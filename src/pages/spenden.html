@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spenden | Newness of life</title>
+  <meta name="description" content="Unterstütze die Arbeit von Newness of Life in Mainz. Deine Spende ermöglicht es uns, einen Ort der Hoffnung und Gemeinschaft zu schaffen.">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+
+  <include src="partials/header.html"></include>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="donate-hero-professional">
+      <div class="container">
+        <div class="donate-hero-content">
+          <h1 id="spenden-hero-title">Deine Spende bewegt Herzen</h1>
+          <p id="spenden-hero-subtitle" class="lead">Mit deiner Unterstützung können wir in Mainz einen Ort der Hoffnung, der Gemeinschaft und des Glaubens gestalten. Jeder Beitrag, ob groß oder klein, macht einen Unterschied.</p>
+          <a href="#spenden-optionen" class="btn btn-primary btn-lg">
+            <i class="fa-solid fa-heart"></i> Jetzt spenden
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- IMPACT SECTION -->
+    <section class="content-section impact-section">
+        <div class="container">
+            <h2 id="impact-title">Was deine Spende bewirkt</h2>
+            <div id="impact-grid" class="impact-grid">
+                <div class="impact-card">
+                    <div class="icon"><i class="fa-solid fa-people-group"></i></div>
+                    <h3>Menschen begegnen</h3>
+                    <p>Deine Spende hilft uns, offene Türen für jeden zu haben, der Gemeinschaft und ein offenes Ohr sucht.</p>
+                </div>
+                <div class="impact-card">
+                    <div class="icon"><i class="fa-solid fa-seedling"></i></div>
+                    <h3>Nächste Generation fördern</h3>
+                    <p>Wir investieren in eine liebevolle und sichere Umgebung, in der Kinder und Jugendliche im Glauben wachsen können.</p>
+                </div>
+                <div class="impact-card">
+                    <div class="icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                    <h3>Praktische Hilfe leisten</h3>
+                    <p>Durch deine Unterstützung können wir Menschen in Notlagen schnell und unbürokratisch zur Seite stehen.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SPENDENWEGE -->
+    <section id="spenden-optionen" class="content-section donate-options-section">
+      <div class="container">
+        <h2>So kannst du uns unterstützen</h2>
+        <div class="donate-options-grid">
+          <!-- Banküberweisung -->
+          <div class="donate-option-card">
+            <div class="donate-option-header">
+              <i class="fa-solid fa-landmark"></i>
+              <h3>Banküberweisung</h3>
+            </div>
+            <div class="donate-option-body">
+              <p>Spende direkt auf unser Konto. Für eine Spendenquittung gib bitte deine Adresse im Verwendungszweck an.</p>
+              <ul class="bank-details-list-professional">
+                <li><strong>Empfänger:</strong> <span id="bank-receiver">Newness of Life e.V.</span></li>
+                <li><strong>IBAN:</strong> <span id="bank-iban">DE12 3456 7890 1234 5678 90</span> <button class="copy-btn" data-copy="#bank-iban"><i class="fa-regular fa-copy"></i></button></li>
+                <li><strong>BIC:</strong> <span id="bank-bic">MALADE51XYZ</span> <button class="copy-btn" data-copy="#bank-bic"><i class="fa-regular fa-copy"></i></button></li>
+                <li><strong>Bank:</strong> <span id="bank-name">Musterbank</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- PayPal -->
+          <div class="donate-option-card">
+            <div class="donate-option-header">
+              <i class="fa-brands fa-paypal"></i>
+              <h3>PayPal</h3>
+            </div>
+            <div class="donate-option-body">
+              <p>Sicher und schnell online spenden – auch ohne PayPal-Konto möglich.</p>
+              <form class="paypal-form" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+                <input type="hidden" name="cmd" value="_donations">
+                <input type="hidden" name="business" value="newnessoflife@clgi.org">
+                <input type="hidden" name="item_name" value="Spende für Newness of Life e.V.">
+                <input type="hidden" name="currency_code" value="EUR">
+                <div class="amount-selection">
+                  <div class="amount-chip" data-amount="25">25€</div>
+                  <div class="amount-chip active" data-amount="50">50€</div>
+                  <div class="amount-chip" data-amount="100">100€</div>
+                  <div class="amount-chip" data-amount="">Andere</div>
+                </div>
+                <div class="amount-input-container">
+                  <span>€</span>
+                  <input type="number" name="amount" value="50" min="1" step="1" required>
+                </div>
+                <button type="submit" class="btn-primary btn-block">
+                  <i class="fa-brands fa-paypal"></i> Mit PayPal spenden
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <include src="partials/footer.html"></include>
+  <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+/* ========================================================================== */
+/*                           Professional Header Styles                       */
+/* ========================================================================== */
+
+.site-header-pro {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--color-white);
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    z-index: 1000;
+    padding: 0 20px;
+    transition: background-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.main-nav-pro {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px;
+}
+
+.logo-pro {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--color-dark);
+}
+
+.logo-img-pro {
+    height: 90px; /* This was the last size requested */
+    margin-right: 15px;
+}
+
+.logo-text-pro {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.site-header-pro .nav-links-pro {
+    display: flex;
+    gap: 30px;
+    list-style: none;
+}
+
+.site-header-pro .nav-links-pro a {
+    text-decoration: none;
+    color: var(--color-dark);
+    font-weight: 600;
+    padding: 10px 0;
+    position: relative;
+    transition: color .3s ease;
+}
+
+.site-header-pro .nav-links-pro a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--color-primary);
+    transition: width .3s ease;
+}
+
+.site-header-pro .nav-links-pro a:hover,
+.site-header-pro .nav-links-pro a.active {
+    color: var(--color-primary);
+}
+
+.site-header-pro .nav-links-pro a:hover::after,
+.site-header-pro .nav-links-pro a.active::after {
+    width: 100%;
+}
+
+.btn-spenden-pro {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-weight: 700;
+}
+
+.menu-toggle-pro {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--color-dark);
+    cursor: pointer;
+}
+
+@media (max-width: 992px) {
+    .site-header-pro .nav-links-pro {
+        position: fixed;
+        /* Use a CSS variable for the header height, with a fallback */
+        inset: var(--header-height, 80px) 0 0 0;
+        background-color: var(--color-white);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        padding: 2rem;
+        
+        /* Hide off-screen to the right and prepare for transition */
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in-out;
+        
+        /* Ensure it's on top of other page content */
+        z-index: 1001;
+    }
+
+    /* This class is toggled by JS to show the menu */
+    .site-header-pro .nav-links-pro.is-open {
+        transform: translateX(0);
+    }
+    
+    /* Adjust link styles for the mobile overlay view */
+    .site-header-pro .nav-links-pro a {
+        color: var(--color-dark);
+        font-size: 1.5rem;
+    }
+    
+    /* Hide the desktop underline effect on mobile */
+    .site-header-pro .nav-links-pro a::after {
+        display: none;
+    }
+
+    .btn-spenden-pro {
+        display: none;
+    }
+    
+    .menu-toggle-pro {
+        display: block;
+        /* Ensure the toggle button is clickable and above the overlay */
+        z-index: 1002;
+        position: relative;
+    }
+    
+    /* This class is toggled by JS to prevent background scroll */
+    body.no-scroll {
+        overflow: hidden;
+    }
+}
+
+.logo-text-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo-subtext-pro {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.2;
+}

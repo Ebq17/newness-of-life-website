@@ -1,0 +1,16 @@
+{
+  "name": "church-website-bearbeiten-8.09-",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "posthtml": "^0.16.6",
+    "posthtml-include": "^2.0.1"
+  }
+}
