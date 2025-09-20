@@ -1,36 +1,49 @@
 backend:
-: main
+  name: git-gateway
+  branch: main
+
+publish_mode: editorial_workflow
+
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
 
 collections:
+  # --- Site Settings (Einzeldatei) ---
   - name: "settings"
-    label: "Site Settings"
-    files:
-      - file: "data/settings.json"
-        label: "General"
-        name: "general"
-        fields:
-          - {label: "Site Title", name: "title", widget: "string", hint: "The title of the website, used in the browser tab."}
-          - {label: "Site Description", name: "description", widget: "text", hint: "A short description of the website, used for search engines."}
-  - name: "homepage"
-    label: "Homepage"
-    files:
-      - file: "data/homepage.json"
-        label: "Homepage"
-        name: "homepage"
-        fields:
-          - {label: "Hero Title", name: "hero_title", widget: "string"}
-          - {label: "Hero Subtitle", name: "hero_subtitle", widget: "text"}
-  - name: "events"
-    label: "Events"
-    folder: "events"
-    create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
-    summary: "{{title}} - {{fields.date | date(DD.MM.YYYY)}}"
+    label: "Allgemeine Einstellungen"
+    file: "data/settings.json"
     fields:
-      - {label: "Titel", name: "title", widget: "string"}
-      - {label: "Datum", name: "date", widget: "datetime"}
-      - {label: "Ort", name: "location", widget: "string"}
-      - {label: "Bild", name: "image", widget: "image"}
-      - {label: "Text", name: "body", widget: "markdown"}
+      - { label: "Seitentitel", name: "title", widget: "string" }
+      - { label: "Seitenbeschreibung", name: "description", widget: "text", required: false }
+      - { label: "Kontakt E-Mail", name: "contact_email", widget: "string", required: false }
+      - { label: "Telefon", name: "phone", widget: "string", required: false }
+      - { label: "Adresse", name: "address", widget: "text", required: false }
+
+  # --- Startseite (Einzeldatei) ---
+  - name: "homepage"
+    label: "Startseite"
+    file: "data/homepage.json"
+    fields:
+      - { label: "Hero Titel", name: "hero_title", widget: "string" }
+      - { label: "Hero Untertitel", name: "hero_subtitle", widget: "text", required: false }
+      - { label: "Hero Bild", name: "hero_image", widget: "image", required: false }
+
+  # --- Veranstaltungen (Liste in JSON) ---
+  - name: "events"
+    label: "Veranstaltungen"
+    file: "data/events.json"
+    fields:
+      - label: "Veranstaltungen"
+        name: "items"
+        widget: "list"
+        collapsed: true
+        add_to_top: true
+        summary: "{{fields.title}} – {{fields.date | date('DD.MM.YYYY HH:mm')}}"
+        fields:
+          - { label: "Titel", name: "title", widget: "string" }
+          - { label: "Datum & Uhrzeit", name: "date", widget: "datetime", format: "YYYY-MM-DDTHH:mm" }
+          - { label: "Ort", name: "location", widget: "string", required: false }
+          - { label: "Bild", name: "image", widget: "image", required: false }
+          - { label: "Beschreibung", name: "description", widget: "text", required: false }
+          - { label: "Externer Link", name: "link", widget: "string", required: false }
+          - { label: "Veröffentlicht", name: "published", widget: "boolean", default: true }
