@@ -1,0 +1,36 @@
+backend:
+: main
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "settings"
+    label: "Site Settings"
+    files:
+      - file: "data/settings.json"
+        label: "General"
+        name: "general"
+        fields:
+          - {label: "Site Title", name: "title", widget: "string", hint: "The title of the website, used in the browser tab."}
+          - {label: "Site Description", name: "description", widget: "text", hint: "A short description of the website, used for search engines."}
+  - name: "homepage"
+    label: "Homepage"
+    files:
+      - file: "data/homepage.json"
+        label: "Homepage"
+        name: "homepage"
+        fields:
+          - {label: "Hero Title", name: "hero_title", widget: "string"}
+          - {label: "Hero Subtitle", name: "hero_subtitle", widget: "text"}
+  - name: "events"
+    label: "Events"
+    folder: "events"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{title}} - {{fields.date | date(DD.MM.YYYY)}}"
+    fields:
+      - {label: "Titel", name: "title", widget: "string"}
+      - {label: "Datum", name: "date", widget: "datetime"}
+      - {label: "Ort", name: "location", widget: "string"}
+      - {label: "Bild", name: "image", widget: "image"}
+      - {label: "Text", name: "body", widget: "markdown"}
