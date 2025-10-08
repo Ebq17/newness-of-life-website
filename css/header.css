@@ -26,6 +26,7 @@
     align-items: center;
     text-decoration: none;
     color: var(--color-dark);
+    flex-shrink: 0;
 }
 
 .logo-img-pro {
@@ -92,7 +93,7 @@
     cursor: pointer;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 1100px) {
     .site-header-pro .nav-links-pro {
         position: fixed;
         /* Use a CSS variable for the header height, with a fallback */
@@ -145,6 +146,7 @@
 .logo-text-container {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .logo-subtext-pro {
@@ -153,5 +155,5 @@
   color: var(--muted);
   line-height: 1.2;
 }
-.show-on-mobile { display: none; } @media (max-width: 992px) { .show-on-mobile { display: list-item; } }
-@media (max-width: 992px) { .btn-spenden-pro { display: none; } }
+.show-on-mobile { display: none; } @media (max-width: 1100px) { .show-on-mobile { display: list-item; } }
+@media (max-width: 1100px) { .btn-spenden-pro { display: none; } }
