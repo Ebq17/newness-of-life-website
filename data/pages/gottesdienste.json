@@ -1,0 +1,80 @@
+{
+  "hero": {
+    "title": "Gottesdienste",
+    "subtitle": "Erlebe Gottes Gegenwart in unserer Mitte",
+    "background_image": ""
+  },
+
+  "intro": {
+    "title": "Was dich erwartet",
+    "text": "Unsere Gottesdienste sind ein Ort der Begegnung mit Gott und untereinander. Erlebe lebendigen Lobpreis, inspirierende Predigten und herzliche Gemeinschaft."
+  },
+
+  "main_service": {
+    "title": "Hauptgottesdienst",
+    "day": "Sonntag",
+    "time": "14:00 Uhr",
+    "duration": "ca. 2 Stunden",
+    "description": "Unser wöchentlicher Gottesdienst mit Lobpreis, Predigt und Gemeinschaft.",
+    "features": [
+      {
+        "title": "Lobpreis & Anbetung",
+        "description": "Beginne die Woche mit kraftvoller Anbetung",
+        "icon": "fa-music"
+      },
+      {
+        "title": "Predigt",
+        "description": "Bibeltreue und lebensnahe Botschaften",
+        "icon": "fa-book-open"
+      },
+      {
+        "title": "Kinderprogramm",
+        "description": "Altersgerechtes Programm während der Predigt",
+        "icon": "fa-child"
+      },
+      {
+        "title": "Gemeinschaft",
+        "description": "Zeit zum Austausch nach dem Gottesdienst",
+        "icon": "fa-users"
+      }
+    ]
+  },
+
+  "other_meetings": {
+    "title": "Weitere Treffen",
+    "items": [
+      {
+        "title": "Gebetstreffen",
+        "day": "Mittwoch",
+        "time": "19:00 Uhr",
+        "description": "Gemeinsames Gebet und Fürbitte",
+        "icon": "fa-pray"
+      },
+      {
+        "title": "Bibelstunde",
+        "day": "Freitag",
+        "time": "19:00 Uhr",
+        "description": "Vertiefendes Bibelstudium",
+        "icon": "fa-book-bible"
+      },
+      {
+        "title": "Jugendgruppe",
+        "day": "Samstag",
+        "time": "17:00 Uhr",
+        "description": "Für Jugendliche und junge Erwachsene",
+        "icon": "fa-users"
+      }
+    ]
+  },
+
+  "location": {
+    "show_map": true,
+    "parking_info": "Parkplätze sind vor dem Gebäude verfügbar.",
+    "accessibility_info": "Barrierefreier Zugang vorhanden."
+  },
+
+  "seo": {
+    "meta_title": "Gottesdienste - Newness of Life Mainz",
+    "meta_description": "Besuche unsere Gottesdienste jeden Sonntag um 14:00 Uhr in Mainz. Erlebe Lobpreis, Predigt und Gemeinschaft."
+  }
+}

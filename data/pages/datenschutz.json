@@ -1,0 +1,40 @@
+{
+  "hero": {
+    "title": "Datenschutzerklärung",
+    "subtitle": ""
+  },
+
+  "content": {
+    "intro": "Der Schutz Ihrer persönlichen Daten ist uns wichtig. Diese Datenschutzerklärung informiert Sie über Art, Umfang und Zweck der Verarbeitung personenbezogener Daten auf unserer Website.",
+
+    "sections": [
+      {
+        "title": "1. Verantwortlicher",
+        "content": "Verantwortlich für die Datenverarbeitung auf dieser Website ist:\n\nDie Kirche des lebendigen Gottes International e.V.\nHebbelstr. 56-60\n55127 Mainz\n\nE-Mail: newnessoflife@clgi.org"
+      },
+      {
+        "title": "2. Erhebung und Speicherung personenbezogener Daten",
+        "content": "Beim Besuch unserer Website werden automatisch Informationen durch den Browser übermittelt und in Server-Logfiles gespeichert (z.B. IP-Adresse, Datum und Uhrzeit des Zugriffs, besuchte Seiten)."
+      },
+      {
+        "title": "3. Kontaktformular",
+        "content": "Wenn Sie uns über das Kontaktformular kontaktieren, werden die von Ihnen angegebenen Daten (Name, E-Mail, Nachricht) zur Bearbeitung Ihrer Anfrage gespeichert."
+      },
+      {
+        "title": "4. Ihre Rechte",
+        "content": "Sie haben das Recht auf Auskunft, Berichtigung, Löschung und Einschränkung der Verarbeitung Ihrer Daten. Kontaktieren Sie uns dafür bitte per E-Mail."
+      },
+      {
+        "title": "5. Cookies",
+        "content": "Unsere Website verwendet keine Cookies zu Tracking-Zwecken."
+      }
+    ]
+  },
+
+  "last_updated": "2025-01-01",
+
+  "seo": {
+    "meta_title": "Datenschutz - Newness of Life Mainz",
+    "meta_description": "Datenschutzerklärung der Newness of Life Gemeinde in Mainz."
+  }
+}

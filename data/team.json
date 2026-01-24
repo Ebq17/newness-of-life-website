@@ -1,0 +1,20 @@
+{
+  "page": {
+    "title": "Unser Team",
+    "subtitle": "Die Menschen hinter unserer Gemeinde",
+    "intro": "Lerne die Leiter und Mitarbeiter unserer Gemeinde kennen."
+  },
+  "members": [
+    {
+      "name": "Beispiel Person",
+      "role": "Pastor",
+      "image": "",
+      "bio": "",
+      "email": "",
+      "phone": "",
+      "show_contact": false,
+      "order": 1,
+      "published": false
+    }
+  ]
+}

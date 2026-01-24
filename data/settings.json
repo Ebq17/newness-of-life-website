@@ -1,1 +1,36 @@
-{ "title": "Newness of Life", "description": "", "contact_email": "", "phone": "", "address": "" }
+{
+  "site_title": "Newness of Life",
+  "site_description": "Die Kirche des lebendigen Gottes International e.V. - Ein Ort des Glaubens, der Gemeinschaft und der Hoffnung.",
+
+  "contact": {
+    "email": "newnessoflife@clgi.org",
+    "phone": "",
+    "whatsapp": "",
+    "address": "Hebbelstr. 56-60",
+    "city": "55127 Mainz",
+    "country": "Deutschland",
+    "maps_url": "https://www.google.com/maps?q=Hebbelstr.+56-60,+55127+Mainz"
+  },
+
+  "social_media": {
+    "instagram": "",
+    "facebook": "",
+    "youtube": "",
+    "tiktok": "",
+    "twitter": ""
+  },
+
+  "service_times": {
+    "main_service": {
+      "day": "Sonntag",
+      "time": "14:00",
+      "description": "Hauptgottesdienst"
+    },
+    "additional_services": []
+  },
+
+  "footer": {
+    "copyright_text": "Newness of Life - Die Kirche des lebendigen Gottes International e.V.",
+    "show_social_icons": true
+  }
+}

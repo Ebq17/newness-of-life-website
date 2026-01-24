@@ -1,15 +1,685 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="de">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Content Manager</title>
-    <!-- Netlify Identity (Login) -->
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-    <!-- Decap CMS -->
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-  </head>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin - Newness of Life</title>
+  <style>
+    /* Admin Styling */
+    * {
+      box-sizing: border-box;
+    }
 
-  <body></body>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      overflow: hidden;
+    }
+
+    /* Preview Bar oben */
+    .preview-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 10000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      height: 52px;
+    }
+
+    .preview-bar h1 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .preview-bar .buttons {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .page-select {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,0.8);
+      font-size: 12px;
+    }
+
+    .page-select select {
+      background: rgba(255,255,255,0.12);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+
+    .preview-bar button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-preview {
+      background: #10B981;
+      color: white;
+    }
+
+    .btn-preview:hover {
+      background: #059669;
+    }
+
+    .btn-preview.active {
+      background: #059669;
+      box-shadow: 0 0 0 2px white;
+    }
+
+    .btn-refresh {
+      background: #6366F1;
+      color: white;
+    }
+
+    .btn-refresh:hover {
+      background: #4F46E5;
+    }
+
+    .btn-site {
+      background: #2563EB;
+      color: white;
+    }
+
+    .btn-site:hover {
+      background: #1D4ED8;
+    }
+
+    .btn-back {
+      background: #374151;
+      color: white;
+    }
+
+    .btn-back:hover {
+      background: #1f2937;
+    }
+
+    .btn-back:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Status Anzeige */
+    .status {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .status.online {
+      background: rgba(16, 185, 129, 0.2);
+      color: #10B981;
+    }
+
+    .status.building {
+      background: rgba(245, 158, 11, 0.2);
+      color: #f59e0b;
+    }
+
+    /* Main Layout */
+    .admin-layout {
+      display: flex;
+      height: calc(100vh - 52px);
+      margin-top: 52px;
+    }
+
+    /* CMS Panel */
+    .cms-panel {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      transition: flex 0.3s ease;
+      order: 2;
+      border-left: 3px solid #e5e7eb;
+    }
+
+    .cms-panel.with-preview {
+      flex: 0 0 38%;
+    }
+
+    #nc-root {
+      height: 100%;
+      overflow: auto;
+    }
+
+    /* Preview Panel */
+    .preview-panel {
+      flex: 1 1 auto;
+      background: #f3f4f6;
+      border-right: 3px solid #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      order: 1;
+    }
+
+    .preview-panel.hidden {
+      display: none;
+    }
+
+    .preview-header {
+      background: #f9fafb;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .preview-header h3 {
+      margin: 0;
+      font-size: 14px;
+      color: #374151;
+      font-weight: 600;
+    }
+
+    .preview-controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .preview-controls button {
+      padding: 6px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      background: white;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.2s;
+    }
+
+    .preview-controls button:hover {
+      background: #f3f4f6;
+    }
+
+    .preview-controls button.active {
+      background: #2563EB;
+      color: white;
+      border-color: #2563EB;
+    }
+
+    .device-btn {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .preview-iframe-container {
+      flex: 1;
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      overflow: auto;
+      background: #e5e7eb;
+    }
+
+    .preview-iframe-wrapper {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: width 0.3s ease;
+      width: 100%;
+      height: 100%;
+    }
+
+    .preview-iframe-wrapper.mobile {
+      width: 375px;
+      height: 667px;
+    }
+
+    .preview-iframe-wrapper.tablet {
+      width: 768px;
+      height: 100%;
+    }
+
+    #preview-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .preview-loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: #6b7280;
+    }
+
+    .preview-loading .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid #e5e7eb;
+      border-top-color: #2563EB;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Auto-build Status */
+    .auto-build-status {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-left: 12px;
+    }
+
+    .auto-build-status.building {
+      color: #f59e0b;
+    }
+
+    .auto-build-status.success {
+      color: #10b981;
+    }
+
+    /* Help Tooltip */
+    .help-text {
+      font-size: 11px;
+      color: rgba(255,255,255,0.7);
+      margin-left: 16px;
+    }
+
+    @media (max-width: 1200px) {
+      .cms-panel.with-preview {
+        flex: 0 0 45%;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .preview-panel {
+        position: fixed;
+        top: 52px;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        z-index: 9999;
+      }
+      .cms-panel.with-preview {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Preview Bar -->
+  <div class="preview-bar">
+    <h1>Newness of Life - Admin</h1>
+    <div class="buttons">
+      <button class="btn-preview" onclick="togglePreview()" id="preview-toggle">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+        Vorschau
+      </button>
+      <button class="btn-refresh" onclick="refreshPreview()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="23 4 23 10 17 10"/>
+          <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+        </svg>
+        Aktualisieren
+      </button>
+      <button class="btn-site" onclick="openSite()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+          <polyline points="15 3 21 3 21 9"/>
+          <line x1="10" y1="14" x2="21" y2="3"/>
+        </svg>
+        Neues Fenster
+      </button>
+      <button class="btn-back" onclick="goBackPage()" id="page-back" disabled>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        Zurueck
+      </button>
+      <div class="page-select">
+        <span>Seite</span>
+        <select id="page-select">
+          <option value="index.html">Startseite</option>
+          <option value="ueber-uns.html">Ueber uns</option>
+          <option value="gottesdienste.html">Gottesdienste</option>
+          <option value="veranstaltungen.html">Veranstaltungen</option>
+          <option value="spenden.html">Spenden</option>
+          <option value="datenschutz.html">Datenschutz</option>
+          <option value="impressum.html">Impressum</option>
+        </select>
+      </div>
+      <span class="help-text">Tipp: watch.js baut automatisch nach dem Speichern</span>
+    </div>
+    <span class="status online" id="status">Lokal verbunden</span>
+  </div>
+
+  <!-- Main Layout -->
+  <div class="admin-layout">
+    <!-- CMS Panel -->
+    <div class="cms-panel" id="cms-panel">
+      <!-- Decap CMS loads here -->
+      <div id="nc-root"></div>
+    </div>
+
+    <!-- Preview Panel -->
+    <div class="preview-panel" id="preview-panel">
+      <div class="preview-header">
+        <h3>Live-Vorschau</h3>
+        <div class="preview-controls">
+          <button class="device-btn active" onclick="setDevice('desktop')" title="Desktop">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+          </button>
+          <button class="device-btn" onclick="setDevice('tablet')" title="Tablet">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="4" y="2" width="16" height="20" rx="2" ry="2"/>
+              <line x1="12" y1="18" x2="12" y2="18"/>
+            </svg>
+          </button>
+          <button class="device-btn" onclick="setDevice('mobile')" title="Mobil">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+              <line x1="12" y1="18" x2="12" y2="18"/>
+            </svg>
+          </button>
+          <button onclick="closePreview()">Schliessen</button>
+        </div>
+      </div>
+      <div class="preview-iframe-container">
+        <div class="preview-iframe-wrapper" id="iframe-wrapper">
+          <iframe id="preview-iframe" src="about:blank"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decap CMS -->
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+  <script>
+    let previewVisible = true;
+    let currentDevice = 'desktop';
+    let currentPage = 'index.html';
+    const pageHistory = [];
+    const SITE_URL = 'http://localhost:8080';
+
+    // Toggle Preview Panel
+    function togglePreview() {
+      previewVisible = !previewVisible;
+      const previewPanel = document.getElementById('preview-panel');
+      const cmsPanel = document.getElementById('cms-panel');
+      const toggleBtn = document.getElementById('preview-toggle');
+
+      if (previewVisible) {
+        previewPanel.classList.remove('hidden');
+        cmsPanel.classList.add('with-preview');
+        toggleBtn.classList.add('active');
+        loadPreview();
+      } else {
+        previewPanel.classList.add('hidden');
+        cmsPanel.classList.remove('with-preview');
+        toggleBtn.classList.remove('active');
+      }
+    }
+
+    // Close Preview
+    function closePreview() {
+      previewVisible = false;
+      document.getElementById('preview-panel').classList.add('hidden');
+      document.getElementById('cms-panel').classList.remove('with-preview');
+      document.getElementById('preview-toggle').classList.remove('active');
+    }
+
+    // Load Preview
+    function loadPreview() {
+      const iframe = document.getElementById('preview-iframe');
+      const base = SITE_URL.replace(/\/$/, '');
+      const url = new URL(base + '/' + currentPage);
+      url.searchParams.set('cms-preview', '1');
+      url.searchParams.set('t', Date.now().toString());
+      iframe.src = url.toString();
+    }
+
+    // Refresh Preview
+    function refreshPreview() {
+      if (previewVisible) {
+        loadPreview();
+      } else {
+        togglePreview();
+      }
+    }
+
+    // Set Device Size
+    function setDevice(device) {
+      currentDevice = device;
+      const wrapper = document.getElementById('iframe-wrapper');
+      const buttons = document.querySelectorAll('.device-btn');
+
+      wrapper.classList.remove('mobile', 'tablet', 'desktop');
+      if (device !== 'desktop') {
+        wrapper.classList.add(device);
+      }
+
+      buttons.forEach((btn, index) => {
+        btn.classList.remove('active');
+        if ((device === 'desktop' && index === 0) ||
+            (device === 'tablet' && index === 1) ||
+            (device === 'mobile' && index === 2)) {
+          btn.classList.add('active');
+        }
+      });
+    }
+
+    // Open Site in new window
+    function openSite() {
+      const base = SITE_URL.replace(/\/$/, '');
+      window.open(base + '/' + currentPage, '_blank');
+    }
+
+    // Page Selector
+    const pageSelect = document.getElementById('page-select');
+    const pageBack = document.getElementById('page-back');
+    if (pageSelect) {
+      pageSelect.value = currentPage;
+      pageSelect.addEventListener('change', function() {
+        setPage(pageSelect.value, true);
+      });
+    }
+    if (pageBack) {
+      pageBack.addEventListener('click', function() {
+        goBackPage();
+      });
+    }
+
+    function setPage(nextPage, pushHistory) {
+      if (!nextPage || nextPage === currentPage) return;
+      if (pushHistory) {
+        pageHistory.push(currentPage);
+      }
+      currentPage = nextPage;
+      if (pageSelect) {
+        pageSelect.value = currentPage;
+      }
+      updateBackButton();
+      if (previewVisible) {
+        loadPreview();
+      }
+    }
+
+    function goBackPage() {
+      if (!pageHistory.length) return;
+      const previous = pageHistory.pop();
+      setPage(previous, false);
+    }
+
+    function updateBackButton() {
+      if (!pageBack) return;
+      pageBack.disabled = pageHistory.length === 0;
+    }
+
+    // Click-to-Edit: focus CMS field from preview
+    let activeField = null;
+    let activeInput = null;
+    let activeInputHandler = null;
+
+    function normalizeText(text) {
+      return (text || '').replace(/\s+/g, ' ').trim().toLowerCase();
+    }
+
+    function findFieldInputByLabel(label) {
+      if (!label) return null;
+      const labels = Array.from(document.querySelectorAll('label, [data-testid="control-label"], .nc-fieldLabel'));
+      const match = labels.find(el => normalizeText(el.textContent) === normalizeText(label));
+      if (!match) return null;
+
+      const fieldRoot = match.closest('.nc-field, .field, [data-testid="field"], .nc-Field') || match.parentElement;
+      if (!fieldRoot) return null;
+      return fieldRoot.querySelector('input, textarea, select, [contenteditable="true"]');
+    }
+
+    function findFieldInputByName(field) {
+      if (!field) return null;
+      const candidates = Array.from(document.querySelectorAll('input[name], textarea[name], select[name]'));
+      const exact = candidates.find(el => el.name === field);
+      if (exact) return exact;
+      const fieldLeaf = field.split('.').pop();
+      const leafMatches = candidates.filter(el => el.name === fieldLeaf);
+      if (leafMatches.length === 1) return leafMatches[0];
+      return null;
+    }
+
+    function focusCmsField(field, label) {
+      let input = findFieldInputByName(field);
+      if (!input) {
+        input = findFieldInputByLabel(label);
+      }
+      if (!input) return false;
+
+      input.focus();
+      input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      attachLiveSync(input, field);
+      return true;
+    }
+
+    function attachLiveSync(input, field) {
+      if (!input || !field) return;
+      if (activeInput && activeInputHandler) {
+        activeInput.removeEventListener('input', activeInputHandler);
+        activeInput.removeEventListener('change', activeInputHandler);
+      }
+
+      activeField = field;
+      activeInput = input;
+      activeInputHandler = function(event) {
+        const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
+        const iframe = document.getElementById('preview-iframe');
+        if (!iframe || !iframe.contentWindow) return;
+        iframe.contentWindow.postMessage({
+          type: 'cms-update-field',
+          field: activeField,
+          value: value
+        }, '*');
+      };
+
+      input.addEventListener('input', activeInputHandler);
+      input.addEventListener('change', activeInputHandler);
+    }
+
+    window.addEventListener('message', function(event) {
+      if (!event.data) return;
+
+      // Click-to-Edit: Feld auswaehlen
+      if (event.data.type === 'cms-select-field') {
+        const field = event.data.field;
+        const label = event.data.label;
+        const found = focusCmsField(field, label);
+        const status = document.getElementById('status');
+        if (found) {
+          status.textContent = 'Feld ausgewaehlt: ' + (label || field);
+          status.classList.add('online');
+          status.classList.remove('building');
+        } else {
+          status.textContent = 'Feld nicht im Editor';
+          status.classList.remove('online');
+        }
+        return;
+      }
+
+      // Navigation innerhalb der Vorschau
+      if (event.data.type === 'cms-navigate') {
+        const page = event.data.page;
+        if (page) {
+          setPage(page, true);
+        }
+        return;
+      }
+    });
+
+    // Initial preview state
+    document.getElementById('preview-panel').classList.remove('hidden');
+    document.getElementById('cms-panel').classList.add('with-preview');
+    document.getElementById('preview-toggle').classList.add('active');
+    loadPreview();
+
+    // Auto-refresh preview when CMS saves
+    if (window.CMS) {
+      CMS.registerEventListener({
+        name: 'postSave',
+        handler: function() {
+          // Wait for watch.js to rebuild
+          document.getElementById('status').textContent = 'Wird neu gebaut...';
+          document.getElementById('status').classList.remove('online');
+          document.getElementById('status').classList.add('building');
+
+          setTimeout(function() {
+            if (previewVisible) {
+              loadPreview();
+            }
+            document.getElementById('status').textContent = 'Lokal verbunden';
+            document.getElementById('status').classList.remove('building');
+            document.getElementById('status').classList.add('online');
+          }, 2000);
+        }
+      });
+    }
+
+    // Fehler abfangen
+    window.onerror = function(msg, url, line) {
+      console.error('CMS Error:', msg);
+      return false;
+    };
+  </script>
+</body>
 </html>
-

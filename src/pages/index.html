@@ -2,61 +2,61 @@
 <html lang="de">
 
 <head>
-    <!-- Document metadata and character set -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kirchen-Webseite</title>
-    
-    <!-- Link to the main stylesheet for general styling -->
+    <title>{{ settings.site_title || 'Newness of Life' }} - Startseite</title>
+    <meta name="description" content="{{ settings.site_description || '' }}">
+
     <link rel="stylesheet" href="css/style.css">
-    
-    <!-- Preconnect to Google Fonts for performance optimization -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Import Poppins font from Google Fonts for consistent typography -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap"
-        rel="stylesheet">
-    
-    <!-- Link to Font Awesome for scalable vector icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Dynamische Theme-Farben -->
+    <style>
+        :root {
+            --color-primary: {{ design.theme.primary_color || '#2563EB' }};
+            --color-secondary: {{ design.theme.secondary_color || '#10B981' }};
+            --color-accent: {{ design.theme.accent_color || '#F59E0B' }};
+            --color-dark: {{ design.theme.dark_color || '#111827' }};
+            --color-light: {{ design.theme.light_color || '#F9FAFB' }};
+        }
+    </style>
 </head>
 
 <body class="home">
     <include src="partials/header.html"></include>
 
-
-    <!-- Hero Section: The main introductory section of the homepage -->
+    <!-- Hero Section -->
     <section class="hero" id="start">
         <div class="container hero-grid">
-            <!-- Hero Left: Contains the main heading and introductory text -->
             <div class="hero-left">
-                <h1 id="hero-title">{{ homepage.hero_title }}</h1>
-                <p id="hero-subtitle">{{ homepage.hero_subtitle }}</p>
-                <!-- Call to action button -->
-                <a href="ueber-uns.html" class="btn-ghost">
-                    Mehr erfahren <i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>
+                <h1 id="hero-title" data-cms-field="hero.title" data-cms-label="Haupttitel">{{ homepage.hero.title || 'Willkommen in unserer Gemeinde' }}</h1>
+                <p id="hero-subtitle" data-cms-field="hero.subtitle" data-cms-label="Untertitel Zeile 1" data-cms-format="html">{{ homepage.hero.subtitle || 'Ein Ort des Glaubens, der Gemeinschaft und der Hoffnung.' }}</p>
+                <a href="{{ homepage.hero.cta_link || 'ueber-uns.html' }}" class="btn-ghost" data-cms-field="hero.cta_link" data-cms-label="Button Link" data-cms-attr="href">
+                    <span data-cms-field="hero.cta_text" data-cms-label="Button Text">{{ homepage.hero.cta_text || 'Mehr erfahren' }}</span>
+                    <i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>
                 </a>
             </div>
-
-            <!-- Hero Right: Decorative church icon, hidden from screen readers -->
             <div class="hero-right hide-on-mobile" aria-hidden="true">
                 <i class="fa-solid fa-church church-icon"></i>
             </div>
         </div>
     </section>
 
-    <!-- Main content area of the page -->
     <main>
-        <!-- Gottesdienste Section: Highlights information about church services -->
+        <!-- Gottesdienste Section -->
         <section id="gottesdienste" class="content-section services-section-new">
             <div class="container">
                 <div class="gottesdienste-grid">
                     <div class="gottesdienste-info">
-                        <h2 id="gottesdienste-title">Gottesdienste</h2>
-                        <p id="gottesdienste-description">Erlebe lebendigen Lobpreis, inspirierende Predigten und herzliche Gemeinschaft. Unsere Gottesdienste sind ein Ort, an dem du Gott begegnen und im Glauben wachsen kannst.</p>
+                        <h2 id="gottesdienste-title" data-cms-field="services_section.title" data-cms-label="Titel">{{ homepage.services_section.title || 'Gottesdienste' }}</h2>
+                        <p id="gottesdienste-description" data-cms-field="services_section.description" data-cms-label="Beschreibung" data-cms-format="html">{{ homepage.services_section.description || 'Erlebe lebendigen Lobpreis, inspirierende Predigten und herzliche Gemeinschaft.' }}</p>
                         <a href="gottesdienste.html" class="btn-primary">
                             Alle Gottesdienste <i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>
                         </a>
@@ -69,28 +69,42 @@
                         <div class="gottesdienste-card-body">
                             <div class="service-item">
                                 <i class="fa-solid fa-clock"></i>
-                                <p id="gottesdienste-zeiten-ort-details"><strong>Jeden Sonntag um 14:00 Uhr</strong></p>
+                                <p id="gottesdienste-zeiten-ort-details">
+                                    <strong>
+                                        <span data-cms-field="services_section.service_day" data-cms-label="Tag">{{ homepage.services_section.service_day || 'Jeden Sonntag' }}</span>
+                                        um
+                                        <span data-cms-field="services_section.service_time" data-cms-label="Uhrzeit">{{ homepage.services_section.service_time || '14:00 Uhr' }}</span>
+                                    </strong>
+                                </p>
                             </div>
                             <div class="service-item">
                                 <i class="fa-solid fa-map-marker-alt"></i>
-                                <p id="gottesdienste-location">Hebbelstr. 56-60<br>55127 Mainz</p>
+                                <p id="gottesdienste-location">
+                                    <span data-cms-field="contact.address" data-cms-label="Strasse">{{ settings.contact.address || 'Hebbelstr. 56-60' }}</span><br>
+                                    <span data-cms-field="contact.city" data-cms-label="PLZ und Stadt">{{ settings.contact.city || '55127 Mainz' }}</span>
+                                </p>
                             </div>
-                            <div class="service-item">
-                                <i class="fa-solid fa-child"></i>
-                                <p id="gottesdienste-kids">Kinderprogramm während der Predigt</p>
-                            </div>
+                            <if condition="homepage.services_section.kids_info">
+                                <div class="service-item">
+                                    <i class="fa-solid fa-child"></i>
+                                    <p id="gottesdienste-kids" data-cms-field="services_section.kids_info" data-cms-label="Kinderinfo">{{ homepage.services_section.kids_info }}</p>
+                                </div>
+                            </if>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Über uns Section: Provides a brief overview of the church's vision and mission -->
+        <!-- Service Cards (Regelmäßige Treffen) -->
+        <include src="partials/service-cards.html"></include>
+
+        <!-- Über uns Section -->
         <section id="ueber-uns" class="content-section">
             <div class="container">
-                <h2 id="ueber-uns-title">Über uns</h2>
-                <h3 id="ueber-uns-subtitle">Unsere Vision & Mission</h3>
-                <p id="ueber-uns-text">Wir sind die Newness of Life Die Kirche des lebendigen Gottes International e. V. aus Mainz.<br>Unser Herz schlägt dafür, Menschen mit der Liebe Gottes zu erreichen, Glauben zu stärken und Gemeinschaft zu leben.<br>Bei uns erlebst du lebendige Gottesdienste, inspirierende Musik, praktische Bibellehre und eine herzliche Familie, in der jeder willkommen ist egal, woher du kommst oder welche Geschichte du mitbringst.<br>Wir glauben, dass jeder Mensch von Gott einzigartig geschaffen ist und einen Platz in seinem Plan hat. Gemeinsam wollen wir wachsen, einander ermutigen und unsere Umgebung mit Hoffnung und Licht prägen.</p>
+                <h2 id="ueber-uns-title" data-cms-field="about_section.title" data-cms-label="Titel">{{ homepage.about_section.title || 'Über uns' }}</h2>
+                <h3 id="ueber-uns-subtitle" data-cms-field="about_section.subtitle" data-cms-label="Untertitel">{{ homepage.about_section.subtitle || 'Unsere Vision & Mission' }}</h3>
+                <p id="ueber-uns-text" data-cms-field="about_section.text" data-cms-label="Text" data-cms-format="html">{{ homepage.about_section.text || '' }}</p>
                 <div style="text-align: center; margin-top: 24px;">
                     <a href="ueber-uns.html" class="btn btn-primary" aria-label="Mehr über uns erfahren">
                         Mehr erfahren
@@ -101,14 +115,13 @@
 
         <include src="partials/event-section.html"></include>
 
-        <!-- Kontakt Section: Provides contact information and a contact form -->
+        <!-- Kontakt Section -->
         <section id="kontakt" class="content-section">
             <div class="container">
-                <h2 id="kontakt-title">Kontakt</h2>
+                <h2 id="kontakt-title" data-cms-field="contact_section.title" data-cms-label="Titel">{{ homepage.contact_section.title || 'Kontakt' }}</h2>
                 <div class="contact-grid">
-                    <!-- Contact Form: Allows users to send messages -->
                     <div class="contact-form">
-                        <h3 id="kontakt-form-title">Schreiben Sie uns</h3>
+                        <h3 id="kontakt-form-title" data-cms-field="contact_section.form_title" data-cms-label="Formular-Titel">{{ homepage.contact_section.form_title || 'Schreiben Sie uns' }}</h3>
                         <form action="https://formspree.io/f/mwpqabkj" method="POST">
                             <input type="text" name="name" placeholder="Ihr Name" required>
                             <input type="email" name="email" placeholder="Ihre E-Mail" required>
@@ -116,13 +129,14 @@
                             <button type="submit">Senden</button>
                         </form>
                     </div>
-                    <!-- Contact Details: Displays address and an embedded map -->
                     <div class="contact-details">
-                        <h3 id="kontakt-address-title">Adresse & Anfahrt</h3>
-                        <p id="kontakt-address">Hebbelstr. 56-60<br>55127 Mainz</p>
-                        <!-- Google Maps embed for location display -->
+                        <h3 id="kontakt-address-title" data-cms-field="contact_section.address_title" data-cms-label="Adress-Titel">{{ homepage.contact_section.address_title || 'Adresse & Anfahrt' }}</h3>
+                        <p id="kontakt-address">
+                            <span data-cms-field="contact.address" data-cms-label="Strasse">{{ settings.contact.address || 'Hebbelstr. 56-60' }}</span><br>
+                            <span data-cms-field="contact.city" data-cms-label="PLZ und Stadt">{{ settings.contact.city || '55127 Mainz' }}</span>
+                        </p>
                         <div class="map-container">
-                            <iframe src="https://www.google.com/maps?q=Hebbelstr.+56-60,+55127+Mainz&output=embed" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                            <iframe src="{{ settings.contact.maps_url || 'https://www.google.com/maps?q=Hebbelstr.+56-60,+55127+Mainz' }}&output=embed" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                         </div>
                     </div>
                 </div>
@@ -130,9 +144,7 @@
         </section>
     </main>
 
-   <include src="partials/footer.html"></include>
+    <include src="partials/footer.html"></include>
     <script src="js/script.js"></script>
 </body>
-</html>/body>
-</html>body>
 </html>

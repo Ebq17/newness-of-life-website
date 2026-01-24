@@ -1,0 +1,58 @@
+{
+  "header": {
+    "logo": {
+      "image": "/images/Logo_Schwarz_Transparent_KS.png",
+      "alt": "Newness of Life Logo",
+      "text": "Newness of Life",
+      "subtext": "die Kirche des lebendigen Gottes International e.V."
+    },
+    "navigation": [
+      { "label": "Startseite", "url": "index.html", "show": true },
+      { "label": "Über uns", "url": "ueber-uns.html", "show": true },
+      { "label": "Gottesdienste", "url": "gottesdienste.html", "show": true },
+      { "label": "Veranstaltungen", "url": "veranstaltungen.html", "show": true },
+      { "label": "Kontakt", "url": "index.html#kontakt", "show": true }
+    ],
+    "cta_button": {
+      "text": "Spenden",
+      "url": "spenden.html",
+      "show": true
+    },
+    "sticky": true
+  },
+
+  "footer": {
+    "about_text": "Ein Ort des Glaubens, der Gemeinschaft und der Hoffnung. Wir wollen Menschen mit der Liebe Gottes erreichen und unsere Umgebung positiv prägen.",
+    "copyright": "Newness of Life - Die Kirche des lebendigen Gottes International e.V.",
+    "show_social": true,
+    "show_navigation": true,
+    "donation_text": "Deine Spende hilft uns, einen Unterschied in unserer Stadt zu machen."
+  },
+
+  "service_cards": [
+    {
+      "label": "Gemeinschaft",
+      "title": "Gottesdienst",
+      "time": "Jeden Sonntag um 14:00 Uhr",
+      "image": "/images/EJC.png",
+      "link": "gottesdienste.html",
+      "show": true
+    },
+    {
+      "label": "Gebet",
+      "title": "Gebetsabend",
+      "time": "Jeden Freitag um 19:00 Uhr",
+      "image": "/images/Gebete.jpg",
+      "link": "",
+      "show": true
+    },
+    {
+      "label": "Bildung",
+      "title": "Bibelstudium",
+      "time": "Jeden Montag & Mittwoch um 19:00 Uhr",
+      "image": "/images/biblestunde_jugend.jpg",
+      "link": "",
+      "show": true
+    }
+  ]
+}

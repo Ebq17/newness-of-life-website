@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- Active Link automatisch setzen ---
     const currentPath = location.pathname.replace(/\/index\.html?$/, '/');
-    document.querySelectorAll('.nav-links a[href]').forEach(a => {
+    document.querySelectorAll('.nav-links-pro a[href]').forEach(a => {
         const url = new URL(a.getAttribute('href'), location.origin);
         const path = url.pathname.replace(/\/index\.html?$/, '/');
         if (path === currentPath) {
@@ -30,7 +30,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- Smooth Scrolling (nur bei existierendem Ziel) ---
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        const target = document.querySelector(anchor.getAttribute('href'));
+        const href = anchor.getAttribute('href');
+        if (!href || href === '#') return;
+        const target = document.querySelector(href);
         if (!target) return;
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
@@ -68,7 +70,83 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     
+    // --- CMS Preview Click-to-Edit ---
+    const searchParams = new URLSearchParams(window.location.search);
+    const isCmsPreview = searchParams.has('cms-preview');
+    if (isCmsPreview) {
+        document.body.classList.add('cms-preview');
+
+        document.addEventListener('click', function (event) {
+            const target = event.target.closest('[data-cms-field]');
+            if (!target) return;
+            event.preventDefault();
+            event.stopPropagation();
+
+            document.querySelectorAll('.cms-selected-field').forEach(el => {
+                el.classList.remove('cms-selected-field');
+            });
+            target.classList.add('cms-selected-field');
+
+            window.parent.postMessage({
+                type: 'cms-select-field',
+                field: target.getAttribute('data-cms-field'),
+                label: target.getAttribute('data-cms-label') || '',
+                format: target.getAttribute('data-cms-format') || '',
+                attr: target.getAttribute('data-cms-attr') || ''
+            }, '*');
+        }, true);
+
+        window.addEventListener('message', function (event) {
+            if (!event.data || event.data.type !== 'cms-update-field') return;
+            const field = event.data.field;
+            const value = event.data.value;
+            if (!field) return;
+            updatePreviewField(field, value);
+            if (field === 'events_section.show_count') {
+                applyEventsCount(value);
+            }
+        });
+    }
 });
+
+function updatePreviewField(field, value) {
+    const nodes = document.querySelectorAll(`[data-cms-field="${field}"]`);
+    if (!nodes.length) return;
+
+    nodes.forEach(node => {
+        const attr = node.getAttribute('data-cms-attr');
+        const format = node.getAttribute('data-cms-format');
+        if (attr) {
+            node.setAttribute(attr, value);
+            return;
+        }
+        if (format === 'html') {
+            node.innerHTML = normalizeCmsText(value);
+        } else {
+            node.textContent = value;
+        }
+    });
+}
+
+function normalizeCmsText(value) {
+    if (value == null) return '';
+    return String(value).replace(/\n/g, '<br>');
+}
+
+function applyEventsCount(value) {
+    const items = Array.from(document.querySelectorAll('[data-cms-role="upcoming-event-item"]'));
+    if (!items.length) return;
+    const max = parseInt(value, 10);
+    if (Number.isNaN(max) || max < 0) {
+        items.forEach(item => {
+            item.style.display = '';
+        });
+        return;
+    }
+    items.forEach((item, index) => {
+        item.style.display = index < max ? '' : 'none';
+    });
+}
 
 function loadIndexContent(pageContent) {
     // Hero

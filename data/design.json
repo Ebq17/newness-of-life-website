@@ -1,0 +1,37 @@
+{
+  "theme": {
+    "primary_color": "#2563EB",
+    "secondary_color": "#10B981",
+    "accent_color": "#F59E0B",
+    "dark_color": "#111827",
+    "light_color": "#F9FAFB"
+  },
+
+  "banner": {
+    "enabled": false,
+    "text": "",
+    "link": "",
+    "background_color": "#F59E0B",
+    "text_color": "#FFFFFF",
+    "dismissible": true
+  },
+
+  "hero_backgrounds": {
+    "homepage": "",
+    "ueber_uns": "",
+    "gottesdienste": "",
+    "spenden": "",
+    "veranstaltungen": ""
+  },
+
+  "logo": {
+    "main": "/images/Logo_Schwarz_Transparent_KS.png",
+    "favicon": "",
+    "alt_text": "Newness of Life Logo"
+  },
+
+  "fonts": {
+    "heading": "Poppins",
+    "body": "Poppins"
+  }
+}

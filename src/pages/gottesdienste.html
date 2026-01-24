@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gottesdienste | Newness of life</title>
-  <meta name="description" content="Erlebe lebendigen Lobpreis, klare Bibellehre und echte Gemeinschaft. Gottesdienste der Newness of Life in Mainz – jeden Sonntag 11:00 Uhr.">
+  <title>{{ pages.gottesdienste.seo.meta_title || 'Gottesdienste | Newness of Life' }}</title>
+  <meta name="description" content="{{ pages.gottesdienste.seo.meta_description || '' }}">
 
   <!-- Styles -->
   <link rel="stylesheet" href="css/style.css" />
@@ -32,11 +32,11 @@
         </div>
         <div class="hero-overlay"></div>
         <div class="container hero-content">
-            <h1>Ein Gottesdienst, der dein Herz berührt</h1>
-            <p class="lead">Erlebe eine Atmosphäre, in der du Gott persönlich begegnen kannst. Wir freuen uns auf dich.</p>
+            <h1 data-cms-field="hero.title" data-cms-label="Titel">{{ pages.gottesdienste.hero.title || 'Gottesdienste' }}</h1>
+            <p class="lead" data-cms-field="hero.subtitle" data-cms-label="Untertitel">{{ pages.gottesdienste.hero.subtitle || 'Erlebe Gottes Gegenwart in unserer Mitte' }}</p>
             <div class="gd-hero-info">
-                <span><i class="fa-solid fa-clock"></i> Jeden Sonntag, 14:00 Uhr</span>
-                <span><i class="fa-solid fa-map-marker-alt"></i> Hebbelstr. 56-60, Mainz</span>
+                <span><i class="fa-solid fa-clock"></i> <span data-cms-field="main_service.day" data-cms-label="Tag">{{ pages.gottesdienste.main_service.day || 'Sonntag' }}</span>, <span data-cms-field="main_service.time" data-cms-label="Uhrzeit">{{ pages.gottesdienste.main_service.time || '14:00 Uhr' }}</span></span>
+                <span><i class="fa-solid fa-map-marker-alt"></i> {{ settings.contact.address || 'Hebbelstr. 56-60' }}, {{ settings.contact.city || 'Mainz' }}</span>
             </div>
         </div>
     </section>
@@ -45,16 +45,11 @@
     <section class="content-section">
         <div class="container">
             <div class="section-intro">
-                <h2>Erlebe unsere Gottesdienste</h2>
+                <h2 data-cms-field="intro.title" data-cms-label="Titel">{{ pages.gottesdienste.intro.title || 'Was dich erwartet' }}</h2>
             </div>
-            <p class="text-center">
-                Herzlich willkommen bei Newness of Life – einer lebendigen Gospelkirche in Berlin! 
-                Unsere Gottesdienste sind ein Ort voller Freude, Musik und Begegnung mit Gott. Wir vereinen afrikanische, 
-                deutsche und amerikanische Gospelmusik – eine besondere Mischung aus Energie, Leidenschaft und Anbetung.
-                 Gemeinsam mit unserer Live-Band und unserem Chor feiern wir Gottes Liebe auf eine Weise, die Herzen berührt und bewegt. 
-                 Dazu gehören mitreißende Musik, eine Predigt, die praktisch und alltagsnah ist, sowie Raum für Gebet, Begegnung und echte Gemeinschaft.
-                Jeder ist willkommen – egal, ob du zum ersten Mal kommst oder schon Teil unserer Familie bist. Komm wie du bist – wir freuen uns auf dich!
-                </p>
+            <p class="text-center" data-cms-field="intro.text" data-cms-label="Text" data-cms-format="html">
+                {{ pages.gottesdienste.intro.text || '' }}
+            </p>
         </div>
 
     </section>
@@ -63,42 +58,41 @@
     <section class="content-section expect-pro-section expect-pro-section-enhanced">
         <div class="container">
             <div class="section-intro">
-                <h2>Was dich erwartet</h2>
-                <p>Ein Besuch bei uns soll für dich eine durch und durch positive Erfahrung sein. </p>
+                <h2 data-cms-field="main_service.title" data-cms-label="Titel">{{ pages.gottesdienste.main_service.title || 'Hauptgottesdienst' }}</h2>
+                <p data-cms-field="main_service.description" data-cms-label="Beschreibung" data-cms-format="html">{{ pages.gottesdienste.main_service.description || '' }}</p>
             </div>
             <div class="expect-pro-grid">
-                <div class="expect-pro-card-enhanced expect-card-anbetung">
-                    <div class="card-overlay"></div>
-                    <div class="card-content">
-                        <div class="icon"><i class="fa-solid fa-music"></i></div>
-                        <h3>Moderne Anbetung</h3>
-                        <p>Unsere Gottesdienste beginnen mit zeitgemäßer Musik, die dir hilft, dich auf Gott auszurichten und ihm zu begegnen.</p>
+                <each loop="feature in pages.gottesdienste.main_service.features">
+                    <div class="expect-pro-card-enhanced" data-cms-field="main_service.features" data-cms-label="Features">
+                        <div class="card-overlay"></div>
+                        <div class="card-content">
+                            <div class="icon"><i class="fa-solid {{ feature.icon }}"></i></div>
+                            <h3>{{ feature.title }}</h3>
+                            <p>{{ feature.description }}</p>
+                        </div>
                     </div>
-                </div>
-                <div class="expect-pro-card-enhanced expect-card-predigten">
-                    <div class="card-overlay"></div>
-                    <div class="card-content">
-                        <div class="icon"><i class="fa-solid fa-lightbulb"></i></div>
-                        <h3>Inspirierende Predigten</h3>
-                        <p>Wir glauben, dass die Bibel heute noch Relevanz hat. Unsere Predigten sind lebensnah, praktisch und ermutigend.</p>
+                </each>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="container">
+            <div class="section-intro">
+                <h2 data-cms-field="other_meetings.title" data-cms-label="Titel">{{ pages.gottesdienste.other_meetings.title || 'Weitere Treffen' }}</h2>
+            </div>
+            <div class="expect-pro-grid">
+                <each loop="meeting in pages.gottesdienste.other_meetings.items">
+                    <div class="expect-pro-card-enhanced" data-cms-field="other_meetings.items" data-cms-label="Treffen">
+                        <div class="card-overlay"></div>
+                        <div class="card-content">
+                            <div class="icon"><i class="fa-solid {{ meeting.icon }}"></i></div>
+                            <h3>{{ meeting.title }}</h3>
+                            <p>{{ meeting.day }} · {{ meeting.time }}</p>
+                            <p>{{ meeting.description }}</p>
+                        </div>
                     </div>
-                </div>
-                <div class="expect-pro-card-enhanced expect-card-gemeinschaft">
-                    <div class="card-overlay"></div>
-                    <div class="card-content">
-                        <div class="icon"><i class="fa-solid fa-heart"></i></div>
-                        <h3>Herzliche Gemeinschaft</h3>
-                        <p>Wir sind eine offene und freundliche Gemeinschaft. Egal, woher du kommst, bei uns bist du willkommen.</p>
-                    </div>
-                </div>
-                <div class="expect-pro-card-enhanced expect-card-kinder">
-                    <div class="card-overlay"></div>
-                    <div class="card-content">
-                        <div class="icon"><i class="fa-solid fa-child"></i></div>
-                        <h3>Tolles Kinderprogramm</h3>
-                        <p>Für Kinder bieten wir ein sicheres und spannendes Programm, in dem sie auf kreative Weise von Gott hören.</p>
-                    </div>
-                </div>
+                </each>
             </div>
         </div>
     </section>

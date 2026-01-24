@@ -1008,3 +1008,304 @@ h3 {
 }
 @media (max-width: 767px) { .gd-hero-info { flex-direction: column; } }
 @media (max-width: 767px) { .gd-hero-pro .hero-content { text-align: center; } .gd-hero-info { flex-direction: column; align-items: center; } }
+
+/* ========================================================================== */
+/*                          ADMIN CMS STYLES                                   */
+/* ========================================================================== */
+
+/* Site Banner (Ankündigungen) */
+.site-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+  padding: 10px 0;
+  text-align: center;
+}
+
+.site-banner .container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.site-banner .banner-text {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.site-banner .banner-text a {
+  text-decoration: underline;
+}
+
+.site-banner .banner-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.site-banner .banner-close:hover {
+  opacity: 1;
+}
+
+/* Adjust body padding when banner is active */
+body.has-banner {
+  padding-top: calc(var(--header-height) + 44px);
+}
+
+/* Featured Events */
+.featured-events {
+  margin-bottom: 40px;
+}
+
+.featured-event-card {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  background: var(--color-white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 768px) {
+  .featured-event-card {
+    grid-template-columns: 300px 1fr;
+  }
+}
+
+.featured-event-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+@media (min-width: 768px) {
+  .featured-event-image {
+    height: 100%;
+  }
+}
+
+.featured-event-content {
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.featured-event-content h3 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.featured-event-content .event-date,
+.featured-event-content .event-location {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.featured-event-content .event-description {
+  margin: 15px 0;
+  color: var(--text);
+}
+
+/* Event Label with dynamic color */
+.event-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  background-color: var(--color-primary);
+  margin-bottom: 10px;
+}
+
+/* Upcoming Events List */
+.upcoming-events-title {
+  text-align: center;
+  font-size: 1.3em;
+  color: var(--color-dark);
+  margin-bottom: 20px;
+}
+
+.upcoming-events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.upcoming-event-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  background: var(--color-white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.3s ease;
+}
+
+.upcoming-event-item:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.event-date-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+  padding: 10px;
+  background: var(--color-primary);
+  color: white;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.event-date-badge .event-day {
+  font-size: 1.5em;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.event-date-badge .event-month {
+  font-size: 0.75em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.upcoming-event-item .event-info {
+  flex: 1;
+}
+
+.upcoming-event-item .event-info h4 {
+  font-size: 1.1em;
+  margin-bottom: 5px;
+  color: var(--color-dark);
+}
+
+.upcoming-event-item .event-time,
+.upcoming-event-item .event-location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9em;
+  color: var(--muted);
+  margin-bottom: 3px;
+}
+
+.upcoming-event-item .event-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: var(--color-light);
+  border-radius: 50%;
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.upcoming-event-item .event-link:hover {
+  background: var(--color-primary);
+  color: white;
+}
+
+/* Section Subtitle */
+.section-subtitle {
+  text-align: center;
+  color: var(--muted);
+  font-size: 1.1em;
+  margin-top: -1em;
+  margin-bottom: 2em;
+}
+
+/* Team Page Styles */
+.team-member-card {
+  background: var(--color-white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.team-member-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+
+.team-member-image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+
+.team-member-content {
+  padding: 20px;
+  text-align: center;
+}
+
+.team-member-content h3 {
+  font-size: 1.2em;
+  margin-bottom: 5px;
+}
+
+.team-member-content .role {
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: 0.9em;
+  margin-bottom: 10px;
+}
+
+.team-member-content .bio {
+  font-size: 0.9em;
+  color: var(--muted);
+}
+
+.team-member-contact {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid var(--border);
+}
+
+.team-member-contact a {
+  color: var(--muted);
+  font-size: 1.2em;
+  transition: color 0.3s ease;
+}
+
+.team-member-contact a:hover {
+  color: var(--color-primary);
+}
+
+/* CMS Preview (Click-to-Edit) */
+body.cms-preview [data-cms-field] {
+  cursor: pointer;
+}
+
+body.cms-preview [data-cms-field]:hover {
+  outline: 2px dashed rgba(37, 99, 235, 0.6);
+  outline-offset: 4px;
+}
+
+body.cms-preview .cms-selected-field {
+  outline: 2px solid rgba(16, 185, 129, 0.9);
+  outline-offset: 4px;
+}

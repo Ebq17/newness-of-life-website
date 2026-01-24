@@ -1,26 +1,50 @@
+<!-- Banner (wenn aktiviert) -->
+<if condition="design.banner && design.banner.enabled">
+  <div class="site-banner" style="background-color: {{ design.banner.background_color }}; color: {{ design.banner.text_color }};" data-cms-field="design.banner" data-cms-label="Banner">
+    <div class="container">
+      <p class="banner-text" data-cms-field="design.banner.text" data-cms-label="Banner Text">
+        <if condition="design.banner.link">
+          <a href="{{ design.banner.link }}" style="color: {{ design.banner.text_color }};">{{ design.banner.text }}</a>
+        </if>
+        <if condition="!design.banner.link">
+          {{ design.banner.text }}
+        </if>
+      </p>
+      <if condition="design.banner.dismissible">
+        <button class="banner-close" aria-label="Banner schließen">&times;</button>
+      </if>
+    </div>
+  </div>
+</if>
+
 <!-- Header (Partial) -->
 <link rel="stylesheet" href="css/header.css" />
 <header class="site-header-pro">
   <div class="container">
     <nav class="main-nav-pro" aria-label="Hauptnavigation">
-      <a href="index.html#start" class="logo-pro">
-        <img src="images/Logo_Schwarz_Transparent_KS.png" alt="Newness of life Logo" class="logo-img-pro">
+      <a href="index.html#start" class="logo-pro" data-cms-field="header.logo" data-cms-label="Logo">
+        <img src="{{ header.logo.image || design.logo.main || 'images/Logo_Schwarz_Transparent_KS.png' }}" alt="{{ header.logo.alt || design.logo.alt_text || 'Newness of life Logo' }}" class="logo-img-pro" data-cms-field="header.logo.image" data-cms-label="Logo Bild">
         <div class="logo-text-container">
-          <span class="logo-text-pro">Newness of Life</span>
-          <span class="logo-subtext-pro">die Kirche des lebendigen Gottes International e.V.</span>
+          <span class="logo-text-pro" data-cms-field="header.logo.text" data-cms-label="Logo Text">{{ header.logo.text || settings.site_title || 'Newness of Life' }}</span>
+          <span class="logo-subtext-pro" data-cms-field="header.logo.subtext" data-cms-label="Logo Untertext">{{ header.logo.subtext || 'die Kirche des lebendigen Gottes International e.V.' }}</span>
         </div>
       </a>
 
       <ul id="mainnav-pro" class="nav-links-pro">
-        <li><a href="index.html">Startseite</a></li>
-        <li><a href="ueber-uns.html">Über uns</a></li>
-        <li><a href="gottesdienste.html">Gottesdienste</a></li>
-        <li><a href="veranstaltungen.html">Veranstaltungen</a></li>
-        <li class="show-on-mobile"><a href="spenden.html">Spenden</a></li>        <li><a href="index.html#kontakt">Kontakt</a></li>
+        <each loop="item in header.navigation">
+          <if condition="item.show !== false">
+            <li><a href="{{ item.url }}">{{ item.label }}</a></li>
+          </if>
+        </each>
+        <if condition="header.cta_button && header.cta_button.show">
+          <li class="show-on-mobile"><a href="{{ header.cta_button.url }}">{{ header.cta_button.text }}</a></li>
+        </if>
       </ul>
 
-
-      <a href="spenden.html" class="btn-primary btn-spenden-pro">Spenden</a>      <button class="menu-toggle-pro" aria-label="Menü öffnen" aria-controls="mainnav-pro" aria-expanded="false">
+      <if condition="header.cta_button && header.cta_button.show">
+        <a href="{{ header.cta_button.url }}" class="btn-primary btn-spenden-pro" data-cms-field="header.cta_button.text" data-cms-label="CTA Button">{{ header.cta_button.text }}</a>
+      </if>
+      <button class="menu-toggle-pro" aria-label="Menü öffnen" aria-controls="mainnav-pro" aria-expanded="false">
         <i class="fa-solid fa-bars"></i>
       </button>
     </nav>

@@ -1,0 +1,54 @@
+{
+  "hero": {
+    "title": "Über uns",
+    "subtitle": "Lerne unsere Gemeinde kennen",
+    "background_image": ""
+  },
+
+  "intro": {
+    "title": "Willkommen bei Newness of Life",
+    "text": "Wir sind die Newness of Life – Die Kirche des lebendigen Gottes International e.V. aus Mainz. Unser Herz schlägt dafür, Menschen mit der Liebe Gottes zu erreichen, Glauben zu stärken und Gemeinschaft zu leben."
+  },
+
+  "story": {
+    "title": "Unsere Geschichte",
+    "text": "Bei uns erlebst du lebendige Gottesdienste, inspirierende Musik, praktische Bibellehre und eine herzliche Familie, in der jeder willkommen ist – egal, woher du kommst oder welche Geschichte du mitbringst.",
+    "image": ""
+  },
+
+  "vision": {
+    "title": "Unsere Vision & Mission",
+    "text": "Wir glauben, dass jeder Mensch von Gott einzigartig geschaffen ist und einen Platz in seinem Plan hat. Gemeinsam wollen wir wachsen, einander ermutigen und unsere Umgebung mit Hoffnung und Licht prägen."
+  },
+
+  "beliefs": {
+    "title": "Was wir glauben",
+    "items": [
+      {
+        "title": "Die Bibel",
+        "text": "Die Bibel ist Gottes inspiriertes Wort und unsere höchste Autorität.",
+        "icon": "fa-book-bible"
+      },
+      {
+        "title": "Jesus Christus",
+        "text": "Jesus ist der Sohn Gottes, unser Retter und Herr.",
+        "icon": "fa-cross"
+      },
+      {
+        "title": "Der Heilige Geist",
+        "text": "Der Heilige Geist lebt in jedem Gläubigen und befähigt uns.",
+        "icon": "fa-dove"
+      },
+      {
+        "title": "Gemeinschaft",
+        "text": "Wir sind eine Familie, die füreinander da ist.",
+        "icon": "fa-users"
+      }
+    ]
+  },
+
+  "seo": {
+    "meta_title": "Über uns - Newness of Life Mainz",
+    "meta_description": "Lerne unsere Gemeinde kennen. Wir sind die Kirche des lebendigen Gottes International e.V. in Mainz."
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "hero": {
+    "title": "Spenden",
+    "subtitle": "Unterstütze unsere Arbeit",
+    "background_image": ""
+  },
+
+  "intro": {
+    "title": "Warum Spenden?",
+    "text": "Deine Spende ermöglicht es uns, Menschen mit der Liebe Gottes zu erreichen, unsere Gemeinde zu betreiben und soziale Projekte zu unterstützen. Jeder Beitrag macht einen Unterschied!"
+  },
+
+  "impact": {
+    "title": "Dein Beitrag bewirkt",
+    "items": [
+      {
+        "title": "Gemeindeleben",
+        "description": "Finanzierung von Gottesdiensten, Veranstaltungen und Gemeindeaktivitäten",
+        "icon": "fa-church"
+      },
+      {
+        "title": "Soziale Projekte",
+        "description": "Unterstützung von Bedürftigen in unserer Umgebung",
+        "icon": "fa-hand-holding-heart"
+      },
+      {
+        "title": "Jugendarbeit",
+        "description": "Programme und Events für junge Menschen",
+        "icon": "fa-users"
+      },
+      {
+        "title": "Mission",
+        "description": "Verbreitung des Evangeliums weltweit",
+        "icon": "fa-globe"
+      }
+    ]
+  },
+
+  "bank_details": {
+    "title": "Bankverbindung",
+    "account_holder": "Die Kirche des lebendigen Gottes International e.V.",
+    "iban": "",
+    "bic": "",
+    "bank_name": "",
+    "reference": "Spende"
+  },
+
+  "online_donation": {
+    "enabled": false,
+    "paypal_link": "",
+    "other_link": ""
+  },
+
+  "faq": {
+    "title": "Häufige Fragen",
+    "items": [
+      {
+        "question": "Ist meine Spende steuerlich absetzbar?",
+        "answer": "Ja, als eingetragener Verein können wir Spendenbescheinigungen ausstellen."
+      },
+      {
+        "question": "Wie wird meine Spende verwendet?",
+        "answer": "Deine Spende fließt in Gemeindeleben, soziale Projekte und Mission."
+      },
+      {
+        "question": "Kann ich auch regelmäßig spenden?",
+        "answer": "Ja, du kannst einen Dauerauftrag bei deiner Bank einrichten."
+      }
+    ]
+  },
+
+  "seo": {
+    "meta_title": "Spenden - Newness of Life Mainz",
+    "meta_description": "Unterstütze unsere Gemeinde mit deiner Spende. Jeder Beitrag hilft uns, Menschen zu erreichen."
+  }
+}

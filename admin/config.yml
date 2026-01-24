@@ -2,48 +2,496 @@ backend:
   name: git-gateway
   branch: main
 
-publish_mode: editorial_workflow
+local_backend: true
 
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
 
+locale: 'de'
+
+site_url: "http://localhost:8080"
+
 collections:
-  # --- Site Settings (Einzeldatei) ---
-  - name: "settings"
-    label: "Allgemeine Einstellungen"
-    file: "data/settings.json"
-    fields:
-      - { label: "Seitentitel", name: "title", widget: "string" }
-      - { label: "Seitenbeschreibung", name: "description", widget: "text", required: false }
-      - { label: "Kontakt E-Mail", name: "contact_email", widget: "string", required: false }
-      - { label: "Telefon", name: "phone", widget: "string", required: false }
-      - { label: "Adresse", name: "address", widget: "text", required: false }
-
-  # --- Startseite (Einzeldatei) ---
-  - name: "homepage"
-    label: "Startseite"
-    file: "data/homepage.json"
-    fields:
-      - { label: "Hero Titel", name: "hero_title", widget: "string" }
-      - { label: "Hero Untertitel", name: "hero_subtitle", widget: "text", required: false }
-      - { label: "Hero Bild", name: "hero_image", widget: "image", required: false }
-
-  # --- Veranstaltungen (Liste in JSON) ---
-  - name: "events"
-    label: "Veranstaltungen"
-    file: "data/events.json"
-    fields:
-      - label: "Veranstaltungen"
-        name: "items"
-        widget: "list"
-        collapsed: true
-        add_to_top: true
-        summary: "{{fields.title}} – {{fields.date | date('DD.MM.YYYY HH:mm')}}"
+  # =============================================
+  # GLOBAL (Header, Footer, Navigation, Karten)
+  # =============================================
+  - name: "global"
+    label: "Global (Header/Footer)"
+    files:
+      - name: "global_settings"
+        label: "Header, Footer & Service-Karten"
+        file: "data/global.json"
         fields:
-          - { label: "Titel", name: "title", widget: "string" }
-          - { label: "Datum & Uhrzeit", name: "date", widget: "datetime", format: "YYYY-MM-DDTHH:mm" }
-          - { label: "Ort", name: "location", widget: "string", required: false }
-          - { label: "Bild", name: "image", widget: "image", required: false }
-          - { label: "Beschreibung", name: "description", widget: "text", required: false }
-          - { label: "Externer Link", name: "link", widget: "string", required: false }
-          - { label: "Veröffentlicht", name: "published", widget: "boolean", default: true }
+          # --- HEADER ---
+          - label: "HEADER"
+            name: "header"
+            widget: "object"
+            fields:
+              - label: "Logo"
+                name: "logo"
+                widget: "object"
+                fields:
+                  - { label: "Logo Bild", name: "image", widget: "image" }
+                  - { label: "Alt-Text", name: "alt", widget: "string" }
+                  - { label: "Logo Text", name: "text", widget: "string" }
+                  - { label: "Untertitel", name: "subtext", widget: "string" }
+
+              - label: "Navigation (Menue)"
+                name: "navigation"
+                widget: "list"
+                fields:
+                  - { label: "Text", name: "label", widget: "string" }
+                  - { label: "Link", name: "url", widget: "string" }
+                  - { label: "Anzeigen", name: "show", widget: "boolean", default: true }
+
+              - label: "Spenden-Button"
+                name: "cta_button"
+                widget: "object"
+                fields:
+                  - { label: "Button Text", name: "text", widget: "string" }
+                  - { label: "Button Link", name: "url", widget: "string" }
+                  - { label: "Anzeigen", name: "show", widget: "boolean", default: true }
+
+              - { label: "Header fixiert (Sticky)", name: "sticky", widget: "boolean", default: true }
+
+          # --- FOOTER ---
+          - label: "FOOTER"
+            name: "footer"
+            widget: "object"
+            fields:
+              - { label: "Ueber uns Text", name: "about_text", widget: "text" }
+              - { label: "Copyright Text", name: "copyright", widget: "string" }
+              - { label: "Social Icons anzeigen", name: "show_social", widget: "boolean", default: true }
+              - { label: "Navigation anzeigen", name: "show_navigation", widget: "boolean", default: true }
+              - { label: "Spenden-Text", name: "donation_text", widget: "string" }
+
+          # --- SERVICE KARTEN ---
+          - label: "SERVICE-KARTEN (Startseite)"
+            name: "service_cards"
+            widget: "list"
+            label_singular: "Karte"
+            fields:
+              - { label: "Kategorie-Label", name: "label", widget: "string", hint: "z.B. Gemeinschaft, Gebet, Bildung" }
+              - { label: "Titel", name: "title", widget: "string" }
+              - { label: "Zeit/Beschreibung", name: "time", widget: "string" }
+              - { label: "Bild", name: "image", widget: "image" }
+              - { label: "Link (optional)", name: "link", widget: "string", required: false }
+              - { label: "Anzeigen", name: "show", widget: "boolean", default: true }
+
+  # =============================================
+  # EINSTELLUNGEN
+  # =============================================
+  - name: "einstellungen"
+    label: "Einstellungen"
+    files:
+      - name: "settings"
+        label: "Kontakt & Social Media"
+        file: "data/settings.json"
+        fields:
+          - { label: "Seitentitel", name: "site_title", widget: "string" }
+          - { label: "Seitenbeschreibung (SEO)", name: "site_description", widget: "text", required: false }
+
+          - label: "Kontaktdaten"
+            name: "contact"
+            widget: "object"
+            fields:
+              - { label: "E-Mail", name: "email", widget: "string" }
+              - { label: "Telefon", name: "phone", widget: "string", required: false }
+              - { label: "WhatsApp", name: "whatsapp", widget: "string", required: false }
+              - { label: "Strasse", name: "address", widget: "string" }
+              - { label: "PLZ und Stadt", name: "city", widget: "string" }
+              - { label: "Land", name: "country", widget: "string", default: "Deutschland" }
+              - { label: "Google Maps URL", name: "maps_url", widget: "string", required: false }
+
+          - label: "Social Media"
+            name: "social_media"
+            widget: "object"
+            fields:
+              - { label: "Instagram", name: "instagram", widget: "string", required: false }
+              - { label: "Facebook", name: "facebook", widget: "string", required: false }
+              - { label: "YouTube", name: "youtube", widget: "string", required: false }
+              - { label: "TikTok", name: "tiktok", widget: "string", required: false }
+
+          - label: "Gottesdienstzeiten"
+            name: "service_times"
+            widget: "object"
+            fields:
+              - label: "Hauptgottesdienst"
+                name: "main_service"
+                widget: "object"
+                fields:
+                  - { label: "Tag", name: "day", widget: "string", default: "Sonntag" }
+                  - { label: "Uhrzeit", name: "time", widget: "string", default: "14:00" }
+
+          - label: "Footer"
+            name: "footer"
+            widget: "object"
+            fields:
+              - { label: "Copyright", name: "copyright_text", widget: "string" }
+              - { label: "Social Icons", name: "show_social_icons", widget: "boolean", default: true }
+
+      - name: "design"
+        label: "Design & Farben"
+        file: "data/design.json"
+        fields:
+          - label: "Farben"
+            name: "theme"
+            widget: "object"
+            fields:
+              - { label: "Primaerfarbe", name: "primary_color", widget: "string", default: "#2563EB" }
+              - { label: "Sekundaerfarbe", name: "secondary_color", widget: "string", default: "#10B981" }
+              - { label: "Akzentfarbe", name: "accent_color", widget: "string", default: "#F59E0B" }
+
+          - label: "Banner oben"
+            name: "banner"
+            widget: "object"
+            fields:
+              - { label: "Aktiv", name: "enabled", widget: "boolean", default: false }
+              - { label: "Text", name: "text", widget: "string", required: false }
+              - { label: "Link", name: "link", widget: "string", required: false }
+
+          - label: "Hintergrundbilder"
+            name: "hero_backgrounds"
+            widget: "object"
+            fields:
+              - { label: "Startseite", name: "homepage", widget: "image", required: false }
+              - { label: "Ueber uns", name: "ueber_uns", widget: "image", required: false }
+              - { label: "Gottesdienste", name: "gottesdienste", widget: "image", required: false }
+
+          - label: "Logo"
+            name: "logo"
+            widget: "object"
+            fields:
+              - { label: "Logo Bild", name: "main", widget: "image", required: false }
+              - { label: "Alt-Text", name: "alt_text", widget: "string" }
+
+  # =============================================
+  # STARTSEITE
+  # =============================================
+  - name: "startseite"
+    label: "Startseite"
+    files:
+      - name: "homepage"
+        label: "Startseite bearbeiten"
+        file: "data/homepage.json"
+        fields:
+          - label: "HERO (ganz oben)"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Haupttitel", name: "title", widget: "string" }
+              - { label: "Untertitel Zeile 1", name: "subtitle", widget: "text" }
+              - { label: "Hintergrundbild", name: "background_image", widget: "image", required: false }
+              - { label: "Button Text", name: "cta_text", widget: "string", default: "Mehr erfahren" }
+              - { label: "Button Link", name: "cta_link", widget: "string", default: "ueber-uns.html" }
+              - { label: "Kirchen-Icon rechts anzeigen", name: "show_icon", widget: "boolean", default: true }
+
+          - label: "GOTTESDIENSTE BEREICH"
+            name: "services_section"
+            widget: "object"
+            fields:
+              - { label: "Titel", name: "title", widget: "string" }
+              - { label: "Beschreibung", name: "description", widget: "text" }
+              - { label: "Tag", name: "service_day", widget: "string" }
+              - { label: "Uhrzeit", name: "service_time", widget: "string" }
+              - { label: "Adresse", name: "location", widget: "string" }
+              - { label: "Kinderinfo", name: "kids_info", widget: "string", required: false }
+
+          - label: "UEBER UNS BEREICH"
+            name: "about_section"
+            widget: "object"
+            fields:
+              - { label: "Titel", name: "title", widget: "string" }
+              - { label: "Untertitel", name: "subtitle", widget: "string" }
+              - { label: "Text", name: "text", widget: "text" }
+
+          - label: "EVENTS BEREICH"
+            name: "events_section"
+            widget: "object"
+            fields:
+              - { label: "Titel", name: "title", widget: "string" }
+              - { label: "Untertitel", name: "subtitle", widget: "string", required: false }
+              - { label: "Anzahl Events", name: "show_count", widget: "number", default: 4 }
+              - { label: "Nur Featured anzeigen", name: "featured_only", widget: "boolean", default: false }
+
+          - label: "KONTAKT BEREICH"
+            name: "contact_section"
+            widget: "object"
+            fields:
+              - { label: "Titel", name: "title", widget: "string" }
+              - { label: "Formular-Titel", name: "form_title", widget: "string" }
+              - { label: "Adress-Titel", name: "address_title", widget: "string" }
+
+  # =============================================
+  # VERANSTALTUNGEN
+  # =============================================
+  - name: "veranstaltungen"
+    label: "Veranstaltungen"
+    files:
+      - name: "events"
+        label: "Alle Events"
+        file: "data/events.json"
+        fields:
+          - label: "Kategorien"
+            name: "categories"
+            widget: "list"
+            collapsed: true
+            fields:
+              - { label: "ID", name: "id", widget: "string" }
+              - { label: "Name", name: "name", widget: "string" }
+              - { label: "Farbe", name: "color", widget: "string" }
+              - { label: "Icon", name: "icon", widget: "string" }
+
+          - label: "Events"
+            name: "items"
+            widget: "list"
+            label_singular: "Event"
+            add_to_top: true
+            fields:
+              - { label: "Titel", name: "title", widget: "string" }
+              - { label: "Datum & Uhrzeit", name: "date", widget: "datetime" }
+              - { label: "Ende (optional)", name: "end_date", widget: "datetime", required: false }
+              - { label: "Ort", name: "location", widget: "string", required: false }
+              - { label: "Beschreibung", name: "description", widget: "markdown", required: false }
+              - { label: "Bild", name: "image", widget: "image", required: false }
+              - label: "Kategorie"
+                name: "category"
+                widget: "select"
+                options: ["gottesdienst", "gebet", "jugend", "special", "gemeinschaft"]
+                default: "gemeinschaft"
+              - { label: "AUF STARTSEITE HERVORHEBEN", name: "featured", widget: "boolean", default: false }
+              - { label: "Link", name: "link", widget: "string", required: false }
+              - { label: "Wiederkehrend", name: "recurring", widget: "boolean", default: false }
+              - { label: "VEROEFFENTLICHT", name: "published", widget: "boolean", default: true }
+
+  # =============================================
+  # TEAM
+  # =============================================
+  - name: "team"
+    label: "Team"
+    files:
+      - name: "team_data"
+        label: "Team verwalten"
+        file: "data/team.json"
+        fields:
+          - label: "Seiten-Header"
+            name: "page"
+            widget: "object"
+            fields:
+              - { label: "Titel", name: "title", widget: "string" }
+              - { label: "Untertitel", name: "subtitle", widget: "string", required: false }
+              - { label: "Intro", name: "intro", widget: "text", required: false }
+
+          - label: "Mitglieder"
+            name: "members"
+            widget: "list"
+            label_singular: "Person"
+            fields:
+              - { label: "Name", name: "name", widget: "string" }
+              - { label: "Rolle", name: "role", widget: "string" }
+              - { label: "Foto", name: "image", widget: "image", required: false }
+              - { label: "Bio", name: "bio", widget: "text", required: false }
+              - { label: "E-Mail", name: "email", widget: "string", required: false }
+              - { label: "Reihenfolge", name: "order", widget: "number", default: 1 }
+              - { label: "Veroeffentlicht", name: "published", widget: "boolean", default: true }
+
+  # =============================================
+  # WEITERE SEITEN
+  # =============================================
+  - name: "seiten"
+    label: "Weitere Seiten"
+    files:
+      - name: "ueber_uns"
+        label: "Ueber uns"
+        file: "data/pages/ueber-uns.json"
+        fields:
+          - label: "Hero"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Titel", name: "title", widget: "string" }
+              - { label: "Untertitel", name: "subtitle", widget: "string", required: false }
+              - { label: "Hintergrund", name: "background_image", widget: "image", required: false }
+          - label: "Intro"
+            name: "intro"
+            widget: "object"
+            fields:
+              - { label: "Titel", name: "title", widget: "string" }
+              - { label: "Text", name: "text", widget: "markdown" }
+          - label: "Geschichte"
+            name: "story"
+            widget: "object"
+            fields:
+              - { label: "Titel", name: "title", widget: "string" }
+              - { label: "Text", name: "text", widget: "markdown" }
+              - { label: "Bild", name: "image", widget: "image", required: false }
+          - label: "Vision"
+            name: "vision"
+            widget: "object"
+            fields:
+              - { label: "Titel", name: "title", widget: "string" }
+              - { label: "Text", name: "text", widget: "markdown" }
+          - label: "Glaubenspunkte"
+            name: "beliefs"
+            widget: "object"
+            fields:
+              - { label: "Titel", name: "title", widget: "string" }
+              - label: "Punkte"
+                name: "items"
+                widget: "list"
+                fields:
+                  - { label: "Titel", name: "title", widget: "string" }
+                  - { label: "Text", name: "text", widget: "text" }
+                  - { label: "Icon", name: "icon", widget: "string" }
+
+      - name: "gottesdienste"
+        label: "Gottesdienste"
+        file: "data/pages/gottesdienste.json"
+        fields:
+          - label: "Hero"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Titel", name: "title", widget: "string" }
+              - { label: "Untertitel", name: "subtitle", widget: "string", required: false }
+          - label: "Intro"
+            name: "intro"
+            widget: "object"
+            fields:
+              - { label: "Titel", name: "title", widget: "string" }
+              - { label: "Text", name: "text", widget: "markdown" }
+          - label: "Hauptgottesdienst"
+            name: "main_service"
+            widget: "object"
+            fields:
+              - { label: "Titel", name: "title", widget: "string" }
+              - { label: "Tag", name: "day", widget: "string" }
+              - { label: "Uhrzeit", name: "time", widget: "string" }
+              - { label: "Dauer", name: "duration", widget: "string", required: false }
+              - { label: "Beschreibung", name: "description", widget: "text" }
+              - label: "Features"
+                name: "features"
+                widget: "list"
+                fields:
+                  - { label: "Titel", name: "title", widget: "string" }
+                  - { label: "Beschreibung", name: "description", widget: "string" }
+                  - { label: "Icon", name: "icon", widget: "string" }
+          - label: "Weitere Treffen"
+            name: "other_meetings"
+            widget: "object"
+            fields:
+              - { label: "Titel", name: "title", widget: "string" }
+              - label: "Treffen"
+                name: "items"
+                widget: "list"
+                fields:
+                  - { label: "Name", name: "title", widget: "string" }
+                  - { label: "Tag", name: "day", widget: "string" }
+                  - { label: "Uhrzeit", name: "time", widget: "string" }
+                  - { label: "Beschreibung", name: "description", widget: "string" }
+                  - { label: "Icon", name: "icon", widget: "string" }
+
+      - name: "spenden"
+        label: "Spenden"
+        file: "data/pages/spenden.json"
+        fields:
+          - label: "Hero"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Titel", name: "title", widget: "string" }
+              - { label: "Untertitel", name: "subtitle", widget: "string", required: false }
+          - label: "Intro"
+            name: "intro"
+            widget: "object"
+            fields:
+              - { label: "Titel", name: "title", widget: "string" }
+              - { label: "Text", name: "text", widget: "markdown" }
+          - label: "Wirkung"
+            name: "impact"
+            widget: "object"
+            fields:
+              - { label: "Titel", name: "title", widget: "string" }
+              - label: "Bereiche"
+                name: "items"
+                widget: "list"
+                fields:
+                  - { label: "Titel", name: "title", widget: "string" }
+                  - { label: "Beschreibung", name: "description", widget: "string" }
+                  - { label: "Icon", name: "icon", widget: "string" }
+          - label: "Bankdaten"
+            name: "bank_details"
+            widget: "object"
+            fields:
+              - { label: "Titel", name: "title", widget: "string" }
+              - { label: "Kontoinhaber", name: "account_holder", widget: "string" }
+              - { label: "IBAN", name: "iban", widget: "string" }
+              - { label: "BIC", name: "bic", widget: "string", required: false }
+              - { label: "Bank", name: "bank_name", widget: "string", required: false }
+          - label: "FAQ"
+            name: "faq"
+            widget: "object"
+            fields:
+              - { label: "Titel", name: "title", widget: "string" }
+              - label: "Fragen"
+                name: "items"
+                widget: "list"
+                fields:
+                  - { label: "Frage", name: "question", widget: "string" }
+                  - { label: "Antwort", name: "answer", widget: "text" }
+
+      - name: "datenschutz"
+        label: "Datenschutz"
+        file: "data/pages/datenschutz.json"
+        fields:
+          - label: "Titel"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Titel", name: "title", widget: "string" }
+          - label: "Inhalt"
+            name: "content"
+            widget: "object"
+            fields:
+              - { label: "Einleitung", name: "intro", widget: "text" }
+              - label: "Abschnitte"
+                name: "sections"
+                widget: "list"
+                fields:
+                  - { label: "Titel", name: "title", widget: "string" }
+                  - { label: "Text", name: "content", widget: "markdown" }
+
+      - name: "impressum"
+        label: "Impressum"
+        file: "data/pages/impressum.json"
+        fields:
+          - label: "Titel"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Titel", name: "title", widget: "string" }
+          - label: "Organisation"
+            name: "content"
+            widget: "object"
+            fields:
+              - label: "Firma"
+                name: "organization"
+                widget: "object"
+                fields:
+                  - { label: "Name", name: "name", widget: "string" }
+                  - { label: "Kurzname", name: "short_name", widget: "string" }
+                  - { label: "Rechtsform", name: "legal_form", widget: "string" }
+              - label: "Adresse"
+                name: "address"
+                widget: "object"
+                fields:
+                  - { label: "Strasse", name: "street", widget: "string" }
+                  - { label: "PLZ", name: "zip", widget: "string" }
+                  - { label: "Stadt", name: "city", widget: "string" }
+                  - { label: "Land", name: "country", widget: "string" }
+              - label: "Kontakt"
+                name: "contact"
+                widget: "object"
+                fields:
+                  - { label: "E-Mail", name: "email", widget: "string" }
+                  - { label: "Telefon", name: "phone", widget: "string", required: false }

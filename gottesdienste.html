@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gottesdienste | Newness of life</title>
-  <meta name="description" content="Erlebe lebendigen Lobpreis, klare Bibellehre und echte Gemeinschaft. Gottesdienste der Newness of Life in Mainz – jeden Sonntag 11:00 Uhr.">
+  <title>Gottesdienste - Newness of Life Mainz</title>
+  <meta name="description" content="Besuche unsere Gottesdienste jeden Sonntag um 14:00 Uhr in Mainz. Erlebe Lobpreis, Predigt und Gemeinschaft.">
 
   <!-- Styles -->
   <link rel="stylesheet" href="css/style.css">
@@ -17,34 +17,50 @@
 </head>
 <body>
 
-  <!-- Header (Partial) -->
+  <!-- Banner (wenn aktiviert) -->
+<!-- Header (Partial) -->
 <link rel="stylesheet" href="css/header.css">
 <header class="site-header-pro">
   <div class="container">
     <nav class="main-nav-pro" aria-label="Hauptnavigation">
-      <a href="index.html#start" class="logo-pro">
-        <img src="images/Logo_Schwarz_Transparent_KS.png" alt="Newness of life Logo" class="logo-img-pro">
+      <a href="index.html#start" class="logo-pro" data-cms-field="header.logo" data-cms-label="Logo">
+        <img src="/images/Logo_Schwarz_Transparent_KS.png" alt="Newness of Life Logo" class="logo-img-pro" data-cms-field="header.logo.image" data-cms-label="Logo Bild">
         <div class="logo-text-container">
-          <span class="logo-text-pro">Newness of Life</span>
-          <span class="logo-subtext-pro">die Kirche des lebendigen Gottes International e.V.</span>
+          <span class="logo-text-pro" data-cms-field="header.logo.text" data-cms-label="Logo Text">Newness of Life</span>
+          <span class="logo-subtext-pro" data-cms-field="header.logo.subtext" data-cms-label="Logo Untertext">die Kirche des lebendigen Gottes International e.V.</span>
         </div>
       </a>
 
       <ul id="mainnav-pro" class="nav-links-pro">
-        <li><a href="index.html">Startseite</a></li>
-        <li><a href="ueber-uns.html">Über uns</a></li>
-        <li><a href="gottesdienste.html">Gottesdienste</a></li>
-        <li><a href="veranstaltungen.html">Veranstaltungen</a></li>
-        <li class="show-on-mobile"><a href="spenden.html">Spenden</a></li>        <li><a href="index.html#kontakt">Kontakt</a></li>
-      </ul>
+        
+          
+            <li><a href="index.html">Startseite</a></li>
+          
+          
+            <li><a href="ueber-uns.html">Über uns</a></li>
+          
+          
+            <li><a href="gottesdienste.html">Gottesdienste</a></li>
+          
+          
+            <li><a href="veranstaltungen.html">Veranstaltungen</a></li>
+          
+          
+            <li><a href="index.html#kontakt">Kontakt</a></li>
+          
+        
+          <li class="show-on-mobile"><a href="spenden.html">Spenden</a></li>
+        </ul>
 
-
-      <a href="spenden.html" class="btn-primary btn-spenden-pro">Spenden</a>      <button class="menu-toggle-pro" aria-label="Menü öffnen" aria-controls="mainnav-pro" aria-expanded="false">
+      
+        <a href="spenden.html" class="btn-primary btn-spenden-pro" data-cms-field="header.cta_button.text" data-cms-label="CTA Button">Spenden</a>
+      <button class="menu-toggle-pro" aria-label="Menü öffnen" aria-controls="mainnav-pro" aria-expanded="false">
         <i class="fa-solid fa-bars"></i>
       </button>
     </nav>
   </div>
 </header>
+
 
   <main>
 
@@ -57,11 +73,11 @@
         </div>
         <div class="hero-overlay"></div>
         <div class="container hero-content">
-            <h1>Ein Gottesdienst, der dein Herz berührt</h1>
-            <p class="lead">Erlebe eine Atmosphäre, in der du Gott persönlich begegnen kannst. Wir freuen uns auf dich.</p>
+            <h1 data-cms-field="hero.title" data-cms-label="Titel">Gottesdienste</h1>
+            <p class="lead" data-cms-field="hero.subtitle" data-cms-label="Untertitel">Erlebe Gottes Gegenwart in unserer Mitte</p>
             <div class="gd-hero-info">
-                <span><i class="fa-solid fa-clock"></i> Jeden Sonntag, 14:00 Uhr</span>
-                <span><i class="fa-solid fa-map-marker-alt"></i> Hebbelstr. 56-60, Mainz</span>
+                <span><i class="fa-solid fa-clock"></i> <span data-cms-field="main_service.day" data-cms-label="Tag">Sonntag</span>, <span data-cms-field="main_service.time" data-cms-label="Uhrzeit">14:00 Uhr</span></span>
+                <span><i class="fa-solid fa-map-marker-alt"></i> Hebbelstr. 56-60, 55127 Mainz</span>
             </div>
         </div>
     </section>
@@ -70,16 +86,11 @@
     <section class="content-section">
         <div class="container">
             <div class="section-intro">
-                <h2>Erlebe unsere Gottesdienste</h2>
+                <h2 data-cms-field="intro.title" data-cms-label="Titel">Was dich erwartet</h2>
             </div>
-            <p class="text-center">
-                Herzlich willkommen bei Newness of Life – einer lebendigen Gospelkirche in Berlin! 
-                Unsere Gottesdienste sind ein Ort voller Freude, Musik und Begegnung mit Gott. Wir vereinen afrikanische, 
-                deutsche und amerikanische Gospelmusik – eine besondere Mischung aus Energie, Leidenschaft und Anbetung.
-                 Gemeinsam mit unserer Live-Band und unserem Chor feiern wir Gottes Liebe auf eine Weise, die Herzen berührt und bewegt. 
-                 Dazu gehören mitreißende Musik, eine Predigt, die praktisch und alltagsnah ist, sowie Raum für Gebet, Begegnung und echte Gemeinschaft.
-                Jeder ist willkommen – egal, ob du zum ersten Mal kommst oder schon Teil unserer Familie bist. Komm wie du bist – wir freuen uns auf dich!
-                </p>
+            <p class="text-center" data-cms-field="intro.text" data-cms-label="Text" data-cms-format="html">
+                Unsere Gottesdienste sind ein Ort der Begegnung mit Gott und untereinander. Erlebe lebendigen Lobpreis, inspirierende Predigten und herzliche Gemeinschaft.
+            </p>
         </div>
 
     </section>
@@ -88,42 +99,88 @@
     <section class="content-section expect-pro-section expect-pro-section-enhanced">
         <div class="container">
             <div class="section-intro">
-                <h2>Was dich erwartet</h2>
-                <p>Ein Besuch bei uns soll für dich eine durch und durch positive Erfahrung sein. </p>
+                <h2 data-cms-field="main_service.title" data-cms-label="Titel">Hauptgottesdienst</h2>
+                <p data-cms-field="main_service.description" data-cms-label="Beschreibung" data-cms-format="html">Unser wöchentlicher Gottesdienst mit Lobpreis, Predigt und Gemeinschaft.</p>
             </div>
             <div class="expect-pro-grid">
-                <div class="expect-pro-card-enhanced expect-card-anbetung">
-                    <div class="card-overlay"></div>
-                    <div class="card-content">
-                        <div class="icon"><i class="fa-solid fa-music"></i></div>
-                        <h3>Moderne Anbetung</h3>
-                        <p>Unsere Gottesdienste beginnen mit zeitgemäßer Musik, die dir hilft, dich auf Gott auszurichten und ihm zu begegnen.</p>
+                
+                    <div class="expect-pro-card-enhanced" data-cms-field="main_service.features" data-cms-label="Features">
+                        <div class="card-overlay"></div>
+                        <div class="card-content">
+                            <div class="icon"><i class="fa-solid fa-music"></i></div>
+                            <h3>Lobpreis &amp; Anbetung</h3>
+                            <p>Beginne die Woche mit kraftvoller Anbetung</p>
+                        </div>
                     </div>
-                </div>
-                <div class="expect-pro-card-enhanced expect-card-predigten">
-                    <div class="card-overlay"></div>
-                    <div class="card-content">
-                        <div class="icon"><i class="fa-solid fa-lightbulb"></i></div>
-                        <h3>Inspirierende Predigten</h3>
-                        <p>Wir glauben, dass die Bibel heute noch Relevanz hat. Unsere Predigten sind lebensnah, praktisch und ermutigend.</p>
+                
+                    <div class="expect-pro-card-enhanced" data-cms-field="main_service.features" data-cms-label="Features">
+                        <div class="card-overlay"></div>
+                        <div class="card-content">
+                            <div class="icon"><i class="fa-solid fa-book-open"></i></div>
+                            <h3>Predigt</h3>
+                            <p>Bibeltreue und lebensnahe Botschaften</p>
+                        </div>
                     </div>
-                </div>
-                <div class="expect-pro-card-enhanced expect-card-gemeinschaft">
-                    <div class="card-overlay"></div>
-                    <div class="card-content">
-                        <div class="icon"><i class="fa-solid fa-heart"></i></div>
-                        <h3>Herzliche Gemeinschaft</h3>
-                        <p>Wir sind eine offene und freundliche Gemeinschaft. Egal, woher du kommst, bei uns bist du willkommen.</p>
+                
+                    <div class="expect-pro-card-enhanced" data-cms-field="main_service.features" data-cms-label="Features">
+                        <div class="card-overlay"></div>
+                        <div class="card-content">
+                            <div class="icon"><i class="fa-solid fa-child"></i></div>
+                            <h3>Kinderprogramm</h3>
+                            <p>Altersgerechtes Programm während der Predigt</p>
+                        </div>
                     </div>
-                </div>
-                <div class="expect-pro-card-enhanced expect-card-kinder">
-                    <div class="card-overlay"></div>
-                    <div class="card-content">
-                        <div class="icon"><i class="fa-solid fa-child"></i></div>
-                        <h3>Tolles Kinderprogramm</h3>
-                        <p>Für Kinder bieten wir ein sicheres und spannendes Programm, in dem sie auf kreative Weise von Gott hören.</p>
+                
+                    <div class="expect-pro-card-enhanced" data-cms-field="main_service.features" data-cms-label="Features">
+                        <div class="card-overlay"></div>
+                        <div class="card-content">
+                            <div class="icon"><i class="fa-solid fa-users"></i></div>
+                            <h3>Gemeinschaft</h3>
+                            <p>Zeit zum Austausch nach dem Gottesdienst</p>
+                        </div>
                     </div>
-                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="container">
+            <div class="section-intro">
+                <h2 data-cms-field="other_meetings.title" data-cms-label="Titel">Weitere Treffen</h2>
+            </div>
+            <div class="expect-pro-grid">
+                
+                    <div class="expect-pro-card-enhanced" data-cms-field="other_meetings.items" data-cms-label="Treffen">
+                        <div class="card-overlay"></div>
+                        <div class="card-content">
+                            <div class="icon"><i class="fa-solid fa-pray"></i></div>
+                            <h3>Gebetstreffen</h3>
+                            <p>Mittwoch · 19:00 Uhr</p>
+                            <p>Gemeinsames Gebet und Fürbitte</p>
+                        </div>
+                    </div>
+                
+                    <div class="expect-pro-card-enhanced" data-cms-field="other_meetings.items" data-cms-label="Treffen">
+                        <div class="card-overlay"></div>
+                        <div class="card-content">
+                            <div class="icon"><i class="fa-solid fa-book-bible"></i></div>
+                            <h3>Bibelstunde</h3>
+                            <p>Freitag · 19:00 Uhr</p>
+                            <p>Vertiefendes Bibelstudium</p>
+                        </div>
+                    </div>
+                
+                    <div class="expect-pro-card-enhanced" data-cms-field="other_meetings.items" data-cms-label="Treffen">
+                        <div class="card-overlay"></div>
+                        <div class="card-content">
+                            <div class="icon"><i class="fa-solid fa-users"></i></div>
+                            <h3>Jugendgruppe</h3>
+                            <p>Samstag · 17:00 Uhr</p>
+                            <p>Für Jugendliche und junge Erwachsene</p>
+                        </div>
+                    </div>
+                
             </div>
         </div>
     </section>
@@ -159,30 +216,43 @@
     <div class="footer-grid">
       <!-- Column 1: About -->
       <div class="footer-column">
-        <h3 class="footer-heading">Newness of Life</h3>
-        <p class="footer-about-text">Ein Ort des Glaubens, der Gemeinschaft und der Hoffnung. Wir wollen Menschen mit der Liebe Gottes erreichen und unsere Umgebung positiv prägen.</p>
+        <h3 class="footer-heading" data-cms-field="settings.site_title" data-cms-label="Seiten-Titel">Newness of Life</h3>
+        <p class="footer-about-text" data-cms-field="footer.about_text" data-cms-label="Footer Beschreibung">Ein Ort des Glaubens, der Gemeinschaft und der Hoffnung. Wir wollen Menschen mit der Liebe Gottes erreichen und unsere Umgebung positiv prägen.</p>
       </div>
 
       <!-- Column 2: Quick Links -->
-      <div class="footer-column hide-on-mobile">
-        <h3 class="footer-heading">Navigation</h3>
-        <ul class="footer-links">
-          <li><a href="index.html">Startseite</a></li>
-          <li><a href="ueber-uns.html">Über uns</a></li>
-          <li><a href="gottesdienste.html">Gottesdienste</a></li>
-          <li><a href="veranstaltungen.html">Veranstaltungen</a></li>
-          <li><a href="spenden.html">Spenden</a></li>
-          <li><a href="index.html#kontakt">Kontakt</a></li>
-        </ul>
-      </div>
-
+      
+        <div class="footer-column hide-on-mobile">
+          <h3 class="footer-heading">Navigation</h3>
+          <ul class="footer-links">
+            
+              
+                <li><a href="index.html">Startseite</a></li>
+              
+              
+                <li><a href="ueber-uns.html">Über uns</a></li>
+              
+              
+                <li><a href="gottesdienste.html">Gottesdienste</a></li>
+              
+              
+                <li><a href="veranstaltungen.html">Veranstaltungen</a></li>
+              
+              
+                <li><a href="index.html#kontakt">Kontakt</a></li>
+              
+            
+              <li><a href="spenden.html">Spenden</a></li>
+            </ul>
+        </div>
       <!-- Column 3: Contact -->
       <div class="footer-column footer-contact-centered">
         <h3 class="footer-heading">Kontakt</h3>
         <address class="footer-contact">
-          <p><i class="fas fa-map-marker-alt"></i> Hebbelstr. 56–60<br>55127 Mainz</p>
-          <p><i class="fas fa-envelope"></i> <a href="mailto:newnessoflife@clgi.org">newnessoflife@clgi.org</a></p>
-        </address>
+          <p><i class="fas fa-map-marker-alt"></i> Hebbelstr. 56-60<br>55127 Mainz</p>
+          
+            <p><i class="fas fa-envelope"></i> <a href="mailto:newnessoflife@clgi.org">newnessoflife@clgi.org</a></p>
+          </address>
         <a href="index.html#kontakt" class="btn-footer-donate">Kontaktformular</a>
       </div>
 
@@ -190,21 +260,17 @@
       <div class="footer-column">
         <h3 class="footer-heading">Folge uns</h3>
         <div class="footer-social">
-          <a href="https://www.instagram.com/newnessoflife.clgi/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-          <a href="https://www.facebook.com/profile.php?id=61578794367292" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-          <a href="https://www.youtube.com/@EuropeCLGI" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-          <a href="https://www.tiktok.com/@newnessoflife.clgi" target="_blank" rel="noopener" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
-        </div>
+          </div>
         <div class="footer-donation">
           <h3 class="footer-heading" style="margin-top: 30px;">Unterstütze uns</h3>
-          <p>Deine Spende hilft uns, einen Unterschied in unserer Stadt zu machen.</p>
+          <p data-cms-field="footer.donation_text" data-cms-label="Spenden Text">Deine Spende hilft uns, einen Unterschied in unserer Stadt zu machen.</p>
           <a href="spenden.html" class="btn-footer-donate">Jetzt spenden</a>
         </div>
       </div>
     </div>
 
     <div class="footer-bottom">
-      <p>&copy; 2025 Newness of Life. Alle Rechte vorbehalten.</p>
+      <p>&copy; 2026 Newness of Life - Die Kirche des lebendigen Gottes International e.V.. Alle Rechte vorbehalten.</p>
       <nav class="footer-legal-links">
         <a href="datenschutz.html">Datenschutz</a>
         <a href="impressum.html">Impressum</a>
@@ -212,6 +278,9 @@
     </div>
   </div>
 </footer>
+<!-- CMS Preview Script (nur aktiv wenn ?cms-preview=1) -->
+<script src="js/cms-preview.js"></script>
+
   <script src="js/script.js"></script>
 </body>
 </html>

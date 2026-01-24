@@ -1,24 +1,92 @@
 {
+  "categories": [
+    {
+      "id": "gottesdienst",
+      "name": "Gottesdienst",
+      "color": "#2563EB",
+      "icon": "fa-church"
+    },
+    {
+      "id": "gebet",
+      "name": "Gebet",
+      "color": "#10B981",
+      "icon": "fa-pray"
+    },
+    {
+      "id": "jugend",
+      "name": "Jugend",
+      "color": "#8B5CF6",
+      "icon": "fa-users"
+    },
+    {
+      "id": "special",
+      "name": "Special Event",
+      "color": "#F59E0B",
+      "icon": "fa-star"
+    },
+    {
+      "id": "gemeinschaft",
+      "name": "Gemeinschaft",
+      "color": "#EC4899",
+      "icon": "fa-heart"
+    }
+  ],
   "items": [
     {
-      "date": "2025-11-08T09:00:00",
       "title": "Church Family Breakfast (vor dem Gottesdienst)",
-      "subtitle": "in der Gemeinde"
+      "date": "2025-11-08T09:00:00",
+      "end_date": "",
+      "location": "in der Gemeinde",
+      "description": "",
+      "image": "",
+      "category": "gemeinschaft",
+      "featured": false,
+      "link": "",
+      "recurring": false,
+      "recurring_pattern": "",
+      "published": true
     },
     {
-      "date": "2025-11-23T19:00:00",
       "title": "Worship Night – Youth & Young Adults",
-      "subtitle": "in der Gemeinde"
+      "date": "2025-11-23T19:00:00",
+      "end_date": "",
+      "location": "in der Gemeinde",
+      "description": "",
+      "image": "",
+      "category": "jugend",
+      "featured": true,
+      "link": "",
+      "recurring": false,
+      "recurring_pattern": "",
+      "published": true
     },
     {
-      "date": "2025-12-20T17:00:00",
       "title": "Christmas Celebration Dinner",
-      "subtitle": "in der Gemeinde"
+      "date": "2025-12-20T17:00:00",
+      "end_date": "",
+      "location": "in der Gemeinde",
+      "description": "",
+      "image": "",
+      "category": "special",
+      "featured": true,
+      "link": "",
+      "recurring": false,
+      "recurring_pattern": "",
+      "published": true
     },
     {
-      "date": "2025-12-31T20:00:00",
       "title": "From Glory to Glory 2026",
-      "subtitle": "in der Gemeinde"
+      "date": "2025-12-31T20:00:00",
+      "end_date": "",
+      "location": "in der Gemeinde",
+      "description": "",
+      "image": "",
+      "category": "special",
+      "featured": true,
+      "link": "",
+      "recurring": false,
+      "recurring_pattern": "",
+      "published": true
     }
   ]
 }
