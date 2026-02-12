@@ -33,7 +33,20 @@
     <include src="partials/header.html"></include>
 
     <!-- Hero Section -->
-    <section class="hero" id="start">
+    <section
+        class="hero"
+        id="start"
+        data-has-image="{{ homepage.hero.background_image ? 'true' : 'false' }}"
+        style="{{ homepage.hero.background_image ? 'background-image: linear-gradient(135deg, rgba(31, 71, 112, 0.6) 0%, rgba(238, 242, 243, 0.9) 100%), url(' + homepage.hero.background_image + '); background-size: cover; background-position: center;' : '' }}"
+    >
+        <div
+            class="cms-edit-layer"
+            data-cms-field="hero.background_image"
+            data-cms-label="Hintergrundbild"
+            data-cms-attr="background-image"
+            data-cms-bg-overlay="linear-gradient(135deg, rgba(31, 71, 112, 0.6) 0%, rgba(238, 242, 243, 0.9) 100%)"
+            data-has-image="{{ homepage.hero.background_image ? 'true' : 'false' }}"
+        ></div>
         <div class="container hero-grid">
             <div class="hero-left">
                 <h1 id="hero-title" data-cms-field="hero.title" data-cms-label="Haupttitel">{{ homepage.hero.title || 'Willkommen in unserer Gemeinde' }}</h1>
@@ -105,7 +118,7 @@
                 <h2 id="ueber-uns-title" data-cms-field="about_section.title" data-cms-label="Titel">{{ homepage.about_section.title || 'Über uns' }}</h2>
                 <h3 id="ueber-uns-subtitle" data-cms-field="about_section.subtitle" data-cms-label="Untertitel">{{ homepage.about_section.subtitle || 'Unsere Vision & Mission' }}</h3>
                 <p id="ueber-uns-text" data-cms-field="about_section.text" data-cms-label="Text" data-cms-format="html">{{ homepage.about_section.text || '' }}</p>
-                <div style="text-align: center; margin-top: 24px;">
+                <div class="centered-actions">
                     <a href="ueber-uns.html" class="btn btn-primary" aria-label="Mehr über uns erfahren">
                         Mehr erfahren
                     </a>
@@ -113,7 +126,7 @@
             </div>
         </section>
 
-        <include src="partials/event-section.html"></include>
+        <!-- Events Section entfernt: Veranstaltungen werden auf eigener Seite verwaltet -->
 
         <!-- Kontakt Section -->
         <section id="kontakt" class="content-section">
@@ -122,11 +135,13 @@
                 <div class="contact-grid">
                     <div class="contact-form">
                         <h3 id="kontakt-form-title" data-cms-field="contact_section.form_title" data-cms-label="Formular-Titel">{{ homepage.contact_section.form_title || 'Schreiben Sie uns' }}</h3>
-                        <form action="https://formspree.io/f/mwpqabkj" method="POST">
+                        <form id="contact-form" method="POST" action="/api/contact">
+                            <input type="text" name="website" class="is-hidden" tabindex="-1" autocomplete="off">
                             <input type="text" name="name" placeholder="Ihr Name" required>
                             <input type="email" name="email" placeholder="Ihre E-Mail" required>
                             <textarea name="message" placeholder="Ihre Nachricht" rows="5" required></textarea>
                             <button type="submit">Senden</button>
+                            <p class="form-status" id="contact-status" aria-live="polite"></p>
                         </form>
                     </div>
                     <div class="contact-details">
@@ -136,7 +151,7 @@
                             <span data-cms-field="contact.city" data-cms-label="PLZ und Stadt">{{ settings.contact.city || '55127 Mainz' }}</span>
                         </p>
                         <div class="map-container">
-                            <iframe src="{{ settings.contact.maps_url || 'https://www.google.com/maps?q=Hebbelstr.+56-60,+55127+Mainz' }}&output=embed" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                            <iframe class="map-embed" src="{{ settings.contact.maps_url || 'https://www.google.com/maps?q=Hebbelstr.+56-60,+55127+Mainz' }}&output=embed" width="100%" height="300" allowfullscreen="" loading="lazy"></iframe>
                         </div>
                     </div>
                 </div>

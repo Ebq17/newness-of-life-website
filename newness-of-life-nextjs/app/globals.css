@@ -1,0 +1,349 @@
+@import "tailwindcss";
+
+/* ========================================================================== */
+/*                           CSS Variables (Design System)                     */
+/* ========================================================================== */
+:root {
+  /* Primary Color Palette */
+  --color-primary: #2563EB;
+  --color-primary-700: #1D4ED8;
+  --color-secondary: #10B981;
+  --color-secondary-dark: #0f9a73;
+  --color-dark: #111827;
+  --color-light: #F9FAFB;
+  --color-gray: #D1D5DB;
+  --color-white: #FFFFFF;
+  --color-accent-yellow: #ffd700;
+
+  /* Category Colors */
+  --color-gottesdienst: #2563EB;
+  --color-gebet: #10B981;
+  --color-jugend: #8B5CF6;
+  --color-special: #F59E0B;
+  --color-gemeinschaft: #EC4899;
+
+  /* Layout */
+  --container-max: 1200px;
+  --header-height: 80px;
+  --container-pad: clamp(12px, 3vw, 24px);
+
+  /* Typography */
+  --font-family-base: 'Poppins', system-ui, Arial, sans-serif;
+  --font-size-base: 16px;
+  --line-height-base: 1.6;
+
+  /* Effects */
+  --shadow-sm: 0 6px 22px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 18px 40px rgba(15, 23, 42, 0.12);
+  --radius: 16px;
+
+  /* Aliases for shadcn/ui */
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 217 91% 60%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 160 84% 39%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 217 91% 60%;
+  --chart-1: 12 76% 61%;
+  --chart-2: 173 58% 39%;
+  --chart-3: 197 37% 24%;
+  --chart-4: 43 74% 66%;
+  --chart-5: 27 87% 67%;
+  --sidebar-background: 0 0% 98%;
+  --sidebar-foreground: 240 5.3% 26.1%;
+  --sidebar-primary: 217 91% 60%;
+  --sidebar-primary-foreground: 0 0% 98%;
+  --sidebar-accent: 240 4.8% 95.9%;
+  --sidebar-accent-foreground: 240 5.9% 10%;
+  --sidebar-border: 220 13% 91%;
+  --sidebar-ring: 217.2 91.2% 59.8%;
+}
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary-hsl: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary-hsl: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent-hsl: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --font-sans: var(--font-family-base);
+}
+
+/* ========================================================================== */
+/*                                 Base Styles                                 */
+/* ========================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border-color: hsl(var(--border));
+}
+
+html {
+  overflow-y: scroll;
+}
+
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  color: var(--color-dark);
+  background-color: var(--color-light);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ========================================================================== */
+/*                              Container Utilities                            */
+/* ========================================================================== */
+.container {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+
+.content-section {
+  padding: 80px 0;
+  background-color: var(--color-white);
+  color: var(--color-dark);
+}
+
+/* ========================================================================== */
+/*                              Typography                                     */
+/* ========================================================================== */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 0.5em;
+}
+
+h2 {
+  font-size: 2.5em;
+  color: var(--color-dark);
+  text-align: center;
+  margin-bottom: 1.5em;
+  position: relative;
+  padding-bottom: 0.5em;
+}
+
+h2::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: var(--color-primary);
+  border-radius: 2px;
+}
+
+h3 {
+  font-size: 1.8em;
+  color: var(--color-dark);
+  margin-bottom: 1em;
+}
+
+p {
+  margin-bottom: 1em;
+  color: var(--color-dark);
+}
+
+/* ========================================================================== */
+/*                              Button Styles                                  */
+/* ========================================================================== */
+.btn-primary {
+  display: inline-block;
+  background: var(--color-primary);
+  color: var(--color-white);
+  padding: 15px 30px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-700);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  display: inline-block;
+  background: var(--color-secondary);
+  color: var(--color-white);
+  padding: 12px 25px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: var(--color-secondary-dark);
+  transform: translateY(-2px);
+}
+
+/* ========================================================================== */
+/*                              Card Styles                                    */
+/* ========================================================================== */
+.card {
+  background: var(--color-white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ========================================================================== */
+/*                              Event Styles                                   */
+/* ========================================================================== */
+.event-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+  margin-top: 40px;
+}
+
+.event-card {
+  background: var(--color-light);
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  text-align: left;
+  color: var(--color-dark);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+}
+
+.event-card img.event-image {
+  width: 100%;
+  aspect-ratio: 16/9;
+  height: clamp(180px, 22vw, 260px);
+  object-fit: cover;
+  border-radius: 14px 14px 0 0;
+  background: var(--color-gray);
+}
+
+.event-card-content {
+  padding: 28px;
+}
+
+.event-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  background-color: var(--color-primary);
+  margin-bottom: 10px;
+}
+
+.event-date-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+  padding: 10px;
+  background: var(--color-primary);
+  color: white;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.event-date-badge .event-day {
+  font-size: 1.5em;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.event-date-badge .event-month {
+  font-size: 0.75em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* ========================================================================== */
+/*                              Responsive Styles                              */
+/* ========================================================================== */
+@media (min-width: 768px) {
+  .content-section {
+    padding: 60px 0;
+  }
+
+  h2 {
+    font-size: 2.2em;
+  }
+
+  h3 {
+    font-size: 1.6em;
+  }
+}
+
+@media (min-width: 1024px) {
+  .event-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1200px;
+  }
+
+  .content-section {
+    padding: 88px 0;
+  }
+
+  .event-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Einstellungen - Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/settings.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h1>Newness of Life</h1>
+      <span>Admin Dashboard</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-title">Übersicht</div>
+        <a href="dashboard.html" class="nav-item">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+          Dashboard
+        </a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Inhalte</div>
+        <a href="events.html" class="nav-item">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+          Events
+        </a>
+        <a href="pages.html" class="nav-item">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          Seiten
+        </a>
+        <a href="media.html" class="nav-item">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+          Medien
+        </a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Einstellungen</div>
+        <a href="settings.html" class="nav-item active">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+          Einstellungen
+        </a>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <header class="header">
+      <h2 class="header-title">Einstellungen</h2>
+      <button class="btn btn-success" onclick="saveSettings()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        Speichern
+      </button>
+    </header>
+
+    <div class="content">
+      <!-- Allgemein -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Allgemeine Einstellungen</h3>
+          <p class="card-desc">Grundlegende Informationen über die Website</p>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label class="form-label">Website-Titel</label>
+            <input type="text" class="form-input" id="siteTitle" value="Newness of Life International Church">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Beschreibung</label>
+            <textarea class="form-textarea" id="siteDescription">Eine lebendige Gemeinde, die Jesus nachfolgt und Menschen in der Liebe Gottes willkommen heißt.</textarea>
+            <p class="form-hint">Wird in Suchmaschinen angezeigt</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kontakt -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Kontaktdaten</h3>
+          <p class="card-desc">Adresse und Kontaktinformationen</p>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label class="form-label">Adresse</label>
+            <textarea class="form-textarea" id="address">Newness of Life International Church
+Musterstraße 123
+12345 Musterstadt</textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">E-Mail</label>
+              <input type="email" class="form-input" id="email" value="info@nol-church.de">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Telefon</label>
+              <input type="tel" class="form-input" id="phone" value="">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Social Media -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Social Media</h3>
+          <p class="card-desc">Links zu sozialen Netzwerken</p>
+        </div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Facebook</label>
+              <input type="url" class="form-input" id="facebook" placeholder="https://facebook.com/...">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Instagram</label>
+              <input type="url" class="form-input" id="instagram" placeholder="https://instagram.com/...">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">YouTube</label>
+              <input type="url" class="form-input" id="youtube" placeholder="https://youtube.com/...">
+            </div>
+            <div class="form-group">
+              <label class="form-label">TikTok</label>
+              <input type="url" class="form-input" id="tiktok" placeholder="https://tiktok.com/...">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Design -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Design</h3>
+          <p class="card-desc">Farben und visuelle Einstellungen</p>
+        </div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Primärfarbe</label>
+              <div class="color-picker-group">
+                <input type="color" class="color-picker" id="primaryColor" value="#2563EB">
+                <input type="text" class="form-input input-width-120" id="primaryColorHex" value="#2563EB">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Sekundärfarbe</label>
+              <div class="color-picker-group">
+                <input type="color" class="color-picker" id="secondaryColor" value="#10B981">
+                <input type="text" class="form-input input-width-120" id="secondaryColorHex" value="#10B981">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gottesdienst-Zeiten -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Gottesdienst-Zeiten</h3>
+          <p class="card-desc">Regelmäßige Veranstaltungen</p>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label class="form-label">Sonntagsgottesdienst</label>
+            <input type="text" class="form-input" id="sundayService" value="Sonntag, 10:30 Uhr">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Gebetsstunde</label>
+            <input type="text" class="form-input" id="prayerMeeting" value="Mittwoch, 19:00 Uhr">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Jugend-Bibelstunde</label>
+            <input type="text" class="form-input" id="youthBible" value="Freitag, 19:00 Uhr">
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+    const API_URL = 'http://localhost:3001/api';
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    // Color picker sync
+    document.getElementById('primaryColor').addEventListener('input', (e) => {
+      document.getElementById('primaryColorHex').value = e.target.value;
+    });
+    document.getElementById('primaryColorHex').addEventListener('input', (e) => {
+      document.getElementById('primaryColor').value = e.target.value;
+    });
+    document.getElementById('secondaryColor').addEventListener('input', (e) => {
+      document.getElementById('secondaryColorHex').value = e.target.value;
+    });
+    document.getElementById('secondaryColorHex').addEventListener('input', (e) => {
+      document.getElementById('secondaryColor').value = e.target.value;
+    });
+
+    // Load settings
+    async function loadSettings() {
+      try {
+        const res = await fetch(`${API_URL}/data/settings.json`);
+        const settings = await res.json();
+
+        if (settings.site_title) document.getElementById('siteTitle').value = settings.site_title;
+        if (settings.site_description) document.getElementById('siteDescription').value = settings.site_description;
+        if (settings.email) document.getElementById('email').value = settings.email;
+        if (settings.phone) document.getElementById('phone').value = settings.phone;
+        if (settings.address) document.getElementById('address').value = settings.address;
+        if (settings.facebook) document.getElementById('facebook').value = settings.facebook;
+        if (settings.instagram) document.getElementById('instagram').value = settings.instagram;
+        if (settings.youtube) document.getElementById('youtube').value = settings.youtube;
+        if (settings.tiktok) document.getElementById('tiktok').value = settings.tiktok;
+      } catch (err) {
+        console.log('Could not load settings:', err);
+      }
+    }
+
+    // Save settings
+    async function saveSettings() {
+      const settings = {
+        site_title: document.getElementById('siteTitle').value,
+        site_description: document.getElementById('siteDescription').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        address: document.getElementById('address').value,
+        facebook: document.getElementById('facebook').value,
+        instagram: document.getElementById('instagram').value,
+        youtube: document.getElementById('youtube').value,
+        tiktok: document.getElementById('tiktok').value,
+        primary_color: document.getElementById('primaryColor').value,
+        secondary_color: document.getElementById('secondaryColor').value,
+        sunday_service: document.getElementById('sundayService').value,
+        prayer_meeting: document.getElementById('prayerMeeting').value,
+        youth_bible: document.getElementById('youthBible').value
+      };
+
+      try {
+        await fetch(`${API_URL}/data/settings.json`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(settings)
+        });
+
+        // Trigger build
+        await fetch(`${API_URL}/build`, { method: 'POST' });
+
+        showToast('Einstellungen gespeichert!', 'success');
+      } catch (err) {
+        showToast('Fehler: ' + err.message, 'error');
+      }
+    }
+
+    loadSettings();
+  </script>
+</body>
+</html>

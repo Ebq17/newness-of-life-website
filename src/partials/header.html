@@ -33,7 +33,7 @@
       <ul id="mainnav-pro" class="nav-links-pro">
         <each loop="item in header.navigation">
           <if condition="item.show !== false">
-            <li><a href="{{ item.url }}">{{ item.label }}</a></li>
+            <li><a href="{{ item.url }}" class="{{ currentPage === item.url ? 'active' : '' }}">{{ item.label }}</a></li>
           </if>
         </each>
         <if condition="header.cta_button && header.cta_button.show">

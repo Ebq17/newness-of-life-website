@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Termin-Verwaltung - Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/events.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <a href="dashboard.html" class="sidebar-logo">
+            <i class="fas fa-church"></i>
+            <span>Gemeinde</span>
+        </a>
+        <nav class="sidebar-nav">
+            <a href="../index.html" class="nav-item">
+                <i class="fas fa-home"></i>
+                Zur Website
+            </a>
+            <a href="events.html" class="nav-item active">
+                <i class="fas fa-calendar-alt"></i>
+                Termine verwalten
+            </a>
+            <a href="pages.html" class="nav-item">
+                <i class="fas fa-file-alt"></i>
+                Seiten bearbeiten
+            </a>
+            <a href="media.html" class="nav-item">
+                <i class="fas fa-images"></i>
+                Medien
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Termin-Verwaltung</h1>
+                <p class="page-subtitle">Erstelle und verwalte Gemeinde-Termine</p>
+            </div>
+            <button class="btn btn-primary" onclick="openModal()">
+                <i class="fas fa-plus"></i>
+                Neuer Termin
+            </button>
+        </div>
+
+        <!-- Events Table -->
+        <div class="events-table-container">
+            <table class="events-table" id="eventsTable">
+                <thead>
+                    <tr>
+                        <th>Event</th>
+                        <th>Kategorie</th>
+                        <th>Datum</th>
+                        <th>Ort</th>
+                        <th>Aktionen</th>
+                    </tr>
+                </thead>
+                <tbody id="eventsTableBody">
+                    <!-- Dynamisch geladen -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Event Modal -->
+    <div class="modal-overlay" id="eventModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Event bearbeiten</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="eventForm" onsubmit="saveEvent(event)">
+                <input type="hidden" id="eventId">
+
+                <div class="form-group">
+                    <label class="form-label">Titel <span class="required">*</span></label>
+                    <input type="text" class="form-input" id="eventTitle" required placeholder="Name der Veranstaltung">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Datum <span class="required">*</span></label>
+                        <input type="date" class="form-input" id="eventDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Uhrzeit <span class="required">*</span></label>
+                        <input type="time" class="form-input" id="eventTime" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Ort <span class="required">*</span></label>
+                    <input type="text" class="form-input" id="eventLocation" required placeholder="z.B. Hebbelstr. 56-60, Mainz">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Kategorie</label>
+                        <select class="form-select" id="eventCategory">
+                            <!-- Kategorien werden dynamisch geladen -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Kapazität</label>
+                        <input type="number" class="form-input" id="eventCapacity" min="0" step="1" placeholder="z.B. 100">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Preis (optional)</label>
+                        <input type="text" class="form-input" id="eventPrice" placeholder="z.B. 25€ oder leer lassen">
+                        <p class="form-hint">Leer lassen wenn kostenlos</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Bild-URL</label>
+                        <input type="text" class="form-input" id="eventImage" placeholder="/images/..." onchange="previewImage()">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Beschreibung</label>
+                    <textarea class="form-textarea" id="eventDescription" placeholder="Beschreibe das Event..."></textarea>
+                </div>
+
+                <div class="image-preview-container is-hidden" id="imagePreviewContainer">
+                    <img id="imagePreview" class="image-preview" src="" alt="Vorschau">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <input type="checkbox" id="eventFeatured"> Als Featured markieren
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <input type="checkbox" id="eventPublished" checked> Veröffentlicht
+                        </label>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">
+                        <i class="fas fa-times"></i> Abbrechen
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Speichern
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirm Modal -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal modal-sm">
+            <div class="delete-modal-content">
+                <i class="fas fa-trash-alt"></i>
+                <h3>Event löschen?</h3>
+                <p id="deleteEventName">Möchtest du dieses Event wirklich löschen?</p>
+                <div class="modal-actions modal-actions-center">
+                    <button class="btn btn-secondary" onclick="closeDeleteModal()">Abbrechen</button>
+                    <button class="btn btn-danger" onclick="confirmDelete()">
+                        <i class="fas fa-trash"></i> Löschen
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+    const API_URL = 'http://localhost:3001/api';
+    let eventsData = { categories: [], items: [] };
+    let deleteEventId = null;
+
+    // Format date for display
+    function formatDate(dateStr) {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    }
+
+    // Get category info
+    function getCategory(categoryId) {
+        return eventsData.categories.find(c => c.id === categoryId) || { name: 'Event', color: '#2563EB' };
+    }
+
+    // Toast notification
+    function showToast(message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i> ${message}`;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 4000);
+    }
+
+    // Load events
+    async function loadEvents() {
+        try {
+            const response = await fetch(`${API_URL}/data/events.json`);
+            if (response.ok) {
+                eventsData = await response.json();
+                renderTable();
+                renderCategoryOptions();
+            }
+        } catch (error) {
+            console.error('Error loading events:', error);
+            showToast('Fehler beim Laden der Events', 'error');
+        }
+    }
+
+    // Render category options
+    function renderCategoryOptions() {
+        const select = document.getElementById('eventCategory');
+        select.innerHTML = eventsData.categories
+            .filter(c => c.id !== 'alle')
+            .map(c => `<option value="${c.id}">${c.name}</option>`)
+            .join('');
+    }
+
+    // Render table
+    function renderTable() {
+        const tbody = document.getElementById('eventsTableBody');
+
+        if (!eventsData.items || eventsData.items.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="5">
+                        <div class="empty-state">
+                            <i class="fas fa-calendar-plus"></i>
+                            <h3>Keine Termine vorhanden</h3>
+                            <p>Erstelle deinen ersten Termin, um loszulegen.</p>
+                            <button class="btn btn-primary" onclick="openModal()">
+                                <i class="fas fa-plus"></i> Neuer Termin
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        // Sort by date
+        const sorted = [...eventsData.items].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        tbody.innerHTML = sorted.map(event => {
+            const category = getCategory(event.category);
+            const hasImage = event.image && event.image.trim() !== '';
+            const defaultImage = '/images/EJC.png';
+
+            return `
+                <tr>
+                    <td>
+                        <div class="event-row-info">
+                            <img src="${hasImage ? event.image : defaultImage}" alt="${event.title}" class="event-row-image">
+                            <span class="event-row-title">${event.title}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="category-badge" style="background-color: ${category.color}20; color: ${category.color}">
+                            ${category.name}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="event-date-cell">
+                            <i class="fas fa-calendar"></i>
+                            ${formatDate(event.date)}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="event-location-cell">
+                            <i class="fas fa-map-marker-alt"></i>
+                            ${event.location || 'In der Gemeinde'}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="event-actions">
+                            <button class="btn btn-icon btn-secondary" onclick="editEvent('${event.id}')" title="Bearbeiten">
+                                <i class="fas fa-pencil-alt"></i>
+                            </button>
+                            <button class="btn btn-icon btn-danger" onclick="deleteEvent('${event.id}')" title="Löschen">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    // Open modal
+    function openModal(eventId = null) {
+        const modal = document.getElementById('eventModal');
+        const form = document.getElementById('eventForm');
+        const title = document.getElementById('modalTitle');
+
+        form.reset();
+        document.getElementById('eventId').value = '';
+        document.getElementById('eventPublished').checked = true;
+        document.getElementById('imagePreviewContainer').style.display = 'none';
+
+        if (eventId) {
+            const event = eventsData.items.find(e => e.id === eventId);
+            if (event) {
+                title.textContent = 'Event bearbeiten';
+                document.getElementById('eventId').value = event.id;
+                document.getElementById('eventTitle').value = event.title || '';
+
+                if (event.date) {
+                    const date = new Date(event.date);
+                    document.getElementById('eventDate').value = date.toISOString().split('T')[0];
+                    document.getElementById('eventTime').value = date.toTimeString().slice(0, 5);
+                }
+
+                document.getElementById('eventLocation').value = event.location || '';
+                document.getElementById('eventCategory').value = event.category || '';
+                document.getElementById('eventCapacity').value = event.capacity || '';
+                document.getElementById('eventPrice').value = event.price || '';
+                document.getElementById('eventImage').value = event.image || '';
+                document.getElementById('eventDescription').value = event.description || '';
+                document.getElementById('eventFeatured').checked = event.featured || false;
+                document.getElementById('eventPublished').checked = event.published !== false;
+
+                previewImage();
+            }
+        } else {
+            title.textContent = 'Neuer Termin';
+        }
+
+        modal.classList.add('visible');
+    }
+
+    // Close modal
+    function closeModal() {
+        document.getElementById('eventModal').classList.remove('visible');
+    }
+
+    // Edit event
+    function editEvent(eventId) {
+        openModal(eventId);
+    }
+
+    // Delete event
+    function deleteEvent(eventId) {
+        const event = eventsData.items.find(e => e.id === eventId);
+        if (event) {
+            deleteEventId = eventId;
+            document.getElementById('deleteEventName').textContent = `"${event.title}" wird unwiderruflich gelöscht.`;
+            document.getElementById('deleteModal').classList.add('visible');
+        }
+    }
+
+    // Close delete modal
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').classList.remove('visible');
+        deleteEventId = null;
+    }
+
+    // Confirm delete
+    async function confirmDelete() {
+        if (!deleteEventId) return;
+
+        eventsData.items = eventsData.items.filter(e => e.id !== deleteEventId);
+
+        try {
+            const response = await fetch(`${API_URL}/data/events.json`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(eventsData)
+            });
+
+            if (response.ok) {
+                showToast('Event gelöscht!', 'success');
+                renderTable();
+            } else {
+                throw new Error('Fehler beim Löschen');
+            }
+        } catch (error) {
+            showToast('Fehler beim Löschen', 'error');
+        }
+
+        closeDeleteModal();
+    }
+
+    // Save event
+    function normalizeText(value) {
+        return (value || '').toString().trim();
+    }
+
+    function isNegativeNumberString(value) {
+        if (!value) return false;
+        const trimmed = value.toString().trim();
+        if (!trimmed) return false;
+        if (trimmed.startsWith('-')) return true;
+        const num = Number(trimmed.replace(',', '.').replace(/[^\d.-]/g, ''));
+        return Number.isFinite(num) && num < 0;
+    }
+
+    async function saveEvent(e) {
+        e.preventDefault();
+
+        const eventId = document.getElementById('eventId').value;
+        const title = normalizeText(document.getElementById('eventTitle').value);
+        const dateStr = document.getElementById('eventDate').value;
+        const timeStr = document.getElementById('eventTime').value;
+        const dateTime = new Date(`${dateStr}T${timeStr}:00`);
+        const capacityRaw = normalizeText(document.getElementById('eventCapacity').value);
+        const priceRaw = normalizeText(document.getElementById('eventPrice').value);
+
+        if (!title) {
+            showToast('Bitte einen Titel eingeben.', 'error');
+            return;
+        }
+        if (!dateStr || !timeStr || Number.isNaN(dateTime.getTime())) {
+            showToast('Bitte gültiges Datum und Uhrzeit eingeben.', 'error');
+            return;
+        }
+        if (capacityRaw) {
+            const capacityNum = Number(capacityRaw);
+            if (!Number.isFinite(capacityNum) || capacityNum < 0) {
+                showToast('Kapazität darf nicht negativ sein.', 'error');
+                return;
+            }
+        }
+        if (isNegativeNumberString(priceRaw)) {
+            showToast('Preis darf nicht negativ sein.', 'error');
+            return;
+        }
+
+        const eventData = {
+            id: eventId || Date.now().toString(),
+            title: title,
+            date: dateTime.toISOString(),
+            location: normalizeText(document.getElementById('eventLocation').value),
+            category: document.getElementById('eventCategory').value,
+            capacity: capacityRaw ? Number(capacityRaw) : '',
+            price: priceRaw,
+            image: normalizeText(document.getElementById('eventImage').value),
+            description: normalizeText(document.getElementById('eventDescription').value),
+            featured: document.getElementById('eventFeatured').checked,
+            published: document.getElementById('eventPublished').checked
+        };
+
+        if (eventId) {
+            // Update existing
+            const index = eventsData.items.findIndex(e => e.id === eventId);
+            if (index !== -1) {
+                eventsData.items[index] = eventData;
+            }
+        } else {
+            // Add new
+            eventsData.items.push(eventData);
+        }
+
+        try {
+            const response = await fetch(`${API_URL}/data/events.json`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(eventsData)
+            });
+
+            if (response.ok) {
+                showToast('Event gespeichert!', 'success');
+                closeModal();
+                renderTable();
+            } else {
+                throw new Error('Fehler beim Speichern');
+            }
+        } catch (error) {
+            showToast('Fehler beim Speichern', 'error');
+        }
+    }
+
+    // Preview image
+    function previewImage() {
+        const url = document.getElementById('eventImage').value;
+        const container = document.getElementById('imagePreviewContainer');
+        const img = document.getElementById('imagePreview');
+
+        if (url && url.trim()) {
+            img.src = url;
+            container.style.display = 'block';
+        } else {
+            container.style.display = 'none';
+        }
+    }
+
+    // Click outside modal to close
+    document.getElementById('eventModal').addEventListener('click', (e) => {
+        if (e.target.id === 'eventModal') closeModal();
+    });
+    document.getElementById('deleteModal').addEventListener('click', (e) => {
+        if (e.target.id === 'deleteModal') closeDeleteModal();
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeModal();
+            closeDeleteModal();
+        }
+    });
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', loadEvents);
+    </script>
+</body>
+</html>

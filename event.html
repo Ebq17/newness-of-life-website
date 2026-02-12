@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Details - Newness of Life</title>
+    <meta name="description" content="Event Details - Newness of Life Gemeinde">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+    /* Event Detail Page Styles */
+    .event-detail-hero {
+        position: relative;
+        min-height: 50vh;
+        display: flex;
+        align-items: flex-end;
+        padding: 0 0 60px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .event-hero-bg {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-size: cover;
+        background-position: center;
+        z-index: 0;
+    }
+    .event-hero-overlay {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.1) 100%);
+        z-index: 1;
+    }
+    .event-detail-hero .container {
+        position: relative;
+        z-index: 2;
+    }
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: white;
+        text-decoration: none;
+        font-size: 0.9rem;
+        padding: 10px 0;
+        margin-bottom: 30px;
+        opacity: 0.9;
+        transition: opacity 0.2s;
+    }
+    .back-link:hover {
+        opacity: 1;
+    }
+    .event-category-badge {
+        display: inline-block;
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: white;
+        background: rgba(255,255,255,0.2);
+        backdrop-filter: blur(10px);
+        margin-bottom: 16px;
+    }
+    .event-detail-title {
+        font-size: clamp(2rem, 6vw, 3.5rem);
+        font-weight: 800;
+        color: white;
+        margin: 0;
+        line-height: 1.2;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    /* Info Cards */
+    .event-info-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin: 40px 0;
+    }
+    .event-info-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px 24px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    .event-info-card i {
+        font-size: 1.3rem;
+        color: var(--color-primary);
+        margin-top: 2px;
+    }
+    .event-info-card-content {
+        flex: 1;
+    }
+    .event-info-label {
+        font-size: 0.75rem;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 4px;
+    }
+    .event-info-value {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-dark);
+        margin: 0;
+    }
+
+    /* Event Meta (Capacity & Price) */
+    .event-meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        margin-bottom: 40px;
+        font-size: 0.95rem;
+        color: #6b7280;
+    }
+    .event-meta-row span {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .event-meta-row i {
+        color: var(--color-primary);
+    }
+    .event-price {
+        font-weight: 700;
+        color: var(--color-dark);
+        font-size: 1.1rem;
+    }
+
+    /* Event Content */
+    .event-content-section {
+        padding: 60px 0 100px;
+        background: var(--color-light);
+    }
+    .event-content-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+    @media (min-width: 900px) {
+        .event-content-grid {
+            grid-template-columns: 2fr 1fr;
+        }
+    }
+    .event-description h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--color-dark);
+        margin: 0 0 20px;
+        text-align: left;
+    }
+    .event-description h2::after {
+        display: none;
+    }
+    .event-description p {
+        font-size: 1.05rem;
+        line-height: 1.8;
+        color: #4b5563;
+    }
+
+    /* Calendar Save Card */
+    .event-sidebar-card {
+        background: white;
+        border-radius: 16px;
+        padding: 28px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    .event-sidebar-card h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--color-dark);
+        margin: 0 0 8px;
+    }
+    .event-sidebar-card p {
+        font-size: 0.9rem;
+        color: #6b7280;
+        margin: 0 0 20px;
+    }
+    .calendar-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .calendar-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.2s;
+        border: 2px solid #e5e7eb;
+        background: white;
+        color: var(--color-dark);
+        cursor: pointer;
+        font-family: inherit;
+    }
+    .calendar-btn:hover {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+    }
+    .calendar-btn.primary {
+        background: var(--color-primary);
+        border-color: var(--color-primary);
+        color: white;
+    }
+    .calendar-btn.primary:hover {
+        background: #1d4ed8;
+        border-color: #1d4ed8;
+    }
+
+    /* Share Section */
+    .share-section {
+        margin-top: 30px;
+        padding-top: 24px;
+        border-top: 1px solid #e5e7eb;
+    }
+    .share-section h4 {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--color-dark);
+        margin: 0 0 12px;
+    }
+    .share-buttons {
+        display: flex;
+        gap: 10px;
+    }
+    .share-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--color-light);
+        color: var(--color-dark);
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+    .share-btn:hover {
+        background: var(--color-primary);
+        color: white;
+    }
+
+    /* Loading State */
+    .event-loading {
+        min-height: 60vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #6b7280;
+    }
+    .event-loading .spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid #e5e7eb;
+        border-top-color: var(--color-primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 20px;
+    }
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* Error State */
+    .event-error {
+        min-height: 60vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 40px;
+    }
+    .event-error i {
+        font-size: 4rem;
+        color: #d1d5db;
+        margin-bottom: 20px;
+    }
+    .event-error h2 {
+        margin-bottom: 10px;
+    }
+    .event-error p {
+        color: #6b7280;
+        margin-bottom: 30px;
+    }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="site-header-pro">
+        <div class="container">
+            <nav class="main-nav-pro" aria-label="Hauptnavigation">
+                <a href="index.html#start" class="logo-pro">
+                    <img src="/images/Logo_Schwarz_Transparent_KS.png" alt="Newness of Life Logo" class="logo-img-pro">
+                    <div class="logo-text-container">
+                        <span class="logo-text-pro">Newness of Life</span>
+                        <span class="logo-subtext-pro">die Kirche des lebendigen Gottes International e.V.</span>
+                    </div>
+                </a>
+                <ul id="mainnav-pro" class="nav-links-pro">
+                    <li><a href="index.html">Startseite</a></li>
+                    <li><a href="gottesdienste.html">Gottesdienste</a></li>
+                    <li><a href="ueber-uns.html">Über uns</a></li>
+                    <li><a href="veranstaltungen.html" class="active">Veranstaltungen</a></li>
+                    <li><a href="index.html#kontakt">Kontakt</a></li>
+                    <li class="show-on-mobile"><a href="spenden.html">Spenden</a></li>
+                </ul>
+                <a href="spenden.html" class="btn-primary btn-spenden-pro">Spenden</a>
+                <button class="menu-toggle-pro" aria-label="Menü öffnen" aria-controls="mainnav-pro" aria-expanded="false">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main id="eventContent">
+        <!-- Content wird dynamisch geladen -->
+        <div class="event-loading">
+            <div class="spinner"></div>
+            <p>Event wird geladen...</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3 class="footer-heading">Newness of Life</h3>
+                    <p class="footer-about-text">Ein Ort des Glaubens, der Gemeinschaft und der Hoffnung.</p>
+                </div>
+                <div class="footer-column hide-on-mobile">
+                    <h3 class="footer-heading">Navigation</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Startseite</a></li>
+                        <li><a href="veranstaltungen.html">Veranstaltungen</a></li>
+                        <li><a href="index.html#kontakt">Kontakt</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column footer-contact-centered">
+                    <h3 class="footer-heading">Kontakt</h3>
+                    <address class="footer-contact">
+                        <p><i class="fas fa-map-marker-alt"></i> Hebbelstr. 56-60<br>55127 Mainz</p>
+                    </address>
+                </div>
+                <div class="footer-column">
+                    <h3 class="footer-heading">Unterstütze uns</h3>
+                    <a href="spenden.html" class="btn-footer-donate">Jetzt spenden</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Newness of Life. Alle Rechte vorbehalten.</p>
+                <nav class="footer-legal-links">
+                    <a href="datenschutz.html">Datenschutz</a>
+                    <a href="impressum.html">Impressum</a>
+                </nav>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script>
+    (function() {
+        'use strict';
+
+        let eventsData = { categories: [], items: [] };
+
+        // Get event ID from URL
+        function getEventId() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id');
+        }
+
+        // Format date
+        function formatDateLong(dateStr) {
+            const date = new Date(dateStr);
+            const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+            return date.toLocaleDateString('de-DE', options);
+        }
+
+        // Format time
+        function formatTime(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) + ' Uhr';
+        }
+
+        // Get category info
+        function getCategory(categoryId) {
+            return eventsData.categories.find(c => c.id === categoryId) || { name: 'Event', color: '#2563EB' };
+        }
+
+        // Generate Google Calendar URL
+        function generateGoogleCalendarUrl(event) {
+            const startDate = new Date(event.date);
+            const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000); // +2 hours
+
+            const formatGoogleDate = (d) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+
+            const params = new URLSearchParams({
+                action: 'TEMPLATE',
+                text: event.title,
+                dates: `${formatGoogleDate(startDate)}/${formatGoogleDate(endDate)}`,
+                details: event.description || '',
+                location: event.location || ''
+            });
+
+            return `https://www.google.com/calendar/render?${params.toString()}`;
+        }
+
+        // Generate ICS file content
+        function generateICS(event) {
+            const startDate = new Date(event.date);
+            const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000);
+
+            const formatICSDate = (d) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+
+            const ics = [
+                'BEGIN:VCALENDAR',
+                'VERSION:2.0',
+                'PRODID:-//Newness of Life//Event//DE',
+                'BEGIN:VEVENT',
+                `DTSTART:${formatICSDate(startDate)}`,
+                `DTEND:${formatICSDate(endDate)}`,
+                `SUMMARY:${event.title}`,
+                `DESCRIPTION:${(event.description || '').replace(/\n/g, '\\n')}`,
+                `LOCATION:${event.location || ''}`,
+                'END:VEVENT',
+                'END:VCALENDAR'
+            ].join('\r\n');
+
+            return ics;
+        }
+
+        // Download ICS file
+        function downloadICS(event) {
+            const ics = generateICS(event);
+            const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${event.title.replace(/[^a-zA-Z0-9]/g, '_')}.ics`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Render event detail
+        function renderEvent(event) {
+            const category = getCategory(event.category);
+            const hasImage = event.image && event.image.trim() !== '';
+            const defaultImage = '/images/EJC.png';
+            const imageUrl = hasImage ? event.image : defaultImage;
+
+            // Update page title
+            document.title = `${event.title} - Newness of Life`;
+
+            const html = `
+                <!-- Hero Section -->
+                <section class="event-detail-hero">
+                    <div class="event-hero-bg" style="background-image: url('${imageUrl}')"></div>
+                    <div class="event-hero-overlay"></div>
+                    <div class="container">
+                        <a href="veranstaltungen.html" class="back-link">
+                            <i class="fas fa-arrow-left"></i> Zurück
+                        </a>
+                        <span class="event-category-badge" style="background-color: ${category.color}">
+                            ${category.name}
+                        </span>
+                        <h1 class="event-detail-title">${event.title}</h1>
+                    </div>
+                </section>
+
+                <!-- Content Section -->
+                <section class="event-content-section">
+                    <div class="container">
+                        <!-- Info Cards -->
+                        <div class="event-info-cards">
+                            <div class="event-info-card">
+                                <i class="fas fa-calendar"></i>
+                                <div class="event-info-card-content">
+                                    <div class="event-info-label">Datum</div>
+                                    <p class="event-info-value">${formatDateLong(event.date)}</p>
+                                </div>
+                            </div>
+                            <div class="event-info-card">
+                                <i class="fas fa-clock"></i>
+                                <div class="event-info-card-content">
+                                    <div class="event-info-label">Uhrzeit</div>
+                                    <p class="event-info-value">${formatTime(event.date)}</p>
+                                </div>
+                            </div>
+                            <div class="event-info-card">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div class="event-info-card-content">
+                                    <div class="event-info-label">Ort</div>
+                                    <p class="event-info-value">${event.location || 'In der Gemeinde'}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        ${(event.capacity || event.price) ? `
+                        <div class="event-meta-row">
+                            ${event.capacity ? `<span><i class="fas fa-users"></i> ${event.capacity} Plätze</span>` : ''}
+                            ${event.price ? `<span class="event-price">${event.price}</span>` : ''}
+                        </div>
+                        ` : ''}
+
+                        <div class="event-content-grid">
+                            <!-- Description -->
+                            <div class="event-description">
+                                <h2>Über das Event</h2>
+                                <p>${event.description || 'Weitere Informationen folgen.'}</p>
+                            </div>
+
+                            <!-- Sidebar -->
+                            <div class="event-sidebar">
+                                <div class="event-sidebar-card">
+                                    <h3>Im Kalender speichern</h3>
+                                    <p>Füge dieses Event zu deinem Kalender hinzu, um nichts zu verpassen.</p>
+                                    <div class="calendar-buttons">
+                                        <a href="${generateGoogleCalendarUrl(event)}" target="_blank" class="calendar-btn primary">
+                                            <i class="fab fa-google"></i> Google Kalender
+                                        </a>
+                                        <button class="calendar-btn" onclick="downloadEventICS()">
+                                            <i class="fas fa-download"></i> Als .ics herunterladen
+                                        </button>
+                                    </div>
+
+                                    <div class="share-section">
+                                        <h4>Event teilen</h4>
+                                        <div class="share-buttons">
+                                            <a href="https://wa.me/?text=${encodeURIComponent(event.title + ' - ' + window.location.href)}" target="_blank" class="share-btn" title="WhatsApp">
+                                                <i class="fab fa-whatsapp"></i>
+                                            </a>
+                                            <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}" target="_blank" class="share-btn" title="Facebook">
+                                                <i class="fab fa-facebook-f"></i>
+                                            </a>
+                                            <a href="mailto:?subject=${encodeURIComponent(event.title)}&body=${encodeURIComponent('Schau dir dieses Event an: ' + window.location.href)}" class="share-btn" title="E-Mail">
+                                                <i class="fas fa-envelope"></i>
+                                            </a>
+                                            <button class="share-btn" onclick="copyEventLink()" title="Link kopieren">
+                                                <i class="fas fa-link"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            `;
+
+            document.getElementById('eventContent').innerHTML = html;
+
+            // Store event for ICS download
+            window.currentEvent = event;
+        }
+
+        // Show error
+        function showError() {
+            document.getElementById('eventContent').innerHTML = `
+                <div class="event-error">
+                    <i class="fas fa-calendar-times"></i>
+                    <h2>Event nicht gefunden</h2>
+                    <p>Dieses Event existiert nicht oder wurde entfernt.</p>
+                    <a href="veranstaltungen.html" class="btn-primary">Alle Veranstaltungen</a>
+                </div>
+            `;
+        }
+
+        // Load event data
+        async function loadEvent() {
+            const eventId = getEventId();
+
+            if (!eventId) {
+                showError();
+                return;
+            }
+
+            try {
+                const response = await fetch('/data/events.json');
+                if (!response.ok) throw new Error('Could not load events');
+
+                eventsData = await response.json();
+                const event = eventsData.items.find(e => e.id === eventId);
+
+                if (!event) {
+                    showError();
+                    return;
+                }
+
+                renderEvent(event);
+            } catch (error) {
+                console.error('Error loading event:', error);
+                showError();
+            }
+        }
+
+        // Global functions for buttons
+        window.downloadEventICS = function() {
+            if (window.currentEvent) {
+                downloadICS(window.currentEvent);
+            }
+        };
+
+        window.copyEventLink = function() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('Link wurde kopiert!');
+            });
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadEvent);
+    })();
+    </script>
+</body>
+</html>

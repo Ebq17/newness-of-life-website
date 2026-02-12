@@ -1,0 +1,541 @@
+// admin-server.js - API Server für das Admin-Panel
+'use strict';
+
+const http = require('http');
+const fs = require('fs').promises;
+const path = require('path');
+const { exec } = require('child_process');
+const url = require('url');
+const https = require('https');
+
+const PORT = 3001;
+const ROOT_DIR = __dirname;
+const DATA_DIR = path.join(ROOT_DIR, 'data');
+const PAGES_DATA_DIR = path.join(DATA_DIR, 'pages');
+const IMAGES_DIR = path.join(ROOT_DIR, 'images');
+const CONTACTS_FILE = path.join(DATA_DIR, 'contacts.json');
+const RESEND_API_KEY = process.env.RESEND_API_KEY || 'e_BDBoNMCf_MnA2YQigPCKiDAP2YLhW3Has';
+const RESEND_FROM = process.env.RESEND_FROM || 'Newness of Life <onboarding@resend.dev>';
+const INTERNAL_EMAIL = 'newnessoflife@clgi.org';
+
+// Simple rate limit (per IP)
+const rateLimits = new Map();
+const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
+const RATE_LIMIT_MAX = 10;
+
+// CORS Headers
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+};
+
+// JSON Response Helper
+function jsonResponse(res, data, status = 200) {
+  res.writeHead(status, { ...corsHeaders, 'Content-Type': 'application/json' });
+  res.end(JSON.stringify(data));
+}
+
+// Parse JSON Body
+async function parseBody(req) {
+  return new Promise((resolve, reject) => {
+    let body = '';
+    req.on('data', chunk => body += chunk);
+    req.on('end', () => {
+      try {
+        resolve(body ? JSON.parse(body) : {});
+      } catch (e) {
+        reject(e);
+      }
+    });
+    req.on('error', reject);
+  });
+}
+
+// Load JSON File
+async function loadJson(filename) {
+  const filePath = path.join(DATA_DIR, filename);
+  try {
+    const data = await fs.readFile(filePath, 'utf8');
+    return JSON.parse(data);
+  } catch (err) {
+    // Try in pages subdirectory
+    const pagesPath = path.join(PAGES_DATA_DIR, filename);
+    try {
+      const data = await fs.readFile(pagesPath, 'utf8');
+      return JSON.parse(data);
+    } catch {
+      throw new Error(`File not found: ${filename}`);
+    }
+  }
+}
+
+async function loadContacts() {
+  try {
+    const raw = await fs.readFile(CONTACTS_FILE, 'utf8');
+    return JSON.parse(raw);
+  } catch {
+    return { lastTicketNumber: 0, items: [] };
+  }
+}
+
+async function saveContacts(data) {
+  await fs.writeFile(CONTACTS_FILE, JSON.stringify(data, null, 2), 'utf8');
+}
+
+function getClientIp(req) {
+  const forwarded = req.headers['x-forwarded-for'];
+  if (forwarded) return forwarded.split(',')[0].trim();
+  return req.socket.remoteAddress || 'unknown';
+}
+
+function isRateLimited(ip) {
+  const now = Date.now();
+  const entry = rateLimits.get(ip);
+  if (!entry || now > entry.resetAt) {
+    rateLimits.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return false;
+  }
+  if (entry.count >= RATE_LIMIT_MAX) return true;
+  entry.count += 1;
+  return false;
+}
+
+function normalizeText(value) {
+  return (value || '').toString().trim();
+}
+
+function classifyCategory(subject, message) {
+  const text = `${subject} ${message}`.toLowerCase();
+  const rules = [
+    { category: 'Spende', keywords: ['spende', 'spenden', 'donation', 'paypal', 'iban', 'quittung', 'spendenquittung', 'bescheinigung'] },
+    { category: 'Event/Anmeldung', keywords: ['event', 'veranstaltung', 'anmeldung', 'anmelden', 'ticket', 'registrierung'] },
+    { category: 'Raum/Technik', keywords: ['raum', 'location', 'mieten', 'wlan', 'internet', 'starkstrom', 'strom', 'technik', 'ton', 'licht'] },
+    { category: 'Seelsorge/Gebet', keywords: ['gebet', 'seelsorge', 'gespräch', 'dringend', 'vertraulich'] }
+  ];
+  for (const rule of rules) {
+    if (rule.keywords.some(k => text.includes(k))) return rule.category;
+  }
+  return 'Allgemein';
+}
+
+function nextTicketId(lastTicketNumber) {
+  const year = new Date().getFullYear();
+  const nextNumber = lastTicketNumber + 1;
+  return {
+    ticketId: `NOL-${year}-${String(nextNumber).padStart(6, '0')}`,
+    nextNumber
+  };
+}
+
+function renderTemplate(text, vars) {
+  return text.replace(/\{\{(\w+)\}\}/g, (_, key) => vars[key] ?? '');
+}
+
+function toHtml(text) {
+  return text.replace(/\n/g, '<br>');
+}
+
+async function sendEmail({ to, subject, html, replyTo }) {
+  const payload = JSON.stringify({
+    from: RESEND_FROM,
+    to: [to],
+    subject,
+    html,
+    ...(replyTo ? { reply_to: replyTo } : {})
+  });
+
+  return new Promise((resolve, reject) => {
+    const req = https.request({
+      method: 'POST',
+      hostname: 'api.resend.com',
+      path: '/emails',
+      headers: {
+        'Authorization': `Bearer ${RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(payload)
+      }
+    }, res => {
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => {
+        if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
+          resolve({ ok: true, data });
+        } else {
+          reject(new Error(`Resend error ${res.statusCode}: ${data}`));
+        }
+      });
+    });
+    req.on('error', reject);
+    req.write(payload);
+    req.end();
+  });
+}
+
+// Save JSON File
+async function saveJson(filename, data) {
+  let filePath = path.join(DATA_DIR, filename);
+
+  // Check if it's a page-specific file
+  const pageFiles = ['ueber-uns.json', 'gottesdienste.json', 'spenden.json', 'datenschutz.json', 'impressum.json'];
+  if (pageFiles.includes(filename)) {
+    filePath = path.join(PAGES_DATA_DIR, filename);
+  }
+
+  await fs.writeFile(filePath, JSON.stringify(data, null, 2), 'utf8');
+  return { success: true, path: filePath };
+}
+
+// Run Build
+function runBuild() {
+  return new Promise((resolve, reject) => {
+    exec('node build.js', { cwd: ROOT_DIR }, (error, stdout, stderr) => {
+      if (error) {
+        reject({ error: error.message, stderr });
+      } else {
+        resolve({ success: true, output: stdout });
+      }
+    });
+  });
+}
+
+// List Images
+async function listImages() {
+  try {
+    const files = await fs.readdir(IMAGES_DIR);
+    const images = files
+      .filter(f => /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(f))
+      .map(f => ({
+        name: f,
+        url: `/images/${f}`,
+        path: path.join(IMAGES_DIR, f)
+      }));
+    return images;
+  } catch {
+    return [];
+  }
+}
+
+// Handle multipart file upload
+async function handleUpload(req) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    req.on('data', chunk => chunks.push(chunk));
+    req.on('end', async () => {
+      try {
+        const buffer = Buffer.concat(chunks);
+        const contentType = req.headers['content-type'] || '';
+
+        if (!contentType.includes('multipart/form-data')) {
+          throw new Error('Expected multipart/form-data');
+        }
+
+        // Extract boundary
+        const boundaryMatch = contentType.match(/boundary=(?:"([^"]+)"|([^;]+))/);
+        if (!boundaryMatch) throw new Error('No boundary found');
+        const boundary = boundaryMatch[1] || boundaryMatch[2];
+
+        // Parse multipart data (simplified)
+        const parts = buffer.toString('binary').split(`--${boundary}`);
+
+        for (const part of parts) {
+          if (part.includes('filename=')) {
+            const filenameMatch = part.match(/filename="([^"]+)"/);
+            if (filenameMatch) {
+              const filename = filenameMatch[1].replace(/[^a-zA-Z0-9.-]/g, '_');
+              const headerEnd = part.indexOf('\r\n\r\n');
+              if (headerEnd > -1) {
+                let fileData = part.slice(headerEnd + 4);
+                // Remove trailing boundary markers
+                const endIndex = fileData.lastIndexOf('\r\n');
+                if (endIndex > -1) {
+                  fileData = fileData.slice(0, endIndex);
+                }
+
+                const filePath = path.join(IMAGES_DIR, filename);
+                await fs.writeFile(filePath, fileData, 'binary');
+
+                resolve({
+                  success: true,
+                  filename,
+                  url: `/images/${filename}`
+                });
+                return;
+              }
+            }
+          }
+        }
+
+        reject(new Error('No file found in upload'));
+      } catch (err) {
+        reject(err);
+      }
+    });
+    req.on('error', reject);
+  });
+}
+
+// MIME Types
+const mimeTypes = {
+  '.html': 'text/html',
+  '.css': 'text/css',
+  '.js': 'application/javascript',
+  '.json': 'application/json',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.gif': 'image/gif',
+  '.svg': 'image/svg+xml',
+  '.webp': 'image/webp',
+  '.ico': 'image/x-icon',
+  '.mp4': 'video/mp4',
+  '.webm': 'video/webm',
+  '.ogg': 'video/ogg',
+  '.woff': 'font/woff',
+  '.woff2': 'font/woff2',
+  '.ttf': 'font/ttf',
+  '.eot': 'application/vnd.ms-fontobject'
+};
+
+// Serve Static File
+async function serveStaticFile(res, filePath) {
+  try {
+    const ext = path.extname(filePath).toLowerCase();
+    const contentType = mimeTypes[ext] || 'application/octet-stream';
+    const data = await fs.readFile(filePath);
+    res.writeHead(200, { ...corsHeaders, 'Content-Type': contentType });
+    res.end(data);
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+
+// Request Handler
+async function handleRequest(req, res) {
+  const parsedUrl = url.parse(req.url, true);
+  const pathname = parsedUrl.pathname;
+  const method = req.method;
+
+  // Handle CORS preflight
+  if (method === 'OPTIONS') {
+    res.writeHead(204, corsHeaders);
+    res.end();
+    return;
+  }
+
+  try {
+    // API Routes
+    if (pathname.startsWith('/api/')) {
+      const route = pathname.replace('/api/', '');
+
+      // GET /api/data/:filename - Load JSON file
+      if (method === 'GET' && route.startsWith('data/')) {
+        const filename = route.replace('data/', '');
+        const data = await loadJson(filename);
+        jsonResponse(res, data);
+        return;
+      }
+
+      // PUT /api/data/:filename - Save JSON file
+      if (method === 'PUT' && route.startsWith('data/')) {
+        const filename = route.replace('data/', '');
+        const body = await parseBody(req);
+        const result = await saveJson(filename, body);
+        jsonResponse(res, result);
+        return;
+      }
+
+      // POST /api/build - Run build
+      if (method === 'POST' && route === 'build') {
+        const result = await runBuild();
+        jsonResponse(res, result);
+        return;
+      }
+
+      // GET /api/images - List images
+      if (method === 'GET' && route === 'images') {
+        const images = await listImages();
+        jsonResponse(res, images);
+        return;
+      }
+
+      // POST /api/upload - Upload image
+      if (method === 'POST' && route === 'upload') {
+        const result = await handleUpload(req);
+        jsonResponse(res, result);
+        return;
+      }
+
+      // GET /api/status - Server status
+      if (method === 'GET' && route === 'status') {
+        jsonResponse(res, { status: 'ok', time: new Date().toISOString() });
+        return;
+      }
+
+      // POST /api/contact - Contact form handler
+      if (method === 'POST' && route === 'contact') {
+        const ip = getClientIp(req);
+        if (isRateLimited(ip)) {
+          jsonResponse(res, { error: 'Zu viele Anfragen. Bitte spaeter erneut versuchen.' }, 429);
+          return;
+        }
+
+        const body = await parseBody(req);
+        const name = normalizeText(body.name);
+        const email = normalizeText(body.email);
+        const subject = normalizeText(body.subject) || 'Kontaktanfrage';
+        const message = normalizeText(body.message);
+        const website = normalizeText(body.website);
+
+        // Honeypot
+        if (website) {
+          jsonResponse(res, { success: true });
+          return;
+        }
+
+        if (!name || !email || !message) {
+          jsonResponse(res, { error: 'Bitte alle Pflichtfelder ausfuellen.' }, 400);
+          return;
+        }
+
+        const contacts = await loadContacts();
+        const { ticketId, nextNumber } = nextTicketId(contacts.lastTicketNumber || 0);
+        contacts.lastTicketNumber = nextNumber;
+
+        const category = classifyCategory(subject, message);
+        const createdAt = new Date().toISOString();
+
+        const record = {
+          ticketId,
+          name,
+          email,
+          subject,
+          message,
+          category,
+          createdAt,
+          ip
+        };
+        contacts.items.push(record);
+        await saveContacts(contacts);
+
+        const templates = {
+          Allgemein: {
+            subject: 'Wir haben deine Nachricht erhalten (Ticket {{ticketId}})',
+            body: `Hallo {{name}},\n` +
+              `vielen Dank fuer deine Nachricht an Newness of Life. Wir haben sie erhalten und melden uns in der Regel innerhalb von 24–48 Stunden.\n\n` +
+              `Betreff: {{subject}}\n` +
+              `Ticket: {{ticketId}}\n\n` +
+              `Wenn du noch Infos ergaenzen moechtest, antworte einfach auf diese E-Mail und nenne die Ticket-Nummer.\n\n` +
+              `Herzliche Gruesse\nNewness of Life (Verein)\n` +
+              `Datenschutz: Deine Daten werden nur zur Bearbeitung deiner Anfrage genutzt.`
+          },
+          'Spende': {
+            subject: 'Danke fuer deine Spendenanfrage (Ticket {{ticketId}})',
+            body: `Hallo {{name}},\n` +
+              `danke, dass du Newness of Life unterstuetzen moechtest.\n` +
+              `Wir haben deine Nachricht erhalten und melden uns in der Regel innerhalb von 24–48 Stunden.\n\n` +
+              `Bankdaten (IBAN/BIC) folgen in Kuerze.\n` +
+              `Wenn du eine Spendenquittung brauchst, antworte bitte mit deiner vollstaendigen Adresse.\n\n` +
+              `Ticket: {{ticketId}}\n\n` +
+              `Herzliche Gruesse\nNewness of Life (Verein)`
+          },
+          'Event/Anmeldung': {
+            subject: 'Event-Anfrage erhalten (Ticket {{ticketId}})',
+            body: `Hallo {{name}},\n` +
+              `danke fuer deine Nachricht an Newness of Life. Wir haben deine Event-Anfrage erhalten und melden uns in der Regel innerhalb von 24–48 Stunden.\n\n` +
+              `Damit wir dir schnell helfen koennen, schick uns bitte (falls noch nicht drin):\n` +
+              `- Event-Name & Datum\n- Anzahl Personen\n- Worum geht's genau? (Infos/Anmeldung/Mitarbeit)\n\n` +
+              `Ticket: {{ticketId}}\n\n` +
+              `Herzliche Gruesse\nNewness of Life (Verein)`
+          },
+          'Raum/Technik': {
+            subject: 'Anfrage zur Location/Technik erhalten (Ticket {{ticketId}})',
+            body: `Hallo {{name}},\n` +
+              `danke fuer deine Nachricht. Wir haben deine Anfrage erhalten und melden uns in der Regel innerhalb von 24–48 Stunden.\n\n` +
+              `Damit wir dir direkt antworten koennen, schick uns bitte (falls noch nicht enthalten):\n` +
+              `- Datum/Uhrzeit\n- Was genau planst du?\n- Brauchst du Starkstrom? (Ja/Nein)\n- Brauchst du WLAN? (Ja/Nein)\n\n` +
+              `Ticket: {{ticketId}}\n\n` +
+              `Herzliche Gruesse\nNewness of Life (Verein)`
+          },
+          'Seelsorge/Gebet': {
+            subject: 'Wir haben deine Nachricht erhalten (vertraulich) – Ticket {{ticketId}}',
+            body: `Hallo {{name}},\n` +
+              `danke, dass du dich gemeldet hast. Wir behandeln deine Nachricht vertraulich und melden uns in der Regel innerhalb von 24–48 Stunden.\n\n` +
+              `Wenn es dringend ist und du sofort Hilfe brauchst, wende dich bitte in akuten Notfaellen an 112.\n\n` +
+              `Ticket: {{ticketId}}\n\n` +
+              `Herzliche Gruesse\nNewness of Life (Verein)`
+          }
+        };
+
+        const template = templates[category] || templates.Allgemein;
+        const vars = { ticketId, name, subject };
+        const autoSubject = renderTemplate(template.subject, vars);
+        const autoBody = renderTemplate(template.body, vars);
+
+        const internalSubject = `Neue Website-Anfrage (${ticketId}) – ${subject}`;
+        const internalBody = `Ticket: ${ticketId}\nName: ${name}\nE-Mail: ${email}\nKategorie: ${category}\nZeit: ${createdAt}\n\nNachricht:\n${message}\n\nWichtig: Reply-To ist auf ${email} gesetzt.`;
+
+        await sendEmail({
+          to: email,
+          subject: autoSubject,
+          html: toHtml(autoBody)
+        });
+
+        await sendEmail({
+          to: INTERNAL_EMAIL,
+          subject: internalSubject,
+          html: toHtml(internalBody),
+          replyTo: email
+        });
+
+        jsonResponse(res, { success: true, ticketId });
+        return;
+      }
+    }
+
+    // Serve static files
+    // Decode URL-encoded characters (e.g., %20 for spaces)
+    const decodedPathname = decodeURIComponent(pathname);
+    let filePath = path.join(ROOT_DIR, decodedPathname);
+
+    // Default to index.html for directory requests
+    if (pathname === '/') {
+      filePath = path.join(ROOT_DIR, 'index.html');
+    } else if (pathname === '/admin' || pathname === '/admin/') {
+      filePath = path.join(ROOT_DIR, 'admin', 'dashboard.html');
+    }
+
+    // Try to serve the file
+    const served = await serveStaticFile(res, filePath);
+    if (served) return;
+
+    // Try adding .html extension
+    if (!path.extname(filePath)) {
+      const htmlPath = filePath + '.html';
+      const servedHtml = await serveStaticFile(res, htmlPath);
+      if (servedHtml) return;
+    }
+
+    // 404 for unknown routes
+    res.writeHead(404, { ...corsHeaders, 'Content-Type': 'text/html' });
+    res.end('<html><body><h1>404 - Seite nicht gefunden</h1><p><a href="/admin/">Zum Admin Dashboard</a></p></body></html>');
+
+  } catch (err) {
+    console.error('Error:', err);
+    jsonResponse(res, { error: err.message }, 500);
+  }
+}
+
+// Start Server
+const server = http.createServer(handleRequest);
+server.listen(PORT, () => {
+  console.log(`\n🚀 Admin API Server running at http://localhost:${PORT}`);
+  console.log(`\nEndpoints:`);
+  console.log(`  GET  /api/data/:file  - Load JSON file`);
+  console.log(`  PUT  /api/data/:file  - Save JSON file`);
+  console.log(`  POST /api/build       - Run build script`);
+  console.log(`  GET  /api/images      - List images`);
+  console.log(`  POST /api/upload      - Upload image\n`);
+  console.log(`  POST /api/contact     - Contact form\n`);
+});

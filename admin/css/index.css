@@ -1,0 +1,325 @@
+/* Admin Styling */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      overflow: hidden;
+    }
+
+    /* Preview Bar oben */
+    .preview-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 10000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      height: 52px;
+    }
+
+    .preview-bar h1 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .preview-bar .buttons {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .page-select {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,0.8);
+      font-size: 12px;
+    }
+
+    .page-select select {
+      background: rgba(255,255,255,0.12);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+
+    .preview-bar button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-preview {
+      background: #10B981;
+      color: white;
+    }
+
+    .btn-preview:hover {
+      background: #059669;
+    }
+
+    .btn-preview.active {
+      background: #059669;
+      box-shadow: 0 0 0 2px white;
+    }
+
+    .btn-refresh {
+      background: #6366F1;
+      color: white;
+    }
+
+    .btn-refresh:hover {
+      background: #4F46E5;
+    }
+
+    .btn-site {
+      background: #2563EB;
+      color: white;
+    }
+
+    .btn-site:hover {
+      background: #1D4ED8;
+    }
+
+    .btn-back {
+      background: #374151;
+      color: white;
+    }
+
+    .btn-back:hover {
+      background: #1f2937;
+    }
+
+    .btn-back:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Status Anzeige */
+    .status {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .status.online {
+      background: rgba(16, 185, 129, 0.2);
+      color: #10B981;
+    }
+
+    .status.building {
+      background: rgba(245, 158, 11, 0.2);
+      color: #f59e0b;
+    }
+
+    /* Main Layout */
+    .admin-layout {
+      display: flex;
+      height: calc(100vh - 52px);
+      margin-top: 52px;
+    }
+
+    /* CMS Panel */
+    .cms-panel {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      transition: flex 0.3s ease;
+      order: 2;
+      border-left: 3px solid #e5e7eb;
+    }
+
+    .cms-panel.with-preview {
+      flex: 0 0 38%;
+    }
+
+    #nc-root {
+      height: 100%;
+      overflow: auto;
+    }
+
+    /* Preview Panel */
+    .preview-panel {
+      flex: 1 1 auto;
+      background: #f3f4f6;
+      border-right: 3px solid #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      order: 1;
+    }
+
+    .preview-panel.hidden {
+      display: none;
+    }
+
+    .preview-header {
+      background: #f9fafb;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .preview-header h3 {
+      margin: 0;
+      font-size: 14px;
+      color: #374151;
+      font-weight: 600;
+    }
+
+    .preview-controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .preview-controls button {
+      padding: 6px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      background: white;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.2s;
+    }
+
+    .preview-controls button:hover {
+      background: #f3f4f6;
+    }
+
+    .preview-controls button.active {
+      background: #2563EB;
+      color: white;
+      border-color: #2563EB;
+    }
+
+    .device-btn {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .preview-iframe-container {
+      flex: 1;
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      overflow: auto;
+      background: #e5e7eb;
+    }
+
+    .preview-iframe-wrapper {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: width 0.3s ease;
+      width: 100%;
+      height: 100%;
+    }
+
+    .preview-iframe-wrapper.mobile {
+      width: 375px;
+      height: 667px;
+    }
+
+    .preview-iframe-wrapper.tablet {
+      width: 768px;
+      height: 100%;
+    }
+
+    #preview-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .preview-loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: #6b7280;
+    }
+
+    .preview-loading .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid #e5e7eb;
+      border-top-color: #2563EB;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Auto-build Status */
+    .auto-build-status {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-left: 12px;
+    }
+
+    .auto-build-status.building {
+      color: #f59e0b;
+    }
+
+    .auto-build-status.success {
+      color: #10b981;
+    }
+
+    /* Help Tooltip */
+    .help-text {
+      font-size: 11px;
+      color: rgba(255,255,255,0.7);
+      margin-left: 16px;
+    }
+
+    @media (max-width: 1200px) {
+      .cms-panel.with-preview {
+        flex: 0 0 45%;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .preview-panel {
+        position: fixed;
+        top: 52px;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        z-index: 9999;
+      }
+      .cms-panel.with-preview {
+        flex: 1;
+      }
+    }

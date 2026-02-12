@@ -24,7 +24,15 @@
   <main>
 
     <!-- Neuer, professioneller Hero -->
-    <section class="gd-hero-pro">
+    <section
+        class="gd-hero-pro"
+        data-cms-field="hero.background_image"
+        data-cms-label="Hintergrundbild"
+        data-cms-attr="background-image"
+        data-cms-bg-overlay="linear-gradient(to bottom, rgba(0,0,0,.65), rgba(0,0,0,.2))"
+        data-has-image="{{ pages.gottesdienste.hero.background_image ? 'true' : 'false' }}"
+        style="{{ pages.gottesdienste.hero.background_image ? 'background-image: linear-gradient(to bottom, rgba(0,0,0,.65), rgba(0,0,0,.2)), url(' + pages.gottesdienste.hero.background_image + '); background-size: cover; background-position: center;' : '' }}"
+    >
         <div class="video-background">
             <video playsinline autoplay muted loop>
                 <source src="images/Black and Red Typographic Funny YouTube Video Intro.mp4" type="video/mp4">
@@ -113,7 +121,7 @@
     <section id="anfahrt" class="content-section">
         <div class="container">
             <h2>Anfahrt</h2>
-            <p style="text-align:center; max-width:720px; margin:0 auto 24px;">
+            <p class="narrow-center-text">
               Adresse: Hebbelstr. 56–60, 55127 Mainz
             </p>
             <div class="map-container">

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medien - Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/media.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h1>Newness of Life</h1>
+      <span>Admin Dashboard</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-title">Übersicht</div>
+        <a href="dashboard.html" class="nav-item">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+          Dashboard
+        </a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Inhalte</div>
+        <a href="events.html" class="nav-item">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+          Events
+        </a>
+        <a href="pages.html" class="nav-item">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          Seiten
+        </a>
+        <a href="media.html" class="nav-item active">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+          Medien
+        </a>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <header class="header">
+      <h2 class="header-title">Medienbibliothek</h2>
+    </header>
+
+    <div class="content">
+      <div class="upload-zone" id="uploadZone">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+        <h3>Bilder hochladen</h3>
+        <p>Ziehe Bilder hierher oder klicke zum Auswählen</p>
+        <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+          Dateien auswählen
+        </button>
+        <input type="file" id="fileInput" accept="image/*" multiple>
+      </div>
+
+      <h3 class="mb-16 text-gray-700">Alle Medien</h3>
+      <div class="media-grid" id="mediaGrid">
+        <div class="loading"><div class="spinner"></div>Lade Medien...</div>
+      </div>
+    </div>
+  </main>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+    const API_URL = 'http://localhost:3001/api';
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    async function loadImages() {
+      try {
+        const res = await fetch(`${API_URL}/images`);
+        const images = await res.json();
+        renderImages(images);
+      } catch (err) {
+        document.getElementById('mediaGrid').innerHTML = '<p class="text-danger">Fehler beim Laden. Ist der API-Server gestartet?</p>';
+      }
+    }
+
+    function renderImages(images) {
+      const grid = document.getElementById('mediaGrid');
+      if (images.length === 0) {
+        grid.innerHTML = '<p class="text-muted">Keine Bilder vorhanden</p>';
+        return;
+      }
+      grid.innerHTML = images.map(img => `
+        <div class="media-item" onclick="copyUrl('${img.url}')">
+          <img src="http://localhost:8000${img.url}" alt="${img.name}">
+          <div class="media-item-info">
+            <div class="media-item-name">${img.name}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function copyUrl(url) {
+      navigator.clipboard.writeText(url);
+      showToast('URL kopiert!', 'success');
+    }
+
+    async function uploadFile(file) {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const res = await fetch(`${API_URL}/upload`, {
+          method: 'POST',
+          body: formData
+        });
+        const result = await res.json();
+        if (result.success) {
+          showToast(`${result.filename} hochgeladen!`, 'success');
+          loadImages();
+        } else {
+          throw new Error(result.error);
+        }
+      } catch (err) {
+        showToast('Fehler: ' + err.message, 'error');
+      }
+    }
+
+    // File Input
+    document.getElementById('fileInput').addEventListener('change', (e) => {
+      Array.from(e.target.files).forEach(uploadFile);
+    });
+
+    // Drag & Drop
+    const zone = document.getElementById('uploadZone');
+    zone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      zone.classList.add('dragover');
+    });
+    zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+    zone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      zone.classList.remove('dragover');
+      Array.from(e.dataTransfer.files).forEach(uploadFile);
+    });
+
+    loadImages();
+  </script>
+</body>
+</html>

@@ -66,7 +66,7 @@
 
         <!-- Kommende Events aus dem CMS -->
         <if condition="homepageEvents && homepageEvents.length > 0">
-            <h3 class="upcoming-events-title" style="margin-top: 40px;" data-cms-field="events_section.show_count" data-cms-label="Anzahl Events">Kommende Veranstaltungen</h3>
+            <h3 class="upcoming-events-title" data-cms-field="events_section.show_count" data-cms-label="Anzahl Events">Kommende Veranstaltungen</h3>
             <div class="upcoming-events-list" data-cms-field="events_section.show_count" data-cms-label="Anzahl Events">
                 <each loop="event in homepageEvents">
                     <div class="upcoming-event-item" data-cms-role="upcoming-event-item">
@@ -90,7 +90,7 @@
         </if>
 
         <!-- Button to navigate to the full Veranstaltungen page -->
-        <div style="text-align: center; margin-top: 40px;">
+        <div class="centered-actions-lg">
             <a href="veranstaltungen.html" class="btn btn-primary" aria-label="Alle Veranstaltungen anzeigen">
                 Alle Veranstaltungen
             </a>

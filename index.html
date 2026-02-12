@@ -43,24 +43,12 @@
       </a>
 
       <ul id="mainnav-pro" class="nav-links-pro">
-        
-          
-            <li><a href="index.html">Startseite</a></li>
-          
-          
-            <li><a href="ueber-uns.html">Über uns</a></li>
-          
-          
+            <li><a href="index.html" class="active">Startseite</a></li>
             <li><a href="gottesdienste.html">Gottesdienste</a></li>
-          
-          
+            <li><a href="ueber-uns.html">Über uns</a></li>
             <li><a href="veranstaltungen.html">Veranstaltungen</a></li>
-          
-          
             <li><a href="index.html#kontakt">Kontakt</a></li>
-          
-        
-          <li class="show-on-mobile"><a href="spenden.html">Spenden</a></li>
+            <li class="show-on-mobile"><a href="spenden.html">Spenden</a></li>
         </ul>
 
       
@@ -74,7 +62,7 @@
 
 
     <!-- Hero Section -->
-    <section class="hero" id="start">
+    <section class="hero" id="start" data-cms-section="hero">
         <div class="container hero-grid">
             <div class="hero-left">
                 <h1 id="hero-title" data-cms-field="hero.title" data-cms-label="Haupttitel">Willkommen in unserer Gemeinde</h1>
@@ -92,7 +80,7 @@
 
     <main>
         <!-- Gottesdienste Section -->
-        <section id="gottesdienste" class="content-section services-section-new">
+        <section id="gottesdienste" class="content-section services-section-new" data-cms-section="services_section">
             <div class="container">
                 <div class="gottesdienste-grid">
                     <div class="gottesdienste-info">
@@ -295,7 +283,7 @@
 
 
         <!-- Über uns Section -->
-        <section id="ueber-uns" class="content-section">
+        <section id="ueber-uns" class="content-section" data-cms-section="about_section">
             <div class="container">
                 <h2 id="ueber-uns-title" data-cms-field="about_section.title" data-cms-label="Titel">Über uns</h2>
                 <h3 id="ueber-uns-subtitle" data-cms-field="about_section.subtitle" data-cms-label="Untertitel">Unsere Vision &amp; Mission</h3>
@@ -309,7 +297,7 @@
         </section>
 
         <!-- Veranstaltungen Section: Displays upcoming events -->
-<section id="veranstaltungen" class="content-section">
+<section id="veranstaltungen" class="content-section" data-cms-section="events_section">
     <div class="container">
         <h2 id="veranstaltungen-title" data-cms-field="events_section.title" data-cms-label="Titel">Veranstaltungen</h2>
         
@@ -453,7 +441,7 @@
 
 
         <!-- Kontakt Section -->
-        <section id="kontakt" class="content-section">
+        <section id="kontakt" class="content-section" data-cms-section="contact_section">
             <div class="container">
                 <h2 id="kontakt-title" data-cms-field="contact_section.title" data-cms-label="Titel">Kontakt</h2>
                 <div class="contact-grid">
@@ -550,6 +538,7 @@
 </footer>
 <!-- CMS Preview Script (nur aktiv wenn ?cms-preview=1) -->
 <script src="js/cms-preview.js"></script>
+<script src="js/cms-loader.js"></script>
 
     <script src="js/script.js"></script>
 </body>

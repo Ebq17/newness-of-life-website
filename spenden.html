@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Spenden | Newness of life</title>
-  <meta name="description" content="Unterstütze die Arbeit von Newness of Life in Mainz. Deine Spende ermöglicht es uns, einen Ort der Hoffnung und Gemeinschaft zu schaffen.">
+  <meta name="description" content="Unterstütze die Arbeit von Newness of Life in Mainz. Deine Spende ermöglicht es uns, einen Ort der Hoffnung und Gemeinschaft zu schaffen." data-cms-field="seo.meta_description" data-cms-label="Meta Beschreibung">
 
   <!-- Styles -->
   <link rel="stylesheet" href="css/style.css">
@@ -32,24 +32,12 @@
       </a>
 
       <ul id="mainnav-pro" class="nav-links-pro">
-        
-          
             <li><a href="index.html">Startseite</a></li>
-          
-          
-            <li><a href="ueber-uns.html">Über uns</a></li>
-          
-          
             <li><a href="gottesdienste.html">Gottesdienste</a></li>
-          
-          
+            <li><a href="ueber-uns.html">Über uns</a></li>
             <li><a href="veranstaltungen.html">Veranstaltungen</a></li>
-          
-          
             <li><a href="index.html#kontakt">Kontakt</a></li>
-          
-        
-          <li class="show-on-mobile"><a href="spenden.html">Spenden</a></li>
+            <li class="show-on-mobile"><a href="spenden.html">Spenden</a></li>
         </ul>
 
       
@@ -68,8 +56,8 @@
     <section class="donate-hero-professional">
       <div class="container">
         <div class="donate-hero-content">
-          <h1 id="spenden-hero-title">Deine Spende bewegt Herzen</h1>
-          <p id="spenden-hero-subtitle" class="lead">Mit deiner Unterstützung können wir in Mainz einen Ort der Hoffnung, der Gemeinschaft und des Glaubens gestalten. Jeder Beitrag, ob groß oder klein, macht einen Unterschied.</p>
+          <h1 id="spenden-hero-title" data-cms-field="hero.title" data-cms-label="Hero Titel">Deine Spende bewegt Herzen</h1>
+          <p id="spenden-hero-subtitle" class="lead" data-cms-field="hero.subtitle" data-cms-label="Hero Untertitel">Mit deiner Unterstützung können wir in Mainz einen Ort der Hoffnung, der Gemeinschaft und des Glaubens gestalten. Jeder Beitrag, ob groß oder klein, macht einen Unterschied.</p>
           <a href="#spenden-optionen" class="btn btn-primary btn-lg">
             <i class="fa-solid fa-heart"></i> Jetzt spenden
           </a>
@@ -80,7 +68,7 @@
     <!-- IMPACT SECTION -->
     <section class="content-section impact-section">
         <div class="container">
-            <h2 id="impact-title">Was deine Spende bewirkt</h2>
+            <h2 id="impact-title" data-cms-field="impact.title" data-cms-label="Impact Titel">Was deine Spende bewirkt</h2>
             <div id="impact-grid" class="impact-grid">
                 <div class="impact-card">
                     <div class="icon"><i class="fa-solid fa-people-group"></i></div>
@@ -115,10 +103,10 @@
             <div class="donate-option-body">
               <p>Spende direkt auf unser Konto. Für eine Spendenquittung gib bitte deine Adresse im Verwendungszweck an.</p>
               <ul class="bank-details-list-professional">
-                <li><strong>Empfänger:</strong> <span id="bank-receiver">Newness of Life e.V.</span></li>
-                <li><strong>IBAN:</strong> <span id="bank-iban">DE12 3456 7890 1234 5678 90</span> <button class="copy-btn" data-copy="#bank-iban"><i class="fa-regular fa-copy"></i></button></li>
-                <li><strong>BIC:</strong> <span id="bank-bic">MALADE51XYZ</span> <button class="copy-btn" data-copy="#bank-bic"><i class="fa-regular fa-copy"></i></button></li>
-                <li><strong>Bank:</strong> <span id="bank-name">Musterbank</span></li>
+                <li><strong>Empfänger:</strong> <span id="bank-receiver" data-cms-field="bank_details.account_holder" data-cms-label="Kontoinhaber">Newness of Life e.V.</span></li>
+                <li><strong>IBAN:</strong> <span id="bank-iban" data-cms-field="bank_details.iban" data-cms-label="IBAN">DE12 3456 7890 1234 5678 90</span> <button class="copy-btn" data-copy="#bank-iban"><i class="fa-regular fa-copy"></i></button></li>
+                <li><strong>BIC:</strong> <span id="bank-bic" data-cms-field="bank_details.bic" data-cms-label="BIC">MALADE51XYZ</span> <button class="copy-btn" data-copy="#bank-bic"><i class="fa-regular fa-copy"></i></button></li>
+                <li><strong>Bank:</strong> <span id="bank-name" data-cms-field="bank_details.bank_name" data-cms-label="Bankname">Musterbank</span></li>
               </ul>
             </div>
           </div>
@@ -227,6 +215,7 @@
 </footer>
 <!-- CMS Preview Script (nur aktiv wenn ?cms-preview=1) -->
 <script src="js/cms-preview.js"></script>
+<script src="js/cms-loader.js"></script>
 
   <script src="js/script.js"></script>
 </body>

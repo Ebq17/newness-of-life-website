@@ -8,8 +8,8 @@
     },
     "navigation": [
       { "label": "Startseite", "url": "index.html", "show": true },
-      { "label": "Über uns", "url": "ueber-uns.html", "show": true },
       { "label": "Gottesdienste", "url": "gottesdienste.html", "show": true },
+      { "label": "Über uns", "url": "ueber-uns.html", "show": true },
       { "label": "Veranstaltungen", "url": "veranstaltungen.html", "show": true },
       { "label": "Kontakt", "url": "index.html#kontakt", "show": true }
     ],

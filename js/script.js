@@ -19,14 +19,39 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // --- Active Link automatisch setzen ---
-    const currentPath = location.pathname.replace(/\/index\.html?$/, '/');
-    document.querySelectorAll('.nav-links-pro a[href]').forEach(a => {
-        const url = new URL(a.getAttribute('href'), location.origin);
-        const path = url.pathname.replace(/\/index\.html?$/, '/');
-        if (path === currentPath) {
-            a.classList.add('active');
-        }
-    });
+    function updateActiveNav() {
+        const currentPath = location.pathname.replace(/\/index\.html?$/, '/');
+        const currentHash = location.hash;
+
+        // First remove all active classes
+        document.querySelectorAll('.nav-links-pro a').forEach(a => {
+            a.classList.remove('active');
+        });
+
+        // Then add active to the correct link
+        document.querySelectorAll('.nav-links-pro a[href]').forEach(a => {
+            const href = a.getAttribute('href');
+            const url = new URL(href, location.origin);
+            const path = url.pathname.replace(/\/index\.html?$/, '/');
+            const hash = url.hash;
+
+            if (path === currentPath) {
+                // If current URL has a hash, only the link with that hash is active
+                if (currentHash && hash === currentHash) {
+                    a.classList.add('active');
+                }
+                // If current URL has no hash, only links without hash are active
+                else if (!currentHash && !hash) {
+                    a.classList.add('active');
+                }
+            }
+        });
+    }
+
+    updateActiveNav();
+
+    // Update on hash change
+    window.addEventListener('hashchange', updateActiveNav);
 
     // --- Smooth Scrolling (nur bei existierendem Ziel) ---
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -104,6 +129,59 @@ document.addEventListener('DOMContentLoaded', function () {
             updatePreviewField(field, value);
             if (field === 'events_section.show_count') {
                 applyEventsCount(value);
+            }
+        });
+    }
+
+    // --- Contact Form (API) ---
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        const statusEl = document.getElementById('contact-status');
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (submitBtn) submitBtn.disabled = true;
+            if (statusEl) {
+                statusEl.textContent = 'Sende...';
+                statusEl.className = 'form-status';
+            }
+
+            const formData = new FormData(contactForm);
+            const payload = {
+                name: formData.get('name') || '',
+                email: formData.get('email') || '',
+                subject: formData.get('subject') || '',
+                message: formData.get('message') || '',
+                website: formData.get('website') || ''
+            };
+
+            const apiBase = (location.hostname === 'localhost' && location.port === '8080')
+                ? 'http://localhost:3001'
+                : '';
+
+            try {
+                const res = await fetch(`${apiBase}/api/contact`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (!res.ok) {
+                    throw new Error(data.error || 'Fehler beim Senden');
+                }
+                if (statusEl) {
+                    statusEl.textContent = `Danke! Wir haben deine Nachricht erhalten. Ticket: ${data.ticketId || ''}`.trim();
+                    statusEl.className = 'form-status is-success';
+                }
+                contactForm.reset();
+            } catch (err) {
+                if (statusEl) {
+                    statusEl.textContent = err.message || 'Fehler beim Senden';
+                    statusEl.className = 'form-status is-error';
+                }
+            } finally {
+                if (submitBtn) submitBtn.disabled = false;
             }
         });
     }

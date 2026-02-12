@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seiten - Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h1>Newness of Life</h1>
+      <span>Admin Dashboard</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-title">Übersicht</div>
+        <a href="dashboard.html" class="nav-item">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+          Dashboard
+        </a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Inhalte</div>
+        <a href="events.html" class="nav-item">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+          Events
+        </a>
+        <a href="pages.html" class="nav-item active">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          Seiten
+        </a>
+        <a href="media.html" class="nav-item">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+          Medien
+        </a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Einstellungen</div>
+        <a href="settings.html" class="nav-item">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+          Einstellungen
+        </a>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <header class="header">
+      <h2 class="header-title">Seiten</h2>
+    </header>
+
+    <div class="content">
+      <div class="pages-grid">
+        <!-- Startseite -->
+        <div class="page-card">
+          <div class="page-preview">🏠</div>
+          <div class="page-info">
+            <h3 class="page-title">Startseite</h3>
+            <p class="page-url">/index.html</p>
+            <div class="page-actions">
+              <a href="page-edit.html?page=homepage" class="btn btn-primary btn-compact">Bearbeiten</a>
+              <a href="http://localhost:8000/" target="_blank" class="btn btn-secondary btn-compact">Ansehen</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gottesdienste -->
+        <div class="page-card">
+          <div class="page-preview">⛪</div>
+          <div class="page-info">
+            <h3 class="page-title">Gottesdienste</h3>
+            <p class="page-url">/gottesdienste.html</p>
+            <div class="page-actions">
+              <a href="page-edit.html?page=gottesdienste" class="btn btn-primary btn-compact">Bearbeiten</a>
+              <a href="http://localhost:8000/gottesdienste.html" target="_blank" class="btn btn-secondary btn-compact">Ansehen</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Veranstaltungen -->
+        <div class="page-card">
+          <div class="page-preview">📅</div>
+          <div class="page-info">
+            <h3 class="page-title">Veranstaltungen</h3>
+            <p class="page-url">/veranstaltungen.html</p>
+            <div class="page-actions">
+              <a href="events.html" class="btn btn-primary btn-compact">Events verwalten</a>
+              <a href="http://localhost:8000/veranstaltungen.html" target="_blank" class="btn btn-secondary btn-compact">Ansehen</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Über uns -->
+        <div class="page-card">
+          <div class="page-preview">👥</div>
+          <div class="page-info">
+            <h3 class="page-title">Über uns</h3>
+            <p class="page-url">/ueber-uns.html</p>
+            <div class="page-actions">
+              <a href="page-edit.html?page=ueber-uns" class="btn btn-primary btn-compact">Bearbeiten</a>
+              <a href="http://localhost:8000/ueber-uns.html" target="_blank" class="btn btn-secondary btn-compact">Ansehen</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Spenden -->
+        <div class="page-card">
+          <div class="page-preview">💝</div>
+          <div class="page-info">
+            <h3 class="page-title">Spenden</h3>
+            <p class="page-url">/spenden.html</p>
+            <div class="page-actions">
+              <a href="page-edit.html?page=spenden" class="btn btn-primary btn-compact">Bearbeiten</a>
+              <a href="http://localhost:8000/spenden.html" target="_blank" class="btn btn-secondary btn-compact">Ansehen</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Impressum -->
+        <div class="page-card">
+          <div class="page-preview">📄</div>
+          <div class="page-info">
+            <h3 class="page-title">Impressum</h3>
+            <p class="page-url">/impressum.html</p>
+            <div class="page-actions">
+              <a href="page-edit.html?page=impressum" class="btn btn-primary btn-compact">Bearbeiten</a>
+              <a href="http://localhost:8000/impressum.html" target="_blank" class="btn btn-secondary btn-compact">Ansehen</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Datenschutz -->
+        <div class="page-card">
+          <div class="page-preview">🔒</div>
+          <div class="page-info">
+            <h3 class="page-title">Datenschutz</h3>
+            <p class="page-url">/datenschutz.html</p>
+            <div class="page-actions">
+              <a href="page-edit.html?page=datenschutz" class="btn btn-primary btn-compact">Bearbeiten</a>
+              <a href="http://localhost:8000/datenschutz.html" target="_blank" class="btn btn-secondary btn-compact">Ansehen</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="toast-container" id="toastContainer"></div>
+</body>
+</html>

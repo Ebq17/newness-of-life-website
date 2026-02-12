@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Impressum - Kirchen-Webseite</title>
+    <meta name="description" content="Impressum der Newness of Life Gemeinde" data-cms-field="seo.meta_description" data-cms-label="Meta Beschreibung">
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -28,24 +29,12 @@
       </a>
 
       <ul id="mainnav-pro" class="nav-links-pro">
-        
-          
             <li><a href="index.html">Startseite</a></li>
-          
-          
-            <li><a href="ueber-uns.html">Über uns</a></li>
-          
-          
             <li><a href="gottesdienste.html">Gottesdienste</a></li>
-          
-          
+            <li><a href="ueber-uns.html">Über uns</a></li>
             <li><a href="veranstaltungen.html">Veranstaltungen</a></li>
-          
-          
             <li><a href="index.html#kontakt">Kontakt</a></li>
-          
-        
-          <li class="show-on-mobile"><a href="spenden.html">Spenden</a></li>
+            <li class="show-on-mobile"><a href="spenden.html">Spenden</a></li>
         </ul>
 
       
@@ -63,23 +52,29 @@
             <img id="impressum-header-image" src="images/kirche.jpg" alt="" aria-hidden="true" class="section-background-image" loading="lazy">
             <div class="overlay"></div>
             <div class="container">
-                <h2 id="impressum-header-title">Impressum</h2>
+                <h2 id="impressum-header-title" data-cms-field="hero.title" data-cms-label="Hero Titel">Impressum</h2>
             </div>
         </section>
         <section class="content-section">
             <div class="container" id="impressum-content">
                 <h3>Angaben gemäß § 5 TMG</h3>
-                <p>Newness of Life; Church of the Living God Europe e.V.</p>
+                <p data-cms-field="content.organization.name" data-cms-label="Name der Organisation">Newness of Life; Church of the Living God Europe e.V.</p>
                 <p><strong>Vertreten durch:</strong><br>Isaac Addae (Vorstand)<br>Anthony Quainoo (Vorstand)</p>
                 <h3>Anschrift</h3>
-                <p>Hebbelstr. 56–60<br>55127 Mainz</p>
+                <p>
+                  <span data-cms-field="content.address.street" data-cms-label="Straße">Hebbelstr. 56–60</span><br>
+                  <span data-cms-field="content.address.zip" data-cms-label="PLZ">55127</span> <span data-cms-field="content.address.city" data-cms-label="Stadt">Mainz</span>
+                </p>
                 <h3>Kontakt</h3>
-                <p>📧 <a href="mailto:newnessoflife@clgi.org">newnessoflife@clgi.org</a></p>
+                <p>📧 <a href="mailto:newnessoflife@clgi.org" data-cms-field="content.contact.email" data-cms-label="Kontakt E-Mail" data-cms-attr="href,textContent">newnessoflife@clgi.org</a></p>
                 <p>📩 Kontaktformular (siehe Menüpunkt „Kontakt“)</p>
                 <h3>Registereintrag</h3>
-                <p>Eingetragen im Vereinsregister beim Amtsgericht Mainz<br>VR 42576</p>
+                <p>Eingetragen im Vereinsregister beim <span data-cms-field="content.registration.court" data-cms-label="Registergericht">Amtsgericht Mainz</span><br><span data-cms-field="content.registration.registration_number" data-cms-label="Registernummer">VR 42576</span></p>
                 <h3>Inhaltlich verantwortlich gemäß § 18 Abs. 2 MStV</h3>
                 <p>Anthony Quainoo<br>Hebbelstr. 56–60<br>55127 Mainz</p>
+
+                <h3 data-cms-field="content.disclaimer.title" data-cms-label="Haftungsausschluss Titel">Haftungsausschluss</h3>
+                <p data-cms-field="content.disclaimer.content" data-cms-label="Haftungsausschluss Inhalt" data-cms-format="html">Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich.</p>
             </div>
         </section>
     </main>
@@ -153,6 +148,7 @@
 </footer>
 <!-- CMS Preview Script (nur aktiv wenn ?cms-preview=1) -->
 <script src="js/cms-preview.js"></script>
+<script src="js/cms-loader.js"></script>
 
   <script src="js/script.js"></script>
 </body>

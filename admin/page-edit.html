@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seite bearbeiten - Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/page-edit.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-left">
+      <a href="pages.html" class="back-link">
+        <i class="fas fa-chevron-left"></i>
+        Zurück
+      </a>
+      <h1 class="header-title" id="pageTitle">Seite bearbeiten</h1>
+    </div>
+    <div class="header-actions">
+      <div class="status-badge draft" id="statusBadge">
+        <span class="status-dot"></span>
+        <span id="statusText">Entwurf</span>
+      </div>
+      <button class="btn btn-secondary" id="saveBtn" onclick="saveData(false)">
+        <i class="fas fa-save"></i>
+        Speichern
+      </button>
+      <button class="btn btn-success" onclick="confirmPublish()">
+        <i class="fas fa-check"></i>
+        Veröffentlichen
+      </button>
+    </div>
+  </header>
+
+  <div class="split-view">
+    <!-- Preview Panel -->
+    <div class="preview-panel">
+      <div class="preview-header">
+        <div class="preview-dots"><span></span><span></span><span></span></div>
+        <div class="preview-url" id="previewUrl">localhost:3001/</div>
+        <div class="viewport-switcher">
+          <button class="viewport-btn active" data-viewport="desktop" title="Desktop">
+            <i class="fas fa-desktop"></i>
+          </button>
+          <button class="viewport-btn" data-viewport="tablet" title="Tablet">
+            <i class="fas fa-tablet-alt"></i>
+          </button>
+          <button class="viewport-btn" data-viewport="mobile" title="Mobile">
+            <i class="fas fa-mobile-alt"></i>
+          </button>
+        </div>
+        <div class="preview-actions">
+          <button onclick="refreshPreview()" title="Aktualisieren">
+            <i class="fas fa-sync-alt"></i>
+          </button>
+          <button onclick="openInNewWindow()" title="In neuem Fenster">
+            <i class="fas fa-external-link-alt"></i>
+          </button>
+        </div>
+      </div>
+      <div class="preview-iframe-container">
+        <div class="preview-iframe-wrapper desktop" id="previewFrame">
+          <div class="edit-mode-indicator">
+            <span class="dot"></span>
+            <span>Bearbeiten</span>
+          </div>
+          <iframe id="previewIframe" src=""></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- Editor Panel -->
+    <div class="editor-panel">
+      <div class="editor-header">
+        <h2 id="editorTitle">Startseite</h2>
+        <p>Klicke auf ein Element in der Vorschau oder bearbeite hier</p>
+      </div>
+
+      <!-- Editor Tabs -->
+      <div class="editor-tabs">
+        <button class="editor-tab active" data-tab="content" onclick="switchTab('content')">
+          <i class="fas fa-edit"></i> Inhalt
+        </button>
+        <button class="editor-tab" data-tab="design" onclick="switchTab('design')">
+          <i class="fas fa-palette"></i> Design
+        </button>
+        <button class="editor-tab" data-tab="blocks" onclick="switchTab('blocks')">
+          <i class="fas fa-th-large"></i> Blöcke
+        </button>
+        <button class="editor-tab" data-tab="seo" onclick="switchTab('seo')">
+          <i class="fas fa-search"></i> SEO
+        </button>
+      </div>
+
+      <!-- Content Tab -->
+      <div class="tab-content active" id="tab-content">
+        <div class="tab-pane" id="contentPane">
+          <div class="loading">
+            <div class="spinner"></div>
+            Lade Daten...
+          </div>
+        </div>
+      </div>
+
+      <!-- Design Tab -->
+      <div class="tab-content" id="tab-design">
+        <div class="tab-pane">
+          <div class="section-group">
+            <div class="section-header" onclick="toggleSectionGroup(this)">
+              <div class="section-header-left">
+                <i class="fas fa-image icon"></i>
+                <h3>Hero Hintergrund</h3>
+              </div>
+              <i class="fas fa-chevron-down section-toggle"></i>
+            </div>
+            <div class="section-body">
+              <div class="form-group">
+                <label class="form-label">Hintergrund-Typ</label>
+                <div class="bg-type-grid">
+                  <div class="bg-type-option" data-bg="color" onclick="selectBgType('hero', 'color')">
+                    <i class="fas fa-fill-drip"></i>
+                    <span>Farbe</span>
+                  </div>
+                  <div class="bg-type-option selected" data-bg="gradient" onclick="selectBgType('hero', 'gradient')">
+                    <i class="fas fa-adjust"></i>
+                    <span>Verlauf</span>
+                  </div>
+                  <div class="bg-type-option" data-bg="image" onclick="selectBgType('hero', 'image')">
+                    <i class="fas fa-image"></i>
+                    <span>Bild</span>
+                  </div>
+                  <div class="bg-type-option" data-bg="video" onclick="selectBgType('hero', 'video')">
+                    <i class="fas fa-video"></i>
+                    <span>Video</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Color -->
+              <div id="hero-bg-color" class="bg-options is-hidden">
+                <div class="form-group">
+                  <label class="form-label">Hintergrundfarbe</label>
+                  <div class="color-picker-row">
+                    <div class="color-preview">
+                      <input type="color" id="heroBgColor" value="#2563EB" onchange="updateDesign('hero', 'bgColor', this.value)">
+                    </div>
+                    <input type="text" class="form-input" id="heroBgColorText" value="#2563EB" oninput="updateDesign('hero', 'bgColor', this.value)">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Gradient -->
+              <div id="hero-bg-gradient" class="bg-options">
+                <div class="gradient-preview gradient-preview-hero" id="heroGradientPreview"></div>
+                <div class="gradient-row">
+                  <div class="gradient-col">
+                    <label class="form-label">Farbe 1</label>
+                    <div class="color-picker-row">
+                      <div class="color-preview">
+                        <input type="color" id="heroGradColor1" value="#667eea" onchange="updateGradient('hero')">
+                      </div>
+                      <input type="text" class="form-input" value="#667eea" id="heroGradColor1Text" oninput="updateGradientText('hero')">
+                    </div>
+                  </div>
+                  <div class="gradient-col">
+                    <label class="form-label">Farbe 2</label>
+                    <div class="color-picker-row">
+                      <div class="color-preview">
+                        <input type="color" id="heroGradColor2" value="#764ba2" onchange="updateGradient('hero')">
+                      </div>
+                      <input type="text" class="form-input" value="#764ba2" id="heroGradColor2Text" oninput="updateGradientText('hero')">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group mt-12">
+                  <label class="form-label">Richtung</label>
+                  <select class="form-select" id="heroGradDirection" onchange="updateGradient('hero')">
+                    <option value="135deg" selected>Diagonal ↘</option>
+                    <option value="45deg">Diagonal ↗</option>
+                    <option value="to right">Links → Rechts</option>
+                    <option value="to bottom">Oben → Unten</option>
+                    <option value="to top">Unten → Oben</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Image -->
+              <div id="hero-bg-image" class="bg-options is-hidden">
+                <div id="heroImagePreview" class="media-preview is-hidden">
+                  <img src="" alt="Background">
+                  <button class="remove-btn" onclick="removeMedia('hero', 'image')"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="media-upload" id="heroImageUpload" onclick="openMediaPicker('hero', 'image')">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                  <p>Bild hochladen oder auswählen</p>
+                </div>
+                <div class="range-group mt-16">
+                  <div class="range-header">
+                    <label class="form-label form-label-inline">Overlay-Stärke</label>
+                    <span class="range-value" id="heroOverlayValue">50%</span>
+                  </div>
+                  <input type="range" id="heroOverlayRange" min="0" max="100" value="50" oninput="updateOverlay('hero', this.value)">
+                </div>
+              </div>
+
+              <!-- Video -->
+              <div id="hero-bg-video" class="bg-options is-hidden">
+                <div id="heroVideoPreview" class="media-preview is-hidden">
+                  <video muted loop autoplay></video>
+                  <button class="remove-btn" onclick="removeMedia('hero', 'video')"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="media-upload" id="heroVideoUpload" onclick="openMediaPicker('hero', 'video')">
+                  <i class="fas fa-film"></i>
+                  <p>Video hochladen (MP4, WebM)</p>
+                </div>
+                <div class="form-group mt-12">
+                  <label class="form-label">Video URL (optional)</label>
+                  <input type="text" class="form-input" id="heroVideoUrl" placeholder="https://..." oninput="updateDesign('hero', 'videoUrl', this.value)">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Text Colors -->
+          <div class="section-group">
+            <div class="section-header" onclick="toggleSectionGroup(this)">
+              <div class="section-header-left">
+                <i class="fas fa-font icon"></i>
+                <h3>Farben & Typografie</h3>
+              </div>
+              <i class="fas fa-chevron-down section-toggle"></i>
+            </div>
+            <div class="section-body">
+              <div class="form-group">
+                <label class="form-label">Primärfarbe</label>
+                <div class="color-picker-row">
+                  <div class="color-preview">
+                    <input type="color" id="primaryColor" value="#2563EB" onchange="updateDesign('global', 'primaryColor', this.value)">
+                  </div>
+                  <input type="text" class="form-input" id="primaryColorText" value="#2563EB">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Akzentfarbe</label>
+                <div class="color-picker-row">
+                  <div class="color-preview">
+                    <input type="color" id="accentColor" value="#10B981" onchange="updateDesign('global', 'accentColor', this.value)">
+                  </div>
+                  <input type="text" class="form-input" id="accentColorText" value="#10B981">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Blocks Tab -->
+      <div class="tab-content" id="tab-blocks">
+        <div class="tab-pane">
+          <p class="form-hint mb-16">Aktiviere oder deaktiviere Seitenabschnitte.</p>
+          <div id="blockList">
+            <!-- Blocks rendered here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- SEO Tab -->
+      <div class="tab-content" id="tab-seo">
+        <div class="tab-pane">
+          <div class="form-group">
+            <label class="form-label"><i class="fas fa-heading"></i> Seitentitel</label>
+            <input type="text" class="form-input" id="metaTitle" placeholder="Titel für Browser-Tab und Google" oninput="updateMeta('title', this.value)">
+            <div class="char-count"><span id="metaTitleCount">0</span>/60 Zeichen</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label"><i class="fas fa-align-left"></i> Meta-Beschreibung</label>
+            <textarea class="form-textarea" id="metaDesc" placeholder="Kurze Beschreibung für Google-Suchergebnisse" oninput="updateMeta('description', this.value)"></textarea>
+            <div class="char-count"><span id="metaDescCount">0</span>/160 Zeichen</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label"><i class="fas fa-image"></i> Social Media Bild</label>
+            <div class="media-upload" onclick="openMediaPicker('seo', 'image')">
+              <i class="fas fa-share-alt"></i>
+              <p>Bild für Social Media Sharing</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="save-status-bar">
+        <div class="last-saved">
+          <i class="fas fa-clock"></i>
+          <span id="lastSavedText">Noch nicht gespeichert</span>
+        </div>
+        <span>Ctrl+S zum Speichern</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Media Picker Modal -->
+  <div class="modal-overlay" id="mediaModal">
+    <div class="modal">
+      <h3>Medien auswählen</h3>
+      <div class="form-group">
+        <input type="file" id="mediaFileInput" class="is-hidden" accept="image/*,video/*" onchange="handleFileUpload(this)">
+        <button class="btn btn-primary w-100" onclick="document.getElementById('mediaFileInput').click()">
+          <i class="fas fa-upload"></i> Datei hochladen
+        </button>
+      </div>
+      <p class="modal-hint">oder aus Galerie wählen:</p>
+      <div class="image-gallery" id="imageGallery">
+        <!-- Images loaded here -->
+      </div>
+      <div class="modal-actions mt-16">
+        <button class="btn btn-secondary" onclick="closeMediaModal()">Abbrechen</button>
+        <button class="btn btn-primary" onclick="selectMedia()">Auswählen</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Publish Modal -->
+  <div class="modal-overlay" id="publishModal">
+    <div class="modal">
+      <h3>Änderungen veröffentlichen?</h3>
+      <p>Die Änderungen werden für alle Besucher sichtbar. Bist du sicher?</p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closePublishModal()">Abbrechen</button>
+        <button class="btn btn-success" onclick="publishChanges()">Ja, veröffentlichen</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+    const API_URL = 'http://localhost:3001/api';
+    const PREVIEW_URL = 'http://localhost:3001';
+
+    // State
+    let currentPage = null;
+    let currentData = {};
+    let designData = {};
+    let hasUnsavedChanges = false;
+    let iframeReady = false;
+    let pendingUpdates = [];
+    let mediaPickerContext = { section: null, type: null, mode: 'design', path: null };
+    let selectedMediaUrl = null;
+    const imageHistory = {};
+
+    // Page config
+    const pageConfigs = {
+      homepage: {
+        title: 'Startseite',
+        dataFile: 'homepage.json',
+        previewUrl: '/index.html',
+        sections: [
+          {
+            id: 'hero',
+            title: 'Hero-Bereich',
+            icon: 'fas fa-star',
+            enabled: true,
+            fields: [
+              { path: 'hero.title', label: 'Haupttitel', type: 'text', placeholder: 'Willkommen...' },
+              { path: 'hero.subtitle', label: 'Untertitel', type: 'textarea', placeholder: 'Beschreibung...' },
+              { path: 'hero.background_image', label: 'Hintergrundbild', type: 'image' },
+              { path: 'hero.cta_text', label: 'Button Text', type: 'text', placeholder: 'Mehr erfahren' },
+              { path: 'hero.cta_link', label: 'Button Link', type: 'text', placeholder: 'ueber-uns.html' }
+            ]
+          },
+          {
+            id: 'services',
+            title: 'Gottesdienste',
+            icon: 'fas fa-church',
+            enabled: true,
+            fields: [
+              { path: 'services_section.title', label: 'Titel', type: 'text' },
+              { path: 'services_section.description', label: 'Beschreibung', type: 'textarea' },
+              { path: 'services_section.service_day', label: 'Tag', type: 'text' },
+              { path: 'services_section.service_time', label: 'Uhrzeit', type: 'text' },
+              { path: 'services_section.kids_info', label: 'Kinderinfo', type: 'text' }
+            ]
+          },
+          {
+            id: 'about',
+            title: 'Über uns',
+            icon: 'fas fa-users',
+            enabled: true,
+            fields: [
+              { path: 'about_section.title', label: 'Titel', type: 'text' },
+              { path: 'about_section.subtitle', label: 'Untertitel', type: 'text' },
+              { path: 'about_section.text', label: 'Text', type: 'textarea' }
+            ]
+          },
+          {
+            id: 'events',
+            title: 'Kontakt',
+            icon: 'fas fa-envelope',
+            enabled: true,
+            fields: [
+              { path: 'contact_section.title', label: 'Titel', type: 'text' },
+              { path: 'contact_section.form_title', label: 'Formular Titel', type: 'text' },
+              { path: 'contact_section.address_title', label: 'Adresse Titel', type: 'text' }
+            ]
+          }
+        ]
+      },
+      gottesdienste: {
+        title: 'Gottesdienste',
+        dataFile: 'gottesdienste.json',
+        previewUrl: '/gottesdienste.html',
+        sections: [
+          {
+            id: 'hero',
+            title: 'Hero-Bereich',
+            icon: 'fas fa-church',
+            enabled: true,
+            fields: [
+              { path: 'hero.title', label: 'Titel', type: 'text' },
+              { path: 'hero.subtitle', label: 'Untertitel', type: 'textarea' },
+              { path: 'hero.background_image', label: 'Hintergrundbild', type: 'image' }
+            ]
+          },
+          {
+            id: 'intro',
+            title: 'Intro',
+            icon: 'fas fa-info-circle',
+            enabled: true,
+            fields: [
+              { path: 'intro.title', label: 'Titel', type: 'text' },
+              { path: 'intro.text', label: 'Text', type: 'textarea' }
+            ]
+          },
+          {
+            id: 'main_service',
+            title: 'Hauptgottesdienst',
+            icon: 'fas fa-clock',
+            enabled: true,
+            fields: [
+              { path: 'main_service.title', label: 'Titel', type: 'text' },
+              { path: 'main_service.day', label: 'Tag', type: 'text' },
+              { path: 'main_service.time', label: 'Uhrzeit', type: 'text' },
+              { path: 'main_service.duration', label: 'Dauer', type: 'text' },
+              { path: 'main_service.description', label: 'Beschreibung', type: 'textarea' }
+            ]
+          }
+        ]
+      }
+    };
+
+    // Get page from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const pageSlug = urlParams.get('page') || 'homepage';
+
+    // Tab switching
+    function switchTab(tabId) {
+      document.querySelectorAll('.editor-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+      document.getElementById(`tab-${tabId}`).classList.add('active');
+    }
+
+    // Section group toggle
+    function toggleSectionGroup(header) {
+      header.closest('.section-group').classList.toggle('collapsed');
+    }
+
+    // Toast notification
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i> ${message}`;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 4000);
+    }
+
+    // Get/Set nested value
+    function getNestedValue(obj, path) {
+      return path.split('.').reduce((o, k) => (o || {})[k], obj);
+    }
+    function setNestedValue(obj, path, value) {
+      const keys = path.split('.');
+      const lastKey = keys.pop();
+      const target = keys.reduce((o, k) => { if (!o[k]) o[k] = {}; return o[k]; }, obj);
+      target[lastKey] = value;
+    }
+
+    // Render editor content
+    function renderEditor(config, data) {
+      const container = document.getElementById('contentPane');
+      let html = '';
+
+      for (const section of config.sections) {
+        html += `
+          <div class="section-group" data-section-id="${section.id}">
+            <div class="section-header" onclick="toggleSectionGroup(this)">
+              <div class="section-header-left">
+                <i class="${section.icon} icon"></i>
+                <h3>${section.title}</h3>
+              </div>
+              <i class="fas fa-chevron-down section-toggle"></i>
+            </div>
+            <div class="section-body">`;
+
+        for (const field of section.fields) {
+          const value = getNestedValue(data, field.path) || '';
+
+          if (field.type === 'textarea') {
+            html += `
+              <div class="form-group" data-field-path="${field.path}">
+                <label class="form-label">${field.label}</label>
+                <textarea class="form-textarea" data-path="${field.path}" placeholder="${field.placeholder || ''}">${value}</textarea>
+              </div>`;
+          } else if (field.type === 'image') {
+            const prev = imageHistory[field.path] || '';
+            html += `
+              <div class="form-group media-field" data-field-path="${field.path}">
+                <label class="form-label">${field.label}</label>
+                <div class="media-row">
+                  <div class="media-col">
+                    <h4>Aktuelles Bild</h4>
+                    <div class="media-thumb" data-media-current="${field.path}">
+                      ${value ? `<img src="${value}" alt="Aktuelles Bild">` : `<span class="form-hint">Kein Bild</span>`}
+                    </div>
+                    <div class="media-meta" data-media-current-meta="${field.path}">${value || '—'}</div>
+                  </div>
+                  <div class="media-col">
+                    <h4>Vorheriges Bild</h4>
+                    <div class="media-thumb" data-media-previous="${field.path}">
+                      ${prev ? `<img src="${prev}" alt="Vorheriges Bild">` : `<span class="form-hint">Noch kein Wechsel</span>`}
+                    </div>
+                    <div class="media-meta" data-media-previous-meta="${field.path}">${prev || '—'}</div>
+                  </div>
+                </div>
+                <div class="media-actions">
+                  <button class="btn btn-primary btn-sm" type="button" onclick="openMediaPickerForField('${field.path}')">
+                    <i class="fas fa-image"></i> Bild auswählen
+                  </button>
+                  <button class="btn btn-secondary btn-sm" type="button" onclick="removeMediaForField('${field.path}')">
+                    <i class="fas fa-trash"></i> Entfernen
+                  </button>
+                </div>
+                <input type="hidden" data-path="${field.path}" value="${value}">
+              </div>`;
+          } else {
+            html += `
+              <div class="form-group" data-field-path="${field.path}">
+                <label class="form-label">${field.label}</label>
+                <input type="text" class="form-input" data-path="${field.path}" value="${value}" placeholder="${field.placeholder || ''}">
+              </div>`;
+          }
+        }
+
+        html += `</div></div>`;
+      }
+
+      container.innerHTML = html;
+      addInputListeners();
+      renderBlockList(config);
+    }
+
+    // Render block list
+    function renderBlockList(config) {
+      const container = document.getElementById('blockList');
+      let html = '';
+
+      for (const section of config.sections) {
+        const isEnabled = section.enabled !== false;
+        html += `
+          <div class="block-item ${!isEnabled ? 'disabled' : ''}" data-section-id="${section.id}">
+            <div class="block-icon"><i class="${section.icon}"></i></div>
+            <div class="block-info">
+              <div class="block-name">${section.title}</div>
+              <div class="block-status">${isEnabled ? 'Sichtbar' : 'Versteckt'}</div>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" ${isEnabled ? 'checked' : ''} onchange="toggleSection('${section.id}', this.checked)">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>`;
+      }
+      container.innerHTML = html;
+    }
+
+    // Toggle section visibility
+    function toggleSection(sectionId, enabled) {
+      const section = currentPage.sections.find(s => s.id === sectionId);
+      if (section) section.enabled = enabled;
+
+      const blockItem = document.querySelector(`.block-item[data-section-id="${sectionId}"]`);
+      if (blockItem) {
+        blockItem.classList.toggle('disabled', !enabled);
+        blockItem.querySelector('.block-status').textContent = enabled ? 'Sichtbar' : 'Versteckt';
+      }
+
+      if (!currentData._sections) currentData._sections = {};
+      currentData._sections[sectionId] = { enabled };
+
+      sendMessageToIframe('toggleSection', { sectionId, enabled });
+      markAsUnsaved();
+    }
+
+    // Input listeners with live update
+    function addInputListeners() {
+      document.querySelectorAll('.form-input, .form-textarea').forEach(input => {
+        input.addEventListener('input', (e) => {
+          const path = e.target.dataset.path;
+          const value = e.target.value;
+
+          setNestedValue(currentData, path, value);
+          sendMessageToIframe('updateContent', { path, value });
+          markAsUnsaved();
+        });
+
+        input.addEventListener('focus', (e) => {
+          const path = e.target.dataset.path;
+          sendMessageToIframe('highlightElement', { path });
+
+          // Highlight form group
+          document.querySelectorAll('.form-group.highlight').forEach(g => g.classList.remove('highlight'));
+          e.target.closest('.form-group')?.classList.add('highlight');
+        });
+      });
+    }
+
+    function openMediaPickerForField(path) {
+      mediaPickerContext = { mode: 'data', path, type: 'image' };
+      openMediaPicker('field', 'image');
+    }
+
+    function removeMediaForField(path) {
+      if (!confirm('Bild wirklich entfernen?')) return;
+      const previous = getNestedValue(currentData, path);
+      if (previous) {
+        imageHistory[path] = previous;
+        if (!currentData._history) currentData._history = {};
+        if (!currentData._history.images) currentData._history.images = {};
+        currentData._history.images[path] = previous;
+      }
+      setNestedValue(currentData, path, '');
+      updateMediaFieldUI(path, '', imageHistory[path] || '');
+      sendMessageToIframe('updateContent', { path, value: '' });
+      markAsUnsaved();
+    }
+
+    // Background type selection
+    function selectBgType(section, type) {
+      const grid = document.querySelector(`#${section}-bg-color`)?.closest('.section-body')?.querySelector('.bg-type-grid');
+      if (!grid) return;
+
+      grid.querySelectorAll('.bg-type-option').forEach(o => o.classList.remove('selected'));
+      grid.querySelector(`[data-bg="${type}"]`)?.classList.add('selected');
+
+      ['color', 'gradient', 'image', 'video'].forEach(t => {
+        const el = document.getElementById(`${section}-bg-${t}`);
+        if (el) el.style.display = t === type ? 'block' : 'none';
+      });
+
+      if (!designData[section]) designData[section] = {};
+      designData[section].bgType = type;
+      markAsUnsaved();
+    }
+
+    // Update gradient
+    function updateGradient(section) {
+      const color1 = document.getElementById(`${section}GradColor1`).value;
+      const color2 = document.getElementById(`${section}GradColor2`).value;
+      const direction = document.getElementById(`${section}GradDirection`).value;
+
+      document.getElementById(`${section}GradColor1Text`).value = color1;
+      document.getElementById(`${section}GradColor2Text`).value = color2;
+
+      const gradient = `linear-gradient(${direction}, ${color1} 0%, ${color2} 100%)`;
+      document.getElementById(`${section}GradientPreview`).style.background = gradient;
+
+      if (!designData[section]) designData[section] = {};
+      designData[section].gradient = { color1, color2, direction };
+
+      // Update in data
+      if (!currentData._design) currentData._design = {};
+      currentData._design[section] = designData[section];
+
+      markAsUnsaved();
+    }
+
+    function updateGradientText(section) {
+      const color1 = document.getElementById(`${section}GradColor1Text`).value;
+      const color2 = document.getElementById(`${section}GradColor2Text`).value;
+
+      if (/^#[0-9A-Fa-f]{6}$/.test(color1)) {
+        document.getElementById(`${section}GradColor1`).value = color1;
+      }
+      if (/^#[0-9A-Fa-f]{6}$/.test(color2)) {
+        document.getElementById(`${section}GradColor2`).value = color2;
+      }
+      updateGradient(section);
+    }
+
+    // Update design
+    function updateDesign(section, key, value) {
+      if (!designData[section]) designData[section] = {};
+      designData[section][key] = value;
+
+      if (!currentData._design) currentData._design = {};
+      currentData._design[section] = designData[section];
+
+      markAsUnsaved();
+    }
+
+    // Update overlay
+    function updateOverlay(section, value) {
+      document.getElementById(`${section}OverlayValue`).textContent = value + '%';
+      updateDesign(section, 'overlay', value);
+    }
+
+    // Update meta
+    function updateMeta(key, value) {
+      if (!currentData._meta) currentData._meta = {};
+      currentData._meta[key] = value;
+
+      const countEl = document.getElementById(`meta${key.charAt(0).toUpperCase() + key.slice(1)}Count`);
+      if (countEl) countEl.textContent = value.length;
+
+      markAsUnsaved();
+    }
+
+    // Media picker
+    function openMediaPicker(section, type) {
+      if (!mediaPickerContext || mediaPickerContext.mode !== 'data') {
+        mediaPickerContext = { section, type, mode: 'design', path: null };
+      }
+      loadImageGallery();
+      document.getElementById('mediaModal').classList.add('visible');
+    }
+
+    function closeMediaModal() {
+      document.getElementById('mediaModal').classList.remove('visible');
+      selectedMediaUrl = null;
+    }
+
+    async function loadImageGallery() {
+      try {
+        const res = await fetch(`${API_URL}/images`);
+        const images = await res.json();
+
+        const gallery = document.getElementById('imageGallery');
+        gallery.innerHTML = images.map(img => `
+          <div class="image-gallery-item" data-url="${img.url}" onclick="selectGalleryImage(this)">
+            <img src="${img.url}" alt="${img.name}">
+          </div>
+        `).join('');
+      } catch (e) {
+        console.error('Error loading images:', e);
+      }
+    }
+
+    function selectGalleryImage(el) {
+      document.querySelectorAll('.image-gallery-item').forEach(i => i.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedMediaUrl = el.dataset.url;
+    }
+
+    async function handleFileUpload(input) {
+      if (!input.files || !input.files[0]) return;
+
+      const formData = new FormData();
+      formData.append('file', input.files[0]);
+
+      try {
+        const res = await fetch(`${API_URL}/upload`, {
+          method: 'POST',
+          body: formData
+        });
+        const result = await res.json();
+
+        if (result.success) {
+          selectedMediaUrl = result.url;
+          showToast('Datei hochgeladen!', 'success');
+          loadImageGallery();
+        }
+      } catch (e) {
+        showToast('Fehler beim Hochladen', 'error');
+      }
+    }
+
+    function selectMedia() {
+      if (!selectedMediaUrl) {
+        showToast('Bitte wähle ein Bild aus', 'error');
+        return;
+      }
+
+      const { section, type, mode, path } = mediaPickerContext;
+
+      if (mode === 'data' && path) {
+        const previous = getNestedValue(currentData, path);
+        if (previous && previous !== selectedMediaUrl) {
+          imageHistory[path] = previous;
+          if (!currentData._history) currentData._history = {};
+          if (!currentData._history.images) currentData._history.images = {};
+          currentData._history.images[path] = previous;
+        }
+        setNestedValue(currentData, path, selectedMediaUrl);
+        updateMediaFieldUI(path, selectedMediaUrl, imageHistory[path] || '');
+        sendMessageToIframe('updateContent', { path, value: selectedMediaUrl });
+        markAsUnsaved();
+        closeMediaModal();
+        return;
+      }
+
+      if (type === 'image') {
+        const preview = document.getElementById(`${section}ImagePreview`);
+        const upload = document.getElementById(`${section}ImageUpload`);
+        if (preview && upload) {
+          preview.style.display = 'block';
+          upload.style.display = 'none';
+          preview.querySelector('img').src = selectedMediaUrl;
+        }
+        updateDesign(section, 'backgroundImage', selectedMediaUrl);
+      } else if (type === 'video') {
+        const preview = document.getElementById(`${section}VideoPreview`);
+        const upload = document.getElementById(`${section}VideoUpload`);
+        if (preview && upload) {
+          preview.style.display = 'block';
+          upload.style.display = 'none';
+          const video = preview.querySelector('video');
+          video.src = selectedMediaUrl;
+          video.play();
+        }
+        updateDesign(section, 'backgroundVideo', selectedMediaUrl);
+      }
+
+      closeMediaModal();
+    }
+
+    function updateMediaFieldUI(path, current, previous) {
+      const currentBox = document.querySelector(`[data-media-current="${path}"]`);
+      const prevBox = document.querySelector(`[data-media-previous="${path}"]`);
+      const currentMeta = document.querySelector(`[data-media-current-meta="${path}"]`);
+      const prevMeta = document.querySelector(`[data-media-previous-meta="${path}"]`);
+
+      if (currentBox) {
+        currentBox.innerHTML = current ? `<img src="${current}" alt="Aktuelles Bild">` : `<span class="form-hint">Kein Bild</span>`;
+      }
+      if (prevBox) {
+        prevBox.innerHTML = previous ? `<img src="${previous}" alt="Vorheriges Bild">` : `<span class="form-hint">Noch kein Wechsel</span>`;
+      }
+      if (currentMeta) currentMeta.textContent = current || '—';
+      if (prevMeta) prevMeta.textContent = previous || '—';
+    }
+
+    function removeMedia(section, type) {
+      if (type === 'image') {
+        document.getElementById(`${section}ImagePreview`).style.display = 'none';
+        document.getElementById(`${section}ImageUpload`).style.display = 'block';
+        updateDesign(section, 'backgroundImage', null);
+      } else if (type === 'video') {
+        document.getElementById(`${section}VideoPreview`).style.display = 'none';
+        document.getElementById(`${section}VideoUpload`).style.display = 'block';
+        updateDesign(section, 'backgroundVideo', null);
+      }
+    }
+
+    // Unsaved changes
+    function markAsUnsaved() {
+      hasUnsavedChanges = true;
+      document.getElementById('statusBadge').className = 'status-badge unsaved';
+      document.getElementById('statusText').textContent = 'Ungespeichert';
+    }
+
+    function markAsSaved() {
+      hasUnsavedChanges = false;
+      document.getElementById('statusBadge').className = 'status-badge draft';
+      document.getElementById('statusText').textContent = 'Gespeichert';
+    }
+
+    // Save data
+    async function saveData(publish = false) {
+      const saveBtn = document.getElementById('saveBtn');
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Speichere...';
+
+      try {
+        // Save page data
+        const res = await fetch(`${API_URL}/data/${currentPage.dataFile}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(currentData)
+        });
+
+        if (!res.ok) throw new Error('Speichern fehlgeschlagen');
+
+        markAsSaved();
+        document.getElementById('lastSavedText').textContent = `Gespeichert um ${new Date().toLocaleTimeString('de-DE')}`;
+
+        if (publish) {
+          await fetch(`${API_URL}/build`, { method: 'POST' });
+          document.getElementById('statusBadge').className = 'status-badge published';
+          document.getElementById('statusText').textContent = 'Veröffentlicht';
+          showToast('Erfolgreich veröffentlicht!', 'success');
+        } else {
+          showToast('Änderungen gespeichert!', 'success');
+        }
+
+        // Refresh preview
+        setTimeout(() => refreshPreview(), 300);
+
+      } catch (err) {
+        showToast('Fehler: ' + err.message, 'error');
+      }
+
+      saveBtn.disabled = false;
+      saveBtn.innerHTML = '<i class="fas fa-save"></i> Speichern';
+    }
+
+    function confirmPublish() {
+      document.getElementById('publishModal').classList.add('visible');
+    }
+    function closePublishModal() {
+      document.getElementById('publishModal').classList.remove('visible');
+    }
+    function publishChanges() {
+      closePublishModal();
+      saveData(true);
+    }
+
+    // Load page data
+    async function loadPageData() {
+      currentPage = pageConfigs[pageSlug];
+      if (!currentPage) {
+        document.getElementById('contentPane').innerHTML = '<p class="empty-state">Seite nicht gefunden.</p>';
+        return;
+      }
+
+      document.getElementById('pageTitle').textContent = currentPage.title + ' bearbeiten';
+      document.getElementById('editorTitle').textContent = currentPage.title;
+      document.getElementById('previewUrl').textContent = 'localhost:3001' + currentPage.previewUrl;
+      loadPreview();
+
+      try {
+        const res = await fetch(`${API_URL}/data/${currentPage.dataFile}`);
+        if (res.ok) {
+          currentData = await res.json();
+          if (currentData._design) designData = currentData._design;
+          if (currentData._history && currentData._history.images) {
+            Object.assign(imageHistory, currentData._history.images);
+          }
+        }
+        renderEditor(currentPage, currentData);
+
+        // Load SEO data
+        if (currentData._meta) {
+          document.getElementById('metaTitle').value = currentData._meta.title || '';
+          document.getElementById('metaDesc').value = currentData._meta.description || '';
+        }
+      } catch (err) {
+        currentData = {};
+        renderEditor(currentPage, currentData);
+      }
+    }
+
+    function loadPreview() {
+      iframeReady = false;
+      document.getElementById('previewIframe').src = `${PREVIEW_URL}${currentPage.previewUrl}?_t=${Date.now()}`;
+    }
+
+    function refreshPreview() {
+      loadPreview();
+      showToast('Vorschau aktualisiert', 'success');
+    }
+
+    function openInNewWindow() {
+      window.open(PREVIEW_URL + currentPage.previewUrl, '_blank');
+    }
+
+    // Viewport switcher
+    document.querySelectorAll('.viewport-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.viewport-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('previewFrame').className = 'preview-iframe-wrapper ' + btn.dataset.viewport;
+      });
+    });
+
+    // Message handling
+    window.addEventListener('message', (event) => {
+      if (event.origin !== PREVIEW_URL) return;
+      const { type, payload } = event.data || {};
+
+      if (type === 'elementClicked') {
+        focusEditorField(payload.path);
+      } else if (type === 'iframeReady') {
+        iframeReady = true;
+        pendingUpdates.forEach(msg => sendMessageToIframe(msg.type, msg.payload));
+        pendingUpdates = [];
+        sendMessageToIframe('setEditMode', { enabled: true });
+        sendMessageToIframe('initialLoad', currentData);
+      }
+    });
+
+    function focusEditorField(path) {
+      switchTab('content');
+      const field = document.querySelector(`[data-path="${path}"]`);
+      if (field) {
+        document.querySelectorAll('.form-group.highlight').forEach(g => g.classList.remove('highlight'));
+        field.closest('.form-group')?.classList.add('highlight');
+
+        // Expand section if collapsed
+        const sectionGroup = field.closest('.section-group');
+        if (sectionGroup?.classList.contains('collapsed')) {
+          sectionGroup.classList.remove('collapsed');
+        }
+
+        field.focus();
+        field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    function sendMessageToIframe(type, payload) {
+      const iframe = document.getElementById('previewIframe');
+      if (iframe?.contentWindow) {
+        if (!iframeReady) {
+          pendingUpdates.push({ type, payload });
+          return;
+        }
+        iframe.contentWindow.postMessage({ type, payload }, PREVIEW_URL);
+      }
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closePublishModal();
+        closeMediaModal();
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        saveData(false);
+      }
+    });
+
+    // Warn before leaving
+    window.addEventListener('beforeunload', (e) => {
+      if (hasUnsavedChanges) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    });
+
+    // Click outside modal to close
+    document.getElementById('publishModal').addEventListener('click', (e) => {
+      if (e.target.id === 'publishModal') closePublishModal();
+    });
+    document.getElementById('mediaModal').addEventListener('click', (e) => {
+      if (e.target.id === 'mediaModal') closeMediaModal();
+    });
+
+    // Init
+    loadPageData();
+  </script>
+</body>
+</html>
