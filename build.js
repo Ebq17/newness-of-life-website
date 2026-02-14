@@ -179,7 +179,7 @@ async function build() {
       // Header, Footer, Service Cards (aus global.json)
       header: global.header || {},
       footer: global.footer || {},
-      service_cards: (global.service_cards || []).filter(c => c.show !== false),
+      service_cards: (global.service_cards || []),
 
       // Startseite
       homepage,

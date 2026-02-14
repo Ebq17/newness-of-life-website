@@ -253,15 +253,14 @@ collections:
               - { label: "Ende (optional)", name: "end_date", widget: "datetime", required: false }
               - { label: "Ort", name: "location", widget: "string", required: false }
               - { label: "Beschreibung", name: "description", widget: "markdown", required: false }
-              - { label: "Bild", name: "image", widget: "image", required: false }
+              - { label: "Bild / Flyer", name: "image", widget: "image", required: false }
+              - { label: "FLYER-LAYOUT (Bild als Hintergrund)", name: "flyerLayout", widget: "boolean", default: false, hint: "Aktivieren fuer Poster/Flyer-Look mit grossem Hintergrundbild" }
               - label: "Kategorie"
                 name: "category"
                 widget: "select"
                 options: ["gottesdienst", "gebet", "jugend", "special", "gemeinschaft"]
                 default: "gemeinschaft"
               - { label: "AUF STARTSEITE HERVORHEBEN", name: "featured", widget: "boolean", default: false }
-              - { label: "Link", name: "link", widget: "string", required: false }
-              - { label: "Wiederkehrend", name: "recurring", widget: "boolean", default: false }
               - { label: "VEROEFFENTLICHT", name: "published", widget: "boolean", default: true }
 
   # =============================================

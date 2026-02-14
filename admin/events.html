@@ -119,9 +119,43 @@
                         <p class="form-hint">Leer lassen wenn kostenlos</p>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Bild-URL</label>
-                        <input type="text" class="form-input" id="eventImage" placeholder="/images/..." onchange="previewImage()">
+                        <label class="form-label">Bild / Flyer</label>
+                        <div class="input-with-actions">
+                            <input type="text" class="form-input" id="eventImage" placeholder="/images/..." oninput="handleEventImageInput()">
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="openMediaModal()" title="Bild auswählen">
+                                <i class="fas fa-images"></i>
+                            </button>
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="clearEventImage()" title="Bild entfernen">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                        <div class="media-row mt-12" id="eventImageCompare">
+                            <div class="media-col">
+                                <div class="media-col-title">Aktuelles Bild</div>
+                                <div class="media-thumb" id="eventImageCurrentThumb"><span class="form-hint">Kein Bild</span></div>
+                                <div class="media-meta" id="eventImageCurrentMeta">—</div>
+                            </div>
+                            <div class="media-col">
+                                <div class="media-col-title">Vorheriges Bild</div>
+                                <div class="media-thumb" id="eventImagePreviousThumb"><span class="form-hint">Noch kein Wechsel</span></div>
+                                <div class="media-meta" id="eventImagePreviousMeta">—</div>
+                            </div>
+                        </div>
                     </div>
+                </div>
+
+                <!-- Flyer Layout Option -->
+                <div class="flyer-option-box" id="flyerOptionBox" style="display: none;">
+                    <div class="flyer-option-header">
+                        <i class="fas fa-image"></i>
+                        <span>Flyer-Layout</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="eventFlyerLayout" onchange="toggleFlyerPreview()">
+                        <span class="toggle-slider"></span>
+                        <span class="toggle-label">Bild als Hintergrund verwenden (Flyer-Look)</span>
+                    </label>
+                    <p class="form-hint">Das Bild wird als großer Hintergrund angezeigt mit Text-Overlay. Ideal für Event-Poster und Flyer.</p>
                 </div>
 
                 <div class="form-group">
@@ -133,17 +167,15 @@
                     <img id="imagePreview" class="image-preview" src="" alt="Vorschau">
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">
-                            <input type="checkbox" id="eventFeatured"> Als Featured markieren
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">
-                            <input type="checkbox" id="eventPublished" checked> Veröffentlicht
-                        </label>
-                    </div>
+                <div class="checkbox-row">
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="eventFeatured">
+                        <span class="checkbox-label"><i class="fas fa-star"></i> Featured (Startseite)</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="eventPublished" checked>
+                        <span class="checkbox-label"><i class="fas fa-eye"></i> Veröffentlicht</span>
+                    </label>
                 </div>
 
                 <div class="modal-actions">
@@ -175,12 +207,39 @@
         </div>
     </div>
 
+    <!-- Media Picker Modal -->
+    <div class="modal-overlay" id="mediaModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Bild auswählen</h2>
+                <button class="modal-close" type="button" onclick="closeMediaModal()">&times;</button>
+            </div>
+            <div class="form-group">
+                <input type="file" id="mediaFileInput" class="is-hidden" accept="image/*" onchange="handleMediaUpload(this)">
+                <button type="button" class="btn btn-primary" onclick="document.getElementById('mediaFileInput').click()">
+                    <i class="fas fa-upload"></i> Datei hochladen
+                </button>
+            </div>
+            <p class="form-hint">oder aus Galerie wählen:</p>
+            <div class="media-gallery" id="mediaGallery">
+                <div class="loading"><div class="spinner"></div>Lade Medien...</div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeMediaModal()">Abbrechen</button>
+                <button type="button" class="btn btn-primary" onclick="applySelectedMedia()">Auswählen</button>
+            </div>
+        </div>
+    </div>
+
     <div class="toast-container" id="toastContainer"></div>
 
     <script>
-    const API_URL = 'http://localhost:3001/api';
+    const API_URL = new URL('/api', window.location.origin).toString().replace(/\/$/, '');
     let eventsData = { categories: [], items: [] };
     let deleteEventId = null;
+    let selectedMediaUrl = null;
+    let eventImageCurrent = '';
+    let eventImagePrevious = '';
 
     // Format date for display
     function formatDate(dateStr) {
@@ -201,6 +260,131 @@
         toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i> ${message}`;
         container.appendChild(toast);
         setTimeout(() => toast.remove(), 4000);
+    }
+
+    function updateEventImageCompare(currentUrl, previousUrl) {
+        const curThumb = document.getElementById('eventImageCurrentThumb');
+        const prevThumb = document.getElementById('eventImagePreviousThumb');
+        const curMeta = document.getElementById('eventImageCurrentMeta');
+        const prevMeta = document.getElementById('eventImagePreviousMeta');
+
+        if (curThumb) curThumb.innerHTML = currentUrl ? `<img src="${currentUrl}" alt="Aktuelles Bild">` : `<span class="form-hint">Kein Bild</span>`;
+        if (prevThumb) prevThumb.innerHTML = previousUrl ? `<img src="${previousUrl}" alt="Vorheriges Bild">` : `<span class="form-hint">Noch kein Wechsel</span>`;
+        if (curMeta) curMeta.textContent = currentUrl || '—';
+        if (prevMeta) prevMeta.textContent = previousUrl || '—';
+    }
+
+    function resetEventImageState(url) {
+        eventImagePrevious = '';
+        eventImageCurrent = normalizeText(url);
+        document.getElementById('eventImage').value = eventImageCurrent;
+        updateEventImageCompare(eventImageCurrent, eventImagePrevious);
+        previewImage();
+    }
+
+    function setEventImage(url) {
+        const next = normalizeText(url);
+        if (eventImageCurrent && eventImageCurrent !== next) {
+            eventImagePrevious = eventImageCurrent;
+        }
+        eventImageCurrent = next;
+        document.getElementById('eventImage').value = eventImageCurrent;
+        updateEventImageCompare(eventImageCurrent, eventImagePrevious);
+        previewImage();
+    }
+
+    function handleEventImageInput() {
+        const next = normalizeText(document.getElementById('eventImage').value);
+        if (eventImageCurrent && eventImageCurrent !== next && !eventImagePrevious) {
+            eventImagePrevious = eventImageCurrent;
+        }
+        eventImageCurrent = next;
+        updateEventImageCompare(eventImageCurrent, eventImagePrevious);
+        previewImage();
+    }
+
+    function clearEventImage() {
+        if (eventImageCurrent) {
+            eventImagePrevious = eventImageCurrent;
+        }
+        eventImageCurrent = '';
+        document.getElementById('eventImage').value = '';
+        updateEventImageCompare(eventImageCurrent, eventImagePrevious);
+        previewImage();
+    }
+
+    // Media Picker
+    function openMediaModal() {
+        selectedMediaUrl = null;
+        loadMediaGallery();
+        document.getElementById('mediaModal').classList.add('visible');
+    }
+
+    function closeMediaModal() {
+        document.getElementById('mediaModal').classList.remove('visible');
+        selectedMediaUrl = null;
+    }
+
+    async function loadMediaGallery() {
+        const gallery = document.getElementById('mediaGallery');
+        if (!gallery) return;
+        gallery.innerHTML = '<div class="loading"><div class="spinner"></div>Lade Medien...</div>';
+        try {
+            const res = await fetch(`${API_URL}/images`);
+            const images = await res.json();
+            if (!Array.isArray(images) || images.length === 0) {
+                gallery.innerHTML = '<p class="text-muted">Keine Bilder vorhanden</p>';
+                return;
+            }
+            gallery.innerHTML = images.map(img => `
+                <button type="button" class="media-gallery-item" data-url="${img.url}" onclick="selectMediaItem(this)">
+                    <img src="${encodeURI(img.url)}" alt="${img.name}">
+                </button>
+            `).join('');
+        } catch (err) {
+            gallery.innerHTML = '<p class="text-danger">Fehler beim Laden der Medien</p>';
+        }
+    }
+
+    function selectMediaItem(el) {
+        document.querySelectorAll('.media-gallery-item').forEach(i => i.classList.remove('selected'));
+        el.classList.add('selected');
+        selectedMediaUrl = el.dataset.url;
+    }
+
+    async function handleMediaUpload(input) {
+        if (!input.files || !input.files[0]) return;
+        const formData = new FormData();
+        formData.append('file', input.files[0]);
+        try {
+            const res = await fetch(`${API_URL}/upload`, { method: 'POST', body: formData });
+            const json = await res.json();
+            if (!res.ok || !json.success) {
+                throw new Error(json.error || 'Upload fehlgeschlagen');
+            }
+            selectedMediaUrl = json.url;
+            showToast('Datei hochgeladen!', 'success');
+            await loadMediaGallery();
+
+            // Auto-select uploaded item
+            if (window.CSS && typeof CSS.escape === 'function') {
+                const btn = document.querySelector(`.media-gallery-item[data-url="${CSS.escape(json.url)}"]`);
+                if (btn) selectMediaItem(btn);
+            }
+        } catch (err) {
+            showToast(err.message || 'Fehler beim Upload', 'error');
+        } finally {
+            input.value = '';
+        }
+    }
+
+    function applySelectedMedia() {
+        if (!selectedMediaUrl) {
+            showToast('Bitte wähle ein Bild aus', 'error');
+            return;
+        }
+        setEventImage(selectedMediaUrl);
+        closeMediaModal();
     }
 
     // Load events
@@ -256,13 +440,14 @@
             const category = getCategory(event.category);
             const hasImage = event.image && event.image.trim() !== '';
             const defaultImage = '/images/EJC.png';
+            const flyerBadge = event.flyerLayout ? '<span class="flyer-badge"><i class="fas fa-image"></i> Flyer</span>' : '';
 
             return `
                 <tr>
                     <td>
                         <div class="event-row-info">
                             <img src="${hasImage ? event.image : defaultImage}" alt="${event.title}" class="event-row-image">
-                            <span class="event-row-title">${event.title}</span>
+                            <span class="event-row-title">${event.title}${flyerBadge}</span>
                         </div>
                     </td>
                     <td>
@@ -306,7 +491,10 @@
         form.reset();
         document.getElementById('eventId').value = '';
         document.getElementById('eventPublished').checked = true;
+        document.getElementById('eventFlyerLayout').checked = false;
         document.getElementById('imagePreviewContainer').style.display = 'none';
+        document.getElementById('flyerOptionBox').style.display = 'none';
+        resetEventImageState('');
 
         if (eventId) {
             const event = eventsData.items.find(e => e.id === eventId);
@@ -325,12 +513,13 @@
                 document.getElementById('eventCategory').value = event.category || '';
                 document.getElementById('eventCapacity').value = event.capacity || '';
                 document.getElementById('eventPrice').value = event.price || '';
-                document.getElementById('eventImage').value = event.image || '';
+                document.getElementById('eventFlyerLayout').checked = event.flyerLayout || false;
                 document.getElementById('eventDescription').value = event.description || '';
                 document.getElementById('eventFeatured').checked = event.featured || false;
                 document.getElementById('eventPublished').checked = event.published !== false;
 
-                previewImage();
+                resetEventImageState(event.image || '');
+                toggleFlyerPreview();
             }
         } else {
             title.textContent = 'Neuer Termin';
@@ -379,7 +568,10 @@
             });
 
             if (response.ok) {
-                showToast('Event gelöscht!', 'success');
+                showToast('Event gelöscht! Baue Website...', 'success');
+                try {
+                    await fetch(`${API_URL}/build`, { method: 'POST' });
+                } catch {}
                 renderTable();
             } else {
                 throw new Error('Fehler beim Löschen');
@@ -445,6 +637,7 @@
             capacity: capacityRaw ? Number(capacityRaw) : '',
             price: priceRaw,
             image: normalizeText(document.getElementById('eventImage').value),
+            flyerLayout: document.getElementById('eventFlyerLayout').checked,
             description: normalizeText(document.getElementById('eventDescription').value),
             featured: document.getElementById('eventFeatured').checked,
             published: document.getElementById('eventPublished').checked
@@ -469,7 +662,10 @@
             });
 
             if (response.ok) {
-                showToast('Event gespeichert!', 'success');
+                showToast('Event gespeichert! Baue Website...', 'success');
+                try {
+                    await fetch(`${API_URL}/build`, { method: 'POST' });
+                } catch {}
                 closeModal();
                 renderTable();
             } else {
@@ -485,12 +681,27 @@
         const url = document.getElementById('eventImage').value;
         const container = document.getElementById('imagePreviewContainer');
         const img = document.getElementById('imagePreview');
+        const flyerBox = document.getElementById('flyerOptionBox');
 
         if (url && url.trim()) {
             img.src = url;
             container.style.display = 'block';
+            flyerBox.style.display = 'block';
         } else {
             container.style.display = 'none';
+            flyerBox.style.display = 'none';
+            document.getElementById('eventFlyerLayout').checked = false;
+        }
+    }
+
+    // Toggle flyer preview
+    function toggleFlyerPreview() {
+        const isFlyer = document.getElementById('eventFlyerLayout').checked;
+        const container = document.getElementById('imagePreviewContainer');
+        if (isFlyer) {
+            container.classList.add('flyer-preview');
+        } else {
+            container.classList.remove('flyer-preview');
         }
     }
 
@@ -501,12 +712,16 @@
     document.getElementById('deleteModal').addEventListener('click', (e) => {
         if (e.target.id === 'deleteModal') closeDeleteModal();
     });
+    document.getElementById('mediaModal').addEventListener('click', (e) => {
+        if (e.target.id === 'mediaModal') closeMediaModal();
+    });
 
     // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             closeModal();
             closeDeleteModal();
+            closeMediaModal();
         }
     });
 

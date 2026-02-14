@@ -1,1 +1,35 @@
-# newness-of-life-website
+# Newness of Life – Website + Admin
+
+## Lokaler Start
+
+1. Admin/API-Server starten:
+
+```bash
+npm run admin
+```
+
+Dann Admin öffnen: `http://localhost:3001/admin/`
+
+2. Website bauen:
+
+```bash
+npm run build
+```
+
+## Tests
+
+```bash
+npm test
+```
+
+## E-Mail (Kontaktformular)
+
+Der Endpoint `POST /api/contact` verschickt E-Mails über Resend.
+
+- Konfiguration über `.env` (siehe `.env.example`)
+- Wichtige Variablen:
+  - `RESEND_API_KEY`
+  - `RESEND_FROM`
+  - `INTERNAL_EMAIL`
+
+Hinweis: Wenn ein API-Key jemals in GitHub gelandet ist, bitte im Resend-Dashboard rotieren und den alten Key deaktivieren.

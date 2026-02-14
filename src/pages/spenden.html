@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Spenden | Newness of life</title>
-  <meta name="description" content="Unterstütze die Arbeit von Newness of Life in Mainz. Deine Spende ermöglicht es uns, einen Ort der Hoffnung und Gemeinschaft zu schaffen.">
+  <title>{{ pages.spenden.seo.meta_title || 'Spenden | Newness of Life' }}</title>
+  <meta name="description" content="{{ pages.spenden.seo.meta_description || '' }}">
 
   <!-- Styles -->
   <link rel="stylesheet" href="css/style.css" />
@@ -24,11 +24,20 @@
   <main>
 
     <!-- HERO -->
-    <section class="donate-hero-professional">
+    <section
+      class="donate-hero-professional"
+      data-cms-section="hero"
+      data-cms-field="hero.background_image"
+      data-cms-label="Hintergrundbild"
+      data-cms-attr="background-image"
+      data-cms-bg-overlay="linear-gradient(135deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.25) 100%)"
+      data-has-image="{{ pages.spenden.hero.background_image ? 'true' : 'false' }}"
+      style="{{ pages.spenden.hero.background_image ? 'background-image: linear-gradient(135deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.25) 100%), url(' + pages.spenden.hero.background_image + '); background-size: cover; background-position: center;' : '' }}"
+    >
       <div class="container">
         <div class="donate-hero-content">
-          <h1 id="spenden-hero-title">Deine Spende bewegt Herzen</h1>
-          <p id="spenden-hero-subtitle" class="lead">Mit deiner Unterstützung können wir in Mainz einen Ort der Hoffnung, der Gemeinschaft und des Glaubens gestalten. Jeder Beitrag, ob groß oder klein, macht einen Unterschied.</p>
+          <h1 id="spenden-hero-title" data-cms-field="hero.title" data-cms-label="Titel">{{ pages.spenden.hero.title || 'Deine Spende bewegt Herzen' }}</h1>
+          <p id="spenden-hero-subtitle" class="lead" data-cms-field="hero.subtitle" data-cms-label="Untertitel" data-cms-format="html">{{ pages.spenden.hero.subtitle || 'Mit deiner Unterstützung können wir in Mainz einen Ort der Hoffnung, der Gemeinschaft und des Glaubens gestalten. Jeder Beitrag, ob groß oder klein, macht einen Unterschied.' }}</p>
           <a href="#spenden-optionen" class="btn btn-primary btn-lg">
             <i class="fa-solid fa-heart"></i> Jetzt spenden
           </a>
@@ -37,9 +46,9 @@
     </section>
 
     <!-- IMPACT SECTION -->
-    <section class="content-section impact-section">
+    <section class="content-section impact-section" data-cms-section="impact">
         <div class="container">
-            <h2 id="impact-title">Was deine Spende bewirkt</h2>
+            <h2 id="impact-title" data-cms-field="impact.title" data-cms-label="Titel">{{ pages.spenden.impact.title || 'Was deine Spende bewirkt' }}</h2>
             <div id="impact-grid" class="impact-grid">
                 <div class="impact-card">
                     <div class="icon"><i class="fa-solid fa-people-group"></i></div>
@@ -61,7 +70,7 @@
     </section>
 
     <!-- SPENDENWEGE -->
-    <section id="spenden-optionen" class="content-section donate-options-section">
+    <section id="spenden-optionen" class="content-section donate-options-section" data-cms-section="bank_details">
       <div class="container">
         <h2>So kannst du uns unterstützen</h2>
         <div class="donate-options-grid">
@@ -69,15 +78,15 @@
           <div class="donate-option-card">
             <div class="donate-option-header">
               <i class="fa-solid fa-landmark"></i>
-              <h3>Banküberweisung</h3>
+              <h3 data-cms-field="bank_details.title" data-cms-label="Titel">{{ pages.spenden.bank_details.title || 'Banküberweisung' }}</h3>
             </div>
             <div class="donate-option-body">
               <p>Spende direkt auf unser Konto. Für eine Spendenquittung gib bitte deine Adresse im Verwendungszweck an.</p>
               <ul class="bank-details-list-professional">
-                <li><strong>Empfänger:</strong> <span id="bank-receiver">Newness of Life e.V.</span></li>
-                <li><strong>IBAN:</strong> <span id="bank-iban">DE12 3456 7890 1234 5678 90</span> <button class="copy-btn" data-copy="#bank-iban"><i class="fa-regular fa-copy"></i></button></li>
-                <li><strong>BIC:</strong> <span id="bank-bic">MALADE51XYZ</span> <button class="copy-btn" data-copy="#bank-bic"><i class="fa-regular fa-copy"></i></button></li>
-                <li><strong>Bank:</strong> <span id="bank-name">Musterbank</span></li>
+                <li><strong>Empfänger:</strong> <span id="bank-receiver" data-cms-field="bank_details.account_holder" data-cms-label="Kontoinhaber">{{ pages.spenden.bank_details.account_holder || 'Newness of Life e.V.' }}</span></li>
+                <li><strong>IBAN:</strong> <span id="bank-iban" data-cms-field="bank_details.iban" data-cms-label="IBAN">{{ pages.spenden.bank_details.iban || 'folgt' }}</span> <button class="copy-btn" data-copy="#bank-iban"><i class="fa-regular fa-copy"></i></button></li>
+                <li><strong>BIC:</strong> <span id="bank-bic" data-cms-field="bank_details.bic" data-cms-label="BIC">{{ pages.spenden.bank_details.bic || 'folgt' }}</span> <button class="copy-btn" data-copy="#bank-bic"><i class="fa-regular fa-copy"></i></button></li>
+                <li><strong>Bank:</strong> <span id="bank-name" data-cms-field="bank_details.bank_name" data-cms-label="Bank">{{ pages.spenden.bank_details.bank_name || 'folgt' }}</span></li>
               </ul>
             </div>
           </div>

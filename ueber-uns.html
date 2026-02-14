@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Über uns – Newness of life</title>
+  <title>Über uns - Newness of Life Mainz</title>
+  <meta name="description" content="Lerne unsere Gemeinde kennen. Wir sind die Kirche des lebendigen Gottes International e.V. in Mainz.">
 
   <!-- Basis-Styles -->
   <link rel="stylesheet" href="css/style.css">
@@ -19,7 +20,7 @@
   <!-- Banner (wenn aktiviert) -->
 <!-- Header (Partial) -->
 <link rel="stylesheet" href="css/header.css">
-<header class="site-header-pro">
+<header class="site-header-pro" data-cms-section="header">
   <div class="container">
     <nav class="main-nav-pro" aria-label="Hauptnavigation">
       <a href="index.html#start" class="logo-pro" data-cms-field="header.logo" data-cms-label="Logo">
@@ -31,12 +32,24 @@
       </a>
 
       <ul id="mainnav-pro" class="nav-links-pro">
-            <li><a href="index.html">Startseite</a></li>
-            <li><a href="gottesdienste.html">Gottesdienste</a></li>
-            <li><a href="ueber-uns.html" class="active">Über uns</a></li>
-            <li><a href="veranstaltungen.html">Veranstaltungen</a></li>
-            <li><a href="index.html#kontakt">Kontakt</a></li>
-            <li class="show-on-mobile"><a href="spenden.html">Spenden</a></li>
+        
+          
+            <li><a href="index.html" class="undefined">Startseite</a></li>
+          
+          
+            <li><a href="gottesdienste.html" class="undefined">Gottesdienste</a></li>
+          
+          
+            <li><a href="ueber-uns.html" class="undefined">Über uns</a></li>
+          
+          
+            <li><a href="veranstaltungen.html" class="undefined">Veranstaltungen</a></li>
+          
+          
+            <li><a href="index.html#kontakt" class="undefined">Kontakt</a></li>
+          
+        
+          <li class="show-on-mobile"><a href="spenden.html">Spenden</a></li>
         </ul>
 
       
@@ -50,26 +63,22 @@
 
 
   <!-- Hero -->
-  <section class="hero-ueber-uns">
+  <section class="hero-ueber-uns" data-cms-section="hero" data-cms-field="hero.background_image" data-cms-label="Hintergrundbild" data-cms-attr="background-image" data-has-image="false" style="">
     <div class="overlay"></div>
     <div class="hero-container">
-      <h1>Über uns</h1>
-      <p>Erfahre mehr über unsere Geschichte, Vision und Gemeinschaft</p>
+      <h1 data-cms-field="hero.title" data-cms-label="Titel">Über uns</h1>
+      <p data-cms-field="hero.subtitle" data-cms-label="Untertitel" data-cms-format="html">Lerne unsere Gemeinde kennen</p>
     </div>
   </section>
 
   <main>
     <!-- Intro -->
-    <section class="content-section about-us-section">
+    <section class="content-section about-us-section" data-cms-section="intro">
       <div class="container about-us-grid">
         <div class="about-us-text">
-          <h2>Willkommen bei <br>Newness of Life</h2>
+          <h2 data-cms-field="intro.title" data-cms-label="Titel" data-cms-format="html">{{ pages.ueberUns.intro.title || 'Willkommen bei <br>Newness of Life' }}</h2>
           <h3>Ein Ort des Glaubens, der Hoffnung und der Erneuerung</h3>
-          <p>
-            Newness of Life ist mehr als ein Gottesdienst am Sonntag – wir sind eine Familie,
-            die im Alltag füreinander da ist. Unser Herzschlag: Jesus Christus klar verkünden,
-            Menschen stärken und unsere Stadt mit praktischer Liebe prägen.
-          </p>
+          <p data-cms-field="intro.text" data-cms-label="Text" data-cms-format="html">Wir sind die Newness of Life – Die Kirche des lebendigen Gottes International e.V. aus Mainz. Unser Herz schlägt dafür, Menschen mit der Liebe Gottes zu erreichen, Glauben zu stärken und Gemeinschaft zu leben.</p>
           <p>
             Bei uns findest du inspirierenden Lobpreis, biblisch fundierte Lehre und Räume, in denen
             du deine Berufung entdecken kannst – in Kleingruppen, in der Jugendarbeit, im Gebet
@@ -83,19 +92,16 @@
         </div>
 
         <div class="about-us-image">
-          <img src="images/Logo_Schwarz_Transparent_KS.png" alt="Gemeinschaft in der Kirche">
+          <img src="images/Logo_Schwarz_Transparent_KS.png" alt="Gemeinschaft in der Kirche" data-cms-field="story.image" data-cms-label="Bild">
         </div>
       </div>
     </section>
 
     <!-- Geschichte -->
-    <section class="content-section history-section" aria-labelledby="history-title">
+    <section class="content-section history-section" aria-labelledby="history-title" data-cms-section="story">
       <div class="container">
-        <h2 id="history-title">Unsere Geschichte</h2>
-        <p class="history-intro">
-          Von bescheidenen Anfängen zu einer lebendigen Gemeinschaft – entdecke die Geschichte
-          von Newness of Life.
-        </p>
+        <h2 id="history-title" data-cms-field="story.title" data-cms-label="Titel">Unsere Geschichte</h2>
+        <p class="history-intro" data-cms-field="story.text" data-cms-label="Text" data-cms-format="html">Bei uns erlebst du lebendige Gottesdienste, inspirierende Musik, praktische Bibellehre und eine herzliche Familie, in der jeder willkommen ist – egal, woher du kommst oder welche Geschichte du mitbringst.</p>
         <div class="history-timeline">
           <div class="timeline-item">
             <div class="timeline-content">
@@ -109,13 +115,8 @@
 
           <div class="timeline-item">
             <div class="timeline-content">
-              <h3>Heute &amp; Zukunft</h3>
-              <p>
-                Heute sind wir eine lebendige, multikulturelle Gemeinde mit einem klaren Fokus:
-                Menschen zu Jüngern machen, Hoffnung weitergeben und Gottes Liebe praktisch leben.
-                Unsere Vision für die Zukunft: Noch mehr Menschen in Mainz und darüber hinaus
-                mit der guten Nachricht von Jesus Christus zu erreichen.
-              </p>
+              <h3 data-cms-field="vision.title" data-cms-label="Titel">Unsere Vision &amp; Mission</h3>
+              <p data-cms-field="vision.text" data-cms-label="Text" data-cms-format="html">Wir glauben, dass jeder Mensch von Gott einzigartig geschaffen ist und einen Platz in seinem Plan hat. Gemeinsam wollen wir wachsen, einander ermutigen und unsere Umgebung mit Hoffnung und Licht prägen.</p>
             </div>
           </div>
         </div>
@@ -224,7 +225,7 @@
     </section>
   </main>
 
-  <footer class="site-footer">
+  <footer class="site-footer" data-cms-section="footer">
   <div class="container">
     <div class="footer-grid">
       <!-- Column 1: About -->
@@ -243,10 +244,10 @@
                 <li><a href="index.html">Startseite</a></li>
               
               
-                <li><a href="ueber-uns.html">Über uns</a></li>
-              
-              
                 <li><a href="gottesdienste.html">Gottesdienste</a></li>
+              
+              
+                <li><a href="ueber-uns.html">Über uns</a></li>
               
               
                 <li><a href="veranstaltungen.html">Veranstaltungen</a></li>
@@ -275,7 +276,7 @@
         <div class="footer-social">
           </div>
         <div class="footer-donation">
-          <h3 class="footer-heading" style="margin-top: 30px;">Unterstütze uns</h3>
+          <h3 class="footer-heading">Unterstütze uns</h3>
           <p data-cms-field="footer.donation_text" data-cms-label="Spenden Text">Deine Spende hilft uns, einen Unterschied in unserer Stadt zu machen.</p>
           <a href="spenden.html" class="btn-footer-donate">Jetzt spenden</a>
         </div>
@@ -293,7 +294,6 @@
 </footer>
 <!-- CMS Preview Script (nur aktiv wenn ?cms-preview=1) -->
 <script src="js/cms-preview.js"></script>
-<script src="js/cms-loader.js"></script>
 
   <script src="js/script.js"></script>
 </body>

@@ -61,7 +61,7 @@
     <header class="header">
       <h2 class="header-title">Dashboard</h2>
       <div class="header-actions">
-        <a href="http://localhost:8000" target="_blank" class="btn btn-secondary">
+        <a href="/" target="_blank" class="btn btn-secondary">
           <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
           Website ansehen
         </a>
@@ -153,7 +153,7 @@
   <div class="toast-container" id="toastContainer"></div>
 
   <script>
-    const API_URL = 'http://localhost:3001/api';
+    const API_URL = new URL('/api', window.location.origin).toString().replace(/\/$/, '');
 
     // Toast Notification
     function showToast(message, type = 'info') {

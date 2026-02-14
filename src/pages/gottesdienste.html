@@ -26,6 +26,7 @@
     <!-- Neuer, professioneller Hero -->
     <section
         class="gd-hero-pro"
+        data-cms-section="hero"
         data-cms-field="hero.background_image"
         data-cms-label="Hintergrundbild"
         data-cms-attr="background-image"
@@ -50,7 +51,7 @@
     </section>
 
     <!-- Erlebe unsere Gottesdienste -->
-    <section class="content-section">
+    <section class="content-section" data-cms-section="intro">
         <div class="container">
             <div class="section-intro">
                 <h2 data-cms-field="intro.title" data-cms-label="Titel">{{ pages.gottesdienste.intro.title || 'Was dich erwartet' }}</h2>
@@ -63,7 +64,7 @@
     </section>
 
     <!-- Was dich erwartet -->
-    <section class="content-section expect-pro-section expect-pro-section-enhanced">
+    <section class="content-section expect-pro-section expect-pro-section-enhanced" data-cms-section="main_service">
         <div class="container">
             <div class="section-intro">
                 <h2 data-cms-field="main_service.title" data-cms-label="Titel">{{ pages.gottesdienste.main_service.title || 'Hauptgottesdienst' }}</h2>
@@ -84,7 +85,7 @@
         </div>
     </section>
 
-    <section class="content-section">
+    <section class="content-section" data-cms-section="other_meetings">
         <div class="container">
             <div class="section-intro">
                 <h2 data-cms-field="other_meetings.title" data-cms-label="Titel">{{ pages.gottesdienste.other_meetings.title || 'Weitere Treffen' }}</h2>
@@ -109,25 +110,27 @@
 
     
     <!-- Call to Action -->
-    <section class="content-section cta-pro-section">
+    <section class="content-section cta-pro-section" data-cms-section="cta">
         <div class="container">
-            <h2>Komm, wie du bist</h2>
-            <p>Ganz egal, wo du im Leben stehst, du bist bei uns herzlich willkommen. Wir freuen uns darauf, dich kennenzulernen.</p>
-            <a href="#anfahrt" class="btn btn-primary">Zur Anfahrt</a>
+            <h2 data-cms-field="cta.title" data-cms-label="CTA Titel">{{ pages.gottesdienste.cta.title || 'Komm, wie du bist' }}</h2>
+            <p data-cms-field="cta.text" data-cms-label="CTA Text" data-cms-format="html">{{ pages.gottesdienste.cta.text || 'Ganz egal, wo du im Leben stehst, du bist bei uns herzlich willkommen. Wir freuen uns darauf, dich kennenzulernen.' }}</p>
+            <a href="{{ pages.gottesdienste.cta.button_link || '#anfahrt' }}" class="btn btn-primary" data-cms-field="cta.button_link" data-cms-label="CTA Button Link" data-cms-attr="href">
+              <span data-cms-field="cta.button_text" data-cms-label="CTA Button Text">{{ pages.gottesdienste.cta.button_text || 'Zur Anfahrt' }}</span>
+            </a>
         </div>
     </section>
 
     <!-- Anfahrt -->
-    <section id="anfahrt" class="content-section">
+    <section id="anfahrt" class="content-section" data-cms-section="anfahrt">
         <div class="container">
-            <h2>Anfahrt</h2>
-            <p class="narrow-center-text">
-              Adresse: Hebbelstr. 56–60, 55127 Mainz
+            <h2 data-cms-field="anfahrt.title" data-cms-label="Anfahrt Titel">{{ pages.gottesdienste.anfahrt.title || 'Anfahrt' }}</h2>
+            <p class="narrow-center-text" data-cms-field="anfahrt.text" data-cms-label="Anfahrt Text" data-cms-format="html">
+              {{ pages.gottesdienste.anfahrt.text || ('Adresse: ' + (settings.contact.address || 'Hebbelstr. 56–60') + ', ' + (settings.contact.city || '55127 Mainz')) }}
             </p>
             <div class="map-container">
               <iframe
                 title="Karte – Newness of Life Mainz"
-                src="https://www.google.com/maps?q=Hebbelstr.+56-60,+55127+Mainz&output=embed"
+                src="{{ settings.contact.maps_url || 'https://www.google.com/maps?q=Hebbelstr.+56-60,+55127+Mainz' }}&output=embed"
                 loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </div>

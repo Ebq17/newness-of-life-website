@@ -66,7 +66,7 @@
   <div class="toast-container" id="toastContainer"></div>
 
   <script>
-    const API_URL = 'http://localhost:3001/api';
+    const API_URL = new URL('/api', window.location.origin).toString().replace(/\/$/, '');
 
     function showToast(message, type = 'info') {
       const container = document.getElementById('toastContainer');
@@ -95,7 +95,7 @@
       }
       grid.innerHTML = images.map(img => `
         <div class="media-item" onclick="copyUrl('${img.url}')">
-          <img src="http://localhost:8000${img.url}" alt="${img.name}">
+          <img src="${new URL(img.url, window.location.origin).toString()}" alt="${img.name}">
           <div class="media-item-info">
             <div class="media-item-name">${img.name}</div>
           </div>

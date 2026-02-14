@@ -12,7 +12,13 @@
 
   let isEditMode = false;
   let activeElement = null;
-  const ADMIN_ORIGIN = 'http://localhost:3001';
+  const ADMIN_ORIGIN = (() => {
+    try {
+      return new URL(document.referrer).origin;
+    } catch {
+      return window.location.origin;
+    }
+  })();
 
   console.log('[CMS Preview] Script geladen, warte auf Nachrichten von:', ADMIN_ORIGIN);
 

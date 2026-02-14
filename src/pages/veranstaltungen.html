@@ -2,156 +2,582 @@
 <html lang="de">
 
 <head>
-    <!-- Document metadata and character set -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kirchen-Webseite</title>
-    
-    <!-- Link to the main stylesheet for general styling -->
+    <title>Termine & Veranstaltungen - Newness of Life Mainz</title>
+    <meta name="description" content="Alle Termine und Veranstaltungen der Newness of Life Gemeinde in Mainz auf einen Blick.">
+
     <link rel="stylesheet" href="css/style.css">
-    
-    <!-- Preconnect to Google Fonts for performance optimization -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Link to Font Awesome for scalable vector icons -->
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* ========================================
+           VERANSTALTUNGEN PAGE - OPTIMIERT
+           ======================================== */
+
+        /* Hero Section - wie Gottesdienste */
+        .events-hero {
+            position: relative;
+            min-height: 55vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1e3a5f 0%, #2563EB 100%);
+            overflow: hidden;
+        }
+
+        .events-hero .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .events-hero .video-background video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .events-hero .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(17, 24, 39, 0.65);
+            z-index: 1;
+        }
+
+        .events-hero .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: white;
+            padding: 80px 20px;
+            max-width: 800px;
+        }
+
+        .events-hero h1 {
+            font-size: clamp(2.25rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 16px;
+            color: white;
+            line-height: 1.2;
+        }
+
+        .events-hero .lead {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            opacity: 0.95;
+            max-width: 550px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* ========================================
+           REGELMÄSSIGE TERMINE - Clean Cards
+           ======================================== */
+        .regular-section {
+            background: #F8FAFC;
+            padding: 80px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-header h2 {
+            font-size: clamp(1.75rem, 3vw, 2.25rem);
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 12px;
+        }
+
+        .section-header p {
+            color: #6B7280;
+            font-size: 1.1rem;
+        }
+
+        .regular-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .regular-card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px 24px;
+            text-align: center;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .regular-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .regular-card .icon-wrap {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .regular-card .icon-wrap i {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .regular-card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .regular-card .time {
+            color: #2563EB;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+        }
+
+        .regular-card .desc {
+            color: #6B7280;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* ========================================
+           KOMMENDE EVENTS - Standard + Flyer Cards
+           ======================================== */
+        .events-section {
+            padding: 80px 0;
+            background: white;
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Standard Event Card */
+        .event-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .event-card .card-header {
+            height: 160px;
+            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .event-card .card-header .event-icon {
+            font-size: 3rem;
+            color: white;
+            opacity: 0.9;
+        }
+
+        .event-card .date-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: white;
+            border-radius: 12px;
+            padding: 10px 14px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .event-card .date-badge .day {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #2563EB;
+            line-height: 1;
+        }
+
+        .event-card .date-badge .month {
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #6B7280;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .event-card .card-body {
+            padding: 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event-card .tag {
+            display: inline-block;
+            background: #EEF2FF;
+            color: #4F46E5;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 12px;
+            width: fit-content;
+        }
+
+        .event-card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+
+        .event-card .meta {
+            color: #6B7280;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .event-card .meta i {
+            color: #2563EB;
+            width: 18px;
+            text-align: center;
+        }
+
+        /* ========================================
+           FLYER CARD - Event mit Hintergrundbild
+           ======================================== */
+        .event-card.flyer-card {
+            min-height: 380px;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            border: none;
+        }
+
+        .event-card.flyer-card .flyer-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(0, 0, 0, 0.1) 0%,
+                rgba(0, 0, 0, 0.4) 50%,
+                rgba(0, 0, 0, 0.85) 100%
+            );
+            z-index: 1;
+        }
+
+        .event-card.flyer-card .card-body {
+            position: relative;
+            z-index: 2;
+            margin-top: auto;
+            padding: 32px 24px;
+            color: white;
+        }
+
+        .event-card.flyer-card .tag {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            backdrop-filter: blur(4px);
+        }
+
+        .event-card.flyer-card h3 {
+            color: white;
+            font-size: 1.4rem;
+        }
+
+        .event-card.flyer-card .meta {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .event-card.flyer-card .meta i {
+            color: white;
+        }
+
+        .event-card.flyer-card .date-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 2;
+        }
+
+        /* ========================================
+           CTA SECTION
+           ======================================== */
+        .events-cta {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2563EB 100%);
+            padding: 80px 0;
+            text-align: center;
+            color: white;
+        }
+
+        .events-cta h2 {
+            color: white;
+            font-size: clamp(1.75rem, 3vw, 2.25rem);
+            margin-bottom: 16px;
+        }
+
+        .events-cta p {
+            opacity: 0.9;
+            max-width: 500px;
+            margin: 0 auto 28px;
+            font-size: 1.1rem;
+        }
+
+        .events-cta .btn {
+            background: white;
+            color: #2563EB;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .events-cta .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* ========================================
+           RESPONSIVE
+           ======================================== */
+        @media (max-width: 900px) {
+            .regular-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .events-grid {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .events-hero {
+                min-height: 45vh;
+            }
+
+            .events-hero .hero-content {
+                padding: 60px 20px;
+            }
+
+            .regular-section,
+            .events-section {
+                padding: 60px 0;
+            }
+
+            .regular-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .regular-card {
+                padding: 24px 20px;
+            }
+
+            .event-card.flyer-card {
+                min-height: 320px;
+            }
+
+            .events-cta {
+                padding: 60px 20px;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <include src="partials/header.html"></include>
 
-    <!-- Main content area of the page -->
     <main>
 
-    <!-- Neuer, professioneller Hero -->
-    <section class="events-hero-pro">
-        <div class="hero-overlay"></div>
-        <div class="container hero-content">
-            <h1 class="animate-fade-in-down">Gemeinschaft erleben. Glauben teilen.</h1>
-            <div class="divider animate-fade-in-up"></div>
-            <p class="lead animate-fade-in-up">Entdecke unsere vielfältigen Veranstaltungen und finde deinen Platz in unserer Mitte.</p>
-            <a href="#upcoming-events" class="btn btn-primary btn-lg animate-fade-in-up">Kommende Termine</a>
-        </div>
-    </section>
-
-    <include src="partials/event-section.html"></include>
-
-    <!-- Kommende Veranstaltungen -->
-    <section id="upcoming-events" class="content-section upcoming-events-pro-section">
-        <div class="container">
-            <div class="section-intro">
-                <h2>Kommende Highlights</h2>
-                <p>Verpasse nicht, was in nächster Zeit bei uns los ist. Wir freuen uns auf dich!</p>
+        <!-- Hero -->
+        <section class="events-hero">
+            <div class="video-background">
+                <video playsinline autoplay muted loop>
+                    <source src="images/Black and Red Typographic Funny YouTube Video Intro.mp4" type="video/mp4">
+                </video>
             </div>
-            <div class="upcoming-events-pro-grid">
-                <div class="upcoming-event-pro-card">
-                    <div class="upcoming-event-pro-date">
-                        <span class="month">SEP</span>
-                        <span class="day">27</span>
-                    </div>
-                    <div class="upcoming-event-pro-content">
-                        <h3>Jährliches Gemeindefest</h3>
-                        <p><i class="fa-solid fa-clock"></i> 15:00 Uhr</p>
-                        <p><i class="fa-solid fa-map-marker-alt"></i> Gemeindezentrum</p>
-                    </div>
-                    
-                </div>
-                <div class="upcoming-event-pro-card">
-                    <div class="upcoming-event-pro-date">
-                        <span class="month">OKT</span>
-                        <span class="day">12</span>
-                    </div>
-                    <div class="upcoming-event-pro-content">
-                        <h3>Europäisches Jugendcamp (EJC)</h3>
-                        <p><i class="fa-solid fa-clock"></i> Ganztägig</p>
-                        <p><i class="fa-solid fa-map-marker-alt"></i> Camp-Gelände</p>
-                    </div>
-                    
-                </div>
-                <div class="upcoming-event-pro-card">
-                    <div class="upcoming-event-pro-date">
-                        <span class="month">NOV</span>
-                        <span class="day">08</span>
-                    </div>
-                    <div class="upcoming-event-pro-content">
-                        <h3>Männerfrühstück</h3>
-                        <p><i class="fa-solid fa-clock"></i> 09:00 Uhr</p>
-                        <p><i class="fa-solid fa-map-marker-alt"></i> Gemeindecafé</p>
-                    </div>
-                    
-                </div>
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h1>Termine & Veranstaltungen</h1>
+                <p class="lead">Alle kommenden Termine unserer Gemeinde auf einen Blick.</p>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Event-Kategorien -->
-    <section class="content-section event-categories-pro-section event-categories-pro-section-enhanced">
-        <div class="container">
-            <div class="section-intro">
-                <h2>Unsere regelmäßigen Treffen</h2>
-                <p>Diese Gruppen und Treffen sind das Herz unserer Gemeinschaft. Hier findest du einen Ort zum Andocken.</p>
-            </div>
-            <div class="event-categories-pro-grid">
-                <div class="event-category-pro-card-enhanced event-category-bg-1">
-                    <div class="card-overlay"></div>
-                    <div class="card-content">
-                        <div class="icon"><i class="fa-solid fa-church"></i></div>
-                        <h3>Gottesdienste</h3>
-                        <p>Jeden Sonntag um 14:00 Uhr feiern wir gemeinsam unseren Glauben mit Musik, Predigt und Gemeinschaft.</p>
-                    </div>
+        <!-- Regelmäßige Termine -->
+        <section class="regular-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Regelmäßige Termine</h2>
+                    <p>Unsere wöchentlichen Treffen</p>
                 </div>
-                <div class="event-category-pro-card-enhanced event-category-bg-2">
-                    <div class="card-overlay"></div>
-                    <div class="card-content">
-                        <div class="icon"><i class="fa-solid fa-users"></i></div>
-                        <h3>Kleingruppen</h3>
-                        <p>Unter der Woche treffen wir uns in kleinen Gruppen, um die Bibel zu studieren und das Leben zu teilen.</p>
+                <div class="regular-grid">
+                    <div class="regular-card">
+                        <div class="icon-wrap">
+                            <i class="fa-solid fa-church"></i>
+                        </div>
+                        <h3>Gottesdienst</h3>
+                        <p class="time">Sonntag, 14:00 Uhr</p>
+                        <p class="desc">Lobpreis, Predigt & Gemeinschaft</p>
                     </div>
-                </div>
-                <div class="event-category-pro-card-enhanced event-category-bg-3">
-                    <div class="card-overlay"></div>
-                    <div class="card-content">
-                        <div class="icon"><i class="fa-solid fa-child-reaching"></i></div>
-                        <h3>Jugend & Kinder</h3>
-                        <p>Für die nächste Generation bieten wir altersgerechte Programme, die Spaß machen und den Glauben fördern.</p>
+                    <div class="regular-card">
+                        <div class="icon-wrap">
+                            <i class="fa-solid fa-hands-praying"></i>
+                        </div>
+                        <h3>Gebetsabend</h3>
+                        <p class="time">Freitag, 19:00 Uhr</p>
+                        <p class="desc">Gemeinsames Gebet & Fürbitte</p>
                     </div>
-                </div>
-                <div class="event-category-pro-card-enhanced event-category-bg-4">
-                    <div class="card-overlay"></div>
-                    <div class="card-content">
-                        <div class="icon"><i class="fa-solid fa-hand-praying"></i></div>
-                        <h3>Gebetstreffen</h3>
-                        <p>Wir glauben an die Kraft des Gebets und treffen uns regelmäßig, um gemeinsam für Anliegen zu beten.</p>
+                    <div class="regular-card">
+                        <div class="icon-wrap">
+                            <i class="fa-solid fa-book-bible"></i>
+                        </div>
+                        <h3>Bibelstudium</h3>
+                        <p class="time">Mo & Mi, 19:00 Uhr</p>
+                        <p class="desc">Vertiefendes Bibelstudium</p>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Featured Event -->
-    <section class="content-section featured-event-pro-section">
-        <div class="container">
-            <div class="featured-event-pro-grid">
-                <div class="featured-event-pro-image">
-                    <img src="images/EJC.png" alt="Europäisches Jugendcamp">
+        <!-- Kommende Veranstaltungen -->
+        <section class="events-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Kommende Veranstaltungen</h2>
+                    <p>Besondere Events und Termine</p>
                 </div>
-                <div class="featured-event-pro-content">
-                    <span class="event-label">Highlight des Jahres</span>
-                    <h2>Europäisches Jugendcamp (EJC)</h2>
-                    <p>Das EJC ist eine unvergessliche Woche für Jugendliche aus ganz Europa. Mit Live-Musik, inspirierenden Sprechern, Sport, Workshops und jeder Menge Action. Sei dabei und erlebe, wie Gott dein Leben verändert!</p>
-                    <a href="#" class="btn-secondary">Mehr Infos & Anmeldung</a>
+                <div class="events-grid">
+
+                    <!-- Standard Card -->
+                    <div class="event-card">
+                        <div class="card-header">
+                            <i class="fa-solid fa-mug-hot event-icon"></i>
+                            <div class="date-badge">
+                                <span class="day">8</span>
+                                <span class="month">Nov</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <span class="tag">Gemeinschaft</span>
+                            <h3>Church Family Breakfast</h3>
+                            <p class="meta"><i class="fa-solid fa-clock"></i> Samstag, 8. Nov 2025 · 09:00 Uhr</p>
+                            <p class="meta"><i class="fa-solid fa-location-dot"></i> In der Gemeinde</p>
+                        </div>
+                    </div>
+
+                    <!-- Standard Card -->
+                    <div class="event-card">
+                        <div class="card-header">
+                            <i class="fa-solid fa-music event-icon"></i>
+                            <div class="date-badge">
+                                <span class="day">23</span>
+                                <span class="month">Nov</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <span class="tag">Jugend</span>
+                            <h3>Worship Night – Youth & Young Adults</h3>
+                            <p class="meta"><i class="fa-solid fa-clock"></i> Sonntag, 23. Nov 2025 · 19:00 Uhr</p>
+                            <p class="meta"><i class="fa-solid fa-location-dot"></i> In der Gemeinde</p>
+                        </div>
+                    </div>
+
+                    <!-- FLYER CARD - mit Hintergrundbild -->
+                    <div class="event-card flyer-card" style="background-image: url('images/christmas-dinner-bg.jpg');">
+                        <div class="flyer-overlay"></div>
+                        <div class="date-badge">
+                            <span class="day">20</span>
+                            <span class="month">Dez</span>
+                        </div>
+                        <div class="card-body">
+                            <span class="tag">Special Event</span>
+                            <h3>Christmas Celebration Dinner</h3>
+                            <p class="meta"><i class="fa-solid fa-clock"></i> Samstag, 20. Dez 2025 · 17:00 Uhr</p>
+                            <p class="meta"><i class="fa-solid fa-location-dot"></i> In der Gemeinde</p>
+                        </div>
+                    </div>
+
+                    <!-- FLYER CARD - mit Hintergrundbild -->
+                    <div class="event-card flyer-card" style="background-image: url('images/new-year-bg.jpg');">
+                        <div class="flyer-overlay"></div>
+                        <div class="date-badge">
+                            <span class="day">31</span>
+                            <span class="month">Dez</span>
+                        </div>
+                        <div class="card-body">
+                            <span class="tag">Special Event</span>
+                            <h3>From Glory to Glory 2026</h3>
+                            <p class="meta"><i class="fa-solid fa-clock"></i> Mittwoch, 31. Dez 2025 · 20:00 Uhr</p>
+                            <p class="meta"><i class="fa-solid fa-location-dot"></i> In der Gemeinde</p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-  </main>
+        <!-- CTA -->
+        <section class="events-cta">
+            <div class="container">
+                <h2>Du bist herzlich willkommen</h2>
+                <p>Egal ob zum ersten Mal oder als regelmäßiger Besucher – wir freuen uns auf dich!</p>
+                <a href="index.html#kontakt" class="btn">Kontakt aufnehmen</a>
+            </div>
+        </section>
+
+    </main>
 
     <include src="partials/footer.html"></include>
-  <script src="js/script.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>

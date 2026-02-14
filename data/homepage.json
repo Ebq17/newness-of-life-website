@@ -26,5 +26,10 @@
     "title": "Kontakt",
     "form_title": "Schreiben Sie uns",
     "address_title": "Adresse & Anfahrt"
+  },
+
+  "seo": {
+    "meta_title": "Newness of Life - Startseite",
+    "meta_description": ""
   }
 }

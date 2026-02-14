@@ -67,6 +67,18 @@
     ]
   },
 
+  "cta": {
+    "title": "Komm, wie du bist",
+    "text": "Ganz egal, wo du im Leben stehst, du bist bei uns herzlich willkommen. Wir freuen uns darauf, dich kennenzulernen.",
+    "button_text": "Zur Anfahrt",
+    "button_link": "#anfahrt"
+  },
+
+  "anfahrt": {
+    "title": "Anfahrt",
+    "text": ""
+  },
+
   "location": {
     "show_map": true,
     "parking_info": "Parkplätze sind vor dem Gebäude verfügbar.",

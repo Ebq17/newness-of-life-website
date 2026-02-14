@@ -20,7 +20,7 @@
   <!-- Banner (wenn aktiviert) -->
 <!-- Header (Partial) -->
 <link rel="stylesheet" href="css/header.css">
-<header class="site-header-pro">
+<header class="site-header-pro" data-cms-section="header">
   <div class="container">
     <nav class="main-nav-pro" aria-label="Hauptnavigation">
       <a href="index.html#start" class="logo-pro" data-cms-field="header.logo" data-cms-label="Logo">
@@ -32,12 +32,24 @@
       </a>
 
       <ul id="mainnav-pro" class="nav-links-pro">
-            <li><a href="index.html">Startseite</a></li>
-            <li><a href="gottesdienste.html" class="active">Gottesdienste</a></li>
-            <li><a href="ueber-uns.html">Über uns</a></li>
-            <li><a href="veranstaltungen.html">Veranstaltungen</a></li>
-            <li><a href="index.html#kontakt">Kontakt</a></li>
-            <li class="show-on-mobile"><a href="spenden.html">Spenden</a></li>
+        
+          
+            <li><a href="index.html" class="undefined">Startseite</a></li>
+          
+          
+            <li><a href="gottesdienste.html" class="undefined">Gottesdienste</a></li>
+          
+          
+            <li><a href="ueber-uns.html" class="undefined">Über uns</a></li>
+          
+          
+            <li><a href="veranstaltungen.html" class="undefined">Veranstaltungen</a></li>
+          
+          
+            <li><a href="index.html#kontakt" class="undefined">Kontakt</a></li>
+          
+        
+          <li class="show-on-mobile"><a href="spenden.html">Spenden</a></li>
         </ul>
 
       
@@ -53,7 +65,7 @@
   <main>
 
     <!-- Neuer, professioneller Hero -->
-    <section class="gd-hero-pro">
+    <section class="gd-hero-pro" data-cms-section="hero" data-cms-field="hero.background_image" data-cms-label="Hintergrundbild" data-cms-attr="background-image" data-cms-bg-overlay="linear-gradient(to bottom, rgba(0,0,0,.65), rgba(0,0,0,.2))" data-has-image="false" style="">
         <div class="video-background">
             <video playsinline="" autoplay="" muted="" loop="">
                 <source src="images/Black and Red Typographic Funny YouTube Video Intro.mp4" type="video/mp4">
@@ -71,7 +83,7 @@
     </section>
 
     <!-- Erlebe unsere Gottesdienste -->
-    <section class="content-section">
+    <section class="content-section" data-cms-section="intro">
         <div class="container">
             <div class="section-intro">
                 <h2 data-cms-field="intro.title" data-cms-label="Titel">Was dich erwartet</h2>
@@ -84,7 +96,7 @@
     </section>
 
     <!-- Was dich erwartet -->
-    <section class="content-section expect-pro-section expect-pro-section-enhanced">
+    <section class="content-section expect-pro-section expect-pro-section-enhanced" data-cms-section="main_service">
         <div class="container">
             <div class="section-intro">
                 <h2 data-cms-field="main_service.title" data-cms-label="Titel">Hauptgottesdienst</h2>
@@ -132,7 +144,7 @@
         </div>
     </section>
 
-    <section class="content-section">
+    <section class="content-section" data-cms-section="other_meetings">
         <div class="container">
             <div class="section-intro">
                 <h2 data-cms-field="other_meetings.title" data-cms-label="Titel">Weitere Treffen</h2>
@@ -177,20 +189,22 @@
 
     
     <!-- Call to Action -->
-    <section class="content-section cta-pro-section">
+    <section class="content-section cta-pro-section" data-cms-section="cta">
         <div class="container">
-            <h2>Komm, wie du bist</h2>
-            <p>Ganz egal, wo du im Leben stehst, du bist bei uns herzlich willkommen. Wir freuen uns darauf, dich kennenzulernen.</p>
-            <a href="#anfahrt" class="btn btn-primary">Zur Anfahrt</a>
+            <h2 data-cms-field="cta.title" data-cms-label="CTA Titel">Komm, wie du bist</h2>
+            <p data-cms-field="cta.text" data-cms-label="CTA Text" data-cms-format="html">Ganz egal, wo du im Leben stehst, du bist bei uns herzlich willkommen. Wir freuen uns darauf, dich kennenzulernen.</p>
+            <a href="#anfahrt" class="btn btn-primary" data-cms-field="cta.button_link" data-cms-label="CTA Button Link" data-cms-attr="href">
+              <span data-cms-field="cta.button_text" data-cms-label="CTA Button Text">Zur Anfahrt</span>
+            </a>
         </div>
     </section>
 
     <!-- Anfahrt -->
-    <section id="anfahrt" class="content-section">
+    <section id="anfahrt" class="content-section" data-cms-section="anfahrt">
         <div class="container">
-            <h2>Anfahrt</h2>
-            <p style="text-align:center; max-width:720px; margin:0 auto 24px;">
-              Adresse: Hebbelstr. 56–60, 55127 Mainz
+            <h2 data-cms-field="anfahrt.title" data-cms-label="Anfahrt Titel">Anfahrt</h2>
+            <p class="narrow-center-text" data-cms-field="anfahrt.text" data-cms-label="Anfahrt Text" data-cms-format="html">
+              Adresse: Hebbelstr. 56-60, 55127 Mainz
             </p>
             <div class="map-container">
               <iframe title="Karte – Newness of Life Mainz" src="https://www.google.com/maps?q=Hebbelstr.+56-60,+55127+Mainz&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
@@ -199,7 +213,7 @@
     </section>
 
   </main>
-<footer class="site-footer">
+<footer class="site-footer" data-cms-section="footer">
   <div class="container">
     <div class="footer-grid">
       <!-- Column 1: About -->
@@ -218,10 +232,10 @@
                 <li><a href="index.html">Startseite</a></li>
               
               
-                <li><a href="ueber-uns.html">Über uns</a></li>
-              
-              
                 <li><a href="gottesdienste.html">Gottesdienste</a></li>
+              
+              
+                <li><a href="ueber-uns.html">Über uns</a></li>
               
               
                 <li><a href="veranstaltungen.html">Veranstaltungen</a></li>
@@ -250,7 +264,7 @@
         <div class="footer-social">
           </div>
         <div class="footer-donation">
-          <h3 class="footer-heading" style="margin-top: 30px;">Unterstütze uns</h3>
+          <h3 class="footer-heading">Unterstütze uns</h3>
           <p data-cms-field="footer.donation_text" data-cms-label="Spenden Text">Deine Spende hilft uns, einen Unterschied in unserer Stadt zu machen.</p>
           <a href="spenden.html" class="btn-footer-donate">Jetzt spenden</a>
         </div>
@@ -268,7 +282,6 @@
 </footer>
 <!-- CMS Preview Script (nur aktiv wenn ?cms-preview=1) -->
 <script src="js/cms-preview.js"></script>
-<script src="js/cms-loader.js"></script>
 
   <script src="js/script.js"></script>
 </body>

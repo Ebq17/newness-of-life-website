@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Impressum - Kirchen-Webseite</title>
+    <title>{{ pages.impressum.seo.meta_title || 'Impressum - Newness of Life' }}</title>
+    <meta name="description" content="{{ pages.impressum.seo.meta_description || '' }}">
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,11 +19,14 @@
     <include src="partials/header.html"></include>
 
     <main>
-        <section class="content-section services-section">
-            <img id="impressum-header-image" src="images/kirche.jpg" alt="" aria-hidden="true" class="section-background-image" loading="lazy">
+        <section class="content-section services-section" data-cms-section="hero">
+            <img id="impressum-header-image" src="{{ pages.impressum.hero.background_image || 'images/kirche.jpg' }}" alt="" aria-hidden="true" class="section-background-image" loading="lazy" data-cms-field="hero.background_image" data-cms-label="Header Bild">
             <div class="overlay"></div>
             <div class="container">
-                <h2 id="impressum-header-title">Impressum</h2>
+                <h2 id="impressum-header-title" data-cms-field="hero.title" data-cms-label="Titel">{{ pages.impressum.hero.title || 'Impressum' }}</h2>
+                <if condition="pages.impressum.hero.subtitle">
+                    <p class="section-subtitle" data-cms-field="hero.subtitle" data-cms-label="Untertitel">{{ pages.impressum.hero.subtitle }}</p>
+                </if>
             </div>
         </section>
         <section class="content-section">

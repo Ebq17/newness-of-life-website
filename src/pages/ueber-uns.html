@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Über uns – Newness of life</title>
+  <title>{{ pages.ueberUns.seo.meta_title || 'Über uns – Newness of Life' }}</title>
+  <meta name="description" content="{{ pages.ueberUns.seo.meta_description || '' }}">
 
   <!-- Basis-Styles -->
   <link rel="stylesheet" href="css/style.css"/>
@@ -22,26 +23,30 @@
   <include src="partials/header.html"></include>
 
   <!-- Hero -->
-  <section class="hero-ueber-uns">
+  <section
+    class="hero-ueber-uns"
+    data-cms-section="hero"
+    data-cms-field="hero.background_image"
+    data-cms-label="Hintergrundbild"
+    data-cms-attr="background-image"
+    data-has-image="{{ pages.ueberUns.hero.background_image ? 'true' : 'false' }}"
+    style="{{ pages.ueberUns.hero.background_image ? 'background-image: url(' + pages.ueberUns.hero.background_image + '); background-size: cover; background-position: center;' : '' }}"
+  >
     <div class="overlay"></div>
     <div class="hero-container">
-      <h1>Über uns</h1>
-      <p>Erfahre mehr über unsere Geschichte, Vision und Gemeinschaft</p>
+      <h1 data-cms-field="hero.title" data-cms-label="Titel">{{ pages.ueberUns.hero.title || 'Über uns' }}</h1>
+      <p data-cms-field="hero.subtitle" data-cms-label="Untertitel" data-cms-format="html">{{ pages.ueberUns.hero.subtitle || 'Erfahre mehr über unsere Geschichte, Vision und Gemeinschaft' }}</p>
     </div>
   </section>
 
   <main>
     <!-- Intro -->
-    <section class="content-section about-us-section">
+    <section class="content-section about-us-section" data-cms-section="intro">
       <div class="container about-us-grid">
         <div class="about-us-text">
-          <h2>Willkommen bei <br>Newness of Life</h2>
+          <h2 data-cms-field="intro.title" data-cms-label="Titel" data-cms-format="html">{{ pages.ueberUns.intro.title || 'Willkommen bei <br>Newness of Life' }}</h2>
           <h3>Ein Ort des Glaubens, der Hoffnung und der Erneuerung</h3>
-          <p>
-            Newness of Life ist mehr als ein Gottesdienst am Sonntag – wir sind eine Familie,
-            die im Alltag füreinander da ist. Unser Herzschlag: Jesus Christus klar verkünden,
-            Menschen stärken und unsere Stadt mit praktischer Liebe prägen.
-          </p>
+          <p data-cms-field="intro.text" data-cms-label="Text" data-cms-format="html">{{ pages.ueberUns.intro.text || '' }}</p>
           <p>
             Bei uns findest du inspirierenden Lobpreis, biblisch fundierte Lehre und Räume, in denen
             du deine Berufung entdecken kannst – in Kleingruppen, in der Jugendarbeit, im Gebet
@@ -55,19 +60,16 @@
         </div>
 
         <div class="about-us-image">
-          <img src="images/Logo_Schwarz_Transparent_KS.png" alt="Gemeinschaft in der Kirche">
+          <img src="{{ pages.ueberUns.story.image || 'images/Logo_Schwarz_Transparent_KS.png' }}" alt="Gemeinschaft in der Kirche" data-cms-field="story.image" data-cms-label="Bild">
         </div>
       </div>
     </section>
 
     <!-- Geschichte -->
-    <section class="content-section history-section" aria-labelledby="history-title">
+    <section class="content-section history-section" aria-labelledby="history-title" data-cms-section="story">
       <div class="container">
-        <h2 id="history-title">Unsere Geschichte</h2>
-        <p class="history-intro">
-          Von bescheidenen Anfängen zu einer lebendigen Gemeinschaft – entdecke die Geschichte
-          von Newness of Life.
-        </p>
+        <h2 id="history-title" data-cms-field="story.title" data-cms-label="Titel">{{ pages.ueberUns.story.title || 'Unsere Geschichte' }}</h2>
+        <p class="history-intro" data-cms-field="story.text" data-cms-label="Text" data-cms-format="html">{{ pages.ueberUns.story.text || '' }}</p>
         <div class="history-timeline">
           <div class="timeline-item">
             <div class="timeline-content">
@@ -81,13 +83,8 @@
 
           <div class="timeline-item">
             <div class="timeline-content">
-              <h3>Heute &amp; Zukunft</h3>
-              <p>
-                Heute sind wir eine lebendige, multikulturelle Gemeinde mit einem klaren Fokus:
-                Menschen zu Jüngern machen, Hoffnung weitergeben und Gottes Liebe praktisch leben.
-                Unsere Vision für die Zukunft: Noch mehr Menschen in Mainz und darüber hinaus
-                mit der guten Nachricht von Jesus Christus zu erreichen.
-              </p>
+              <h3 data-cms-field="vision.title" data-cms-label="Titel">{{ pages.ueberUns.vision.title || 'Heute &amp; Zukunft' }}</h3>
+              <p data-cms-field="vision.text" data-cms-label="Text" data-cms-format="html">{{ pages.ueberUns.vision.text || '' }}</p>
             </div>
           </div>
         </div>

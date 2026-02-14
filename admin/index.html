@@ -1,360 +1,1487 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin - Newness of Life</title>
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/index.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    :root {
+      --primary: #2563EB;
+      --primary-hover: #1d4ed8;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --gray-50: #F9FAFB;
+      --gray-100: #F3F4F6;
+      --gray-200: #E5E7EB;
+      --gray-300: #D1D5DB;
+      --gray-400: #9CA3AF;
+      --gray-500: #6B7280;
+      --gray-600: #4B5563;
+      --gray-700: #374151;
+      --gray-800: #1F2937;
+      --gray-900: #111827;
+      --sidebar-width: 280px;
+      --header-height: 60px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--gray-100);
+      color: var(--gray-800);
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: white;
+      border-right: 1px solid var(--gray-200);
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+    }
+
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--gray-900);
+    }
+
+    .sidebar-logo i {
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+
+    .sidebar-logo span {
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 16px 12px;
+      overflow-y: auto;
+    }
+
+    .nav-section {
+      margin-bottom: 24px;
+    }
+
+    .nav-section-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--gray-400);
+      padding: 0 12px;
+      margin-bottom: 8px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--gray-600);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.15s;
+      cursor: pointer;
+    }
+
+    .nav-item:hover {
+      background: var(--gray-100);
+      color: var(--gray-900);
+    }
+
+    .nav-item.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .nav-item i {
+      width: 20px;
+      text-align: center;
+    }
+
+    .nav-item .badge {
+      margin-left: auto;
+      background: var(--gray-200);
+      color: var(--gray-600);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    .nav-item.active .badge {
+      background: rgba(255,255,255,0.2);
+      color: white;
+    }
+
+    /* Main Content */
+    .main {
+      margin-left: var(--sidebar-width);
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      height: var(--header-height);
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .header-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--gray-900);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--gray-700);
+      border: 1px solid var(--gray-300);
+    }
+
+    .btn-secondary:hover {
+      background: var(--gray-50);
+      border-color: var(--gray-400);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--gray-600);
+      padding: 8px;
+    }
+
+    .btn-ghost:hover {
+      background: var(--gray-100);
+      color: var(--gray-900);
+    }
+
+    /* Content Area */
+    .content {
+      padding: 24px;
+    }
+
+    /* Dashboard Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      border: 1px solid var(--gray-200);
+    }
+
+    .stat-card h3 {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .stat-card .value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--gray-900);
+    }
+
+    /* Quick Actions */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .quick-action {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid var(--gray-200);
+      text-decoration: none;
+      color: var(--gray-700);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: all 0.15s;
+    }
+
+    .quick-action:hover {
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+    }
+
+    .quick-action .icon {
+      width: 48px;
+      height: 48px;
+      background: var(--gray-100);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      color: var(--primary);
+    }
+
+    .quick-action h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--gray-800);
+    }
+
+    .quick-action p {
+      font-size: 0.8rem;
+      color: var(--gray-500);
+      margin-top: 4px;
+    }
+
+    /* Cards */
+    .card {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid var(--gray-200);
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--gray-900);
+    }
+
+    .card-body {
+      padding: 20px;
+    }
+
+    /* Table */
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .table th {
+      text-align: left;
+      padding: 12px 16px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--gray-500);
+      background: var(--gray-50);
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .table td {
+      padding: 16px;
+      border-bottom: 1px solid var(--gray-100);
+      font-size: 0.9rem;
+    }
+
+    .table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .table tr:hover td {
+      background: var(--gray-50);
+    }
+
+    /* Badge */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .badge-success {
+      background: #D1FAE5;
+      color: #059669;
+    }
+
+    .badge-warning {
+      background: #FEF3C7;
+      color: #D97706;
+    }
+
+    .badge-info {
+      background: #DBEAFE;
+      color: #2563EB;
+    }
+
+    /* Status */
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 8px;
+    }
+
+    .status-dot.online { background: var(--success); }
+    .status-dot.offline { background: var(--danger); }
+
+    /* Editor View */
+    .editor-view {
+      display: none;
+    }
+
+    .editor-view.active {
+      display: block;
+    }
+
+    .split-layout {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 0;
+      height: calc(100vh - var(--header-height));
+    }
+
+    /* Preview Panel */
+    .preview-panel {
+      background: var(--gray-100);
+      border-right: 1px solid var(--gray-200);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .preview-toolbar {
+      padding: 12px 16px;
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .preview-url {
+      flex: 1;
+      background: var(--gray-100);
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 0.8rem;
+      color: var(--gray-600);
+      font-family: monospace;
+    }
+
+    .viewport-btns {
+      display: flex;
+      gap: 4px;
+    }
+
+    .viewport-btn {
+      width: 36px;
+      height: 36px;
+      border: none;
+      background: transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--gray-500);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .viewport-btn:hover {
+      background: var(--gray-100);
+      color: var(--gray-700);
+    }
+
+    .viewport-btn.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .preview-frame {
+      flex: 1;
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+      overflow: auto;
+    }
+
+    .preview-iframe-wrap {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+      transition: width 0.3s;
+    }
+
+    .preview-iframe-wrap.tablet {
+      width: 768px;
+      max-width: 100%;
+    }
+
+    .preview-iframe-wrap.mobile {
+      width: 375px;
+      max-width: 100%;
+    }
+
+    .preview-iframe-wrap iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Editor Panel */
+    .editor-panel {
+      background: white;
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - var(--header-height));
+      overflow: hidden;
+    }
+
+    .editor-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .editor-header h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 4px;
+    }
+
+    .editor-header p {
+      font-size: 0.8rem;
+      color: var(--gray-500);
+    }
+
+    .editor-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    /* Form Elements */
+    .form-section {
+      margin-bottom: 24px;
+    }
+
+    .form-section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--gray-50);
+      border-radius: 8px;
+      cursor: pointer;
+      margin-bottom: 16px;
+    }
+
+    .form-section-header i {
+      color: var(--primary);
+    }
+
+    .form-section-header h3 {
+      flex: 1;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--gray-800);
+    }
+
+    .form-section-header .toggle-icon {
+      color: var(--gray-400);
+      transition: transform 0.2s;
+    }
+
+    .form-section.collapsed .form-section-body {
+      display: none;
+    }
+
+    .form-section.collapsed .toggle-icon {
+      transform: rotate(-90deg);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--gray-700);
+      margin-bottom: 6px;
+    }
+
+    .form-input, .form-textarea, .form-select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--gray-300);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      transition: all 0.15s;
+      background: white;
+    }
+
+    .form-input:focus, .form-textarea:focus, .form-select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .form-textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .form-hint {
+      font-size: 0.75rem;
+      color: var(--gray-500);
+      margin-top: 4px;
+    }
+
+    /* Image Upload */
+    .image-upload {
+      border: 2px dashed var(--gray-300);
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .image-upload:hover {
+      border-color: var(--primary);
+      background: var(--gray-50);
+    }
+
+    .image-upload i {
+      font-size: 2rem;
+      color: var(--gray-400);
+      margin-bottom: 8px;
+    }
+
+    .image-upload p {
+      font-size: 0.85rem;
+      color: var(--gray-600);
+    }
+
+    .image-preview {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .image-preview img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+
+    .image-preview .remove-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 28px;
+      height: 28px;
+      background: rgba(0, 0, 0, 0.6);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Toast */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+    }
+
+    .toast {
+      background: var(--gray-900);
+      color: white;
+      padding: 14px 20px;
+      border-radius: 8px;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: slideIn 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .toast.success { background: var(--success); }
+    .toast.error { background: var(--danger); }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    /* Loading */
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--gray-300);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--gray-500);
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      color: var(--gray-300);
+      margin-bottom: 16px;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .split-layout {
+        grid-template-columns: 1fr 350px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .split-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .preview-panel {
+        display: none;
+      }
+    }
+  </style>
 </head>
 <body>
-  <!-- Preview Bar -->
-  <div class="preview-bar">
-    <h1>Newness of Life - Admin</h1>
-    <div class="buttons">
-      <button class="btn-preview" onclick="togglePreview()" id="preview-toggle">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-          <circle cx="12" cy="12" r="3"/>
-        </svg>
-        Vorschau
-      </button>
-      <button class="btn-refresh" onclick="refreshPreview()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="23 4 23 10 17 10"/>
-          <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
-        </svg>
-        Aktualisieren
-      </button>
-      <button class="btn-site" onclick="openSite()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-          <polyline points="15 3 21 3 21 9"/>
-          <line x1="10" y1="14" x2="21" y2="3"/>
-        </svg>
-        Neues Fenster
-      </button>
-      <button class="btn-back" onclick="goBackPage()" id="page-back" disabled>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="15 18 9 12 15 6"/>
-        </svg>
-        Zurueck
-      </button>
-      <div class="page-select">
-        <span>Seite</span>
-        <select id="page-select">
-          <option value="index.html">Startseite</option>
-          <option value="ueber-uns.html">Ueber uns</option>
-          <option value="gottesdienste.html">Gottesdienste</option>
-          <option value="veranstaltungen.html">Veranstaltungen</option>
-          <option value="spenden.html">Spenden</option>
-          <option value="datenschutz.html">Datenschutz</option>
-          <option value="impressum.html">Impressum</option>
-        </select>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <a href="#" class="sidebar-logo">
+        <i class="fa-solid fa-church"></i>
+        <span>Newness of Life</span>
+      </a>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-title">Übersicht</div>
+        <a class="nav-item active" data-view="dashboard">
+          <i class="fa-solid fa-grid-2"></i>
+          Dashboard
+        </a>
       </div>
-      <span class="help-text">Tipp: watch.js baut automatisch nach dem Speichern</span>
-    </div>
-    <span class="status online" id="status">Lokal verbunden</span>
-  </div>
 
-  <!-- Main Layout -->
-  <div class="admin-layout">
-    <!-- CMS Panel -->
-    <div class="cms-panel" id="cms-panel">
-      <!-- Decap CMS loads here -->
-      <div id="nc-root"></div>
-    </div>
+      <div class="nav-section">
+        <div class="nav-section-title">Seiten bearbeiten</div>
+        <a class="nav-item" data-view="editor" data-page="homepage">
+          <i class="fa-solid fa-home"></i>
+          Startseite
+        </a>
+        <a class="nav-item" data-view="editor" data-page="gottesdienste">
+          <i class="fa-solid fa-church"></i>
+          Gottesdienste
+        </a>
+        <a class="nav-item" data-view="editor" data-page="ueber-uns">
+          <i class="fa-solid fa-users"></i>
+          Über uns
+        </a>
+        <a class="nav-item" data-view="editor" data-page="spenden">
+          <i class="fa-solid fa-hand-holding-heart"></i>
+          Spenden
+        </a>
+      </div>
 
-    <!-- Preview Panel -->
-    <div class="preview-panel" id="preview-panel">
-      <div class="preview-header">
-        <h3>Live-Vorschau</h3>
-        <div class="preview-controls">
-          <button class="device-btn active" onclick="setDevice('desktop')" title="Desktop">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-              <line x1="8" y1="21" x2="16" y2="21"/>
-              <line x1="12" y1="17" x2="12" y2="21"/>
-            </svg>
+      <div class="nav-section">
+        <div class="nav-section-title">Inhalte</div>
+        <a class="nav-item" href="events.html">
+          <i class="fa-solid fa-calendar"></i>
+          Termine
+          <span class="badge" id="eventBadge">0</span>
+        </a>
+        <a class="nav-item" href="media.html">
+          <i class="fa-solid fa-images"></i>
+          Medien
+        </a>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Einstellungen</div>
+        <a class="nav-item" href="settings.html">
+          <i class="fa-solid fa-cog"></i>
+          Einstellungen
+        </a>
+      </div>
+    </nav>
+
+    <div style="padding: 16px; border-top: 1px solid var(--gray-200);">
+      <div style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--gray-500);">
+        <span class="status-dot online" id="serverDot"></span>
+        <span id="serverStatus">Verbunden</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main">
+    <!-- Dashboard View -->
+    <div id="dashboard-view" class="editor-view active">
+      <header class="header">
+        <div class="header-left">
+          <h1 class="header-title">Dashboard</h1>
+        </div>
+        <div class="header-actions">
+          <a href="/" target="_blank" class="btn btn-secondary">
+            <i class="fa-solid fa-external-link"></i>
+            Website ansehen
+          </a>
+          <button class="btn btn-primary" id="buildBtn">
+            <i class="fa-solid fa-rotate"></i>
+            Neu bauen
           </button>
-          <button class="device-btn" onclick="setDevice('tablet')" title="Tablet">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="4" y="2" width="16" height="20" rx="2" ry="2"/>
-              <line x1="12" y1="18" x2="12" y2="18"/>
-            </svg>
-          </button>
-          <button class="device-btn" onclick="setDevice('mobile')" title="Mobil">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
-              <line x1="12" y1="18" x2="12" y2="18"/>
-            </svg>
-          </button>
-          <button onclick="closePreview()">Schliessen</button>
+        </div>
+      </header>
+
+      <div class="content">
+        <div class="dashboard-grid">
+          <div class="stat-card">
+            <h3>Termine</h3>
+            <div class="value" id="statEvents">0</div>
+          </div>
+          <div class="stat-card">
+            <h3>Seiten</h3>
+            <div class="value">6</div>
+          </div>
+          <div class="stat-card">
+            <h3>Bilder</h3>
+            <div class="value" id="statImages">0</div>
+          </div>
+        </div>
+
+        <h3 style="margin-bottom: 16px; color: var(--gray-700);">Schnellzugriff</h3>
+        <div class="quick-actions">
+          <a href="events.html" class="quick-action">
+            <div class="icon"><i class="fa-solid fa-plus"></i></div>
+            <div>
+              <h4>Neuer Termin</h4>
+              <p>Event hinzufügen</p>
+            </div>
+          </a>
+          <a class="quick-action" data-view="editor" data-page="homepage">
+            <div class="icon"><i class="fa-solid fa-pen"></i></div>
+            <div>
+              <h4>Startseite</h4>
+              <p>Inhalt bearbeiten</p>
+            </div>
+          </a>
+          <a href="media.html" class="quick-action">
+            <div class="icon"><i class="fa-solid fa-upload"></i></div>
+            <div>
+              <h4>Medien</h4>
+              <p>Bilder hochladen</p>
+            </div>
+          </a>
+          <a href="settings.html" class="quick-action">
+            <div class="icon"><i class="fa-solid fa-cog"></i></div>
+            <div>
+              <h4>Einstellungen</h4>
+              <p>Kontakt & Design</p>
+            </div>
+          </a>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Nächste Termine</h3>
+            <a href="events.html" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.8rem;">
+              Alle anzeigen
+            </a>
+          </div>
+          <div class="card-body" style="padding: 0;">
+            <table class="table" id="eventsTable">
+              <thead>
+                <tr>
+                  <th>Titel</th>
+                  <th>Datum</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="eventsBody">
+                <tr><td colspan="3" class="empty-state">Lade...</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-      <div class="preview-iframe-container">
-        <div class="preview-iframe-wrapper" id="iframe-wrapper">
-          <iframe id="preview-iframe" src="about:blank"></iframe>
+    </div>
+
+    <!-- Editor View -->
+    <div id="editor-view" class="editor-view">
+      <header class="header">
+        <div class="header-left">
+          <button class="btn btn-ghost" onclick="showView('dashboard')">
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
+          <h1 class="header-title" id="editorTitle">Seite bearbeiten</h1>
+        </div>
+        <div class="header-actions">
+          <span id="saveStatus" style="font-size: 0.8rem; color: var(--gray-500);">Nicht gespeichert</span>
+          <button class="btn btn-secondary" id="saveBtn" onclick="saveData()">
+            <i class="fa-solid fa-save"></i>
+            Speichern
+          </button>
+          <button class="btn btn-success" onclick="saveAndPublish()">
+            <i class="fa-solid fa-check"></i>
+            Veröffentlichen
+          </button>
+        </div>
+      </header>
+
+      <div class="split-layout">
+        <!-- Preview -->
+        <div class="preview-panel">
+          <div class="preview-toolbar">
+            <div class="preview-url" id="previewUrl">-</div>
+            <div class="viewport-btns">
+              <button class="viewport-btn active" data-viewport="desktop" title="Desktop">
+                <i class="fa-solid fa-desktop"></i>
+              </button>
+              <button class="viewport-btn" data-viewport="tablet" title="Tablet">
+                <i class="fa-solid fa-tablet"></i>
+              </button>
+              <button class="viewport-btn" data-viewport="mobile" title="Mobil">
+                <i class="fa-solid fa-mobile"></i>
+              </button>
+            </div>
+            <button class="btn btn-ghost" onclick="refreshPreview()" title="Aktualisieren">
+              <i class="fa-solid fa-rotate"></i>
+            </button>
+            <button class="btn btn-ghost" onclick="openPreview()" title="Neues Fenster">
+              <i class="fa-solid fa-external-link"></i>
+            </button>
+          </div>
+          <div class="preview-frame">
+            <div class="preview-iframe-wrap" id="previewWrap">
+              <iframe id="previewIframe" src="about:blank"></iframe>
+            </div>
+          </div>
+        </div>
+
+        <!-- Editor -->
+        <div class="editor-panel">
+          <div class="editor-header">
+            <h2 id="editorPageTitle">Startseite</h2>
+            <p>Klicke auf ein Feld um es zu bearbeiten</p>
+          </div>
+          <div class="editor-content" id="editorContent">
+            <div class="empty-state">
+              <i class="fa-solid fa-spinner fa-spin"></i>
+              <p>Lade Daten...</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </main>
 
-  <!-- Decap CMS -->
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <div class="toast-container" id="toastContainer"></div>
 
   <script>
-    let previewVisible = true;
-    let currentDevice = 'desktop';
-    let currentPage = 'index.html';
-    const pageHistory = [];
-    const SITE_URL = 'http://localhost:8080';
+    const API_URL = new URL('/api', window.location.origin).toString().replace(/\/$/, '');
+    const PREVIEW_URL = window.location.origin;
 
-    // Toggle Preview Panel
-    function togglePreview() {
-      previewVisible = !previewVisible;
-      const previewPanel = document.getElementById('preview-panel');
-      const cmsPanel = document.getElementById('cms-panel');
-      const toggleBtn = document.getElementById('preview-toggle');
+    let currentPage = null;
+    let currentData = {};
+    let hasChanges = false;
 
-      if (previewVisible) {
-        previewPanel.classList.remove('hidden');
-        cmsPanel.classList.add('with-preview');
-        toggleBtn.classList.add('active');
-        loadPreview();
-      } else {
-        previewPanel.classList.add('hidden');
-        cmsPanel.classList.remove('with-preview');
-        toggleBtn.classList.remove('active');
+    // Page configurations
+    const pages = {
+      homepage: {
+        title: 'Startseite',
+        file: 'homepage.json',
+        url: '/index.html',
+        sections: [
+          {
+            id: 'hero',
+            title: 'Hero-Bereich',
+            icon: 'fa-star',
+            fields: [
+              { key: 'hero.title', label: 'Haupttitel', type: 'text' },
+              { key: 'hero.subtitle', label: 'Untertitel', type: 'textarea' },
+              { key: 'hero.background_image', label: 'Hintergrundbild', type: 'image' },
+              { key: 'hero.cta_text', label: 'Button Text', type: 'text' },
+              { key: 'hero.cta_link', label: 'Button Link', type: 'text' }
+            ]
+          },
+          {
+            id: 'services',
+            title: 'Gottesdienste',
+            icon: 'fa-church',
+            fields: [
+              { key: 'services_section.title', label: 'Titel', type: 'text' },
+              { key: 'services_section.description', label: 'Beschreibung', type: 'textarea' },
+              { key: 'services_section.service_day', label: 'Tag', type: 'text' },
+              { key: 'services_section.service_time', label: 'Uhrzeit', type: 'text' },
+              { key: 'services_section.kids_info', label: 'Kinderinfo', type: 'text' }
+            ]
+          },
+          {
+            id: 'about',
+            title: 'Über uns',
+            icon: 'fa-users',
+            fields: [
+              { key: 'about_section.title', label: 'Titel', type: 'text' },
+              { key: 'about_section.subtitle', label: 'Untertitel', type: 'text' },
+              { key: 'about_section.text', label: 'Text', type: 'textarea' }
+            ]
+          },
+          {
+            id: 'contact',
+            title: 'Kontakt',
+            icon: 'fa-envelope',
+            fields: [
+              { key: 'contact_section.title', label: 'Titel', type: 'text' },
+              { key: 'contact_section.form_title', label: 'Formular Titel', type: 'text' },
+              { key: 'contact_section.address_title', label: 'Adresse Titel', type: 'text' }
+            ]
+          }
+        ]
+      },
+      gottesdienste: {
+        title: 'Gottesdienste',
+        file: 'pages/gottesdienste.json',
+        url: '/gottesdienste.html',
+        sections: [
+          {
+            id: 'hero',
+            title: 'Hero-Bereich',
+            icon: 'fa-image',
+            fields: [
+              { key: 'hero.title', label: 'Titel', type: 'text' },
+              { key: 'hero.subtitle', label: 'Untertitel', type: 'text' }
+            ]
+          },
+          {
+            id: 'intro',
+            title: 'Intro',
+            icon: 'fa-align-left',
+            fields: [
+              { key: 'intro.title', label: 'Titel', type: 'text' },
+              { key: 'intro.text', label: 'Text', type: 'textarea' }
+            ]
+          },
+          {
+            id: 'main',
+            title: 'Hauptgottesdienst',
+            icon: 'fa-clock',
+            fields: [
+              { key: 'main_service.title', label: 'Titel', type: 'text' },
+              { key: 'main_service.day', label: 'Tag', type: 'text' },
+              { key: 'main_service.time', label: 'Uhrzeit', type: 'text' },
+              { key: 'main_service.duration', label: 'Dauer', type: 'text' },
+              { key: 'main_service.description', label: 'Beschreibung', type: 'textarea' }
+            ]
+          }
+        ]
+      },
+      'ueber-uns': {
+        title: 'Über uns',
+        file: 'pages/ueber-uns.json',
+        url: '/ueber-uns.html',
+        sections: [
+          {
+            id: 'hero',
+            title: 'Hero-Bereich',
+            icon: 'fa-image',
+            fields: [
+              { key: 'hero.title', label: 'Titel', type: 'text' },
+              { key: 'hero.subtitle', label: 'Untertitel', type: 'text' }
+            ]
+          },
+          {
+            id: 'intro',
+            title: 'Intro',
+            icon: 'fa-align-left',
+            fields: [
+              { key: 'intro.title', label: 'Titel', type: 'text' },
+              { key: 'intro.text', label: 'Text', type: 'textarea' }
+            ]
+          },
+          {
+            id: 'story',
+            title: 'Unsere Geschichte',
+            icon: 'fa-book',
+            fields: [
+              { key: 'story.title', label: 'Titel', type: 'text' },
+              { key: 'story.text', label: 'Text', type: 'textarea' }
+            ]
+          },
+          {
+            id: 'vision',
+            title: 'Vision & Mission',
+            icon: 'fa-lightbulb',
+            fields: [
+              { key: 'vision.title', label: 'Titel', type: 'text' },
+              { key: 'vision.text', label: 'Text', type: 'textarea' }
+            ]
+          }
+        ]
+      },
+      spenden: {
+        title: 'Spenden',
+        file: 'pages/spenden.json',
+        url: '/spenden.html',
+        sections: [
+          {
+            id: 'hero',
+            title: 'Hero-Bereich',
+            icon: 'fa-image',
+            fields: [
+              { key: 'hero.title', label: 'Titel', type: 'text' },
+              { key: 'hero.subtitle', label: 'Untertitel', type: 'text' }
+            ]
+          },
+          {
+            id: 'intro',
+            title: 'Intro',
+            icon: 'fa-align-left',
+            fields: [
+              { key: 'intro.title', label: 'Titel', type: 'text' },
+              { key: 'intro.text', label: 'Text', type: 'textarea' }
+            ]
+          },
+          {
+            id: 'bank',
+            title: 'Bankdaten',
+            icon: 'fa-credit-card',
+            fields: [
+              { key: 'bank_details.title', label: 'Titel', type: 'text' },
+              { key: 'bank_details.account_holder', label: 'Kontoinhaber', type: 'text' },
+              { key: 'bank_details.iban', label: 'IBAN', type: 'text' },
+              { key: 'bank_details.bic', label: 'BIC', type: 'text' },
+              { key: 'bank_details.bank_name', label: 'Bank', type: 'text' }
+            ]
+          }
+        ]
+      }
+    };
+
+    // Toast notification
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.innerHTML = `<i class="fa-solid fa-${type === 'success' ? 'check' : 'info-circle'}"></i> ${message}`;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    // Get/Set nested values
+    function getValue(obj, path) {
+      return path.split('.').reduce((o, k) => (o || {})[k], obj);
+    }
+
+    function setValue(obj, path, value) {
+      const keys = path.split('.');
+      const last = keys.pop();
+      const target = keys.reduce((o, k) => { if (!o[k]) o[k] = {}; return o[k]; }, obj);
+      target[last] = value;
+    }
+
+    // View switching
+    function showView(viewName, pageId = null) {
+      document.querySelectorAll('.editor-view').forEach(v => v.classList.remove('active'));
+      document.getElementById(`${viewName}-view`).classList.add('active');
+
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      if (viewName === 'dashboard') {
+        document.querySelector('[data-view="dashboard"]').classList.add('active');
+      } else if (pageId) {
+        document.querySelector(`[data-page="${pageId}"]`)?.classList.add('active');
+        loadPage(pageId);
       }
     }
 
-    // Close Preview
-    function closePreview() {
-      previewVisible = false;
-      document.getElementById('preview-panel').classList.add('hidden');
-      document.getElementById('cms-panel').classList.remove('with-preview');
-      document.getElementById('preview-toggle').classList.remove('active');
-    }
+    // Load page for editing
+    async function loadPage(pageId) {
+      currentPage = pages[pageId];
+      if (!currentPage) return;
 
-    // Load Preview
-    function loadPreview() {
-      const iframe = document.getElementById('preview-iframe');
-      const base = SITE_URL.replace(/\/$/, '');
-      const url = new URL(base + '/' + currentPage);
-      url.searchParams.set('cms-preview', '1');
-      url.searchParams.set('t', Date.now().toString());
-      iframe.src = url.toString();
-    }
+      document.getElementById('editorTitle').textContent = currentPage.title + ' bearbeiten';
+      document.getElementById('editorPageTitle').textContent = currentPage.title;
+      document.getElementById('previewUrl').textContent = window.location.host + currentPage.url;
 
-    // Refresh Preview
-    function refreshPreview() {
-      if (previewVisible) {
-        loadPreview();
-      } else {
-        togglePreview();
-      }
-    }
+      // Load preview
+      document.getElementById('previewIframe').src = PREVIEW_URL + currentPage.url + '?t=' + Date.now();
 
-    // Set Device Size
-    function setDevice(device) {
-      currentDevice = device;
-      const wrapper = document.getElementById('iframe-wrapper');
-      const buttons = document.querySelectorAll('.device-btn');
-
-      wrapper.classList.remove('mobile', 'tablet', 'desktop');
-      if (device !== 'desktop') {
-        wrapper.classList.add(device);
-      }
-
-      buttons.forEach((btn, index) => {
-        btn.classList.remove('active');
-        if ((device === 'desktop' && index === 0) ||
-            (device === 'tablet' && index === 1) ||
-            (device === 'mobile' && index === 2)) {
-          btn.classList.add('active');
-        }
-      });
-    }
-
-    // Open Site in new window
-    function openSite() {
-      const base = SITE_URL.replace(/\/$/, '');
-      window.open(base + '/' + currentPage, '_blank');
-    }
-
-    // Page Selector
-    const pageSelect = document.getElementById('page-select');
-    const pageBack = document.getElementById('page-back');
-    if (pageSelect) {
-      pageSelect.value = currentPage;
-      pageSelect.addEventListener('change', function() {
-        setPage(pageSelect.value, true);
-      });
-    }
-    if (pageBack) {
-      pageBack.addEventListener('click', function() {
-        goBackPage();
-      });
-    }
-
-    function setPage(nextPage, pushHistory) {
-      if (!nextPage || nextPage === currentPage) return;
-      if (pushHistory) {
-        pageHistory.push(currentPage);
-      }
-      currentPage = nextPage;
-      if (pageSelect) {
-        pageSelect.value = currentPage;
-      }
-      updateBackButton();
-      if (previewVisible) {
-        loadPreview();
-      }
-    }
-
-    function goBackPage() {
-      if (!pageHistory.length) return;
-      const previous = pageHistory.pop();
-      setPage(previous, false);
-    }
-
-    function updateBackButton() {
-      if (!pageBack) return;
-      pageBack.disabled = pageHistory.length === 0;
-    }
-
-    // Click-to-Edit: focus CMS field from preview
-    let activeField = null;
-    let activeInput = null;
-    let activeInputHandler = null;
-
-    function normalizeText(text) {
-      return (text || '').replace(/\s+/g, ' ').trim().toLowerCase();
-    }
-
-    function findFieldInputByLabel(label) {
-      if (!label) return null;
-      const labels = Array.from(document.querySelectorAll('label, [data-testid="control-label"], .nc-fieldLabel'));
-      const match = labels.find(el => normalizeText(el.textContent) === normalizeText(label));
-      if (!match) return null;
-
-      const fieldRoot = match.closest('.nc-field, .field, [data-testid="field"], .nc-Field') || match.parentElement;
-      if (!fieldRoot) return null;
-      return fieldRoot.querySelector('input, textarea, select, [contenteditable="true"]');
-    }
-
-    function findFieldInputByName(field) {
-      if (!field) return null;
-      const candidates = Array.from(document.querySelectorAll('input[name], textarea[name], select[name]'));
-      const exact = candidates.find(el => el.name === field);
-      if (exact) return exact;
-      const fieldLeaf = field.split('.').pop();
-      const leafMatches = candidates.filter(el => el.name === fieldLeaf);
-      if (leafMatches.length === 1) return leafMatches[0];
-      return null;
-    }
-
-    function focusCmsField(field, label) {
-      let input = findFieldInputByName(field);
-      if (!input) {
-        input = findFieldInputByLabel(label);
-      }
-      if (!input) return false;
-
-      input.focus();
-      input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      attachLiveSync(input, field);
-      return true;
-    }
-
-    function attachLiveSync(input, field) {
-      if (!input || !field) return;
-      if (activeInput && activeInputHandler) {
-        activeInput.removeEventListener('input', activeInputHandler);
-        activeInput.removeEventListener('change', activeInputHandler);
-      }
-
-      activeField = field;
-      activeInput = input;
-      activeInputHandler = function(event) {
-        const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
-        const iframe = document.getElementById('preview-iframe');
-        if (!iframe || !iframe.contentWindow) return;
-        iframe.contentWindow.postMessage({
-          type: 'cms-update-field',
-          field: activeField,
-          value: value
-        }, '*');
-      };
-
-      input.addEventListener('input', activeInputHandler);
-      input.addEventListener('change', activeInputHandler);
-    }
-
-    window.addEventListener('message', function(event) {
-      if (!event.data) return;
-
-      // Click-to-Edit: Feld auswaehlen
-      if (event.data.type === 'cms-select-field') {
-        const field = event.data.field;
-        const label = event.data.label;
-        const found = focusCmsField(field, label);
-        const status = document.getElementById('status');
-        if (found) {
-          status.textContent = 'Feld ausgewaehlt: ' + (label || field);
-          status.classList.add('online');
-          status.classList.remove('building');
+      // Load data
+      try {
+        const res = await fetch(`${API_URL}/data/${currentPage.file}`);
+        if (res.ok) {
+          currentData = await res.json();
         } else {
-          status.textContent = 'Feld nicht im Editor';
-          status.classList.remove('online');
+          currentData = {};
         }
-        return;
+      } catch (e) {
+        currentData = {};
       }
 
-      // Navigation innerhalb der Vorschau
-      if (event.data.type === 'cms-navigate') {
-        const page = event.data.page;
-        if (page) {
-          setPage(page, true);
+      renderEditor();
+      hasChanges = false;
+      updateSaveStatus();
+    }
+
+    // Render editor
+    function renderEditor() {
+      const container = document.getElementById('editorContent');
+      let html = '';
+
+      for (const section of currentPage.sections) {
+        html += `
+          <div class="form-section" data-section="${section.id}">
+            <div class="form-section-header" onclick="this.parentElement.classList.toggle('collapsed')">
+              <i class="fa-solid ${section.icon}"></i>
+              <h3>${section.title}</h3>
+              <i class="fa-solid fa-chevron-down toggle-icon"></i>
+            </div>
+            <div class="form-section-body">`;
+
+        for (const field of section.fields) {
+          const value = getValue(currentData, field.key) || '';
+
+          if (field.type === 'textarea') {
+            html += `
+              <div class="form-group">
+                <label class="form-label">${field.label}</label>
+                <textarea class="form-textarea" data-key="${field.key}" oninput="handleInput(this)">${value}</textarea>
+              </div>`;
+          } else if (field.type === 'image') {
+            html += `
+              <div class="form-group">
+                <label class="form-label">${field.label}</label>
+                ${value ? `
+                  <div class="image-preview">
+                    <img src="${value}" alt="${field.label}">
+                    <button class="remove-btn" onclick="removeImage('${field.key}')"><i class="fa-solid fa-times"></i></button>
+                  </div>
+                ` : `
+                  <div class="image-upload" onclick="selectImage('${field.key}')">
+                    <i class="fa-solid fa-cloud-upload-alt"></i>
+                    <p>Bild auswählen</p>
+                  </div>
+                `}
+                <input type="hidden" data-key="${field.key}" value="${value}">
+              </div>`;
+          } else {
+            html += `
+              <div class="form-group">
+                <label class="form-label">${field.label}</label>
+                <input type="text" class="form-input" data-key="${field.key}" value="${value}" oninput="handleInput(this)">
+              </div>`;
+          }
         }
-        return;
+
+        html += `</div></div>`;
+      }
+
+      container.innerHTML = html;
+    }
+
+    // Handle input change
+    function handleInput(input) {
+      const key = input.dataset.key;
+      setValue(currentData, key, input.value);
+      hasChanges = true;
+      updateSaveStatus();
+    }
+
+    // Update save status
+    function updateSaveStatus() {
+      const status = document.getElementById('saveStatus');
+      if (hasChanges) {
+        status.textContent = 'Ungespeicherte Änderungen';
+        status.style.color = 'var(--warning)';
+      } else {
+        status.textContent = 'Gespeichert';
+        status.style.color = 'var(--success)';
+      }
+    }
+
+    // Save data
+    async function saveData() {
+      const btn = document.getElementById('saveBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Speichere...';
+
+      try {
+        const res = await fetch(`${API_URL}/data/${currentPage.file}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(currentData)
+        });
+
+        if (res.ok) {
+          hasChanges = false;
+          updateSaveStatus();
+          showToast('Gespeichert!', 'success');
+        } else {
+          throw new Error('Fehler beim Speichern');
+        }
+      } catch (e) {
+        showToast('Fehler: ' + e.message, 'error');
+      }
+
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-save"></i> Speichern';
+    }
+
+    // Save and publish
+    async function saveAndPublish() {
+      await saveData();
+
+      try {
+        await fetch(`${API_URL}/build`, { method: 'POST' });
+        showToast('Veröffentlicht!', 'success');
+        setTimeout(() => refreshPreview(), 500);
+      } catch (e) {
+        showToast('Fehler beim Veröffentlichen', 'error');
+      }
+    }
+
+    // Refresh preview
+    function refreshPreview() {
+      const iframe = document.getElementById('previewIframe');
+      iframe.src = iframe.src.split('?')[0] + '?t=' + Date.now();
+    }
+
+    // Open preview in new window
+    function openPreview() {
+      window.open(PREVIEW_URL + currentPage.url, '_blank');
+    }
+
+    // Viewport switching
+    document.querySelectorAll('.viewport-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.viewport-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const wrap = document.getElementById('previewWrap');
+        wrap.className = 'preview-iframe-wrap ' + btn.dataset.viewport;
+      });
+    });
+
+    // Image handling
+    function selectImage(key) {
+      const url = prompt('Bild-URL eingeben (oder /images/... für lokale Bilder):');
+      if (url) {
+        setValue(currentData, key, url);
+        hasChanges = true;
+        updateSaveStatus();
+        renderEditor();
+      }
+    }
+
+    function removeImage(key) {
+      setValue(currentData, key, '');
+      hasChanges = true;
+      updateSaveStatus();
+      renderEditor();
+    }
+
+    // Navigation clicks
+    document.querySelectorAll('.nav-item[data-view]').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const view = item.dataset.view;
+        const page = item.dataset.page;
+        showView(view, page);
+      });
+    });
+
+    document.querySelectorAll('.quick-action[data-view]').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const view = item.dataset.view;
+        const page = item.dataset.page;
+        showView(view, page);
+      });
+    });
+
+    // Build button
+    document.getElementById('buildBtn').addEventListener('click', async () => {
+      const btn = document.getElementById('buildBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+      try {
+        await fetch(`${API_URL}/build`, { method: 'POST' });
+        showToast('Website neu gebaut!', 'success');
+      } catch (e) {
+        showToast('Fehler beim Bauen', 'error');
+      }
+
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-rotate"></i> Neu bauen';
+    });
+
+    // Load dashboard data
+    async function loadDashboard() {
+      try {
+        const eventsRes = await fetch(`${API_URL}/data/events.json`);
+        const events = await eventsRes.json();
+        const items = events.items || [];
+
+        document.getElementById('statEvents').textContent = items.length;
+        document.getElementById('eventBadge').textContent = items.length;
+
+        const tbody = document.getElementById('eventsBody');
+        if (items.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="3" class="empty-state">Keine Termine</td></tr>';
+        } else {
+          tbody.innerHTML = items.slice(0, 5).map(e => `
+            <tr>
+              <td><strong>${e.title}</strong></td>
+              <td>${new Date(e.date).toLocaleDateString('de-DE')}</td>
+              <td><span class="badge ${e.published ? 'badge-success' : 'badge-warning'}">${e.published ? 'Aktiv' : 'Entwurf'}</span></td>
+            </tr>
+          `).join('');
+        }
+      } catch (e) {
+        console.error(e);
+      }
+
+      try {
+        const imagesRes = await fetch(`${API_URL}/images`);
+        const images = await imagesRes.json();
+        document.getElementById('statImages').textContent = images.length;
+      } catch (e) {
+        document.getElementById('statImages').textContent = '-';
+      }
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        if (currentPage) saveData();
       }
     });
 
-    // Initial preview state
-    document.getElementById('preview-panel').classList.remove('hidden');
-    document.getElementById('cms-panel').classList.add('with-preview');
-    document.getElementById('preview-toggle').classList.add('active');
-    loadPreview();
+    // Warn before leaving with unsaved changes
+    window.addEventListener('beforeunload', (e) => {
+      if (hasChanges) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    });
 
-    // Auto-refresh preview when CMS saves
-    if (window.CMS) {
-      CMS.registerEventListener({
-        name: 'postSave',
-        handler: function() {
-          // Wait for watch.js to rebuild
-          document.getElementById('status').textContent = 'Wird neu gebaut...';
-          document.getElementById('status').classList.remove('online');
-          document.getElementById('status').classList.add('building');
-
-          setTimeout(function() {
-            if (previewVisible) {
-              loadPreview();
-            }
-            document.getElementById('status').textContent = 'Lokal verbunden';
-            document.getElementById('status').classList.remove('building');
-            document.getElementById('status').classList.add('online');
-          }, 2000);
-        }
-      });
-    }
-
-    // Fehler abfangen
-    window.onerror = function(msg, url, line) {
-      console.error('CMS Error:', msg);
-      return false;
-    };
+    // Init
+    loadDashboard();
   </script>
 </body>
 </html>

@@ -66,11 +66,11 @@
         <div class="card-body">
           <div class="form-group">
             <label class="form-label">Website-Titel</label>
-            <input type="text" class="form-input" id="siteTitle" value="Newness of Life International Church">
+            <input type="text" class="form-input" id="siteTitle" value="Newness of Life">
           </div>
           <div class="form-group">
             <label class="form-label">Beschreibung</label>
-            <textarea class="form-textarea" id="siteDescription">Eine lebendige Gemeinde, die Jesus nachfolgt und Menschen in der Liebe Gottes willkommen heißt.</textarea>
+            <textarea class="form-textarea" id="siteDescription"></textarea>
             <p class="form-hint">Wird in Suchmaschinen angezeigt</p>
           </div>
         </div>
@@ -84,19 +84,32 @@
         </div>
         <div class="card-body">
           <div class="form-group">
-            <label class="form-label">Adresse</label>
-            <textarea class="form-textarea" id="address">Newness of Life International Church
-Musterstraße 123
-12345 Musterstadt</textarea>
+            <label class="form-label">E-Mail</label>
+            <input type="email" class="form-input" id="contactEmail" placeholder="newnessoflife@clgi.org">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Telefon (optional)</label>
+            <input type="tel" class="form-input" id="contactPhone" placeholder="+49 ...">
+            <p class="form-hint">Wird nur angezeigt, wenn gesetzt.</p>
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label class="form-label">E-Mail</label>
-              <input type="email" class="form-input" id="email" value="info@nol-church.de">
+              <label class="form-label">Straße / Adresse</label>
+              <input type="text" class="form-input" id="contactAddress" placeholder="Hebbelstr. 56-60">
             </div>
             <div class="form-group">
-              <label class="form-label">Telefon</label>
-              <input type="tel" class="form-input" id="phone" value="">
+              <label class="form-label">PLZ &amp; Stadt</label>
+              <input type="text" class="form-input" id="contactCity" placeholder="55127 Mainz">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Land</label>
+              <input type="text" class="form-input" id="contactCountry" placeholder="Deutschland">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Google Maps URL</label>
+              <input type="url" class="form-input" id="contactMapsUrl" placeholder="https://www.google.com/maps?q=...">
             </div>
           </div>
         </div>
@@ -106,7 +119,7 @@ Musterstraße 123
       <div class="card">
         <div class="card-header">
           <h3 class="card-title">Social Media</h3>
-          <p class="card-desc">Links zu sozialen Netzwerken</p>
+          <p class="card-desc">Links zu euren Profilen (werden nur angezeigt, wenn gesetzt)</p>
         </div>
         <div class="card-body">
           <div class="form-row">
@@ -129,6 +142,10 @@ Musterstraße 123
               <input type="url" class="form-input" id="tiktok" placeholder="https://tiktok.com/...">
             </div>
           </div>
+          <div class="form-group">
+            <label class="form-label">Twitter/X</label>
+            <input type="url" class="form-input" id="twitter" placeholder="https://x.com/...">
+          </div>
         </div>
       </div>
 
@@ -136,7 +153,7 @@ Musterstraße 123
       <div class="card">
         <div class="card-header">
           <h3 class="card-title">Design</h3>
-          <p class="card-desc">Farben und visuelle Einstellungen</p>
+          <p class="card-desc">Theme-Farben (wirken sich direkt auf das Design aus)</p>
         </div>
         <div class="card-body">
           <div class="form-row">
@@ -155,37 +172,47 @@ Musterstraße 123
               </div>
             </div>
           </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Akzentfarbe</label>
+              <div class="color-picker-group">
+                <input type="color" class="color-picker" id="accentColor" value="#F59E0B">
+                <input type="text" class="form-input input-width-120" id="accentColorHex" value="#F59E0B">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Dunkel (Text)</label>
+              <div class="color-picker-group">
+                <input type="color" class="color-picker" id="darkColor" value="#111827">
+                <input type="text" class="form-input input-width-120" id="darkColorHex" value="#111827">
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Hell (Hintergrund)</label>
+              <div class="color-picker-group">
+                <input type="color" class="color-picker" id="lightColor" value="#F9FAFB">
+                <input type="text" class="form-input input-width-120" id="lightColorHex" value="#F9FAFB">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Hinweis</label>
+              <p class="form-hint">Logo / Header / Footer bearbeitest du unter <strong>Seiten → Global</strong>.</p>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Gottesdienst-Zeiten -->
-      <div class="card">
-        <div class="card-header">
-          <h3 class="card-title">Gottesdienst-Zeiten</h3>
-          <p class="card-desc">Regelmäßige Veranstaltungen</p>
-        </div>
-        <div class="card-body">
-          <div class="form-group">
-            <label class="form-label">Sonntagsgottesdienst</label>
-            <input type="text" class="form-input" id="sundayService" value="Sonntag, 10:30 Uhr">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Gebetsstunde</label>
-            <input type="text" class="form-input" id="prayerMeeting" value="Mittwoch, 19:00 Uhr">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Jugend-Bibelstunde</label>
-            <input type="text" class="form-input" id="youthBible" value="Freitag, 19:00 Uhr">
-          </div>
-        </div>
-      </div>
     </div>
   </main>
 
   <div class="toast-container" id="toastContainer"></div>
 
   <script>
-    const API_URL = 'http://localhost:3001/api';
+    const API_URL = new URL('/api', window.location.origin).toString().replace(/\/$/, '');
+    let settingsData = {};
+    let designData = {};
 
     function showToast(message, type = 'info') {
       const container = document.getElementById('toastContainer');
@@ -196,35 +223,74 @@ Musterstraße 123
       setTimeout(() => toast.remove(), 3000);
     }
 
+    function syncColorInputs(colorId, hexId) {
+      const color = document.getElementById(colorId);
+      const hex = document.getElementById(hexId);
+      if (!color || !hex) return;
+      color.addEventListener('input', () => {
+        hex.value = color.value;
+      });
+      hex.addEventListener('input', () => {
+        color.value = hex.value;
+      });
+    }
+
     // Color picker sync
-    document.getElementById('primaryColor').addEventListener('input', (e) => {
-      document.getElementById('primaryColorHex').value = e.target.value;
-    });
-    document.getElementById('primaryColorHex').addEventListener('input', (e) => {
-      document.getElementById('primaryColor').value = e.target.value;
-    });
-    document.getElementById('secondaryColor').addEventListener('input', (e) => {
-      document.getElementById('secondaryColorHex').value = e.target.value;
-    });
-    document.getElementById('secondaryColorHex').addEventListener('input', (e) => {
-      document.getElementById('secondaryColor').value = e.target.value;
-    });
+    syncColorInputs('primaryColor', 'primaryColorHex');
+    syncColorInputs('secondaryColor', 'secondaryColorHex');
+    syncColorInputs('accentColor', 'accentColorHex');
+    syncColorInputs('darkColor', 'darkColorHex');
+    syncColorInputs('lightColor', 'lightColorHex');
 
     // Load settings
     async function loadSettings() {
       try {
-        const res = await fetch(`${API_URL}/data/settings.json`);
-        const settings = await res.json();
+        const [settingsRes, designRes] = await Promise.all([
+          fetch(`${API_URL}/data/settings.json`),
+          fetch(`${API_URL}/data/design.json`)
+        ]);
 
-        if (settings.site_title) document.getElementById('siteTitle').value = settings.site_title;
-        if (settings.site_description) document.getElementById('siteDescription').value = settings.site_description;
-        if (settings.email) document.getElementById('email').value = settings.email;
-        if (settings.phone) document.getElementById('phone').value = settings.phone;
-        if (settings.address) document.getElementById('address').value = settings.address;
-        if (settings.facebook) document.getElementById('facebook').value = settings.facebook;
-        if (settings.instagram) document.getElementById('instagram').value = settings.instagram;
-        if (settings.youtube) document.getElementById('youtube').value = settings.youtube;
-        if (settings.tiktok) document.getElementById('tiktok').value = settings.tiktok;
+        settingsData = settingsRes.ok ? await settingsRes.json() : {};
+        designData = designRes.ok ? await designRes.json() : {};
+
+        document.getElementById('siteTitle').value = settingsData.site_title || '';
+        document.getElementById('siteDescription').value = settingsData.site_description || '';
+
+        const c = settingsData.contact || {};
+        document.getElementById('contactEmail').value = c.email || '';
+        document.getElementById('contactPhone').value = c.phone || '';
+        document.getElementById('contactAddress').value = c.address || '';
+        document.getElementById('contactCity').value = c.city || '';
+        document.getElementById('contactCountry').value = c.country || '';
+        document.getElementById('contactMapsUrl').value = c.maps_url || '';
+
+        const sm = settingsData.social_media || {};
+        document.getElementById('instagram').value = sm.instagram || '';
+        document.getElementById('facebook').value = sm.facebook || '';
+        document.getElementById('youtube').value = sm.youtube || '';
+        document.getElementById('tiktok').value = sm.tiktok || '';
+        document.getElementById('twitter').value = sm.twitter || '';
+
+        const theme = designData.theme || {};
+        const setColor = (id, value) => {
+          const el = document.getElementById(id);
+          if (el) el.value = value;
+        };
+
+        setColor('primaryColor', theme.primary_color || '#2563EB');
+        setColor('primaryColorHex', document.getElementById('primaryColor').value);
+
+        setColor('secondaryColor', theme.secondary_color || '#10B981');
+        setColor('secondaryColorHex', document.getElementById('secondaryColor').value);
+
+        setColor('accentColor', theme.accent_color || '#F59E0B');
+        setColor('accentColorHex', document.getElementById('accentColor').value);
+
+        setColor('darkColor', theme.dark_color || '#111827');
+        setColor('darkColorHex', document.getElementById('darkColor').value);
+
+        setColor('lightColor', theme.light_color || '#F9FAFB');
+        setColor('lightColorHex', document.getElementById('lightColor').value);
       } catch (err) {
         console.log('Could not load settings:', err);
       }
@@ -232,29 +298,48 @@ Musterstraße 123
 
     // Save settings
     async function saveSettings() {
-      const settings = {
-        site_title: document.getElementById('siteTitle').value,
-        site_description: document.getElementById('siteDescription').value,
-        email: document.getElementById('email').value,
-        phone: document.getElementById('phone').value,
-        address: document.getElementById('address').value,
-        facebook: document.getElementById('facebook').value,
-        instagram: document.getElementById('instagram').value,
-        youtube: document.getElementById('youtube').value,
-        tiktok: document.getElementById('tiktok').value,
-        primary_color: document.getElementById('primaryColor').value,
-        secondary_color: document.getElementById('secondaryColor').value,
-        sunday_service: document.getElementById('sundayService').value,
-        prayer_meeting: document.getElementById('prayerMeeting').value,
-        youth_bible: document.getElementById('youthBible').value
-      };
-
       try {
-        await fetch(`${API_URL}/data/settings.json`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(settings)
-        });
+        settingsData.site_title = document.getElementById('siteTitle').value.trim();
+        settingsData.site_description = document.getElementById('siteDescription').value.trim();
+
+        settingsData.contact = settingsData.contact || {};
+        settingsData.contact.email = document.getElementById('contactEmail').value.trim();
+        settingsData.contact.phone = document.getElementById('contactPhone').value.trim();
+        settingsData.contact.address = document.getElementById('contactAddress').value.trim();
+        settingsData.contact.city = document.getElementById('contactCity').value.trim();
+        settingsData.contact.country = document.getElementById('contactCountry').value.trim();
+        settingsData.contact.maps_url = document.getElementById('contactMapsUrl').value.trim();
+
+        settingsData.social_media = settingsData.social_media || {};
+        settingsData.social_media.instagram = document.getElementById('instagram').value.trim();
+        settingsData.social_media.facebook = document.getElementById('facebook').value.trim();
+        settingsData.social_media.youtube = document.getElementById('youtube').value.trim();
+        settingsData.social_media.tiktok = document.getElementById('tiktok').value.trim();
+        settingsData.social_media.twitter = document.getElementById('twitter').value.trim();
+
+        designData.theme = designData.theme || {};
+        designData.theme.primary_color = document.getElementById('primaryColor').value;
+        designData.theme.secondary_color = document.getElementById('secondaryColor').value;
+        designData.theme.accent_color = document.getElementById('accentColor').value;
+        designData.theme.dark_color = document.getElementById('darkColor').value;
+        designData.theme.light_color = document.getElementById('lightColor').value;
+
+        const [settingsSaveRes, designSaveRes] = await Promise.all([
+          fetch(`${API_URL}/data/settings.json`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(settingsData)
+          }),
+          fetch(`${API_URL}/data/design.json`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(designData)
+          })
+        ]);
+
+        if (!settingsSaveRes.ok || !designSaveRes.ok) {
+          throw new Error('Speichern fehlgeschlagen');
+        }
 
         // Trigger build
         await fetch(`${API_URL}/build`, { method: 'POST' });

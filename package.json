@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "description": "Newness of Life - Kirchen-Website mit Admin CMS",
   "scripts": {
+    "test": "node --test",
     "build": "node build.js",
     "watch": "node watch.js",
     "cms": "npx decap-server",
     "serve": "python3 -m http.server 8080",
+    "admin": "node admin-server.js",
     "dev": "echo 'Starte in 3 Terminals: npm run cms | npm run serve | npm run watch'"
   },
   "dependencies": {
