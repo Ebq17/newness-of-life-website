@@ -14,11 +14,11 @@
           <ul class="footer-links">
             <each loop="item in header.navigation">
               <if condition="item.show !== false">
-                <li><a href="{{ item.url }}">{{ item.label }}</a></li>
+                <li><a href="{{ item.url }}" data-i18n="{{ item.i18n_key }}">{{ item.label }}</a></li>
               </if>
             </each>
             <if condition="header.cta_button && header.cta_button.show">
-              <li><a href="{{ header.cta_button.url }}">{{ header.cta_button.text }}</a></li>
+              <li><a href="{{ header.cta_button.url }}" data-i18n="{{ header.cta_button.i18n_key }}">{{ header.cta_button.text }}</a></li>
             </if>
           </ul>
         </div>
@@ -41,7 +41,7 @@
 
       <!-- Column 4: Social Media & Donations -->
       <div class="footer-column">
-        <h3 class="footer-heading">Folge uns</h3>
+        <h3 class="footer-heading" data-i18n="footer.follow_us">Folge uns</h3>
         <div class="footer-social">
           <if condition="settings.social_media.instagram">
             <a href="{{ settings.social_media.instagram }}" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>

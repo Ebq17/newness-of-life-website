@@ -33,18 +33,18 @@
       <ul id="mainnav-pro" class="nav-links-pro">
         <each loop="item in header.navigation">
           <if condition="item.show !== false">
-            <li><a href="{{ item.url }}" class="{{ currentPage === item.url ? 'active' : '' }}">{{ item.label }}</a></li>
+            <li><a href="{{ item.url }}" class="{{ currentPage === item.url ? 'active' : '' }}" data-i18n="{{ item.i18n_key }}">{{ item.label }}</a></li>
           </if>
         </each>
         <if condition="header.cta_button && header.cta_button.show">
-          <li class="show-on-mobile"><a href="{{ header.cta_button.url }}">{{ header.cta_button.text }}</a></li>
+          <li class="show-on-mobile"><a href="{{ header.cta_button.url }}" data-i18n="{{ header.cta_button.i18n_key }}">{{ header.cta_button.text }}</a></li>
         </if>
       </ul>
 
       <div class="header-actions">
         <button id="langToggle" class="lang-toggle" onclick="I18n.toggleLanguage()" title="Switch to English">EN</button>
         <if condition="header.cta_button && header.cta_button.show">
-          <a href="{{ header.cta_button.url }}" class="btn-primary btn-spenden-pro" data-cms-field="header.cta_button.text" data-cms-label="CTA Button" data-i18n="nav.donate">{{ header.cta_button.text }}</a>
+          <a href="{{ header.cta_button.url }}" class="btn-primary btn-spenden-pro" data-cms-field="header.cta_button.text" data-cms-label="CTA Button" data-i18n="{{ header.cta_button.i18n_key }}">{{ header.cta_button.text }}</a>
         </if>
         <button class="menu-toggle-pro" aria-label="Menü öffnen" aria-controls="mainnav-pro" aria-expanded="false">
           <i class="fa-solid fa-bars"></i>

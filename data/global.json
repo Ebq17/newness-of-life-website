@@ -7,16 +7,17 @@
       "subtext": "die Kirche des lebendigen Gottes International e.V."
     },
     "navigation": [
-      { "label": "Startseite", "url": "index.html", "show": true },
-      { "label": "Gottesdienste", "url": "gottesdienste.html", "show": true },
-      { "label": "Über uns", "url": "ueber-uns.html", "show": true },
-      { "label": "Veranstaltungen", "url": "veranstaltungen.html", "show": true },
-      { "label": "Kontakt", "url": "index.html#kontakt", "show": true }
+      { "label": "Startseite", "url": "index.html", "show": true, "i18n_key": "nav.home" },
+      { "label": "Gottesdienste", "url": "gottesdienste.html", "show": true, "i18n_key": "nav.services" },
+      { "label": "Über uns", "url": "ueber-uns.html", "show": true, "i18n_key": "nav.about" },
+      { "label": "Veranstaltungen", "url": "veranstaltungen.html", "show": true, "i18n_key": "nav.events" },
+      { "label": "Kontakt", "url": "index.html#kontakt", "show": true, "i18n_key": "nav.contact" }
     ],
     "cta_button": {
       "text": "Spenden",
       "url": "spenden.html",
-      "show": true
+      "show": true,
+      "i18n_key": "nav.donate"
     },
     "sticky": true
   },
