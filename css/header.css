@@ -112,6 +112,33 @@
     width: 100%;
 }
 
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.lang-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 2px solid var(--color-primary);
+    background: transparent;
+    color: var(--color-primary);
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.lang-toggle:hover {
+    background: var(--color-primary);
+    color: white;
+}
+
 .btn-spenden-pro {
     display: inline-flex;
     align-items: center;

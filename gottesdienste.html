@@ -52,11 +52,14 @@
           <li class="show-on-mobile"><a href="spenden.html">Spenden</a></li>
         </ul>
 
-      
-        <a href="spenden.html" class="btn-primary btn-spenden-pro" data-cms-field="header.cta_button.text" data-cms-label="CTA Button">Spenden</a>
-      <button class="menu-toggle-pro" aria-label="Menü öffnen" aria-controls="mainnav-pro" aria-expanded="false">
-        <i class="fa-solid fa-bars"></i>
-      </button>
+      <div class="header-actions">
+        <button id="langToggle" class="lang-toggle" onclick="I18n.toggleLanguage()" title="Switch to English">EN</button>
+        
+          <a href="spenden.html" class="btn-primary btn-spenden-pro" data-cms-field="header.cta_button.text" data-cms-label="CTA Button" data-i18n="nav.donate">Spenden</a>
+        <button class="menu-toggle-pro" aria-label="Menü öffnen" aria-controls="mainnav-pro" aria-expanded="false">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
     </nav>
   </div>
 </header>
@@ -225,7 +228,7 @@
       <!-- Column 2: Quick Links -->
       
         <div class="footer-column hide-on-mobile">
-          <h3 class="footer-heading">Navigation</h3>
+          <h3 class="footer-heading" data-i18n="footer.quick_links">Navigation</h3>
           <ul class="footer-links">
             
               
@@ -249,13 +252,13 @@
         </div>
       <!-- Column 3: Contact -->
       <div class="footer-column footer-contact-centered">
-        <h3 class="footer-heading">Kontakt</h3>
+        <h3 class="footer-heading" data-i18n="footer.contact">Kontakt</h3>
         <address class="footer-contact">
           <p><i class="fas fa-map-marker-alt"></i> Hebbelstr. 56-60<br>55127 Mainz</p>
           
             <p><i class="fas fa-envelope"></i> <a href="mailto:newnessoflife@clgi.org">newnessoflife@clgi.org</a></p>
           </address>
-        <a href="index.html#kontakt" class="btn-footer-donate">Kontaktformular</a>
+        <a href="index.html#kontakt" class="btn-footer-donate" data-i18n="contact_section.form_title">Kontaktformular</a>
       </div>
 
       <!-- Column 4: Social Media & Donations -->
@@ -264,9 +267,9 @@
         <div class="footer-social">
           </div>
         <div class="footer-donation">
-          <h3 class="footer-heading">Unterstütze uns</h3>
+          <h3 class="footer-heading" data-i18n="footer.donate">Unterstütze uns</h3>
           <p data-cms-field="footer.donation_text" data-cms-label="Spenden Text">Deine Spende hilft uns, einen Unterschied in unserer Stadt zu machen.</p>
-          <a href="spenden.html" class="btn-footer-donate">Jetzt spenden</a>
+          <a href="spenden.html" class="btn-footer-donate" data-i18n="footer.donate_button">Jetzt spenden</a>
         </div>
       </div>
     </div>
@@ -274,14 +277,16 @@
     <div class="footer-bottom">
       <p>&copy; 2026 Newness of Life - Die Kirche des lebendigen Gottes International e.V.. Alle Rechte vorbehalten.</p>
       <nav class="footer-legal-links">
-        <a href="datenschutz.html">Datenschutz</a>
-        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html" data-i18n="footer.privacy">Datenschutz</a>
+        <a href="impressum.html" data-i18n="footer.imprint">Impressum</a>
       </nav>
     </div>
   </div>
 </footer>
 <!-- CMS Preview Script (nur aktiv wenn ?cms-preview=1) -->
 <script src="js/cms-preview.js"></script>
+<!-- Internationalization -->
+<script src="js/i18n.js"></script>
 
   <script src="js/script.js"></script>
 </body>

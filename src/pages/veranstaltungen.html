@@ -482,8 +482,8 @@
             </div>
             <div class="hero-overlay"></div>
             <div class="hero-content">
-                <h1>Termine & Veranstaltungen</h1>
-                <p class="lead">Alle kommenden Termine unserer Gemeinde auf einen Blick.</p>
+                <h1 data-i18n="events_page.title">Termine & Veranstaltungen</h1>
+                <p class="lead" data-i18n="events_page.subtitle">Alle kommenden Termine unserer Gemeinde auf einen Blick.</p>
             </div>
         </section>
 
@@ -491,33 +491,33 @@
         <section class="regular-section">
             <div class="container">
                 <div class="section-header">
-                    <h2>Regelmäßige Termine</h2>
-                    <p>Unsere wöchentlichen Treffen</p>
+                    <h2 data-i18n="events_page.regular">Regelmäßige Termine</h2>
+                    <p data-i18n="events_page.regular_subtitle">Unsere wöchentlichen Treffen</p>
                 </div>
                 <div class="regular-grid">
                     <div class="regular-card">
                         <div class="icon-wrap">
                             <i class="fa-solid fa-church"></i>
                         </div>
-                        <h3>Gottesdienst</h3>
-                        <p class="time">Sonntag, 14:00 Uhr</p>
-                        <p class="desc">Lobpreis, Predigt & Gemeinschaft</p>
+                        <h3 data-i18n="service_cards.service">Gottesdienst</h3>
+                        <p class="time" data-i18n="service_cards.every_sunday_at">Sonntag, 14:00 Uhr</p>
+                        <p class="desc" data-i18n="events_page.worship_praise">Lobpreis, Predigt & Gemeinschaft</p>
                     </div>
                     <div class="regular-card">
                         <div class="icon-wrap">
                             <i class="fa-solid fa-hands-praying"></i>
                         </div>
-                        <h3>Gebetsabend</h3>
-                        <p class="time">Freitag, 19:00 Uhr</p>
-                        <p class="desc">Gemeinsames Gebet & Fürbitte</p>
+                        <h3 data-i18n="service_cards.prayer_evening">Gebetsabend</h3>
+                        <p class="time" data-i18n="service_cards.every_friday_at">Freitag, 19:00 Uhr</p>
+                        <p class="desc" data-i18n="events_page.prayer_desc">Gemeinsames Gebet & Fürbitte</p>
                     </div>
                     <div class="regular-card">
                         <div class="icon-wrap">
                             <i class="fa-solid fa-book-bible"></i>
                         </div>
-                        <h3>Bibelstudium</h3>
-                        <p class="time">Mo & Mi, 19:00 Uhr</p>
-                        <p class="desc">Vertiefendes Bibelstudium</p>
+                        <h3 data-i18n="service_cards.bible_study">Bibelstudium</h3>
+                        <p class="time" data-i18n="service_cards.every_monday_wednesday_at">Mo & Mi, 19:00 Uhr</p>
+                        <p class="desc" data-i18n="events_page.bible_study_desc">Vertiefendes Bibelstudium</p>
                     </div>
                 </div>
             </div>
@@ -527,8 +527,8 @@
         <section class="events-section">
             <div class="container">
                 <div class="section-header">
-                    <h2>Kommende Veranstaltungen</h2>
-                    <p>Besondere Events und Termine</p>
+                    <h2 data-i18n="events_page.upcoming">Kommende Veranstaltungen</h2>
+                    <p data-i18n="events_page.upcoming_subtitle">Besondere Events und Termine</p>
                 </div>
                 <div class="events-grid">
                     <each loop="event in events">
@@ -546,7 +546,7 @@
                                     <p class="meta"><i class="fa-solid fa-clock"></i> {{ event.date_de }}</p>
                                     <p class="meta"><i class="fa-solid fa-location-dot"></i> {{ event.location }}</p>
                                     <button class="btn-calendar" onclick="addToCalendar('{{ event.title }}', '{{ event.date }}', '{{ event.location }}', '{{ event.description }}')">
-                                        <i class="fa-solid fa-calendar-plus"></i> Zum Kalender
+                                        <i class="fa-solid fa-calendar-plus"></i> <span data-i18n="events_page.add_to_calendar">Zum Kalender</span>
                                     </button>
                                 </div>
                             </div>
@@ -567,7 +567,7 @@
                                     <p class="meta"><i class="fa-solid fa-clock"></i> {{ event.date_de }}</p>
                                     <p class="meta"><i class="fa-solid fa-location-dot"></i> {{ event.location }}</p>
                                     <button class="btn-calendar" onclick="addToCalendar('{{ event.title }}', '{{ event.date }}', '{{ event.location }}', '{{ event.description }}')">
-                                        <i class="fa-solid fa-calendar-plus"></i> Zum Kalender
+                                        <i class="fa-solid fa-calendar-plus"></i> <span data-i18n="events_page.add_to_calendar">Zum Kalender</span>
                                     </button>
                                 </div>
                             </div>
@@ -580,9 +580,9 @@
         <!-- CTA -->
         <section class="events-cta">
             <div class="container">
-                <h2>Du bist herzlich willkommen</h2>
-                <p>Egal ob zum ersten Mal oder als regelmäßiger Besucher – wir freuen uns auf dich!</p>
-                <a href="index.html#kontakt" class="btn">Kontakt aufnehmen</a>
+                <h2 data-i18n="events_page.cta_title">Du bist herzlich willkommen</h2>
+                <p data-i18n="events_page.cta_text">Egal ob zum ersten Mal oder als regelmäßiger Besucher – wir freuen uns auf dich!</p>
+                <a href="index.html#kontakt" class="btn" data-i18n="events_page.contact">Kontakt aufnehmen</a>
             </div>
         </section>
 

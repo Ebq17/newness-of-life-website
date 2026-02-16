@@ -502,11 +502,14 @@
           <li class="show-on-mobile"><a href="spenden.html">Spenden</a></li>
         </ul>
 
-      
-        <a href="spenden.html" class="btn-primary btn-spenden-pro" data-cms-field="header.cta_button.text" data-cms-label="CTA Button">Spenden</a>
-      <button class="menu-toggle-pro" aria-label="Menü öffnen" aria-controls="mainnav-pro" aria-expanded="false">
-        <i class="fa-solid fa-bars"></i>
-      </button>
+      <div class="header-actions">
+        <button id="langToggle" class="lang-toggle" onclick="I18n.toggleLanguage()" title="Switch to English">EN</button>
+        
+          <a href="spenden.html" class="btn-primary btn-spenden-pro" data-cms-field="header.cta_button.text" data-cms-label="CTA Button" data-i18n="nav.donate">Spenden</a>
+        <button class="menu-toggle-pro" aria-label="Menü öffnen" aria-controls="mainnav-pro" aria-expanded="false">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
     </nav>
   </div>
 </header>
@@ -523,8 +526,8 @@
             </div>
             <div class="hero-overlay"></div>
             <div class="hero-content">
-                <h1>Termine & Veranstaltungen</h1>
-                <p class="lead">Alle kommenden Termine unserer Gemeinde auf einen Blick.</p>
+                <h1 data-i18n="events_page.title">Termine & Veranstaltungen</h1>
+                <p class="lead" data-i18n="events_page.subtitle">Alle kommenden Termine unserer Gemeinde auf einen Blick.</p>
             </div>
         </section>
 
@@ -532,33 +535,33 @@
         <section class="regular-section">
             <div class="container">
                 <div class="section-header">
-                    <h2>Regelmäßige Termine</h2>
-                    <p>Unsere wöchentlichen Treffen</p>
+                    <h2 data-i18n="events_page.regular">Regelmäßige Termine</h2>
+                    <p data-i18n="events_page.regular_subtitle">Unsere wöchentlichen Treffen</p>
                 </div>
                 <div class="regular-grid">
                     <div class="regular-card">
                         <div class="icon-wrap">
                             <i class="fa-solid fa-church"></i>
                         </div>
-                        <h3>Gottesdienst</h3>
-                        <p class="time">Sonntag, 14:00 Uhr</p>
-                        <p class="desc">Lobpreis, Predigt & Gemeinschaft</p>
+                        <h3 data-i18n="service_cards.service">Gottesdienst</h3>
+                        <p class="time" data-i18n="service_cards.every_sunday_at">Sonntag, 14:00 Uhr</p>
+                        <p class="desc" data-i18n="events_page.worship_praise">Lobpreis, Predigt & Gemeinschaft</p>
                     </div>
                     <div class="regular-card">
                         <div class="icon-wrap">
                             <i class="fa-solid fa-hands-praying"></i>
                         </div>
-                        <h3>Gebetsabend</h3>
-                        <p class="time">Freitag, 19:00 Uhr</p>
-                        <p class="desc">Gemeinsames Gebet & Fürbitte</p>
+                        <h3 data-i18n="service_cards.prayer_evening">Gebetsabend</h3>
+                        <p class="time" data-i18n="service_cards.every_friday_at">Freitag, 19:00 Uhr</p>
+                        <p class="desc" data-i18n="events_page.prayer_desc">Gemeinsames Gebet & Fürbitte</p>
                     </div>
                     <div class="regular-card">
                         <div class="icon-wrap">
                             <i class="fa-solid fa-book-bible"></i>
                         </div>
-                        <h3>Bibelstudium</h3>
-                        <p class="time">Mo & Mi, 19:00 Uhr</p>
-                        <p class="desc">Vertiefendes Bibelstudium</p>
+                        <h3 data-i18n="service_cards.bible_study">Bibelstudium</h3>
+                        <p class="time" data-i18n="service_cards.every_monday_wednesday_at">Mo & Mi, 19:00 Uhr</p>
+                        <p class="desc" data-i18n="events_page.bible_study_desc">Vertiefendes Bibelstudium</p>
                     </div>
                 </div>
             </div>
@@ -568,8 +571,8 @@
         <section class="events-section">
             <div class="container">
                 <div class="section-header">
-                    <h2>Kommende Veranstaltungen</h2>
-                    <p>Besondere Events und Termine</p>
+                    <h2 data-i18n="events_page.upcoming">Kommende Veranstaltungen</h2>
+                    <p data-i18n="events_page.upcoming_subtitle">Besondere Events und Termine</p>
                 </div>
                 <div class="events-grid">
                     
@@ -589,7 +592,7 @@
                                     <p class="meta"><i class="fa-solid fa-clock"></i> Dienstag, 10. Februar 2026 um 19:00 Uhr</p>
                                     <p class="meta"><i class="fa-solid fa-location-dot"></i> In der Gemeinde</p>
                                     <button class="btn-calendar" onclick="addToCalendar('Gebetsabend', '2026-02-10T19:00:00', 'In der Gemeinde', 'Gemeinsamer Gebetsabend. Letzte Woche – sollte noch angezeigt werden.')">
-                                        <i class="fa-solid fa-calendar-plus"></i> Zum Kalender
+                                        <i class="fa-solid fa-calendar-plus"></i> <span data-i18n="events_page.add_to_calendar">Zum Kalender</span>
                                     </button>
                                 </div>
                             </div>
@@ -610,7 +613,7 @@
                                     <p class="meta"><i class="fa-solid fa-clock"></i> Montag, 23. Februar 2026 um 10:00 Uhr</p>
                                     <p class="meta"><i class="fa-solid fa-location-dot"></i> In der Gemeinde</p>
                                     <button class="btn-calendar" onclick="addToCalendar('Sonntagsgottesdienst', '2026-02-23T10:00:00', 'In der Gemeinde', 'Unser wöchentlicher Sonntagsgottesdienst. Alle sind herzlich willkommen!')">
-                                        <i class="fa-solid fa-calendar-plus"></i> Zum Kalender
+                                        <i class="fa-solid fa-calendar-plus"></i> <span data-i18n="events_page.add_to_calendar">Zum Kalender</span>
                                     </button>
                                 </div>
                             </div>
@@ -631,7 +634,7 @@
                                     <p class="meta"><i class="fa-solid fa-clock"></i> Samstag, 28. Februar 2026 um 18:30 Uhr</p>
                                     <p class="meta"><i class="fa-solid fa-location-dot"></i> In der Gemeinde</p>
                                     <button class="btn-calendar" onclick="addToCalendar('Jugendabend', '2026-02-28T18:30:00', 'In der Gemeinde', 'Jugendabend mit Lobpreis, Gemeinschaft und Gottes Wort.')">
-                                        <i class="fa-solid fa-calendar-plus"></i> Zum Kalender
+                                        <i class="fa-solid fa-calendar-plus"></i> <span data-i18n="events_page.add_to_calendar">Zum Kalender</span>
                                     </button>
                                 </div>
                             </div>
@@ -652,7 +655,7 @@
                                     <p class="meta"><i class="fa-solid fa-clock"></i> Sonntag, 8. März 2026 um 09:00 Uhr</p>
                                     <p class="meta"><i class="fa-solid fa-location-dot"></i> In der Gemeinde</p>
                                     <button class="btn-calendar" onclick="addToCalendar('Gemeindefrühstück', '2026-03-08T09:00:00', 'In der Gemeinde', 'Gemeinsames Frühstück vor dem Gottesdienst. Eine wunderbare Gelegenheit für Gemeinschaft!')">
-                                        <i class="fa-solid fa-calendar-plus"></i> Zum Kalender
+                                        <i class="fa-solid fa-calendar-plus"></i> <span data-i18n="events_page.add_to_calendar">Zum Kalender</span>
                                     </button>
                                 </div>
                             </div>
@@ -671,7 +674,7 @@
                                     <p class="meta"><i class="fa-solid fa-clock"></i> Sonntag, 5. April 2026 um 10:00 Uhr</p>
                                     <p class="meta"><i class="fa-solid fa-location-dot"></i> In der Gemeinde</p>
                                     <button class="btn-calendar" onclick="addToCalendar('Oster-Gottesdienst', '2026-04-05T10:00:00', 'In der Gemeinde', 'Festlicher Oster-Gottesdienst zur Feier der Auferstehung Jesu Christi!')">
-                                        <i class="fa-solid fa-calendar-plus"></i> Zum Kalender
+                                        <i class="fa-solid fa-calendar-plus"></i> <span data-i18n="events_page.add_to_calendar">Zum Kalender</span>
                                     </button>
                                 </div>
                             </div>
@@ -683,9 +686,9 @@
         <!-- CTA -->
         <section class="events-cta">
             <div class="container">
-                <h2>Du bist herzlich willkommen</h2>
-                <p>Egal ob zum ersten Mal oder als regelmäßiger Besucher – wir freuen uns auf dich!</p>
-                <a href="index.html#kontakt" class="btn">Kontakt aufnehmen</a>
+                <h2 data-i18n="events_page.cta_title">Du bist herzlich willkommen</h2>
+                <p data-i18n="events_page.cta_text">Egal ob zum ersten Mal oder als regelmäßiger Besucher – wir freuen uns auf dich!</p>
+                <a href="index.html#kontakt" class="btn" data-i18n="events_page.contact">Kontakt aufnehmen</a>
             </div>
         </section>
 
@@ -703,7 +706,7 @@
       <!-- Column 2: Quick Links -->
       
         <div class="footer-column hide-on-mobile">
-          <h3 class="footer-heading">Navigation</h3>
+          <h3 class="footer-heading" data-i18n="footer.quick_links">Navigation</h3>
           <ul class="footer-links">
             
               
@@ -727,13 +730,13 @@
         </div>
       <!-- Column 3: Contact -->
       <div class="footer-column footer-contact-centered">
-        <h3 class="footer-heading">Kontakt</h3>
+        <h3 class="footer-heading" data-i18n="footer.contact">Kontakt</h3>
         <address class="footer-contact">
           <p><i class="fas fa-map-marker-alt"></i> Hebbelstr. 56-60<br>55127 Mainz</p>
           
             <p><i class="fas fa-envelope"></i> <a href="mailto:newnessoflife@clgi.org">newnessoflife@clgi.org</a></p>
           </address>
-        <a href="index.html#kontakt" class="btn-footer-donate">Kontaktformular</a>
+        <a href="index.html#kontakt" class="btn-footer-donate" data-i18n="contact_section.form_title">Kontaktformular</a>
       </div>
 
       <!-- Column 4: Social Media & Donations -->
@@ -742,9 +745,9 @@
         <div class="footer-social">
           </div>
         <div class="footer-donation">
-          <h3 class="footer-heading">Unterstütze uns</h3>
+          <h3 class="footer-heading" data-i18n="footer.donate">Unterstütze uns</h3>
           <p data-cms-field="footer.donation_text" data-cms-label="Spenden Text">Deine Spende hilft uns, einen Unterschied in unserer Stadt zu machen.</p>
-          <a href="spenden.html" class="btn-footer-donate">Jetzt spenden</a>
+          <a href="spenden.html" class="btn-footer-donate" data-i18n="footer.donate_button">Jetzt spenden</a>
         </div>
       </div>
     </div>
@@ -752,14 +755,16 @@
     <div class="footer-bottom">
       <p>&copy; 2026 Newness of Life - Die Kirche des lebendigen Gottes International e.V.. Alle Rechte vorbehalten.</p>
       <nav class="footer-legal-links">
-        <a href="datenschutz.html">Datenschutz</a>
-        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html" data-i18n="footer.privacy">Datenschutz</a>
+        <a href="impressum.html" data-i18n="footer.imprint">Impressum</a>
       </nav>
     </div>
   </div>
 </footer>
 <!-- CMS Preview Script (nur aktiv wenn ?cms-preview=1) -->
 <script src="js/cms-preview.js"></script>
+<!-- Internationalization -->
+<script src="js/i18n.js"></script>
 
     <script src="js/script.js"></script>
     <script>

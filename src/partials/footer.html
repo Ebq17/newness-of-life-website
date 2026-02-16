@@ -10,7 +10,7 @@
       <!-- Column 2: Quick Links -->
       <if condition="footer.show_navigation !== false">
         <div class="footer-column hide-on-mobile">
-          <h3 class="footer-heading">Navigation</h3>
+          <h3 class="footer-heading" data-i18n="footer.quick_links">Navigation</h3>
           <ul class="footer-links">
             <each loop="item in header.navigation">
               <if condition="item.show !== false">
@@ -26,7 +26,7 @@
 
       <!-- Column 3: Contact -->
       <div class="footer-column footer-contact-centered">
-        <h3 class="footer-heading">Kontakt</h3>
+        <h3 class="footer-heading" data-i18n="footer.contact">Kontakt</h3>
         <address class="footer-contact">
           <p><i class="fas fa-map-marker-alt"></i> {{ settings.contact.address || 'Hebbelstr. 56–60' }}<br>{{ settings.contact.city || '55127 Mainz' }}</p>
           <if condition="settings.contact.email">
@@ -36,7 +36,7 @@
             <p><i class="fas fa-phone"></i> <a href="tel:{{ settings.contact.phone }}">{{ settings.contact.phone }}</a></p>
           </if>
         </address>
-        <a href="index.html#kontakt" class="btn-footer-donate">Kontaktformular</a>
+        <a href="index.html#kontakt" class="btn-footer-donate" data-i18n="contact_section.form_title">Kontaktformular</a>
       </div>
 
       <!-- Column 4: Social Media & Donations -->
@@ -60,9 +60,9 @@
           </if>
         </div>
         <div class="footer-donation">
-          <h3 class="footer-heading">Unterstütze uns</h3>
+          <h3 class="footer-heading" data-i18n="footer.donate">Unterstütze uns</h3>
           <p data-cms-field="footer.donation_text" data-cms-label="Spenden Text">{{ footer.donation_text || 'Deine Spende hilft uns, einen Unterschied in unserer Stadt zu machen.' }}</p>
-          <a href="spenden.html" class="btn-footer-donate">Jetzt spenden</a>
+          <a href="spenden.html" class="btn-footer-donate" data-i18n="footer.donate_button">Jetzt spenden</a>
         </div>
       </div>
     </div>
@@ -70,11 +70,13 @@
     <div class="footer-bottom">
       <p>&copy; {{ new Date().getFullYear() }} {{ footer.copyright || settings.footer.copyright_text || 'Newness of Life' }}. Alle Rechte vorbehalten.</p>
       <nav class="footer-legal-links">
-        <a href="datenschutz.html">Datenschutz</a>
-        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html" data-i18n="footer.privacy">Datenschutz</a>
+        <a href="impressum.html" data-i18n="footer.imprint">Impressum</a>
       </nav>
     </div>
   </div>
 </footer>
 <!-- CMS Preview Script (nur aktiv wenn ?cms-preview=1) -->
 <script src="js/cms-preview.js"></script>
+<!-- Internationalization -->
+<script src="js/i18n.js"></script>

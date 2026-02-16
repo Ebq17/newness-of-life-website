@@ -39,7 +39,7 @@
           <h1 id="spenden-hero-title" data-cms-field="hero.title" data-cms-label="Titel">{{ pages.spenden.hero.title || 'Deine Spende bewegt Herzen' }}</h1>
           <p id="spenden-hero-subtitle" class="lead" data-cms-field="hero.subtitle" data-cms-label="Untertitel" data-cms-format="html">{{ pages.spenden.hero.subtitle || 'Mit deiner Unterstützung können wir in Mainz einen Ort der Hoffnung, der Gemeinschaft und des Glaubens gestalten. Jeder Beitrag, ob groß oder klein, macht einen Unterschied.' }}</p>
           <a href="#spenden-optionen" class="btn btn-primary btn-lg">
-            <i class="fa-solid fa-heart"></i> Jetzt spenden
+            <i class="fa-solid fa-heart"></i> <span data-i18n="donate_page.donate_now">Jetzt spenden</span>
           </a>
         </div>
       </div>
@@ -48,22 +48,22 @@
     <!-- IMPACT SECTION -->
     <section class="content-section impact-section" data-cms-section="impact">
         <div class="container">
-            <h2 id="impact-title" data-cms-field="impact.title" data-cms-label="Titel">{{ pages.spenden.impact.title || 'Was deine Spende bewirkt' }}</h2>
+            <h2 id="impact-title" data-cms-field="impact.title" data-cms-label="Titel" data-i18n="donate_page.impact_title">{{ pages.spenden.impact.title || 'Was deine Spende bewirkt' }}</h2>
             <div id="impact-grid" class="impact-grid">
                 <div class="impact-card">
                     <div class="icon"><i class="fa-solid fa-people-group"></i></div>
-                    <h3>Menschen begegnen</h3>
-                    <p>Deine Spende hilft uns, offene Türen für jeden zu haben, der Gemeinschaft und ein offenes Ohr sucht.</p>
+                    <h3 data-i18n="donate_page.impact_meet">Menschen begegnen</h3>
+                    <p data-i18n="donate_page.impact_meet_desc">Deine Spende hilft uns, offene Türen für jeden zu haben, der Gemeinschaft und ein offenes Ohr sucht.</p>
                 </div>
                 <div class="impact-card">
                     <div class="icon"><i class="fa-solid fa-seedling"></i></div>
-                    <h3>Nächste Generation fördern</h3>
-                    <p>Wir investieren in eine liebevolle und sichere Umgebung, in der Kinder und Jugendliche im Glauben wachsen können.</p>
+                    <h3 data-i18n="donate_page.impact_next_gen">Nächste Generation fördern</h3>
+                    <p data-i18n="donate_page.impact_next_gen_desc">Wir investieren in eine liebevolle und sichere Umgebung, in der Kinder und Jugendliche im Glauben wachsen können.</p>
                 </div>
                 <div class="impact-card">
                     <div class="icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
-                    <h3>Praktische Hilfe leisten</h3>
-                    <p>Durch deine Unterstützung können wir Menschen in Notlagen schnell und unbürokratisch zur Seite stehen.</p>
+                    <h3 data-i18n="donate_page.impact_help">Praktische Hilfe leisten</h3>
+                    <p data-i18n="donate_page.impact_help_desc">Durch deine Unterstützung können wir Menschen in Notlagen schnell und unbürokratisch zur Seite stehen.</p>
                 </div>
             </div>
         </div>
@@ -72,7 +72,7 @@
     <!-- SPENDENWEGE -->
     <section id="spenden-optionen" class="content-section donate-options-section" data-cms-section="bank_details">
       <div class="container">
-        <h2>So kannst du uns unterstützen</h2>
+        <h2 data-i18n="donate_page.support_options">So kannst du uns unterstützen</h2>
         <div class="donate-options-grid">
           <!-- Banküberweisung -->
           <div class="donate-option-card">
@@ -81,12 +81,12 @@
               <h3 data-cms-field="bank_details.title" data-cms-label="Titel">{{ pages.spenden.bank_details.title || 'Banküberweisung' }}</h3>
             </div>
             <div class="donate-option-body">
-              <p>Spende direkt auf unser Konto. Für eine Spendenquittung gib bitte deine Adresse im Verwendungszweck an.</p>
+              <p data-i18n="donate_page.bank_transfer_desc">Spende direkt auf unser Konto. Für eine Spendenquittung gib bitte deine Adresse im Verwendungszweck an.</p>
               <ul class="bank-details-list-professional">
-                <li><strong>Empfänger:</strong> <span id="bank-receiver" data-cms-field="bank_details.account_holder" data-cms-label="Kontoinhaber">{{ pages.spenden.bank_details.account_holder || 'Newness of Life e.V.' }}</span></li>
+                <li><strong data-i18n="donate_page.recipient">Empfänger</strong>: <span id="bank-receiver" data-cms-field="bank_details.account_holder" data-cms-label="Kontoinhaber">{{ pages.spenden.bank_details.account_holder || 'Newness of Life e.V.' }}</span></li>
                 <li><strong>IBAN:</strong> <span id="bank-iban" data-cms-field="bank_details.iban" data-cms-label="IBAN">{{ pages.spenden.bank_details.iban || 'folgt' }}</span> <button class="copy-btn" data-copy="#bank-iban"><i class="fa-regular fa-copy"></i></button></li>
                 <li><strong>BIC:</strong> <span id="bank-bic" data-cms-field="bank_details.bic" data-cms-label="BIC">{{ pages.spenden.bank_details.bic || 'folgt' }}</span> <button class="copy-btn" data-copy="#bank-bic"><i class="fa-regular fa-copy"></i></button></li>
-                <li><strong>Bank:</strong> <span id="bank-name" data-cms-field="bank_details.bank_name" data-cms-label="Bank">{{ pages.spenden.bank_details.bank_name || 'folgt' }}</span></li>
+                <li><strong data-i18n="donate_page.bank">Bank</strong>: <span id="bank-name" data-cms-field="bank_details.bank_name" data-cms-label="Bank">{{ pages.spenden.bank_details.bank_name || 'folgt' }}</span></li>
               </ul>
             </div>
           </div>
@@ -98,7 +98,7 @@
               <h3>PayPal</h3>
             </div>
             <div class="donate-option-body">
-              <p>Sicher und schnell online spenden – auch ohne PayPal-Konto möglich.</p>
+              <p data-i18n="donate_page.paypal_desc">Sicher und schnell online spenden – auch ohne PayPal-Konto möglich.</p>
               <form class="paypal-form" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
                 <input type="hidden" name="cmd" value="_donations">
                 <input type="hidden" name="business" value="newnessoflife@clgi.org">
@@ -108,14 +108,14 @@
                   <div class="amount-chip" data-amount="25">25€</div>
                   <div class="amount-chip active" data-amount="50">50€</div>
                   <div class="amount-chip" data-amount="100">100€</div>
-                  <div class="amount-chip" data-amount="">Andere</div>
+                  <div class="amount-chip" data-amount="" data-i18n="donate_page.other_amount">Andere</div>
                 </div>
                 <div class="amount-input-container">
                   <span>€</span>
                   <input type="number" name="amount" value="50" min="1" step="1" required>
                 </div>
                 <button type="submit" class="btn-primary btn-block">
-                  <i class="fa-brands fa-paypal"></i> Mit PayPal spenden
+                  <i class="fa-brands fa-paypal"></i> <span data-i18n="donate_page.donate_with_paypal">Mit PayPal spenden</span>
                 </button>
               </form>
             </div>

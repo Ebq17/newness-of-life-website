@@ -41,12 +41,15 @@
         </if>
       </ul>
 
-      <if condition="header.cta_button && header.cta_button.show">
-        <a href="{{ header.cta_button.url }}" class="btn-primary btn-spenden-pro" data-cms-field="header.cta_button.text" data-cms-label="CTA Button">{{ header.cta_button.text }}</a>
-      </if>
-      <button class="menu-toggle-pro" aria-label="Menü öffnen" aria-controls="mainnav-pro" aria-expanded="false">
-        <i class="fa-solid fa-bars"></i>
-      </button>
+      <div class="header-actions">
+        <button id="langToggle" class="lang-toggle" onclick="I18n.toggleLanguage()" title="Switch to English">EN</button>
+        <if condition="header.cta_button && header.cta_button.show">
+          <a href="{{ header.cta_button.url }}" class="btn-primary btn-spenden-pro" data-cms-field="header.cta_button.text" data-cms-label="CTA Button" data-i18n="nav.donate">{{ header.cta_button.text }}</a>
+        </if>
+        <button class="menu-toggle-pro" aria-label="Menü öffnen" aria-controls="mainnav-pro" aria-expanded="false">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
     </nav>
   </div>
 </header>

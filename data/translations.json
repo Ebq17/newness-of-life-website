@@ -1,0 +1,286 @@
+{
+  "de": {
+    "lang": "de",
+    "lang_name": "Deutsch",
+    "nav": {
+      "home": "Startseite",
+      "services": "Gottesdienste",
+      "about": "Über uns",
+      "events": "Veranstaltungen",
+      "contact": "Kontakt",
+      "donate": "Spenden"
+    },
+    "hero": {
+      "title": "Willkommen in unserer Gemeinde",
+      "subtitle": "Ein Ort des Glaubens, der Gemeinschaft und der Hoffnung. Entdecke, wer wir sind und was uns bewegt.",
+      "cta": "Mehr erfahren"
+    },
+    "services_section": {
+      "title": "Unsere regelmäßigen Treffen",
+      "subtitle": "Gemeinsam wachsen wir im Glauben",
+      "main_title": "Gottesdienste",
+      "description": "Erlebe lebendigen Lobpreis, inspirierende Predigten und herzliche Gemeinschaft. Unsere Gottesdienste sind ein Ort, an dem du Gott begegnen und im Glauben wachsen kannst.",
+      "all_services": "Alle Gottesdienste",
+      "our_service": "Unser Gottesdienst",
+      "every_sunday": "Jeden Sonntag",
+      "at": "um",
+      "kids_program": "Kinderprogramm während der Predigt"
+    },
+    "service_cards": {
+      "fellowship": "Gemeinschaft",
+      "prayer": "Gebet",
+      "education": "Bildung",
+      "service": "Gottesdienst",
+      "prayer_evening": "Gebetsabend",
+      "bible_study": "Bibelstudium",
+      "every_sunday_at": "Jeden Sonntag um",
+      "every_friday_at": "Jeden Freitag um",
+      "every_monday_wednesday_at": "Jeden Montag & Mittwoch um",
+      "learn_more": "Mehr erfahren"
+    },
+    "about_section": {
+      "title": "Über uns",
+      "subtitle": "Unsere Vision & Mission",
+      "learn_more": "Mehr erfahren"
+    },
+    "contact_section": {
+      "title": "Kontakt",
+      "form_title": "Schreiben Sie uns",
+      "address_title": "Adresse & Anfahrt",
+      "name": "Ihr Name",
+      "email": "Ihre E-Mail",
+      "message": "Ihre Nachricht",
+      "send": "Senden"
+    },
+    "events_page": {
+      "title": "Termine & Veranstaltungen",
+      "subtitle": "Alle kommenden Termine unserer Gemeinde auf einen Blick.",
+      "upcoming": "Kommende Veranstaltungen",
+      "upcoming_subtitle": "Besondere Events und Termine",
+      "regular": "Regelmäßige Termine",
+      "regular_subtitle": "Unsere wöchentlichen Treffen",
+      "no_events": "Keine aktuellen Veranstaltungen",
+      "add_to_calendar": "Zum Kalender",
+      "featured": "Featured",
+      "past": "Vergangen",
+      "cta_title": "Du bist herzlich willkommen",
+      "cta_text": "Egal ob zum ersten Mal oder als regelmäßiger Besucher – wir freuen uns auf dich!",
+      "contact": "Kontakt aufnehmen",
+      "worship_praise": "Lobpreis, Predigt & Gemeinschaft",
+      "prayer_desc": "Gemeinsames Gebet & Fürbitte",
+      "bible_study_desc": "Vertiefendes Bibelstudium"
+    },
+    "donate_page": {
+      "title": "Deine Spende bewegt Herzen",
+      "subtitle": "Mit deiner Unterstützung können wir in Mainz einen Ort der Hoffnung, der Gemeinschaft und des Glaubens gestalten.",
+      "why_donate": "Warum Spenden?",
+      "bank_details": "Bankverbindung",
+      "online_donation": "Online Spenden",
+      "faq": "Häufige Fragen",
+      "donate_now": "Jetzt spenden",
+      "impact_title": "Was deine Spende bewirkt",
+      "support_options": "So kannst du uns unterstützen",
+      "bank_transfer": "Banküberweisung",
+      "bank_transfer_desc": "Spende direkt auf unser Konto. Für eine Spendenquittung gib bitte deine Adresse im Verwendungszweck an.",
+      "recipient": "Empfänger",
+      "bank": "Bank",
+      "paypal_desc": "Sicher und schnell online spenden – auch ohne PayPal-Konto möglich.",
+      "donate_with_paypal": "Mit PayPal spenden",
+      "other_amount": "Andere",
+      "impact_meet": "Menschen begegnen",
+      "impact_meet_desc": "Deine Spende hilft uns, offene Türen für jeden zu haben, der Gemeinschaft und ein offenes Ohr sucht.",
+      "impact_next_gen": "Nächste Generation fördern",
+      "impact_next_gen_desc": "Wir investieren in eine liebevolle und sichere Umgebung, in der Kinder und Jugendliche im Glauben wachsen können.",
+      "impact_help": "Praktische Hilfe leisten",
+      "impact_help_desc": "Durch deine Unterstützung können wir Menschen in Notlagen schnell und unbürokratisch zur Seite stehen."
+    },
+    "about_page": {
+      "title": "Über uns",
+      "subtitle": "Lerne unsere Gemeinde kennen",
+      "welcome_title": "Willkommen bei Newness of Life",
+      "welcome_subtitle": "Ein Ort des Glaubens, der Hoffnung und der Erneuerung",
+      "history_title": "Unsere Geschichte",
+      "vision_title": "Unsere Vision & Mission",
+      "beliefs_title": "Was wir glauben"
+    },
+    "services_page": {
+      "title": "Gottesdienste",
+      "subtitle": "Erlebe Gottes Gegenwart in unserer Mitte",
+      "what_to_expect": "Was dich erwartet",
+      "main_service": "Hauptgottesdienst",
+      "other_meetings": "Weitere Treffen",
+      "directions": "Anfahrt",
+      "cta_title": "Komm, wie du bist",
+      "cta_text": "Ganz egal, wo du im Leben stehst, du bist bei uns herzlich willkommen. Wir freuen uns darauf, dich kennenzulernen."
+    },
+    "donate_page": {
+      "title": "Deine Spende bewegt Herzen",
+      "subtitle": "Mit deiner Unterstützung können wir in Mainz einen Ort der Hoffnung, der Gemeinschaft und des Glaubens gestalten.",
+      "why_donate": "Warum Spenden?",
+      "bank_details": "Bankverbindung",
+      "online_donation": "Online Spenden",
+      "faq": "Häufige Fragen"
+    },
+    "footer": {
+      "about": "Über uns",
+      "quick_links": "Navigation",
+      "contact": "Kontakt",
+      "follow_us": "Folge uns",
+      "donate": "Unterstütze uns",
+      "donate_text": "Deine Spende hilft uns, einen Unterschied in unserer Stadt zu machen.",
+      "donate_button": "Jetzt spenden",
+      "privacy": "Datenschutz",
+      "imprint": "Impressum",
+      "copyright": "Alle Rechte vorbehalten"
+    },
+    "common": {
+      "read_more": "Mehr lesen",
+      "back": "Zurück",
+      "loading": "Laden...",
+      "error": "Fehler",
+      "success": "Erfolgreich"
+    }
+  },
+  "en": {
+    "lang": "en",
+    "lang_name": "English",
+    "nav": {
+      "home": "Home",
+      "services": "Services",
+      "about": "About Us",
+      "events": "Events",
+      "contact": "Contact",
+      "donate": "Donate"
+    },
+    "hero": {
+      "title": "Welcome to Our Church",
+      "subtitle": "A place of faith, community, and hope. Discover who we are and what moves us.",
+      "cta": "Learn More"
+    },
+    "services_section": {
+      "title": "Our Regular Meetings",
+      "subtitle": "Together we grow in faith",
+      "main_title": "Church Services",
+      "description": "Experience vibrant worship, inspiring sermons, and warm fellowship. Our services are a place where you can encounter God and grow in faith.",
+      "all_services": "All Services",
+      "our_service": "Our Service",
+      "every_sunday": "Every Sunday",
+      "at": "at",
+      "kids_program": "Kids program during the sermon"
+    },
+    "service_cards": {
+      "fellowship": "Fellowship",
+      "prayer": "Prayer",
+      "education": "Education",
+      "service": "Church Service",
+      "prayer_evening": "Prayer Evening",
+      "bible_study": "Bible Study",
+      "every_sunday_at": "Every Sunday at",
+      "every_friday_at": "Every Friday at",
+      "every_monday_wednesday_at": "Every Monday & Wednesday at",
+      "learn_more": "Learn More"
+    },
+    "about_section": {
+      "title": "About Us",
+      "subtitle": "Our Vision & Mission",
+      "learn_more": "Learn More"
+    },
+    "contact_section": {
+      "title": "Contact",
+      "form_title": "Write to Us",
+      "address_title": "Address & Directions",
+      "name": "Your Name",
+      "email": "Your Email",
+      "message": "Your Message",
+      "send": "Send"
+    },
+    "events_page": {
+      "title": "Events & Dates",
+      "subtitle": "All upcoming events at a glance.",
+      "upcoming": "Upcoming Events",
+      "upcoming_subtitle": "Special events and dates",
+      "regular": "Regular Meetings",
+      "regular_subtitle": "Our weekly gatherings",
+      "no_events": "No current events",
+      "add_to_calendar": "Add to Calendar",
+      "featured": "Featured",
+      "past": "Past",
+      "cta_title": "You are warmly welcome",
+      "cta_text": "Whether it's your first time or you're a regular visitor – we look forward to seeing you!",
+      "contact": "Get in touch",
+      "worship_praise": "Worship, preaching & fellowship",
+      "prayer_desc": "Joint prayer & intercession",
+      "bible_study_desc": "In-depth Bible study"
+    },
+    "donate_page": {
+      "title": "Your Donation Moves Hearts",
+      "subtitle": "With your support, we can create a place of hope, community, and faith in Mainz.",
+      "why_donate": "Why Donate?",
+      "bank_details": "Bank Details",
+      "online_donation": "Online Donation",
+      "faq": "Frequently Asked Questions",
+      "donate_now": "Donate Now",
+      "impact_title": "What your donation achieves",
+      "support_options": "Ways to support us",
+      "bank_transfer": "Bank Transfer",
+      "bank_transfer_desc": "Donate directly to our account. For a donation receipt, please include your address in the reference.",
+      "recipient": "Recipient",
+      "bank": "Bank",
+      "paypal_desc": "Donate securely and quickly online – even without a PayPal account.",
+      "donate_with_paypal": "Donate with PayPal",
+      "other_amount": "Other",
+      "impact_meet": "Connect with people",
+      "impact_meet_desc": "Your donation helps us keep our doors open for everyone seeking community and a listening ear.",
+      "impact_next_gen": "Support the next generation",
+      "impact_next_gen_desc": "We invest in a loving and safe environment where children and young people can grow in faith.",
+      "impact_help": "Provide practical help",
+      "impact_help_desc": "With your support, we can quickly and unbureaucratically assist people in difficult situations."
+    },
+    "about_page": {
+      "title": "About Us",
+      "subtitle": "Get to know our church",
+      "welcome_title": "Welcome to Newness of Life",
+      "welcome_subtitle": "A place of faith, hope, and renewal",
+      "history_title": "Our History",
+      "vision_title": "Our Vision & Mission",
+      "beliefs_title": "What We Believe"
+    },
+    "services_page": {
+      "title": "Church Services",
+      "subtitle": "Experience God's presence among us",
+      "what_to_expect": "What to Expect",
+      "main_service": "Main Service",
+      "other_meetings": "Other Meetings",
+      "directions": "Directions",
+      "cta_title": "Come as You Are",
+      "cta_text": "No matter where you are in life, you are warmly welcome. We look forward to meeting you."
+    },
+    "donate_page": {
+      "title": "Your Donation Moves Hearts",
+      "subtitle": "With your support, we can create a place of hope, community, and faith in Mainz.",
+      "why_donate": "Why Donate?",
+      "bank_details": "Bank Details",
+      "online_donation": "Online Donation",
+      "faq": "Frequently Asked Questions"
+    },
+    "footer": {
+      "about": "About Us",
+      "quick_links": "Navigation",
+      "contact": "Contact",
+      "follow_us": "Follow Us",
+      "donate": "Support Us",
+      "donate_text": "Your donation helps us make a difference in our city.",
+      "donate_button": "Donate Now",
+      "privacy": "Privacy Policy",
+      "imprint": "Imprint",
+      "copyright": "All rights reserved"
+    },
+    "common": {
+      "read_more": "Read More",
+      "back": "Back",
+      "loading": "Loading...",
+      "error": "Error",
+      "success": "Success"
+    }
+  }
+}
