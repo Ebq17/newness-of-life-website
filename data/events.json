@@ -1,60 +1,140 @@
 {
   "categories": [
-    { "id": "alle", "name": "Alle Termine", "color": "#2563EB", "icon": "fa-calendar" },
-    { "id": "gottesdienst", "name": "Gottesdienst", "color": "#10B981", "icon": "fa-church" },
-    { "id": "jugend", "name": "Jugend", "color": "#8B5CF6", "icon": "fa-users" },
-    { "id": "special", "name": "Special Event", "color": "#F59E0B", "icon": "fa-star" },
-    { "id": "gebet", "name": "Gebet", "color": "#10B981", "icon": "fa-pray" },
-    { "id": "gemeinschaft", "name": "Gemeinschaft", "color": "#F97316", "icon": "fa-heart" }
+    {
+      "id": "alle",
+      "name": "Alle Termine",
+      "color": "#2563EB",
+      "icon": "fa-calendar"
+    },
+    {
+      "id": "gottesdienst",
+      "name": "Gottesdienst",
+      "color": "#10B981",
+      "icon": "fa-church"
+    },
+    {
+      "id": "jugend",
+      "name": "Jugend",
+      "color": "#8B5CF6",
+      "icon": "fa-users"
+    },
+    {
+      "id": "special",
+      "name": "Special Event",
+      "color": "#F59E0B",
+      "icon": "fa-star"
+    },
+    {
+      "id": "gebet",
+      "name": "Gebet",
+      "color": "#10B981",
+      "icon": "fa-pray"
+    },
+    {
+      "id": "gemeinschaft",
+      "name": "Gemeinschaft",
+      "color": "#F97316",
+      "icon": "fa-heart"
+    }
   ],
   "items": [
     {
       "id": "1",
-      "title": "Church Family Breakfast",
-      "date": "2025-11-08T09:00:00",
+      "title": "Sonntagsgottesdienst",
+      "date": "2026-02-23T10:00:00",
       "location": "In der Gemeinde",
-      "description": "Gemeinsames Frühstück vor dem Gottesdienst. Eine wunderbare Gelegenheit für Gemeinschaft!",
+      "category": "gottesdienst",
       "image": "",
-      "category": "gemeinschaft",
-      "flyerLayout": false,
+      "icon": "fa-church",
+      "color": "#10B981",
+      "description": "Unser wöchentlicher Sonntagsgottesdienst. Alle sind herzlich willkommen!",
       "featured": false,
-      "published": true
+      "published": true,
+      "flyerLayout": false
     },
     {
       "id": "2",
-      "title": "Worship Night – Youth & Young Adults",
-      "date": "2025-11-23T19:00:00",
+      "title": "Jugendabend",
+      "date": "2026-02-28T18:30:00",
       "location": "In der Gemeinde",
-      "description": "Ein Abend voller Lobpreis für Jugendliche und junge Erwachsene.",
-      "image": "",
       "category": "jugend",
-      "flyerLayout": false,
-      "featured": true,
-      "published": true
+      "image": "",
+      "icon": "fa-users",
+      "color": "#8B5CF6",
+      "description": "Jugendabend mit Lobpreis, Gemeinschaft und Gottes Wort.",
+      "featured": false,
+      "published": true,
+      "flyerLayout": false
     },
     {
       "id": "3",
-      "title": "Christmas Celebration Dinner",
-      "date": "2025-12-20T17:00:00",
+      "title": "Gebetsabend",
+      "date": "2026-02-10T19:00:00",
       "location": "In der Gemeinde",
-      "description": "Festliches Weihnachtsessen mit der ganzen Gemeinde. Ein besonderer Abend voller Freude und Gemeinschaft.",
-      "image": "/images/christmas-dinner-bg.jpg",
-      "category": "special",
-      "flyerLayout": true,
-      "featured": true,
-      "published": true
+      "category": "gebet",
+      "image": "",
+      "icon": "fa-pray",
+      "color": "#10B981",
+      "description": "Gemeinsamer Gebetsabend. Letzte Woche – sollte noch angezeigt werden.",
+      "featured": false,
+      "published": true,
+      "flyerLayout": false
     },
     {
       "id": "4",
-      "title": "From Glory to Glory 2026",
-      "date": "2025-12-31T20:00:00",
+      "title": "Oster-Gottesdienst",
+      "date": "2026-04-05T10:00:00",
       "location": "In der Gemeinde",
-      "description": "Silvester-Gottesdienst zum Jahreswechsel. Gemeinsam das neue Jahr mit Gott beginnen!",
-      "image": "/images/new-year-bg.jpg",
       "category": "special",
-      "flyerLayout": true,
+      "image": "/images/bible.und.hand.hoch.jpg",
+      "icon": "fa-star",
+      "color": "#F59E0B",
+      "description": "Festlicher Oster-Gottesdienst zur Feier der Auferstehung Jesu Christi!",
       "featured": true,
-      "published": true
+      "published": true,
+      "flyerLayout": true
+    },
+    {
+      "id": "5",
+      "title": "Gemeindefrühstück",
+      "date": "2026-03-08T09:00:00",
+      "location": "In der Gemeinde",
+      "category": "gemeinschaft",
+      "image": "",
+      "icon": "fa-heart",
+      "color": "#F97316",
+      "description": "Gemeinsames Frühstück vor dem Gottesdienst. Eine wunderbare Gelegenheit für Gemeinschaft!",
+      "featured": false,
+      "published": true,
+      "flyerLayout": false
+    },
+    {
+      "id": "6",
+      "title": "NICHT VERÖFFENTLICHT - Test",
+      "date": "2026-03-15T19:00:00",
+      "location": "Test",
+      "category": "special",
+      "image": "",
+      "icon": "fa-star",
+      "color": "#f59e0b",
+      "description": "Dies ist ein unveröffentlichtes Event - sollte NICHT auf der Website erscheinen!",
+      "featured": false,
+      "published": false,
+      "flyerLayout": true
+    },
+    {
+      "id": "7",
+      "title": "Altes Event - Test",
+      "date": "2025-12-01T10:00:00",
+      "location": "Test",
+      "category": "gottesdienst",
+      "image": "",
+      "icon": "fa-church",
+      "color": "#10B981",
+      "description": "Dies ist ein altes Event (älter als 2 Wochen) - sollte NICHT auf der Website erscheinen!",
+      "featured": false,
+      "published": true,
+      "flyerLayout": false
     }
   ]
 }

@@ -287,6 +287,40 @@
             text-align: center;
         }
 
+        .btn-calendar {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
+            padding: 10px 18px;
+            background: #2563EB;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-calendar:hover {
+            background: #1D4ED8;
+            transform: translateY(-2px);
+        }
+
+        .btn-calendar i {
+            font-size: 1rem;
+        }
+
+        .event-card.flyer-card .btn-calendar {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
+        }
+
+        .event-card.flyer-card .btn-calendar:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
         /* ========================================
            FLYER CARD - Event mit Hintergrundbild
            ======================================== */
@@ -497,71 +531,48 @@
                     <p>Besondere Events und Termine</p>
                 </div>
                 <div class="events-grid">
-
-                    <!-- Standard Card -->
-                    <div class="event-card">
-                        <div class="card-header">
-                            <i class="fa-solid fa-mug-hot event-icon"></i>
-                            <div class="date-badge">
-                                <span class="day">8</span>
-                                <span class="month">Nov</span>
+                    <each loop="event in events">
+                        <if condition="event.flyerLayout && event.image">
+                            <!-- FLYER CARD - mit Hintergrundbild -->
+                            <div class="event-card flyer-card" style="background-image: url('{{ event.image }}');">
+                                <div class="flyer-overlay"></div>
+                                <div class="date-badge">
+                                    <span class="day">{{ event.day }}</span>
+                                    <span class="month">{{ event.monthShort }}</span>
+                                </div>
+                                <div class="card-body">
+                                    <span class="tag">{{ event.category_name }}</span>
+                                    <h3>{{ event.title }}</h3>
+                                    <p class="meta"><i class="fa-solid fa-clock"></i> {{ event.date_de }}</p>
+                                    <p class="meta"><i class="fa-solid fa-location-dot"></i> {{ event.location }}</p>
+                                    <button class="btn-calendar" onclick="addToCalendar('{{ event.title }}', '{{ event.date }}', '{{ event.location }}', '{{ event.description }}')">
+                                        <i class="fa-solid fa-calendar-plus"></i> Zum Kalender
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                        <div class="card-body">
-                            <span class="tag">Gemeinschaft</span>
-                            <h3>Church Family Breakfast</h3>
-                            <p class="meta"><i class="fa-solid fa-clock"></i> Samstag, 8. Nov 2025 · 09:00 Uhr</p>
-                            <p class="meta"><i class="fa-solid fa-location-dot"></i> In der Gemeinde</p>
-                        </div>
-                    </div>
-
-                    <!-- Standard Card -->
-                    <div class="event-card">
-                        <div class="card-header">
-                            <i class="fa-solid fa-music event-icon"></i>
-                            <div class="date-badge">
-                                <span class="day">23</span>
-                                <span class="month">Nov</span>
+                        </if>
+                        <if condition="!(event.flyerLayout && event.image)">
+                            <!-- Standard Card -->
+                            <div class="event-card">
+                                <div class="card-header" style="background: linear-gradient(135deg, {{ event.category_color }}cc 0%, {{ event.category_color }} 100%);">
+                                    <i class="fa-solid {{ event.category_icon }} event-icon"></i>
+                                    <div class="date-badge">
+                                        <span class="day">{{ event.day }}</span>
+                                        <span class="month">{{ event.monthShort }}</span>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <span class="tag" style="background: {{ event.category_color }}22; color: {{ event.category_color }};">{{ event.category_name }}</span>
+                                    <h3>{{ event.title }}</h3>
+                                    <p class="meta"><i class="fa-solid fa-clock"></i> {{ event.date_de }}</p>
+                                    <p class="meta"><i class="fa-solid fa-location-dot"></i> {{ event.location }}</p>
+                                    <button class="btn-calendar" onclick="addToCalendar('{{ event.title }}', '{{ event.date }}', '{{ event.location }}', '{{ event.description }}')">
+                                        <i class="fa-solid fa-calendar-plus"></i> Zum Kalender
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                        <div class="card-body">
-                            <span class="tag">Jugend</span>
-                            <h3>Worship Night – Youth & Young Adults</h3>
-                            <p class="meta"><i class="fa-solid fa-clock"></i> Sonntag, 23. Nov 2025 · 19:00 Uhr</p>
-                            <p class="meta"><i class="fa-solid fa-location-dot"></i> In der Gemeinde</p>
-                        </div>
-                    </div>
-
-                    <!-- FLYER CARD - mit Hintergrundbild -->
-                    <div class="event-card flyer-card" style="background-image: url('images/christmas-dinner-bg.jpg');">
-                        <div class="flyer-overlay"></div>
-                        <div class="date-badge">
-                            <span class="day">20</span>
-                            <span class="month">Dez</span>
-                        </div>
-                        <div class="card-body">
-                            <span class="tag">Special Event</span>
-                            <h3>Christmas Celebration Dinner</h3>
-                            <p class="meta"><i class="fa-solid fa-clock"></i> Samstag, 20. Dez 2025 · 17:00 Uhr</p>
-                            <p class="meta"><i class="fa-solid fa-location-dot"></i> In der Gemeinde</p>
-                        </div>
-                    </div>
-
-                    <!-- FLYER CARD - mit Hintergrundbild -->
-                    <div class="event-card flyer-card" style="background-image: url('images/new-year-bg.jpg');">
-                        <div class="flyer-overlay"></div>
-                        <div class="date-badge">
-                            <span class="day">31</span>
-                            <span class="month">Dez</span>
-                        </div>
-                        <div class="card-body">
-                            <span class="tag">Special Event</span>
-                            <h3>From Glory to Glory 2026</h3>
-                            <p class="meta"><i class="fa-solid fa-clock"></i> Mittwoch, 31. Dez 2025 · 20:00 Uhr</p>
-                            <p class="meta"><i class="fa-solid fa-location-dot"></i> In der Gemeinde</p>
-                        </div>
-                    </div>
-
+                        </if>
+                    </each>
                 </div>
             </div>
         </section>
@@ -579,5 +590,44 @@
 
     <include src="partials/footer.html"></include>
     <script src="js/script.js"></script>
+    <script>
+        // Add to Calendar function - generates .ics file
+        function addToCalendar(title, dateStr, location, description) {
+            const date = new Date(dateStr);
+            const endDate = new Date(date.getTime() + 2 * 60 * 60 * 1000); // +2 hours
+
+            // Format dates for iCal (YYYYMMDDTHHmmss)
+            const formatDate = (d) => {
+                return d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+            };
+
+            const icsContent = [
+                'BEGIN:VCALENDAR',
+                'VERSION:2.0',
+                'PRODID:-//Newness of Life//Event//DE',
+                'CALSCALE:GREGORIAN',
+                'METHOD:PUBLISH',
+                'BEGIN:VEVENT',
+                `DTSTART:${formatDate(date)}`,
+                `DTEND:${formatDate(endDate)}`,
+                `SUMMARY:${title}`,
+                `LOCATION:${location || 'Hebbelstr. 56-60, 55127 Mainz'}`,
+                `DESCRIPTION:${(description || '').replace(/\n/g, '\\n')}`,
+                'STATUS:CONFIRMED',
+                `UID:${Date.now()}@newnessoflife.de`,
+                'END:VEVENT',
+                'END:VCALENDAR'
+            ].join('\r\n');
+
+            // Create download
+            const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${title.replace(/[^a-zA-Z0-9]/g, '_')}.ics`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
 </body>
 </html>

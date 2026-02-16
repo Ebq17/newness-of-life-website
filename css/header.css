@@ -30,28 +30,65 @@
 }
 
 .logo-img-pro {
-    height: 90px; /* This was the last size requested */
-    margin-right: 15px;
+    height: 50px;
+    margin-right: 10px;
 }
 
 .logo-text-pro {
-    font-size: 1.5rem;
+    font-size: 1rem;
     font-weight: 700;
+    line-height: 1.2;
+}
+
+/* Tablet und Desktop Logo größer */
+@media (min-width: 768px) {
+    .logo-img-pro {
+        height: 70px;
+        margin-right: 12px;
+    }
+    .logo-text-pro {
+        font-size: 1.25rem;
+    }
+}
+
+@media (min-width: 1100px) {
+    .logo-img-pro {
+        height: 80px;
+        margin-right: 15px;
+    }
+    .logo-text-pro {
+        font-size: 1.5rem;
+    }
 }
 
 .site-header-pro .nav-links-pro {
     display: flex;
-    gap: 30px;
+    gap: 20px;
     list-style: none;
+}
+
+/* Größere Abstände auf großen Bildschirmen */
+@media (min-width: 1400px) {
+    .site-header-pro .nav-links-pro {
+        gap: 30px;
+    }
 }
 
 .site-header-pro .nav-links-pro a {
     text-decoration: none;
     color: var(--color-dark);
     font-weight: 600;
+    font-size: 0.9rem;
     padding: 10px 0;
     position: relative;
     transition: color .3s ease;
+    white-space: nowrap;
+}
+
+@media (min-width: 1400px) {
+    .site-header-pro .nav-links-pro a {
+        font-size: 1rem;
+    }
 }
 
 .site-header-pro .nav-links-pro a::after {
@@ -93,53 +130,85 @@
     cursor: pointer;
 }
 
-@media (max-width: 1100px) {
-    .site-header-pro .nav-links-pro {
-        position: fixed;
-        /* Use a CSS variable for the header height, with a fallback */
-        inset: var(--header-height, 80px) 0 0 0;
-        background-color: var(--color-white);
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 2rem;
-        padding: 2rem;
-        
-        /* Hide off-screen to the right and prepare for transition */
-        transform: translateX(100%);
-        transition: transform 0.3s ease-in-out;
-        
-        /* Ensure it's on top of other page content */
-        z-index: 1001;
+@media (max-width: 1200px) {
+    .main-nav-pro {
+        height: 64px;
     }
 
-    /* This class is toggled by JS to show the menu */
+    .site-header-pro .nav-links-pro {
+        position: fixed;
+        inset: 64px 0 0 0;
+        background: linear-gradient(180deg, var(--color-white) 0%, #f8fafc 100%);
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0;
+        padding: 24px 20px;
+
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in-out;
+        z-index: 1001;
+        overflow-y: auto;
+    }
+
     .site-header-pro .nav-links-pro.is-open {
         transform: translateX(0);
     }
-    
-    /* Adjust link styles for the mobile overlay view */
-    .site-header-pro .nav-links-pro a {
-        color: var(--color-dark);
-        font-size: 1.5rem;
+
+    .site-header-pro .nav-links-pro li {
+        width: 100%;
+        border-bottom: 1px solid rgba(0,0,0,0.06);
     }
-    
-    /* Hide the desktop underline effect on mobile */
+
+    .site-header-pro .nav-links-pro a {
+        display: block;
+        color: var(--color-dark);
+        font-size: 1.1rem;
+        padding: 16px 0;
+        text-align: center;
+        transition: background-color 0.2s ease;
+    }
+
+    .site-header-pro .nav-links-pro a:hover {
+        background-color: rgba(37, 99, 235, 0.05);
+    }
+
     .site-header-pro .nav-links-pro a::after {
         display: none;
     }
 
-    
     .menu-toggle-pro {
-        display: block;
-        /* Ensure the toggle button is clickable and above the overlay */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 8px;
         z-index: 1002;
         position: relative;
+        transition: background-color 0.2s ease;
     }
-    
-    /* This class is toggled by JS to prevent background scroll */
+
+    .menu-toggle-pro:hover {
+        background-color: rgba(0,0,0,0.05);
+    }
+
     body.no-scroll {
         overflow: hidden;
+    }
+}
+
+/* Kleinere Bildschirme - Logo noch kompakter */
+@media (max-width: 400px) {
+    .logo-img-pro {
+        height: 40px;
+        margin-right: 8px;
+    }
+    .logo-text-pro {
+        font-size: 0.9rem;
+    }
+    .logo-subtext-pro {
+        font-size: 0.65rem;
     }
 }
 
@@ -155,5 +224,5 @@
   color: var(--muted);
   line-height: 1.2;
 }
-.show-on-mobile { display: none; } @media (max-width: 1100px) { .show-on-mobile { display: list-item; } }
-@media (max-width: 1100px) { .btn-spenden-pro { display: none; } }
+.show-on-mobile { display: none; } @media (max-width: 1200px) { .show-on-mobile { display: list-item; } }
+@media (max-width: 1200px) { .btn-spenden-pro { display: none; } }

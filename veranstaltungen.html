@@ -285,6 +285,40 @@
             text-align: center;
         }
 
+        .btn-calendar {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
+            padding: 10px 18px;
+            background: #2563EB;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-calendar:hover {
+            background: #1D4ED8;
+            transform: translateY(-2px);
+        }
+
+        .btn-calendar i {
+            font-size: 1rem;
+        }
+
+        .event-card.flyer-card .btn-calendar {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
+        }
+
+        .event-card.flyer-card .btn-calendar:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
         /* ========================================
            FLYER CARD - Event mit Hintergrundbild
            ======================================== */
@@ -538,71 +572,110 @@
                     <p>Besondere Events und Termine</p>
                 </div>
                 <div class="events-grid">
-
-                    <!-- Standard Card -->
-                    <div class="event-card">
-                        <div class="card-header">
-                            <i class="fa-solid fa-mug-hot event-icon"></i>
-                            <div class="date-badge">
-                                <span class="day">8</span>
-                                <span class="month">Nov</span>
+                    
+                        
+                            <!-- Standard Card -->
+                            <div class="event-card">
+                                <div class="card-header" style="background: linear-gradient(135deg, #10B981cc 0%, #10B981 100%);">
+                                    <i class="fa-solid fa-pray event-icon"></i>
+                                    <div class="date-badge">
+                                        <span class="day">10</span>
+                                        <span class="month">Feb</span>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <span class="tag" style="background: #10B98122; color: #10B981;">Gebet</span>
+                                    <h3>Gebetsabend</h3>
+                                    <p class="meta"><i class="fa-solid fa-clock"></i> Dienstag, 10. Februar 2026 um 19:00 Uhr</p>
+                                    <p class="meta"><i class="fa-solid fa-location-dot"></i> In der Gemeinde</p>
+                                    <button class="btn-calendar" onclick="addToCalendar('Gebetsabend', '2026-02-10T19:00:00', 'In der Gemeinde', 'Gemeinsamer Gebetsabend. Letzte Woche – sollte noch angezeigt werden.')">
+                                        <i class="fa-solid fa-calendar-plus"></i> Zum Kalender
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                        <div class="card-body">
-                            <span class="tag">Gemeinschaft</span>
-                            <h3>Church Family Breakfast</h3>
-                            <p class="meta"><i class="fa-solid fa-clock"></i> Samstag, 8. Nov 2025 · 09:00 Uhr</p>
-                            <p class="meta"><i class="fa-solid fa-location-dot"></i> In der Gemeinde</p>
-                        </div>
-                    </div>
-
-                    <!-- Standard Card -->
-                    <div class="event-card">
-                        <div class="card-header">
-                            <i class="fa-solid fa-music event-icon"></i>
-                            <div class="date-badge">
-                                <span class="day">23</span>
-                                <span class="month">Nov</span>
+                        
+                        
+                            <!-- Standard Card -->
+                            <div class="event-card">
+                                <div class="card-header" style="background: linear-gradient(135deg, #10B981cc 0%, #10B981 100%);">
+                                    <i class="fa-solid fa-church event-icon"></i>
+                                    <div class="date-badge">
+                                        <span class="day">23</span>
+                                        <span class="month">Feb</span>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <span class="tag" style="background: #10B98122; color: #10B981;">Gottesdienst</span>
+                                    <h3>Sonntagsgottesdienst</h3>
+                                    <p class="meta"><i class="fa-solid fa-clock"></i> Montag, 23. Februar 2026 um 10:00 Uhr</p>
+                                    <p class="meta"><i class="fa-solid fa-location-dot"></i> In der Gemeinde</p>
+                                    <button class="btn-calendar" onclick="addToCalendar('Sonntagsgottesdienst', '2026-02-23T10:00:00', 'In der Gemeinde', 'Unser wöchentlicher Sonntagsgottesdienst. Alle sind herzlich willkommen!')">
+                                        <i class="fa-solid fa-calendar-plus"></i> Zum Kalender
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                        <div class="card-body">
-                            <span class="tag">Jugend</span>
-                            <h3>Worship Night – Youth & Young Adults</h3>
-                            <p class="meta"><i class="fa-solid fa-clock"></i> Sonntag, 23. Nov 2025 · 19:00 Uhr</p>
-                            <p class="meta"><i class="fa-solid fa-location-dot"></i> In der Gemeinde</p>
-                        </div>
-                    </div>
-
-                    <!-- FLYER CARD - mit Hintergrundbild -->
-                    <div class="event-card flyer-card" style="background-image: url('images/christmas-dinner-bg.jpg');">
-                        <div class="flyer-overlay"></div>
-                        <div class="date-badge">
-                            <span class="day">20</span>
-                            <span class="month">Dez</span>
-                        </div>
-                        <div class="card-body">
-                            <span class="tag">Special Event</span>
-                            <h3>Christmas Celebration Dinner</h3>
-                            <p class="meta"><i class="fa-solid fa-clock"></i> Samstag, 20. Dez 2025 · 17:00 Uhr</p>
-                            <p class="meta"><i class="fa-solid fa-location-dot"></i> In der Gemeinde</p>
-                        </div>
-                    </div>
-
-                    <!-- FLYER CARD - mit Hintergrundbild -->
-                    <div class="event-card flyer-card" style="background-image: url('images/new-year-bg.jpg');">
-                        <div class="flyer-overlay"></div>
-                        <div class="date-badge">
-                            <span class="day">31</span>
-                            <span class="month">Dez</span>
-                        </div>
-                        <div class="card-body">
-                            <span class="tag">Special Event</span>
-                            <h3>From Glory to Glory 2026</h3>
-                            <p class="meta"><i class="fa-solid fa-clock"></i> Mittwoch, 31. Dez 2025 · 20:00 Uhr</p>
-                            <p class="meta"><i class="fa-solid fa-location-dot"></i> In der Gemeinde</p>
-                        </div>
-                    </div>
-
+                        
+                        
+                            <!-- Standard Card -->
+                            <div class="event-card">
+                                <div class="card-header" style="background: linear-gradient(135deg, #8B5CF6cc 0%, #8B5CF6 100%);">
+                                    <i class="fa-solid fa-users event-icon"></i>
+                                    <div class="date-badge">
+                                        <span class="day">28</span>
+                                        <span class="month">Feb</span>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <span class="tag" style="background: #8B5CF622; color: #8B5CF6;">Jugend</span>
+                                    <h3>Jugendabend</h3>
+                                    <p class="meta"><i class="fa-solid fa-clock"></i> Samstag, 28. Februar 2026 um 18:30 Uhr</p>
+                                    <p class="meta"><i class="fa-solid fa-location-dot"></i> In der Gemeinde</p>
+                                    <button class="btn-calendar" onclick="addToCalendar('Jugendabend', '2026-02-28T18:30:00', 'In der Gemeinde', 'Jugendabend mit Lobpreis, Gemeinschaft und Gottes Wort.')">
+                                        <i class="fa-solid fa-calendar-plus"></i> Zum Kalender
+                                    </button>
+                                </div>
+                            </div>
+                        
+                        
+                            <!-- Standard Card -->
+                            <div class="event-card">
+                                <div class="card-header" style="background: linear-gradient(135deg, #F97316cc 0%, #F97316 100%);">
+                                    <i class="fa-solid fa-heart event-icon"></i>
+                                    <div class="date-badge">
+                                        <span class="day">8</span>
+                                        <span class="month">Mär</span>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <span class="tag" style="background: #F9731622; color: #F97316;">Gemeinschaft</span>
+                                    <h3>Gemeindefrühstück</h3>
+                                    <p class="meta"><i class="fa-solid fa-clock"></i> Sonntag, 8. März 2026 um 09:00 Uhr</p>
+                                    <p class="meta"><i class="fa-solid fa-location-dot"></i> In der Gemeinde</p>
+                                    <button class="btn-calendar" onclick="addToCalendar('Gemeindefrühstück', '2026-03-08T09:00:00', 'In der Gemeinde', 'Gemeinsames Frühstück vor dem Gottesdienst. Eine wunderbare Gelegenheit für Gemeinschaft!')">
+                                        <i class="fa-solid fa-calendar-plus"></i> Zum Kalender
+                                    </button>
+                                </div>
+                            </div>
+                        
+                        
+                            <!-- FLYER CARD - mit Hintergrundbild -->
+                            <div class="event-card flyer-card" style="background-image: url('/images/bible.und.hand.hoch.jpg');">
+                                <div class="flyer-overlay"></div>
+                                <div class="date-badge">
+                                    <span class="day">5</span>
+                                    <span class="month">Apr</span>
+                                </div>
+                                <div class="card-body">
+                                    <span class="tag">Special Event</span>
+                                    <h3>Oster-Gottesdienst</h3>
+                                    <p class="meta"><i class="fa-solid fa-clock"></i> Sonntag, 5. April 2026 um 10:00 Uhr</p>
+                                    <p class="meta"><i class="fa-solid fa-location-dot"></i> In der Gemeinde</p>
+                                    <button class="btn-calendar" onclick="addToCalendar('Oster-Gottesdienst', '2026-04-05T10:00:00', 'In der Gemeinde', 'Festlicher Oster-Gottesdienst zur Feier der Auferstehung Jesu Christi!')">
+                                        <i class="fa-solid fa-calendar-plus"></i> Zum Kalender
+                                    </button>
+                                </div>
+                            </div>
+                        
                 </div>
             </div>
         </section>
@@ -689,5 +762,44 @@
 <script src="js/cms-preview.js"></script>
 
     <script src="js/script.js"></script>
+    <script>
+        // Add to Calendar function - generates .ics file
+        function addToCalendar(title, dateStr, location, description) {
+            const date = new Date(dateStr);
+            const endDate = new Date(date.getTime() + 2 * 60 * 60 * 1000); // +2 hours
+
+            // Format dates for iCal (YYYYMMDDTHHmmss)
+            const formatDate = (d) => {
+                return d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+            };
+
+            const icsContent = [
+                'BEGIN:VCALENDAR',
+                'VERSION:2.0',
+                'PRODID:-//Newness of Life//Event//DE',
+                'CALSCALE:GREGORIAN',
+                'METHOD:PUBLISH',
+                'BEGIN:VEVENT',
+                `DTSTART:${formatDate(date)}`,
+                `DTEND:${formatDate(endDate)}`,
+                `SUMMARY:${title}`,
+                `LOCATION:${location || 'Hebbelstr. 56-60, 55127 Mainz'}`,
+                `DESCRIPTION:${(description || '').replace(/\n/g, '\\n')}`,
+                'STATUS:CONFIRMED',
+                `UID:${Date.now()}@newnessoflife.de`,
+                'END:VEVENT',
+                'END:VCALENDAR'
+            ].join('\r\n');
+
+            // Create download
+            const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${title.replace(/[^a-zA-Z0-9]/g, '_')}.ics`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
 </body>
 </html>

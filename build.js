@@ -37,20 +37,34 @@ function prepareEvents(eventsRaw) {
   const items = eventsRaw.items || [];
   const categories = eventsRaw.categories || [];
 
+  // Cutoff: 2 weeks ago
+  const twoWeeksAgo = new Date();
+  twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
+
   const processedItems = items
-    .filter(e => e.published !== false)
+    // Only published events
+    .filter(e => e.published === true)
+    // Hide events older than 2 weeks
+    .filter(e => new Date(e.date) >= twoWeeksAgo)
+    // Sort by date (upcoming first)
     .sort((a, b) => new Date(a.date) - new Date(b.date))
     .map(e => {
       // Kategorie-Infos hinzufügen
       const category = categories.find(c => c.id === e.category) || {};
 
+      const dateObj = new Date(e.date);
+      const monthNames = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
+
       return {
         ...e,
         date_de: formatDateDE(e.date),
         end_date_de: e.end_date ? formatDateDE(e.end_date) : '',
+        day: dateObj.getDate(),
+        monthShort: monthNames[dateObj.getMonth()],
         category_name: category.name || '',
-        category_color: category.color || '#2563EB',
-        category_icon: category.icon || 'fa-calendar'
+        // Use custom color/icon if set, otherwise fall back to category defaults
+        category_color: e.color || category.color || '#2563EB',
+        category_icon: e.icon || category.icon || 'fa-calendar'
       };
     });
 

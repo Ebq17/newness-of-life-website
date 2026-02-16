@@ -6,6 +6,8 @@ const fs = require('fs').promises;
 const path = require('path');
 const { exec } = require('child_process');
 const url = require('url');
+const { Resend } = require('resend');
+const resend = new Resend(process.env.RESEND_API_KEY);
 const https = require('https');
 
 // Simple rate limit (per IP)
@@ -104,7 +106,7 @@ function toHtml(text) {
   return text.replace(/\n/g, '<br>');
 }
 
-async function sendEmail({ to, subject, html, replyTo }) {
+async function sendEmail({ to, subject, html, replyTo, from }) {
   // In tests / local runs we want to be able to hit /api/contact without network access.
   if (process.env.NODE_ENV === 'test' || process.env.DISABLE_EMAIL === '1') {
     return { ok: true, skipped: true };
@@ -115,40 +117,27 @@ async function sendEmail({ to, subject, html, replyTo }) {
     throw new Error('RESEND_API_KEY is not set (emails disabled)');
   }
 
-  const RESEND_FROM = process.env.RESEND_FROM || 'Newness of Life <onboarding@resend.dev>';
-  const payload = JSON.stringify({
-    from: RESEND_FROM,
-    to: [to],
-    subject,
-    html,
-    ...(replyTo ? { reply_to: replyTo } : {})
-  });
-
-  return new Promise((resolve, reject) => {
-    const req = https.request({
-      method: 'POST',
-      hostname: 'api.resend.com',
-      path: '/emails',
-      headers: {
-        'Authorization': `Bearer ${RESEND_API_KEY}`,
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(payload)
-      }
-    }, res => {
-      let data = '';
-      res.on('data', chunk => data += chunk);
-      res.on('end', () => {
-        if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
-          resolve({ ok: true, data });
-        } else {
-          reject(new Error(`Resend error ${res.statusCode}: ${data}`));
-        }
-      });
+  try {
+    const { data, error } = await resend.emails.send({
+      from,
+      to,
+      subject,
+      html,
+      ...(replyTo ? { reply_to: replyTo } : {}),
     });
-    req.on('error', reject);
-    req.write(payload);
-    req.end();
-  });
+
+    if (error) {
+      // NOTE: Logging the full error for more detailed debugging.
+      console.error('Resend API Error:', JSON.stringify(error, null, 2));
+      throw new Error(`Resend API Error: ${error.name} - ${error.message}`);
+    }
+
+    return { ok: true, data };
+  } catch (err) {
+    console.error('Failed to send email:', err);
+    // Re-throw a generic but informative error to the caller.
+    throw new Error(`Failed to send email via Resend: ${err.message || 'Unknown error'}`);
+  }
 }
 
 // Run Build
@@ -295,7 +284,6 @@ function createRequestHandler({ rootDir = __dirname } = {}) {
   const PAGES_DATA_DIR = path.join(DATA_DIR, 'pages');
   const IMAGES_DIR = path.join(ROOT_DIR, 'images');
   const CONTACTS_FILE = path.join(DATA_DIR, 'contacts.json');
-  const INTERNAL_EMAIL = process.env.INTERNAL_EMAIL || 'newnessoflife@clgi.org';
 
   async function loadJson(filename) {
     if (!isSafeJsonFileName(filename)) {
@@ -444,6 +432,12 @@ function createRequestHandler({ rootDir = __dirname } = {}) {
 
         // POST /api/contact - Contact form handler
         if (method === 'POST' && route === 'contact') {
+          const {
+            TO_EMAIL = 'newnessoflife@clgi.org',
+            FROM_EMAIL = 'Newness of Life <kontakt@newnessoflife.de>',
+            NOREPLY_EMAIL = 'Newness of Life <noreply@newnessoflife.de>',
+          } = process.env;
+
           const ip = getClientIp(req);
           if (isRateLimited(ip)) {
             jsonResponse(res, { error: 'Zu viele Anfragen. Bitte spaeter erneut versuchen.' }, 429);
@@ -459,7 +453,7 @@ function createRequestHandler({ rootDir = __dirname } = {}) {
 
           // Honeypot
           if (website) {
-            jsonResponse(res, { success: true });
+            jsonResponse(res, { success: true }); // Silently succeed
             return;
           }
 
@@ -468,6 +462,7 @@ function createRequestHandler({ rootDir = __dirname } = {}) {
             return;
           }
 
+          // --- Save contact to local file (optional, can be disabled) ---
           const contacts = await loadContacts();
           const { ticketId, nextNumber } = nextTicketId(contacts.lastTicketNumber || 0);
           contacts.lastTicketNumber = nextNumber;
@@ -475,102 +470,75 @@ function createRequestHandler({ rootDir = __dirname } = {}) {
           const category = classifyCategory(subject, message);
           const createdAt = new Date().toISOString();
 
-          const record = {
-            ticketId,
-            name,
-            email,
-            subject,
-            message,
-            category,
-            createdAt,
-            ip
-          };
+          const record = { ticketId, name, email, subject, message, category, createdAt, ip };
           contacts.items.push(record);
           await saveContacts(contacts);
+          // --- End of saving logic ---
 
+          // --- Email Templating ---
           const templates = {
             Allgemein: {
               subject: 'Wir haben deine Nachricht erhalten (Ticket {{ticketId}})',
-              body: `Hallo {{name}},\n` +
-                `vielen Dank fuer deine Nachricht an Newness of Life. Wir haben sie erhalten und melden uns in der Regel innerhalb von 24–48 Stunden.\n\n` +
-                `Betreff: {{subject}}\n` +
-                `Ticket: {{ticketId}}\n\n` +
-                `Wenn du noch Infos ergaenzen moechtest, antworte einfach auf diese E-Mail und nenne die Ticket-Nummer.\n\n` +
-                `Herzliche Gruesse\nNewness of Life (Verein)\n` +
-                `Datenschutz: Deine Daten werden nur zur Bearbeitung deiner Anfrage genutzt.`
+              body: `Hallo {{name}},\n\nvielen Dank fuer deine Nachricht an Newness of Life. Wir haben sie erhalten und melden uns in der Regel innerhalb von 24–48 Stunden.\n\nBetreff: {{subject}}\nTicket: {{ticketId}}\n\nWenn du noch Infos ergaenzen moechtest, antworte einfach auf diese E-Mail und nenne die Ticket-Nummer.\n\nHerzliche Gruesse\nNewness of Life (Verein)\nDatenschutz: Deine Daten werden nur zur Bearbeitung deiner Anfrage genutzt.`
             },
             Spende: {
               subject: 'Danke fuer deine Spendenanfrage (Ticket {{ticketId}})',
-              body: `Hallo {{name}},\n` +
-                `danke, dass du Newness of Life unterstuetzen moechtest.\n` +
-                `Wir haben deine Nachricht erhalten und melden uns in der Regel innerhalb von 24–48 Stunden.\n\n` +
-                `Bankdaten (IBAN/BIC) folgen in Kuerze.\n` +
-                `Wenn du eine Spendenquittung brauchst, antworte bitte mit deiner vollstaendigen Adresse.\n\n` +
-                `Ticket: {{ticketId}}\n\n` +
-                `Herzliche Gruesse\nNewness of Life (Verein)`
+              body: `Hallo {{name}},\n\ndanke, dass du Newness of Life unterstuetzen moechtest.\nWir haben deine Nachricht erhalten und melden uns in der Regel innerhalb von 24–48 Stunden.\n\nBankdaten (IBAN/BIC) folgen in Kuerze.\nWenn du eine Spendenquittung brauchst, antworte bitte mit deiner vollstaendigen Adresse.\n\nTicket: {{ticketId}}\n\nHerzliche Gruesse\nNewness of Life (Verein)`
             },
             'Event/Anmeldung': {
               subject: 'Event-Anfrage erhalten (Ticket {{ticketId}})',
-              body: `Hallo {{name}},\n` +
-                `danke fuer deine Nachricht an Newness of Life. Wir haben deine Event-Anfrage erhalten und melden uns in der Regel innerhalb von 24–48 Stunden.\n\n` +
-                `Damit wir dir schnell helfen koennen, schick uns bitte (falls noch nicht drin):\n` +
-                `- Event-Name & Datum\n- Anzahl Personen\n- Worum geht's genau? (Infos/Anmeldung/Mitarbeit)\n\n` +
-                `Ticket: {{ticketId}}\n\n` +
-                `Herzliche Gruesse\nNewness of Life (Verein)`
+              body: `Hallo {{name}},\n\ndanke fuer deine Nachricht an Newness of Life. Wir haben deine Event-Anfrage erhalten und melden uns in der Regel innerhalb von 24–48 Stunden.\n\nDamit wir dir schnell helfen koennen, schick uns bitte (falls noch nicht drin):\n- Event-Name & Datum\n- Anzahl Personen\n- Worum geht's genau? (Infos/Anmeldung/Mitarbeit)\n\nTicket: {{ticketId}}\n\nHerzliche Gruesse\nNewness of Life (Verein)`
             },
             'Raum/Technik': {
               subject: 'Anfrage zur Location/Technik erhalten (Ticket {{ticketId}})',
-              body: `Hallo {{name}},\n` +
-                `danke fuer deine Nachricht. Wir haben deine Anfrage erhalten und melden uns in der Regel innerhalb von 24–48 Stunden.\n\n` +
-                `Damit wir dir direkt antworten koennen, schick uns bitte (falls noch nicht enthalten):\n` +
-                `- Datum/Uhrzeit\n- Was genau planst du?\n- Brauchst du Starkstrom? (Ja/Nein)\n- Brauchst du WLAN? (Ja/Nein)\n\n` +
-                `Ticket: {{ticketId}}\n\n` +
-                `Herzliche Gruesse\nNewness of Life (Verein)`
+              body: `Hallo {{name}},\n\ndanke fuer deine Nachricht. Wir haben deine Anfrage erhalten und melden uns in der Regel innerhalb von 24–48 Stunden.\n\nDamit wir dir direkt antworten koennen, schick uns bitte (falls noch nicht enthalten):\n- Datum/Uhrzeit\n- Was genau planst du?\n- Brauchst du Starkstrom? (Ja/Nein)\n- Brauchst du WLAN? (Ja/Nein)\n\nTicket: {{ticketId}}\n\nHerzliche Gruesse\nNewness of Life (Verein)`
             },
             'Seelsorge/Gebet': {
               subject: 'Wir haben deine Nachricht erhalten (vertraulich) – Ticket {{ticketId}}',
-              body: `Hallo {{name}},\n` +
-                `danke, dass du dich gemeldet hast. Wir behandeln deine Nachricht vertraulich und melden uns in der Regel innerhalb von 24–48 Stunden.\n\n` +
-                `Wenn es dringend ist und du sofort Hilfe brauchst, wende dich bitte in akuten Notfaellen an 112.\n\n` +
-                `Ticket: {{ticketId}}\n\n` +
-                `Herzliche Gruesse\nNewness of Life (Verein)`
+              body: `Hallo {{name}},\n\ndanke, dass du dich gemeldet hast. Wir behandeln deine Nachricht vertraulich und melden uns in der Regel innerhalb von 24–48 Stunden.\n\nWenn es dringend ist und du sofort Hilfe brauchst, wende dich bitte in akuten Notfaellen an 112.\n\nTicket: {{ticketId}}\n\nHerzliche Gruesse\nNewness of Life (Verein)`
             }
           };
 
           const template = templates[category] || templates.Allgemein;
           const vars = { ticketId, name, subject };
-          const autoSubject = renderTemplate(template.subject, vars);
-          const autoBody = renderTemplate(template.body, vars);
 
-          const internalSubject = `Neue Website-Anfrage (${ticketId}) – ${subject}`;
-          const internalBody = `Ticket: ${ticketId}\nName: ${name}\nE-Mail: ${email}\nKategorie: ${category}\nZeit: ${createdAt}\n\nNachricht:\n${message}\n\nWichtig: Reply-To ist auf ${email} gesetzt.`;
-
-          const emailStatus = { auto: 'skipped', internal: 'skipped' };
+          // --- Send Emails ---
+          const emailStatus = { auto_reply: 'skipped', internal_notification: 'skipped' };
           const emailErrors = {};
 
+          // 1. Auto-Reply to sender
           try {
+            const autoSubject = renderTemplate(template.subject, vars);
+            const autoBody = renderTemplate(template.body, vars);
             await sendEmail({
+              from: NOREPLY_EMAIL,
               to: email,
               subject: autoSubject,
               html: toHtml(autoBody)
             });
-            emailStatus.auto = 'sent';
+            emailStatus.auto_reply = 'sent';
           } catch (err) {
-            emailStatus.auto = 'failed';
-            emailErrors.auto = err.message || String(err);
+            emailStatus.auto_reply = 'failed';
+            emailErrors.auto_reply = err.message || String(err);
+            console.error(`Failed to send auto-reply to ${email}:`, err);
           }
 
+          // 2. Internal notification
           try {
+            const internalSubject = `Neue Website-Anfrage (${ticketId}) – ${subject}`;
+            const internalBody = `Ticket: ${ticketId}\nName: ${name}\nE-Mail: ${email}\nKategorie: ${category}\nZeit: ${createdAt}\n\nNachricht:\n${message}\n\nWichtig: Antwort an ${email} senden.`;
             await sendEmail({
-              to: INTERNAL_EMAIL,
+              from: FROM_EMAIL,
+              to: TO_EMAIL,
               subject: internalSubject,
               html: toHtml(internalBody),
               replyTo: email
             });
-            emailStatus.internal = 'sent';
+            emailStatus.internal_notification = 'sent';
           } catch (err) {
-            emailStatus.internal = 'failed';
-            emailErrors.internal = err.message || String(err);
+            emailStatus.internal_notification = 'failed';
+            emailErrors.internal_notification = err.message || String(err);
+            console.error(`Failed to send internal notification for ticket ${ticketId}:`, err);
           }
 
           jsonResponse(res, { success: true, ticketId, category, emailStatus, ...(Object.keys(emailErrors).length ? { emailErrors } : {}) });
@@ -587,7 +555,7 @@ function createRequestHandler({ rootDir = __dirname } = {}) {
       if (pathname === '/') {
         effectivePathname = '/index.html';
       } else if (pathname === '/admin' || pathname === '/admin/') {
-        effectivePathname = '/admin/dashboard.html';
+        effectivePathname = '/admin/index.html';
       }
 
       const filePath = resolveSafePath(ROOT_DIR, effectivePathname);

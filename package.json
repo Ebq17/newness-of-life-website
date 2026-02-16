@@ -14,7 +14,8 @@
   "dependencies": {
     "posthtml": "^0.16.6",
     "posthtml-expressions": "^1.11.4",
-    "posthtml-include": "^2.0.1"
+    "posthtml-include": "^2.0.1",
+    "resend": "^6.9.2"
   },
   "devDependencies": {
     "chokidar": "^5.0.0"
