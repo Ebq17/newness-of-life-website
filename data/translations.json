@@ -10,6 +10,9 @@
       "contact": "Kontakt",
       "donate": "Spenden"
     },
+    "header": {
+      "logo_subtext": "die Kirche des lebendigen Gottes International e.V."
+    },
     "hero": {
       "title": "Willkommen in unserer Gemeinde",
       "subtitle": "Ein Ort des Glaubens, der Gemeinschaft und der Hoffnung. Entdecke, wer wir sind und was uns bewegt.",
@@ -41,6 +44,7 @@
     "about_section": {
       "title": "Über uns",
       "subtitle": "Unsere Vision & Mission",
+      "text": "Wir sind die Newness of Life – Die Kirche des lebendigen Gottes International e.V. aus Mainz. Unser Herz schlägt dafür, Menschen mit der Liebe Gottes zu erreichen, Glauben zu stärken und Gemeinschaft zu leben. Bei uns erlebst du lebendige Gottesdienste, inspirierende Musik, praktische Bibellehre und eine herzliche Familie, in der jeder willkommen ist – egal, woher du kommst oder welche Geschichte du mitbringst. Wir glauben, dass jeder Mensch von Gott einzigartig geschaffen ist und einen Platz in seinem Plan hat. Gemeinsam wollen wir wachsen, einander ermutigen und unsere Umgebung mit Hoffnung und Licht prägen.",
       "learn_more": "Mehr erfahren"
     },
     "contact_section": {
@@ -99,30 +103,100 @@
       "subtitle": "Lerne unsere Gemeinde kennen",
       "welcome_title": "Willkommen bei Newness of Life",
       "welcome_subtitle": "Ein Ort des Glaubens, der Hoffnung und der Erneuerung",
+      "intro_text": "Wir sind die Newness of Life – Die Kirche des lebendigen Gottes International e.V. aus Mainz. Unser Herz schlägt dafür, Menschen mit der Liebe Gottes zu erreichen, Glauben zu stärken und Gemeinschaft zu leben.",
+      "intro_extra_1": "Bei uns findest du inspirierenden Lobpreis, biblisch fundierte Lehre und Räume, in denen du deine Berufung entdecken kannst – in Kleingruppen, in der Jugendarbeit, im Gebet und im sozialen Engagement. Wir glauben: Jeder Mensch ist von Gott geliebt und berufen.",
+      "intro_extra_2": "Unser Auftrag ist klar: <strong>Menschen zu Jüngern machen, Hoffnung weitergeben und Gottes Licht sichtbar machen.</strong> Wenn du nach einer geistlichen Heimat suchst: Du bist willkommen.",
       "history_title": "Unsere Geschichte",
+      "story_text": "Bei uns erlebst du lebendige Gottesdienste, inspirierende Musik, praktische Bibellehre und eine herzliche Familie, in der jeder willkommen ist – egal, woher du kommst oder welche Geschichte du mitbringst.",
+      "timeline": {
+        "beginnings_title": "Die Anfänge",
+        "beginnings_p1": "Unsere Gemeinde entstand Anfang der 1990er-Jahre aus kleinen Bibelstunden in Mainz. Aus dieser einfachen, aber leidenschaftlichen Anfangszeit entwickelte sich Schritt für Schritt eine wachsende Gemeinschaft. 1993 begannen regelmäßige Treffen, die schon bald zu einem festen geistlichen Zuhause für viele wurden. 1994 kam weitere Unterstützung hinzu, und durch die Zusammenarbeit mit Geschwistern aus umliegenden Städten konnte die Gemeinde gefestigt und aufgebaut werden. Am 23. August 2003 wurde die Geschichte unserer Gemeinde schriftlich festgehalten – als Zeugnis von Gottes Treue.",
+        "beginnings_p2": "Heute ist Newness of Life mehr als ein Gottesdienst am Sonntag – wir sind eine Familie, die im Alltag füreinander da ist. Unser Herzschlag: Jesus Christus klar verkünden, Menschen stärken und unsere Stadt mit praktischer Liebe prägen.",
+        "beginnings_p3": "Bei uns findest du inspirierenden Lobpreis, biblisch fundierte Lehre und Räume, in denen du deine Berufung entdecken kannst – in Kleingruppen, in der Jugendarbeit, im Gebet und im sozialen Engagement. Wir glauben: Jeder Mensch ist von Gott geliebt.",
+        "beginnings_p4": "Unser Auftrag ist klar: Menschen zu Jüngern machen, Hoffnung weitergeben und Gottes Licht sichtbar machen. Wenn du nach einer geistlichen Heimat suchst: Du bist willkommen."
+      },
       "vision_title": "Unsere Vision & Mission",
+      "vision_text": "Wir glauben, dass jeder Mensch von Gott einzigartig geschaffen ist und einen Platz in seinem Plan hat. Gemeinsam wollen wir wachsen, einander ermutigen und unsere Umgebung mit Hoffnung und Licht prägen.",
+      "values": {
+        "community_title": "Gemeinschaft & Familie",
+        "community_p1": "Kirche ist nicht nur ein Ort – sie ist Familie. Wir leben Annahme und Liebe, damit jeder Mensch Zugehörigkeit und Freundschaft findet. <span class=\"bibelstelle\">(1. Johannes 4,7)</span>",
+        "community_p2": "Gott hat uns nicht als Einzelkämpfer geschaffen. Darum schaffen wir Räume, in denen Menschen füreinander da sind – durch Ermutigung, praktische Hilfe und Freundschaften, die tragen.",
+        "transparency_title": "Transparenz & Vertrauen",
+        "transparency_p1": "Wir handeln ehrlich und kommunizieren klar. So wächst Vertrauen, Beziehungen werden gestärkt und Gottes Wahrheit wird sichtbar. <span class=\"bibelstelle\">(Epheser 4,25)</span>",
+        "transparency_p2": "Bei uns gibt es nichts Hintergründiges oder Verstecktes. Offenheit schafft Glaubwürdigkeit und lässt Kirche als sicheren Ort erlebt werden.",
+        "calling_title": "Ermächtigung & Berufung",
+        "calling_p1": "Jeder ist von Gott begabt. Wir ermutigen, Talente zu entdecken und einzusetzen – in Kirche, im Alltag und beim Aufbau neuer Gemeinden in Europa. <span class=\"bibelstelle\">(1. Petrus 4,10)</span>",
+        "calling_p2": "Ob Musik, Organisation, Seelsorge oder Technik – Gott kann jede Gabe gebrauchen. Wir setzen frei, damit Menschen ihr Potenzial leben und einen Unterschied machen.",
+        "growth_title": "Wachstum & Entwicklung",
+        "growth_p1": "Durch Gebet, Lobpreis und Bibelstudium wachsen wir im Glauben; zugleich fördern wir Bildung, Arbeit und persönliche Reife für ein Leben mit Sinn. <span class=\"bibelstelle\">(2. Petrus 3,18)</span>",
+        "growth_p2": "Wir begleiten Menschen, in allen Lebensbereichen gesund zu reifen – geistlich, seelisch und praktisch – damit Verantwortung im Alltag gelingen kann.",
+        "unity_title": "Verantwortung & Einheit",
+        "unity_p1": "Respekt, Integrität und Authentizität – vor Ort und online. Wir bauen Brücken und verbinden Menschen. <span class=\"bibelstelle\">(Epheser 4,3)</span>",
+        "unity_p2": "Einheit heißt für uns: Unterschiede nicht übersehen, sondern als Bereicherung feiern und im Geist Christi zusammenführen.",
+        "service_title": "Dienst & Hingabe",
+        "service_p1": "Nachfolge zeigt sich im Tun: Wir setzen Zeit, Gaben und Ressourcen ein, um anderen zu dienen. <span class=\"bibelstelle\">(Markus 10,45)</span>",
+        "service_p2": "Ob im Gottesdienst, in der Nachbarschaft oder in globalen Projekten – wir wollen durch praktische Taten zeigen, dass Gottes Liebe real ist."
+      },
+      "roots_title": "Mehr über unsere Wurzeln",
+      "roots_intro": "Du möchtest mehr über die Gründung, Geschichte und weltweite Bewegung hinter The Church of the Living God International, Inc. erfahren? Hier findest du weiterführende Informationen unserer Kirchenfamilie.",
+      "open_website": "Website öffnen",
+      "roots_europe_desc": "Die europäische Jurisdiktion der Church of the Living God International. Entdecke Mission, Leitbild und Gemeinden in Europa.",
+      "roots_global_desc": "Die internationale Bewegung: Geschichte, Glaubensgrundsätze und weltweite Arbeit der Church of the Living God International.",
       "beliefs_title": "Was wir glauben"
     },
     "services_page": {
       "title": "Gottesdienste",
       "subtitle": "Erlebe Gottes Gegenwart in unserer Mitte",
       "what_to_expect": "Was dich erwartet",
+      "intro_text": "Unsere Gottesdienste sind ein Ort der Begegnung mit Gott und untereinander. Erlebe lebendigen Lobpreis, inspirierende Predigten und herzliche Gemeinschaft.",
       "main_service": "Hauptgottesdienst",
+      "main_service_day": "Sonntag",
+      "main_service_desc": "Unser wöchentlicher Gottesdienst mit Lobpreis, Predigt und Gemeinschaft.",
+      "main_service_features": [
+        {
+          "title": "Lobpreis & Anbetung",
+          "description": "Beginne die Woche mit kraftvoller Anbetung"
+        },
+        {
+          "title": "Predigt",
+          "description": "Bibeltreue und lebensnahe Botschaften"
+        },
+        {
+          "title": "Kinderprogramm",
+          "description": "Altersgerechtes Programm während der Predigt"
+        },
+        {
+          "title": "Gemeinschaft",
+          "description": "Zeit zum Austausch nach dem Gottesdienst"
+        }
+      ],
       "other_meetings": "Weitere Treffen",
+      "other_meetings_items": [
+        {
+          "title": "Gebetstreffen",
+          "day": "Mittwoch",
+          "description": "Gemeinsames Gebet und Fürbitte"
+        },
+        {
+          "title": "Bibelstunde",
+          "day": "Freitag",
+          "description": "Vertiefendes Bibelstudium"
+        },
+        {
+          "title": "Jugendgruppe",
+          "day": "Samstag",
+          "description": "Für Jugendliche und junge Erwachsene"
+        }
+      ],
       "directions": "Anfahrt",
       "cta_title": "Komm, wie du bist",
-      "cta_text": "Ganz egal, wo du im Leben stehst, du bist bei uns herzlich willkommen. Wir freuen uns darauf, dich kennenzulernen."
-    },
-    "donate_page": {
-      "title": "Deine Spende bewegt Herzen",
-      "subtitle": "Mit deiner Unterstützung können wir in Mainz einen Ort der Hoffnung, der Gemeinschaft und des Glaubens gestalten.",
-      "why_donate": "Warum Spenden?",
-      "bank_details": "Bankverbindung",
-      "online_donation": "Online Spenden",
-      "faq": "Häufige Fragen"
+      "address_prefix": "Adresse:",
+      "cta_text": "Ganz egal, wo du im Leben stehst, du bist bei uns herzlich willkommen. Wir freuen uns darauf, dich kennenzulernen.",
+      "cta_button": "Zur Anfahrt"
     },
     "footer": {
       "about": "Über uns",
+      "about_text": "Ein Ort des Glaubens, der Gemeinschaft und der Hoffnung. Wir wollen Menschen mit der Liebe Gottes erreichen und unsere Umgebung positiv prägen.",
       "quick_links": "Navigation",
       "contact": "Kontakt",
       "follow_us": "Folge uns",
@@ -151,6 +225,9 @@
       "events": "Events",
       "contact": "Contact",
       "donate": "Donate"
+    },
+    "header": {
+      "logo_subtext": "The Church of the Living God International e.V."
     },
     "hero": {
       "title": "Welcome to Our Church",
@@ -183,6 +260,7 @@
     "about_section": {
       "title": "About Us",
       "subtitle": "Our Vision & Mission",
+      "text": "We are Newness of Life – The Church of the Living God International e.V. in Mainz. Our heart is to reach people with God's love, strengthen faith, and live out community. With us you will experience vibrant services, inspiring music, practical Bible teaching, and a warm family where everyone is welcome—no matter where you come from or what story you bring. We believe every person is uniquely created by God and has a place in His plan. Together we want to grow, encourage one another, and shape our surroundings with hope and light.",
       "learn_more": "Learn More"
     },
     "contact_section": {
@@ -241,30 +319,100 @@
       "subtitle": "Get to know our church",
       "welcome_title": "Welcome to Newness of Life",
       "welcome_subtitle": "A place of faith, hope, and renewal",
+      "intro_text": "We are Newness of Life – The Church of the Living God International e.V. in Mainz. Our heart is to reach people with God's love, strengthen faith, and live out community.",
+      "intro_extra_1": "With us you will find inspiring worship, Bible-based teaching, and spaces where you can discover your calling – in small groups, youth ministry, prayer, and social engagement. We believe: Every person is loved and called by God.",
+      "intro_extra_2": "Our mission is clear: <strong>make disciples, pass on hope, and make God's light visible.</strong> If you are looking for a spiritual home: you are welcome.",
       "history_title": "Our History",
+      "story_text": "With us you will experience vibrant services, inspiring music, practical Bible teaching, and a warm family where everyone is welcome—no matter where you come from or what story you bring.",
+      "timeline": {
+        "beginnings_title": "The Beginnings",
+        "beginnings_p1": "Our church began in the early 1990s with small Bible studies in Mainz. From these simple but passionate beginnings, a growing community developed step by step. In 1993, regular meetings began and soon became a spiritual home for many. In 1994, further support was added, and through cooperation with brothers and sisters from nearby cities, the church was strengthened and built up. On August 23, 2003, the history of our church was documented in writing – as a testimony to God's faithfulness.",
+        "beginnings_p2": "Today, Newness of Life is more than a Sunday service – we are a family that supports one another in everyday life. Our heartbeat: proclaim Jesus Christ clearly, strengthen people, and shape our city with practical love.",
+        "beginnings_p3": "With us you will find inspiring worship, Bible-based teaching, and spaces where you can discover your calling – in small groups, youth ministry, prayer, and social engagement. We believe: Every person is loved by God.",
+        "beginnings_p4": "Our mission is clear: make disciples, pass on hope, and make God's light visible. If you are looking for a spiritual home: you are welcome."
+      },
       "vision_title": "Our Vision & Mission",
+      "vision_text": "We believe every person is uniquely created by God and has a place in His plan. Together we want to grow, encourage one another, and shape our surroundings with hope and light.",
+      "values": {
+        "community_title": "Community & Family",
+        "community_p1": "Church is not just a place – it is family. We live acceptance and love so that everyone can find belonging and friendship. <span class=\"bibelstelle\">(1 John 4:7)</span>",
+        "community_p2": "God did not create us as lone fighters. That is why we create spaces where people are there for one another – through encouragement, practical help, and friendships that carry.",
+        "transparency_title": "Transparency & Trust",
+        "transparency_p1": "We act honestly and communicate clearly. In this way, trust grows, relationships are strengthened, and God's truth becomes visible. <span class=\"bibelstelle\">(Ephesians 4:25)</span>",
+        "transparency_p2": "There is nothing hidden or deceptive with us. Openness builds credibility and allows church to be experienced as a safe place.",
+        "calling_title": "Empowerment & Calling",
+        "calling_p1": "Everyone is gifted by God. We encourage people to discover and use their talents – in church, in everyday life, and in building new churches in Europe. <span class=\"bibelstelle\">(1 Peter 4:10)</span>",
+        "calling_p2": "Whether music, organization, pastoral care, or tech – God can use every gift. We release people to live their potential and make a difference.",
+        "growth_title": "Growth & Development",
+        "growth_p1": "Through prayer, worship, and Bible study we grow in faith; at the same time we encourage education, work, and personal maturity for a life with purpose. <span class=\"bibelstelle\">(2 Peter 3:18)</span>",
+        "growth_p2": "We accompany people to grow healthy in all areas of life – spiritually, emotionally, and practically – so that responsibility can succeed in everyday life.",
+        "unity_title": "Responsibility & Unity",
+        "unity_p1": "Respect, integrity, and authenticity – on site and online. We build bridges and connect people. <span class=\"bibelstelle\">(Ephesians 4:3)</span>",
+        "unity_p2": "For us, unity means not ignoring differences but celebrating them as enrichment and bringing people together in the spirit of Christ.",
+        "service_title": "Service & Devotion",
+        "service_p1": "Discipleship shows itself in action: we invest time, gifts, and resources to serve others. <span class=\"bibelstelle\">(Mark 10:45)</span>",
+        "service_p2": "Whether in services, in the neighborhood, or in global projects – we want to show through practical actions that God's love is real."
+      },
+      "roots_title": "More About Our Roots",
+      "roots_intro": "Would you like to learn more about the founding, history, and worldwide movement behind The Church of the Living God International, Inc.? Here you will find further information from our church family.",
+      "open_website": "Open Website",
+      "roots_europe_desc": "The European jurisdiction of the Church of the Living God International. Discover mission, vision, and churches in Europe.",
+      "roots_global_desc": "The international movement: history, beliefs, and worldwide work of the Church of the Living God International.",
       "beliefs_title": "What We Believe"
     },
     "services_page": {
       "title": "Church Services",
       "subtitle": "Experience God's presence among us",
       "what_to_expect": "What to Expect",
+      "intro_text": "Our services are a place to encounter God and one another. Experience vibrant worship, inspiring sermons, and warm fellowship.",
       "main_service": "Main Service",
+      "main_service_day": "Sunday",
+      "main_service_desc": "Our weekly service with worship, preaching, and fellowship.",
+      "main_service_features": [
+        {
+          "title": "Worship & Praise",
+          "description": "Start the week with powerful worship"
+        },
+        {
+          "title": "Sermon",
+          "description": "Bible-based and practical messages"
+        },
+        {
+          "title": "Kids Program",
+          "description": "Age-appropriate program during the sermon"
+        },
+        {
+          "title": "Fellowship",
+          "description": "Time to connect after the service"
+        }
+      ],
       "other_meetings": "Other Meetings",
+      "other_meetings_items": [
+        {
+          "title": "Prayer Meeting",
+          "day": "Wednesday",
+          "description": "Joint prayer and intercession"
+        },
+        {
+          "title": "Bible Study",
+          "day": "Friday",
+          "description": "In-depth Bible study"
+        },
+        {
+          "title": "Youth Group",
+          "day": "Saturday",
+          "description": "For teenagers and young adults"
+        }
+      ],
       "directions": "Directions",
       "cta_title": "Come as You Are",
-      "cta_text": "No matter where you are in life, you are warmly welcome. We look forward to meeting you."
-    },
-    "donate_page": {
-      "title": "Your Donation Moves Hearts",
-      "subtitle": "With your support, we can create a place of hope, community, and faith in Mainz.",
-      "why_donate": "Why Donate?",
-      "bank_details": "Bank Details",
-      "online_donation": "Online Donation",
-      "faq": "Frequently Asked Questions"
+      "address_prefix": "Address:",
+      "cta_text": "No matter where you are in life, you are warmly welcome. We look forward to meeting you.",
+      "cta_button": "Get Directions"
     },
     "footer": {
       "about": "About Us",
+      "about_text": "A place of faith, community, and hope. We want to reach people with God's love and positively impact our surroundings.",
       "quick_links": "Navigation",
       "contact": "Contact",
       "follow_us": "Follow Us",

@@ -2,8 +2,8 @@
 <section class="content-section service-cards-section" data-cms-section="service_cards" data-cms-field="service_cards" data-cms-label="Service-Karten">
   <div class="container">
     <div class="section-intro">
-      <h2>Unsere regelmaessigen Treffen</h2>
-      <p>Gemeinsam wachsen wir im Glauben</p>
+      <h2 data-i18n="services_section.title">Unsere regelmaessigen Treffen</h2>
+      <p data-i18n="services_section.subtitle">Gemeinsam wachsen wir im Glauben</p>
     </div>
     <div class="service-cards-grid">
       <each loop="card, index in service_cards">
@@ -21,7 +21,7 @@
               <h3 data-cms-field="service_cards.{{ index }}.title" data-cms-label="Titel">{{ card.title }}</h3>
               <p class="service-card-time" data-cms-field="service_cards.{{ index }}.time" data-cms-label="Zeit/Beschreibung"><i class="fa-solid fa-clock"></i> {{ card.time }}</p>
               <if condition="card.link">
-                <a href="{{ card.link }}" class="service-card-link" data-cms-field="service_cards.{{ index }}.link" data-cms-label="Link" data-cms-attr="href">Mehr erfahren <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="{{ card.link }}" class="service-card-link" data-cms-field="service_cards.{{ index }}.link" data-cms-label="Link" data-cms-attr="href"><span data-i18n="service_cards.learn_more">Mehr erfahren</span> <i class="fa-solid fa-arrow-right"></i></a>
               </if>
             </div>
           </div>

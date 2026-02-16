@@ -12,7 +12,8 @@ const I18n = {
 
     // Load translations
     try {
-      const response = await fetch('/data/translations.json');
+      // Use a relative URL so it also works on GitHub Pages subpaths.
+      const response = await fetch('data/translations.json');
       this.translations = await response.json();
     } catch (e) {
       console.warn('Could not load translations:', e);

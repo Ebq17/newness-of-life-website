@@ -7,7 +7,6 @@ const path = require('path');
 const { exec } = require('child_process');
 const url = require('url');
 const { Resend } = require('resend');
-const resend = new Resend(process.env.RESEND_API_KEY);
 const https = require('https');
 
 // Simple rate limit (per IP)
@@ -118,6 +117,7 @@ async function sendEmail({ to, subject, html, replyTo, from }) {
   }
 
   try {
+    const resend = new Resend(RESEND_API_KEY);
     const { data, error } = await resend.emails.send({
       from,
       to,

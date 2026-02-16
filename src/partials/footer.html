@@ -4,7 +4,7 @@
       <!-- Column 1: About -->
       <div class="footer-column">
         <h3 class="footer-heading" data-cms-field="settings.site_title" data-cms-label="Seiten-Titel">{{ settings.site_title || 'Newness of Life' }}</h3>
-        <p class="footer-about-text" data-cms-field="footer.about_text" data-cms-label="Footer Beschreibung">{{ footer.about_text || settings.site_description || 'Ein Ort des Glaubens, der Gemeinschaft und der Hoffnung. Wir wollen Menschen mit der Liebe Gottes erreichen und unsere Umgebung positiv prägen.' }}</p>
+        <p class="footer-about-text" data-cms-field="footer.about_text" data-cms-label="Footer Beschreibung" data-i18n="footer.about_text">{{ footer.about_text || settings.site_description || 'Ein Ort des Glaubens, der Gemeinschaft und der Hoffnung. Wir wollen Menschen mit der Liebe Gottes erreichen und unsere Umgebung positiv prägen.' }}</p>
       </div>
 
       <!-- Column 2: Quick Links -->
@@ -61,14 +61,14 @@
         </div>
         <div class="footer-donation">
           <h3 class="footer-heading" data-i18n="footer.donate">Unterstütze uns</h3>
-          <p data-cms-field="footer.donation_text" data-cms-label="Spenden Text">{{ footer.donation_text || 'Deine Spende hilft uns, einen Unterschied in unserer Stadt zu machen.' }}</p>
+          <p data-cms-field="footer.donation_text" data-cms-label="Spenden Text" data-i18n="footer.donate_text">{{ footer.donation_text || 'Deine Spende hilft uns, einen Unterschied in unserer Stadt zu machen.' }}</p>
           <a href="spenden.html" class="btn-footer-donate" data-i18n="footer.donate_button">Jetzt spenden</a>
         </div>
       </div>
     </div>
 
     <div class="footer-bottom">
-      <p>&copy; {{ new Date().getFullYear() }} {{ footer.copyright || settings.footer.copyright_text || 'Newness of Life' }}. Alle Rechte vorbehalten.</p>
+      <p>&copy; {{ new Date().getFullYear() }} {{ footer.copyright || settings.footer.copyright_text || 'Newness of Life' }}. <span data-i18n="footer.copyright">Alle Rechte vorbehalten</span>.</p>
       <nav class="footer-legal-links">
         <a href="datenschutz.html" data-i18n="footer.privacy">Datenschutz</a>
         <a href="impressum.html" data-i18n="footer.imprint">Impressum</a>

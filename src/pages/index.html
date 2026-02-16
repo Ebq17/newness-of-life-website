@@ -50,10 +50,10 @@
         ></div>
         <div class="container hero-grid">
             <div class="hero-left">
-                <h1 id="hero-title" data-cms-field="hero.title" data-cms-label="Haupttitel">{{ homepage.hero.title || 'Willkommen in unserer Gemeinde' }}</h1>
-                <p id="hero-subtitle" data-cms-field="hero.subtitle" data-cms-label="Untertitel Zeile 1" data-cms-format="html">{{ homepage.hero.subtitle || 'Ein Ort des Glaubens, der Gemeinschaft und der Hoffnung.' }}</p>
+                <h1 id="hero-title" data-cms-field="hero.title" data-cms-label="Haupttitel" data-i18n="hero.title">{{ homepage.hero.title || 'Willkommen in unserer Gemeinde' }}</h1>
+                <p id="hero-subtitle" data-cms-field="hero.subtitle" data-cms-label="Untertitel" data-cms-format="html" data-i18n="hero.subtitle">{{ homepage.hero.subtitle || 'Ein Ort des Glaubens, der Gemeinschaft und der Hoffnung.' }}</p>
                 <a href="{{ homepage.hero.cta_link || 'ueber-uns.html' }}" class="btn-ghost" data-cms-field="hero.cta_link" data-cms-label="Button Link" data-cms-attr="href">
-                    <span data-cms-field="hero.cta_text" data-cms-label="Button Text">{{ homepage.hero.cta_text || 'Mehr erfahren' }}</span>
+                    <span data-cms-field="hero.cta_text" data-cms-label="Button Text" data-i18n="hero.cta">{{ homepage.hero.cta_text || 'Mehr erfahren' }}</span>
                     <i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>
                 </a>
             </div>
@@ -69,8 +69,8 @@
             <div class="container">
                 <div class="gottesdienste-grid">
                     <div class="gottesdienste-info">
-                        <h2 id="gottesdienste-title" data-cms-field="services_section.title" data-cms-label="Titel">{{ homepage.services_section.title || 'Gottesdienste' }}</h2>
-                        <p id="gottesdienste-description" data-cms-field="services_section.description" data-cms-label="Beschreibung" data-cms-format="html">{{ homepage.services_section.description || 'Erlebe lebendigen Lobpreis, inspirierende Predigten und herzliche Gemeinschaft.' }}</p>
+                        <h2 id="gottesdienste-title" data-cms-field="services_section.title" data-cms-label="Titel" data-i18n="services_section.main_title">{{ homepage.services_section.title || 'Gottesdienste' }}</h2>
+                        <p id="gottesdienste-description" data-cms-field="services_section.description" data-cms-label="Beschreibung" data-cms-format="html" data-i18n="services_section.description">{{ homepage.services_section.description || 'Erlebe lebendigen Lobpreis, inspirierende Predigten und herzliche Gemeinschaft.' }}</p>
                         <a href="gottesdienste.html" class="btn-primary">
                             <span data-i18n="services_section.all_services">Alle Gottesdienste</span> <i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>
                         </a>
@@ -85,8 +85,8 @@
                                 <i class="fa-solid fa-clock"></i>
                                 <p id="gottesdienste-zeiten-ort-details">
                                     <strong>
-                                        <span data-cms-field="services_section.service_day" data-cms-label="Tag">{{ homepage.services_section.service_day || 'Jeden Sonntag' }}</span>
-                                        um
+                                        <span data-cms-field="services_section.service_day" data-cms-label="Tag" data-i18n="services_section.every_sunday">{{ homepage.services_section.service_day || 'Jeden Sonntag' }}</span>
+                                        <span data-i18n="services_section.at">um</span>
                                         <span data-cms-field="services_section.service_time" data-cms-label="Uhrzeit">{{ homepage.services_section.service_time || '14:00 Uhr' }}</span>
                                     </strong>
                                 </p>
@@ -101,7 +101,7 @@
                             <if condition="homepage.services_section.kids_info">
                                 <div class="service-item">
                                     <i class="fa-solid fa-child"></i>
-                                    <p id="gottesdienste-kids" data-cms-field="services_section.kids_info" data-cms-label="Kinderinfo">{{ homepage.services_section.kids_info }}</p>
+                                    <p id="gottesdienste-kids" data-cms-field="services_section.kids_info" data-cms-label="Kinderinfo" data-i18n="services_section.kids_program">{{ homepage.services_section.kids_info }}</p>
                                 </div>
                             </if>
                         </div>
@@ -116,9 +116,9 @@
         <!-- Über uns Section -->
         <section id="ueber-uns" class="content-section" data-cms-section="about">
             <div class="container">
-                <h2 id="ueber-uns-title" data-cms-field="about_section.title" data-cms-label="Titel">{{ homepage.about_section.title || 'Über uns' }}</h2>
-                <h3 id="ueber-uns-subtitle" data-cms-field="about_section.subtitle" data-cms-label="Untertitel">{{ homepage.about_section.subtitle || 'Unsere Vision & Mission' }}</h3>
-                <p id="ueber-uns-text" data-cms-field="about_section.text" data-cms-label="Text" data-cms-format="html">{{ homepage.about_section.text || '' }}</p>
+                <h2 id="ueber-uns-title" data-cms-field="about_section.title" data-cms-label="Titel" data-i18n="about_section.title">{{ homepage.about_section.title || 'Über uns' }}</h2>
+                <h3 id="ueber-uns-subtitle" data-cms-field="about_section.subtitle" data-cms-label="Untertitel" data-i18n="about_section.subtitle">{{ homepage.about_section.subtitle || 'Unsere Vision & Mission' }}</h3>
+                <p id="ueber-uns-text" data-cms-field="about_section.text" data-cms-label="Text" data-cms-format="html" data-i18n-html="about_section.text">{{ homepage.about_section.text || '' }}</p>
                 <div class="centered-actions">
                     <a href="ueber-uns.html" class="btn btn-primary" aria-label="Mehr über uns erfahren">
                         <span data-i18n="about_section.learn_more">Mehr erfahren</span>
@@ -132,21 +132,21 @@
         <!-- Kontakt Section -->
         <section id="kontakt" class="content-section" data-cms-section="contact">
             <div class="container">
-                <h2 id="kontakt-title" data-cms-field="contact_section.title" data-cms-label="Titel">{{ homepage.contact_section.title || 'Kontakt' }}</h2>
+                <h2 id="kontakt-title" data-cms-field="contact_section.title" data-cms-label="Titel" data-i18n="contact_section.title">{{ homepage.contact_section.title || 'Kontakt' }}</h2>
                 <div class="contact-grid">
                     <div class="contact-form">
-                        <h3 id="kontakt-form-title" data-cms-field="contact_section.form_title" data-cms-label="Formular-Titel">{{ homepage.contact_section.form_title || 'Schreiben Sie uns' }}</h3>
+                        <h3 id="kontakt-form-title" data-cms-field="contact_section.form_title" data-cms-label="Formular-Titel" data-i18n="contact_section.form_title">{{ homepage.contact_section.form_title || 'Schreiben Sie uns' }}</h3>
                         <form id="contact-form" method="POST" action="/api/contact">
                             <input type="text" name="website" class="is-hidden" tabindex="-1" autocomplete="off">
-                            <input type="text" name="name" placeholder="Ihr Name" required>
-                            <input type="email" name="email" placeholder="Ihre E-Mail" required>
-                            <textarea name="message" placeholder="Ihre Nachricht" rows="5" required></textarea>
-                            <button type="submit">Senden</button>
+                            <input type="text" name="name" placeholder="Ihr Name" data-i18n="contact_section.name" required>
+                            <input type="email" name="email" placeholder="Ihre E-Mail" data-i18n="contact_section.email" required>
+                            <textarea name="message" placeholder="Ihre Nachricht" data-i18n="contact_section.message" rows="5" required></textarea>
+                            <button type="submit" data-i18n="contact_section.send">Senden</button>
                             <p class="form-status" id="contact-status" aria-live="polite"></p>
                         </form>
                     </div>
                     <div class="contact-details">
-                        <h3 id="kontakt-address-title" data-cms-field="contact_section.address_title" data-cms-label="Adress-Titel">{{ homepage.contact_section.address_title || 'Adresse & Anfahrt' }}</h3>
+                        <h3 id="kontakt-address-title" data-cms-field="contact_section.address_title" data-cms-label="Adress-Titel" data-i18n="contact_section.address_title">{{ homepage.contact_section.address_title || 'Adresse & Anfahrt' }}</h3>
                         <p id="kontakt-address">
                             <span data-cms-field="contact.address" data-cms-label="Strasse">{{ settings.contact.address || 'Hebbelstr. 56-60' }}</span><br>
                             <span data-cms-field="contact.city" data-cms-label="PLZ und Stadt">{{ settings.contact.city || '55127 Mainz' }}</span>

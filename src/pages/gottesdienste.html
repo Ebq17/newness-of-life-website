@@ -41,10 +41,10 @@
         </div>
         <div class="hero-overlay"></div>
         <div class="container hero-content">
-            <h1 data-cms-field="hero.title" data-cms-label="Titel">{{ pages.gottesdienste.hero.title || 'Gottesdienste' }}</h1>
-            <p class="lead" data-cms-field="hero.subtitle" data-cms-label="Untertitel">{{ pages.gottesdienste.hero.subtitle || 'Erlebe Gottes Gegenwart in unserer Mitte' }}</p>
+            <h1 data-cms-field="hero.title" data-cms-label="Titel" data-i18n="services_page.title">{{ pages.gottesdienste.hero.title || 'Gottesdienste' }}</h1>
+            <p class="lead" data-cms-field="hero.subtitle" data-cms-label="Untertitel" data-i18n="services_page.subtitle">{{ pages.gottesdienste.hero.subtitle || 'Erlebe Gottes Gegenwart in unserer Mitte' }}</p>
             <div class="gd-hero-info">
-                <span><i class="fa-solid fa-clock"></i> <span data-cms-field="main_service.day" data-cms-label="Tag">{{ pages.gottesdienste.main_service.day || 'Sonntag' }}</span>, <span data-cms-field="main_service.time" data-cms-label="Uhrzeit">{{ pages.gottesdienste.main_service.time || '14:00 Uhr' }}</span></span>
+                <span><i class="fa-solid fa-clock"></i> <span data-cms-field="main_service.day" data-cms-label="Tag" data-i18n="services_page.main_service_day">{{ pages.gottesdienste.main_service.day || 'Sonntag' }}</span>, <span data-cms-field="main_service.time" data-cms-label="Uhrzeit">{{ pages.gottesdienste.main_service.time || '14:00 Uhr' }}</span></span>
                 <span><i class="fa-solid fa-map-marker-alt"></i> {{ settings.contact.address || 'Hebbelstr. 56-60' }}, {{ settings.contact.city || 'Mainz' }}</span>
             </div>
         </div>
@@ -54,9 +54,9 @@
     <section class="content-section" data-cms-section="intro">
         <div class="container">
             <div class="section-intro">
-                <h2 data-cms-field="intro.title" data-cms-label="Titel">{{ pages.gottesdienste.intro.title || 'Was dich erwartet' }}</h2>
+                <h2 data-cms-field="intro.title" data-cms-label="Titel" data-i18n="services_page.what_to_expect">{{ pages.gottesdienste.intro.title || 'Was dich erwartet' }}</h2>
             </div>
-            <p class="text-center" data-cms-field="intro.text" data-cms-label="Text" data-cms-format="html">
+            <p class="text-center" data-cms-field="intro.text" data-cms-label="Text" data-cms-format="html" data-i18n="services_page.intro_text">
                 {{ pages.gottesdienste.intro.text || '' }}
             </p>
         </div>
@@ -67,17 +67,17 @@
     <section class="content-section expect-pro-section expect-pro-section-enhanced" data-cms-section="main_service">
         <div class="container">
             <div class="section-intro">
-                <h2 data-cms-field="main_service.title" data-cms-label="Titel">{{ pages.gottesdienste.main_service.title || 'Hauptgottesdienst' }}</h2>
-                <p data-cms-field="main_service.description" data-cms-label="Beschreibung" data-cms-format="html">{{ pages.gottesdienste.main_service.description || '' }}</p>
+                <h2 data-cms-field="main_service.title" data-cms-label="Titel" data-i18n="services_page.main_service">{{ pages.gottesdienste.main_service.title || 'Hauptgottesdienst' }}</h2>
+                <p data-cms-field="main_service.description" data-cms-label="Beschreibung" data-cms-format="html" data-i18n="services_page.main_service_desc">{{ pages.gottesdienste.main_service.description || '' }}</p>
             </div>
             <div class="expect-pro-grid">
-                <each loop="feature in pages.gottesdienste.main_service.features">
+                <each loop="feature, index in pages.gottesdienste.main_service.features">
                     <div class="expect-pro-card-enhanced" data-cms-field="main_service.features" data-cms-label="Features">
                         <div class="card-overlay"></div>
                         <div class="card-content">
                             <div class="icon"><i class="fa-solid {{ feature.icon }}"></i></div>
-                            <h3>{{ feature.title }}</h3>
-                            <p>{{ feature.description }}</p>
+                            <h3 data-i18n="services_page.main_service_features.{{ index }}.title">{{ feature.title }}</h3>
+                            <p data-i18n="services_page.main_service_features.{{ index }}.description">{{ feature.description }}</p>
                         </div>
                     </div>
                 </each>
@@ -88,17 +88,17 @@
     <section class="content-section" data-cms-section="other_meetings">
         <div class="container">
             <div class="section-intro">
-                <h2 data-cms-field="other_meetings.title" data-cms-label="Titel">{{ pages.gottesdienste.other_meetings.title || 'Weitere Treffen' }}</h2>
+                <h2 data-cms-field="other_meetings.title" data-cms-label="Titel" data-i18n="services_page.other_meetings">{{ pages.gottesdienste.other_meetings.title || 'Weitere Treffen' }}</h2>
             </div>
             <div class="expect-pro-grid">
-                <each loop="meeting in pages.gottesdienste.other_meetings.items">
+                <each loop="meeting, index in pages.gottesdienste.other_meetings.items">
                     <div class="expect-pro-card-enhanced" data-cms-field="other_meetings.items" data-cms-label="Treffen">
                         <div class="card-overlay"></div>
                         <div class="card-content">
                             <div class="icon"><i class="fa-solid {{ meeting.icon }}"></i></div>
-                            <h3>{{ meeting.title }}</h3>
-                            <p>{{ meeting.day }} · {{ meeting.time }}</p>
-                            <p>{{ meeting.description }}</p>
+                            <h3 data-i18n="services_page.other_meetings_items.{{ index }}.title">{{ meeting.title }}</h3>
+                            <p><span data-i18n="services_page.other_meetings_items.{{ index }}.day">{{ meeting.day }}</span> · {{ meeting.time }}</p>
+                            <p data-i18n="services_page.other_meetings_items.{{ index }}.description">{{ meeting.description }}</p>
                         </div>
                     </div>
                 </each>
@@ -112,10 +112,10 @@
     <!-- Call to Action -->
     <section class="content-section cta-pro-section" data-cms-section="cta">
         <div class="container">
-            <h2 data-cms-field="cta.title" data-cms-label="CTA Titel">{{ pages.gottesdienste.cta.title || 'Komm, wie du bist' }}</h2>
-            <p data-cms-field="cta.text" data-cms-label="CTA Text" data-cms-format="html">{{ pages.gottesdienste.cta.text || 'Ganz egal, wo du im Leben stehst, du bist bei uns herzlich willkommen. Wir freuen uns darauf, dich kennenzulernen.' }}</p>
+            <h2 data-cms-field="cta.title" data-cms-label="CTA Titel" data-i18n="services_page.cta_title">{{ pages.gottesdienste.cta.title || 'Komm, wie du bist' }}</h2>
+            <p data-cms-field="cta.text" data-cms-label="CTA Text" data-cms-format="html" data-i18n="services_page.cta_text">{{ pages.gottesdienste.cta.text || 'Ganz egal, wo du im Leben stehst, du bist bei uns herzlich willkommen. Wir freuen uns darauf, dich kennenzulernen.' }}</p>
             <a href="{{ pages.gottesdienste.cta.button_link || '#anfahrt' }}" class="btn btn-primary" data-cms-field="cta.button_link" data-cms-label="CTA Button Link" data-cms-attr="href">
-              <span data-cms-field="cta.button_text" data-cms-label="CTA Button Text">{{ pages.gottesdienste.cta.button_text || 'Zur Anfahrt' }}</span>
+              <span data-cms-field="cta.button_text" data-cms-label="CTA Button Text" data-i18n="services_page.cta_button">{{ pages.gottesdienste.cta.button_text || 'Zur Anfahrt' }}</span>
             </a>
         </div>
     </section>
@@ -123,9 +123,14 @@
     <!-- Anfahrt -->
     <section id="anfahrt" class="content-section" data-cms-section="anfahrt">
         <div class="container">
-            <h2 data-cms-field="anfahrt.title" data-cms-label="Anfahrt Titel">{{ pages.gottesdienste.anfahrt.title || 'Anfahrt' }}</h2>
+            <h2 data-cms-field="anfahrt.title" data-cms-label="Anfahrt Titel" data-i18n="services_page.directions">{{ pages.gottesdienste.anfahrt.title || 'Anfahrt' }}</h2>
             <p class="narrow-center-text" data-cms-field="anfahrt.text" data-cms-label="Anfahrt Text" data-cms-format="html">
-              {{ pages.gottesdienste.anfahrt.text || ('Adresse: ' + (settings.contact.address || 'Hebbelstr. 56–60') + ', ' + (settings.contact.city || '55127 Mainz')) }}
+              <if condition="pages.gottesdienste.anfahrt.text">
+                {{ pages.gottesdienste.anfahrt.text }}
+              </if>
+              <if condition="!pages.gottesdienste.anfahrt.text">
+                <span data-i18n="services_page.address_prefix">Adresse:</span> {{ settings.contact.address || 'Hebbelstr. 56–60' }}, {{ settings.contact.city || '55127 Mainz' }}
+              </if>
             </p>
             <div class="map-container">
               <iframe

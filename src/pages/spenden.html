@@ -36,8 +36,8 @@
     >
       <div class="container">
         <div class="donate-hero-content">
-          <h1 id="spenden-hero-title" data-cms-field="hero.title" data-cms-label="Titel">{{ pages.spenden.hero.title || 'Deine Spende bewegt Herzen' }}</h1>
-          <p id="spenden-hero-subtitle" class="lead" data-cms-field="hero.subtitle" data-cms-label="Untertitel" data-cms-format="html">{{ pages.spenden.hero.subtitle || 'Mit deiner Unterstützung können wir in Mainz einen Ort der Hoffnung, der Gemeinschaft und des Glaubens gestalten. Jeder Beitrag, ob groß oder klein, macht einen Unterschied.' }}</p>
+          <h1 id="spenden-hero-title" data-cms-field="hero.title" data-cms-label="Titel" data-i18n="donate_page.title">{{ pages.spenden.hero.title || 'Deine Spende bewegt Herzen' }}</h1>
+          <p id="spenden-hero-subtitle" class="lead" data-cms-field="hero.subtitle" data-cms-label="Untertitel" data-cms-format="html" data-i18n-html="donate_page.subtitle">{{ pages.spenden.hero.subtitle || 'Mit deiner Unterstützung können wir in Mainz einen Ort der Hoffnung, der Gemeinschaft und des Glaubens gestalten. Jeder Beitrag, ob groß oder klein, macht einen Unterschied.' }}</p>
           <a href="#spenden-optionen" class="btn btn-primary btn-lg">
             <i class="fa-solid fa-heart"></i> <span data-i18n="donate_page.donate_now">Jetzt spenden</span>
           </a>
@@ -78,7 +78,7 @@
           <div class="donate-option-card">
             <div class="donate-option-header">
               <i class="fa-solid fa-landmark"></i>
-              <h3 data-cms-field="bank_details.title" data-cms-label="Titel">{{ pages.spenden.bank_details.title || 'Banküberweisung' }}</h3>
+              <h3 data-cms-field="bank_details.title" data-cms-label="Titel" data-i18n="donate_page.bank_transfer">{{ pages.spenden.bank_details.title || 'Banküberweisung' }}</h3>
             </div>
             <div class="donate-option-body">
               <p data-i18n="donate_page.bank_transfer_desc">Spende direkt auf unser Konto. Für eine Spendenquittung gib bitte deine Adresse im Verwendungszweck an.</p>

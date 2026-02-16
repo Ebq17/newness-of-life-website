@@ -127,9 +127,10 @@ async function renderPage(file, locals) {
 
   try {
     const html = await fs.readFile(src, 'utf8');
+    const localsForPage = { ...locals, currentPage: file };
     const result = await posthtml([
       include({ root: SRC_DIR }),
-      expressions({ locals })
+      expressions({ locals: localsForPage })
     ]).process(html);
 
     await fs.writeFile(dest, result.html);
