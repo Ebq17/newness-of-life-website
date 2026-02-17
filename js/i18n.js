@@ -5,10 +5,37 @@
 const I18n = {
   currentLang: 'de',
   translations: {},
+  storageKey: 'site-language',
+
+  getSavedLanguage() {
+    // Default to German for each new browser session/tab.
+    try {
+      const lang = sessionStorage.getItem(this.storageKey);
+      if (lang === 'de' || lang === 'en') return lang;
+    } catch (e) {
+      // Ignore storage errors and keep fallback.
+    }
+    return 'de';
+  },
+
+  saveLanguage(lang) {
+    try {
+      sessionStorage.setItem(this.storageKey, lang);
+    } catch (e) {
+      // Ignore storage errors; language still works for current page.
+    }
+  },
 
   async init() {
-    // Load saved language preference
-    this.currentLang = localStorage.getItem('site-language') || 'de';
+    // Load language for current browser session only.
+    this.currentLang = this.getSavedLanguage();
+
+    // Remove old persistent preference so German is the default on new visits.
+    try {
+      localStorage.removeItem(this.storageKey);
+    } catch (e) {
+      // Ignore storage errors.
+    }
 
     // Load translations
     try {
@@ -34,7 +61,7 @@ const I18n = {
     if (lang !== 'de' && lang !== 'en') return;
 
     this.currentLang = lang;
-    localStorage.setItem('site-language', lang);
+    this.saveLanguage(lang);
     document.documentElement.lang = lang;
 
     this.applyTranslations();

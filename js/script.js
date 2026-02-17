@@ -133,46 +133,157 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // --- Contact Form (API) ---
+    // --- Contact Form (API + Netlify Fallback) ---
     const contactForm = document.getElementById('contact-form');
     if (contactForm) {
         const statusEl = document.getElementById('contact-status');
         const submitBtn = contactForm.querySelector('button[type="submit"]');
+        const isLocalStaticSite = location.hostname === 'localhost' && location.port === '8080';
+        const hasNetlifyForm = contactForm.getAttribute('data-netlify') === 'true';
+
+        // E-Mail Validierung
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        async function submitToContactApi(payload) {
+            const apiBase = isLocalStaticSite ? 'http://localhost:3001' : '';
+            let res;
+
+            try {
+                res = await fetch(`${apiBase}/api/contact`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+            } catch (err) {
+                const networkError = new Error('Kontakt-Server nicht erreichbar. Bitte spaeter erneut versuchen.');
+                networkError.code = 'API_NETWORK';
+                throw networkError;
+            }
+
+            const contentType = (res.headers.get('content-type') || '').toLowerCase();
+            let data = null;
+
+            if (contentType.includes('application/json')) {
+                try {
+                    data = await res.json();
+                } catch (err) {
+                    const parseError = new Error('Ungueltige Antwort vom Kontakt-Server.');
+                    parseError.code = 'API_NON_JSON';
+                    throw parseError;
+                }
+            } else {
+                data = { raw: await res.text() };
+            }
+
+            if (!res.ok) {
+                const apiError = new Error((data && data.error) ? data.error : 'Fehler beim Senden');
+                apiError.code = (res.status === 404 || res.status === 405 || res.status >= 500)
+                    ? 'API_UNAVAILABLE'
+                    : 'API_VALIDATION';
+                throw apiError;
+            }
+
+            if (!contentType.includes('application/json')) {
+                const unexpectedResponseError = new Error('Kontakt-API hat keine JSON-Antwort geliefert.');
+                unexpectedResponseError.code = 'API_NON_JSON';
+                throw unexpectedResponseError;
+            }
+
+            return data || {};
+        }
+
+        async function submitToNetlifyForm(payload) {
+            const formName = contactForm.getAttribute('name') || 'contact';
+            const encodedBody = new URLSearchParams({
+                'form-name': formName,
+                name: payload.name,
+                email: payload.email,
+                subject: payload.subject,
+                message: payload.message,
+                website: payload.website
+            });
+
+            const res = await fetch('/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: encodedBody.toString()
+            });
+
+            if (!res.ok) {
+                throw new Error('Fehler beim Senden');
+            }
+
+            return {};
+        }
 
         contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            const formData = new FormData(contactForm);
+            const email = formData.get('email') || '';
+
+            // E-Mail Format prüfen
+            if (!isValidEmail(email)) {
+                if (statusEl) {
+                    statusEl.textContent = 'Bitte geben Sie eine gültige E-Mail-Adresse ein (z.B. name@beispiel.de)';
+                    statusEl.className = 'form-status is-error';
+                }
+                return;
+            }
+
             if (submitBtn) submitBtn.disabled = true;
             if (statusEl) {
                 statusEl.textContent = 'Sende...';
                 statusEl.className = 'form-status';
             }
 
-            const formData = new FormData(contactForm);
             const payload = {
                 name: formData.get('name') || '',
-                email: formData.get('email') || '',
+                email: email,
                 subject: formData.get('subject') || '',
                 message: formData.get('message') || '',
                 website: formData.get('website') || ''
             };
 
-            const apiBase = (location.hostname === 'localhost' && location.port === '8080')
-                ? 'http://localhost:3001'
-                : '';
-
             try {
-                const res = await fetch(`${apiBase}/api/contact`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const data = await res.json();
-                if (!res.ok) {
-                    throw new Error(data.error || 'Fehler beim Senden');
+                let data;
+
+                try {
+                    data = await submitToContactApi(payload);
+                } catch (apiErr) {
+                    const shouldFallbackToNetlify =
+                        hasNetlifyForm &&
+                        !isLocalStaticSite &&
+                        (apiErr.code === 'API_UNAVAILABLE' || apiErr.code === 'API_NON_JSON' || apiErr.code === 'API_NETWORK');
+
+                    if (!shouldFallbackToNetlify) {
+                        throw apiErr;
+                    }
+
+                    data = await submitToNetlifyForm(payload);
                 }
+
                 if (statusEl) {
-                    statusEl.textContent = `Danke! Wir haben deine Nachricht erhalten. Ticket: ${data.ticketId || ''}`.trim();
-                    statusEl.className = 'form-status is-success';
+                    const ticketInfo = data.ticketId ? ` Ticket: ${data.ticketId}` : '';
+                    const internalMailFailed =
+                        data &&
+                        data.emailStatus &&
+                        data.emailStatus.internal_notification &&
+                        data.emailStatus.internal_notification !== 'sent';
+
+                    if (internalMailFailed) {
+                        statusEl.textContent = `Nachricht gespeichert.${ticketInfo} E-Mail-Zustellung ist fehlgeschlagen.`;
+                        statusEl.className = 'form-status is-error';
+                    } else {
+                        statusEl.textContent = `Danke! Wir haben deine Nachricht erhalten.${ticketInfo}`;
+                        statusEl.className = 'form-status is-success';
+                    }
                 }
                 contactForm.reset();
             } catch (err) {

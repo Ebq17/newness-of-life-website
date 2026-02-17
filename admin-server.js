@@ -2,12 +2,45 @@
 'use strict';
 
 const http = require('http');
+const fsSync = require('fs');
 const fs = require('fs').promises;
 const path = require('path');
 const { exec } = require('child_process');
 const url = require('url');
 const { Resend } = require('resend');
 const https = require('https');
+
+function loadEnvFile(filePath) {
+  try {
+    const raw = fsSync.readFileSync(filePath, 'utf8');
+    const lines = raw.split(/\r?\n/);
+
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) continue;
+
+      const match = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$/);
+      if (!match) continue;
+
+      const key = match[1];
+      let value = match[2] || '';
+      if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+        value = value.slice(1, -1);
+      }
+      value = value.replace(/\\n/g, '\n');
+
+      if (process.env[key] === undefined) {
+        process.env[key] = value;
+      }
+    }
+  } catch (err) {
+    if (err && err.code !== 'ENOENT') {
+      console.warn(`Could not read env file ${filePath}:`, err.message);
+    }
+  }
+}
+
+loadEnvFile(path.join(__dirname, '.env'));
 
 // Simple rate limit (per IP)
 const rateLimits = new Map();
@@ -432,11 +465,9 @@ function createRequestHandler({ rootDir = __dirname } = {}) {
 
         // POST /api/contact - Contact form handler
         if (method === 'POST' && route === 'contact') {
-          const {
-            TO_EMAIL = 'newnessoflife@clgi.org',
-            FROM_EMAIL = 'Newness of Life <kontakt@newnessoflife.de>',
-            NOREPLY_EMAIL = 'Newness of Life <noreply@newnessoflife.de>',
-          } = process.env;
+          const TO_EMAIL = process.env.TO_EMAIL || process.env.INTERNAL_EMAIL || 'newnessoflife@clgi.org';
+          const FROM_EMAIL = process.env.FROM_EMAIL || process.env.RESEND_FROM || 'Newness of Life <kontakt@newnessoflife.de>';
+          const NOREPLY_EMAIL = process.env.NOREPLY_EMAIL || 'Newness of Life <noreply@newnessoflife.de>';
 
           const ip = getClientIp(req);
           if (isRateLimited(ip)) {

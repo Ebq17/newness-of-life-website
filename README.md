@@ -29,7 +29,8 @@ Der Endpoint `POST /api/contact` verschickt E-Mails über Resend.
 - Konfiguration über `.env` (siehe `.env.example`)
 - Wichtige Variablen:
   - `RESEND_API_KEY`
-  - `RESEND_FROM`
-  - `INTERNAL_EMAIL`
+  - `TO_EMAIL`
+  - `FROM_EMAIL`
+  - `NOREPLY_EMAIL`
 
 Hinweis: Wenn ein API-Key jemals in GitHub gelandet ist, bitte im Resend-Dashboard rotieren und den alten Key deaktivieren.

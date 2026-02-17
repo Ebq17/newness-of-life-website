@@ -222,7 +222,8 @@
                 <div class="contact-grid">
                     <div class="contact-form">
                         <h3 id="kontakt-form-title" data-cms-field="contact_section.form_title" data-cms-label="Formular-Titel" data-i18n="contact_section.form_title">Schreiben Sie uns</h3>
-                        <form id="contact-form" method="POST" action="/api/contact">
+                        <form id="contact-form" name="contact" method="POST" action="/" data-netlify="true" netlify-honeypot="website">
+                            <input type="hidden" name="form-name" value="contact">
                             <input type="text" name="website" class="is-hidden" tabindex="-1" autocomplete="off">
                             <input type="text" name="name" placeholder="Ihr Name" data-i18n="contact_section.name" required="">
                             <input type="email" name="email" placeholder="Ihre E-Mail" data-i18n="contact_section.email" required="">
