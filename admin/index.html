@@ -1345,9 +1345,23 @@
   <div class="toast-container" id="toastContainer"></div>
 
   <script>
+    const ADMIN_PATH = window.location.pathname;
+    const ADMIN_BASE = ADMIN_PATH.includes('/admin/')
+      ? ADMIN_PATH.split('/admin/')[0]
+      : (ADMIN_PATH.endsWith('/admin') ? ADMIN_PATH.slice(0, -6) : '');
+    const QUERY_API = new URLSearchParams(window.location.search).get('api');
+    const STORED_API = localStorage.getItem('admin-api');
+    const IS_LOCALHOST = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const DEFAULT_API = IS_LOCALHOST
+      ? 'http://localhost:3001/api'
+      : `${window.location.origin}${ADMIN_BASE}/api`;
+    const DEFAULT_SITE = IS_LOCALHOST
+      ? 'http://localhost:8080'
+      : `${window.location.origin}${ADMIN_BASE}`;
+
     const App = {
-      API: 'http://localhost:3001/api',
-      SITE: 'http://localhost:8080',
+      API: (QUERY_API || STORED_API || DEFAULT_API).replace(/\/+$/, ''),
+      SITE: DEFAULT_SITE.replace(/\/+$/, ''),
       currentPage: null,
       pageData: {},
       eventsData: { categories: [], items: [] },
@@ -1357,6 +1371,7 @@
       selectedImage: null,
       imageFieldCallback: null,
       eventImageCallback: false,
+      readOnlyNoticeShown: false,
 
       pages: {
         homepage: { title: 'Startseite', icon: 'fa-home', file: 'homepage.json', url: '/index.html', desc: 'Hero, Gottesdienste, Über uns', sections: [
@@ -1536,16 +1551,41 @@
         else if (viewId === 'editor' && pageId) this.loadPageEditor(pageId);
       },
 
+      getStaticDataUrl(endpoint) {
+        const rel = endpoint.replace(/^\/data\//, 'data/');
+        return `../${rel}`;
+      },
+
+      showReadOnlyNotice() {
+        if (this.readOnlyNoticeShown) return;
+        this.readOnlyNoticeShown = true;
+        this.toast('API offline: Daten werden nur lesend aus statischen JSON-Dateien geladen.', 'info');
+      },
+
       async api(endpoint, options = {}) {
-        const res = await fetch(`${this.API}${endpoint}`, { ...options, headers: { 'Content-Type': 'application/json', ...options.headers } });
-        let data = {};
+        const method = (options.method || 'GET').toUpperCase();
+        const isReadableDataEndpoint = method === 'GET' && /^\/data\/.+\.json$/.test(endpoint);
+
         try {
-          data = await res.json();
-        } catch {
-          data = {};
+          const res = await fetch(`${this.API}${endpoint}`, { ...options, headers: { 'Content-Type': 'application/json', ...options.headers } });
+          let data = {};
+          try {
+            data = await res.json();
+          } catch {
+            data = {};
+          }
+          if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+          return data;
+        } catch (err) {
+          if (isReadableDataEndpoint) {
+            const staticRes = await fetch(this.getStaticDataUrl(endpoint));
+            if (staticRes.ok) {
+              this.showReadOnlyNotice();
+              return staticRes.json();
+            }
+          }
+          throw err;
         }
-        if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
-        return data;
       },
 
       async checkServer() {
@@ -1807,7 +1847,7 @@
 
       async loadEvents() {
         try { this.eventsData = await this.api('/data/events.json'); this.renderEventsTable(); }
-        catch { this.toast('Fehler beim Laden', 'error'); }
+        catch (err) { this.toast(`Fehler beim Laden: ${err.message || 'Unbekannt'}`, 'error'); }
       },
 
       renderEventsTable() {
