@@ -35,30 +35,30 @@
           <if condition="settings.contact.phone">
             <p><i class="fas fa-phone"></i> <a href="tel:{{ settings.contact.phone }}">{{ settings.contact.phone }}</a></p>
           </if>
+          <if condition="settings.contact.whatsapp">
+            <p><i class="fab fa-whatsapp"></i> <a href="https://api.whatsapp.com/send?phone={{ settings.contact.whatsapp }}" target="_blank" rel="noopener">{{ settings.contact.whatsapp }}</a></p>
+          </if>
         </address>
         <a href="index.html#kontakt" class="btn-footer-donate" data-i18n="contact_section.form_title">Kontaktformular</a>
       </div>
 
       <!-- Column 4: Social Media & Donations -->
       <div class="footer-column">
-        <h3 class="footer-heading" data-i18n="footer.follow_us">Folge uns</h3>
-        <div class="footer-social">
-          <if condition="settings.social_media.instagram">
-            <a href="{{ settings.social_media.instagram }}" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-          </if>
-          <if condition="settings.social_media.facebook">
-            <a href="{{ settings.social_media.facebook }}" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-          </if>
-          <if condition="settings.social_media.youtube">
-            <a href="{{ settings.social_media.youtube }}" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-          </if>
-          <if condition="settings.social_media.tiktok">
-            <a href="{{ settings.social_media.tiktok }}" target="_blank" rel="noopener" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
-          </if>
-          <if condition="settings.social_media.twitter">
-            <a href="{{ settings.social_media.twitter }}" target="_blank" rel="noopener" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-          </if>
-        </div>
+        <if condition="settings.footer.show_social_icons !== false">
+          <h3 class="footer-heading" data-i18n="footer.follow_us">Folge uns</h3>
+          <div class="footer-social">
+            <a href="{{ settings.social_media.instagram || 'https://instagram.com' }}" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <if condition="settings.social_media.facebook">
+              <a href="{{ settings.social_media.facebook }}" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+            </if>
+            <if condition="settings.social_media.youtube">
+              <a href="{{ settings.social_media.youtube }}" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            </if>
+            <if condition="settings.social_media.tiktok">
+              <a href="{{ settings.social_media.tiktok }}" target="_blank" rel="noopener" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+            </if>
+          </div>
+        </if>
         <div class="footer-donation">
           <h3 class="footer-heading" data-i18n="footer.donate">Unterstütze uns</h3>
           <p data-cms-field="footer.donation_text" data-cms-label="Spenden Text" data-i18n="footer.donate_text">{{ footer.donation_text || 'Deine Spende hilft uns, einen Unterschied in unserer Stadt zu machen.' }}</p>

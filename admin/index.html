@@ -440,6 +440,66 @@
     .event-image-preview img { width: 100%; height: 100%; object-fit: cover; }
     .event-image-preview.has-image { border-style: solid; }
     .event-image-actions { display: flex; flex-direction: column; gap: 8px; }
+    .flyer-style-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+    }
+    .flyer-range-value {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-left: 6px;
+      font-weight: 500;
+    }
+    .flyer-style-grid input[type="range"] {
+      width: 100%;
+      accent-color: var(--primary);
+    }
+    .schedule-editor {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .schedule-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .schedule-empty {
+      font-size: 12px;
+      color: var(--text-muted);
+      padding: 8px 10px;
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      background: var(--bg-elevated);
+    }
+    .schedule-row {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg-elevated);
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .schedule-row-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .schedule-row-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
 
     .icon-picker {
       display: flex;
@@ -518,6 +578,36 @@
     .toggle input:checked + .toggle-slider { background: var(--primary); }
     .toggle input:checked + .toggle-slider:before { transform: translateX(16px); }
     .toggle-label { font-size: 13px; color: var(--text-secondary); }
+
+    .editor-note {
+      margin-bottom: 14px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg-elevated);
+      color: var(--text-secondary);
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .editor-note i { color: var(--primary); margin-right: 6px; }
+
+    .editor-toolbar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .section-actions {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
 
     .events-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
 
@@ -636,6 +726,38 @@
     .media-item:hover { border-color: var(--primary); }
     .media-item.selected { border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary); }
     .media-item img { width: 100%; height: 100%; object-fit: cover; }
+
+    .media-item-actions {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      display: flex;
+      gap: 6px;
+      opacity: 0;
+      transition: opacity 0.15s;
+      z-index: 2;
+    }
+
+    .media-item:hover .media-item-actions { opacity: 1; }
+
+    .media-delete-btn {
+      width: 28px;
+      height: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      background: rgba(17, 24, 39, 0.88);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.15s, background 0.15s;
+    }
+
+    .media-delete-btn:hover {
+      background: var(--danger);
+      transform: translateY(-1px);
+    }
 
     .media-item-overlay {
       position: absolute;
@@ -858,6 +980,8 @@
     @media (max-width: 1200px) {
       .editor-layout { grid-template-columns: 1fr; }
       .editor-preview { display: none; }
+      .flyer-style-grid { grid-template-columns: 1fr; }
+      .schedule-row-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     ::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -1053,6 +1177,7 @@
           <div class="header-left"><h1 class="header-title">Einstellungen</h1></div>
           <div class="header-actions">
             <button class="btn btn-primary" onclick="App.saveSettings()"><i class="fa-solid fa-save"></i> Speichern</button>
+            <button class="btn btn-success" onclick="App.saveSettingsAndBuild()"><i class="fa-solid fa-check"></i> Veröffentlichen</button>
           </div>
         </header>
         <div class="content"><div class="settings-grid" id="settingsContent"><div class="loading"><div class="spinner"></div> Lade...</div></div></div>
@@ -1141,8 +1266,45 @@
               <input type="hidden" id="eventImage">
             </div>
             <p style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">Mit Flyer-Bild wird das Event als großer Flyer angezeigt</p>
+            <div class="flyer-style-grid">
+              <div class="form-group">
+                <label class="form-label">Bildposition</label>
+                <select class="form-select" id="eventFlyerPosition" onchange="App.updateFlyerStylePreviewLabels()">
+                  <option value="center center">Mitte</option>
+                  <option value="center top">Oben</option>
+                  <option value="center 30%">Oben-Mitte</option>
+                  <option value="center 70%">Unten-Mitte</option>
+                  <option value="center bottom">Unten</option>
+                  <option value="left center">Links</option>
+                  <option value="right center">Rechts</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Zoom <span class="flyer-range-value" id="eventFlyerZoomValue">100%</span></label>
+                <input type="range" id="eventFlyerZoom" min="100" max="170" step="5" value="100" oninput="App.updateFlyerStylePreviewLabels()">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Dunkelheit <span class="flyer-range-value" id="eventFlyerOverlayValue">85%</span></label>
+                <input type="range" id="eventFlyerOverlay" min="40" max="95" step="5" value="85" oninput="App.updateFlyerStylePreviewLabels()">
+              </div>
+            </div>
+            <p style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">Diese Optionen wirken nur, wenn Flyer-Layout aktiv ist.</p>
           </div>
           <div class="form-group"><label class="form-label">Beschreibung</label><textarea class="form-textarea" id="eventDescription" placeholder="Beschreibung..."></textarea></div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group"><label class="form-label">Enddatum (optional)</label><input type="date" class="form-input" id="eventEndDate"></div>
+            <div class="form-group"><label class="form-label">Endzeit (optional)</label><input type="time" class="form-input" id="eventEndTime"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Programm (mehrere Tage)</label>
+            <div class="schedule-editor">
+              <div id="eventScheduleList" class="schedule-list"></div>
+              <div>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="App.addEventScheduleRow()"><i class="fa-solid fa-plus"></i> Programmpunkt hinzufügen</button>
+              </div>
+            </div>
+            <p style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">Beispiel: Freitag 18:00-21:00, Samstag 10:00-20:00, Sonntag 11:00-14:30.</p>
+          </div>
           <div style="display: flex; gap: 20px; flex-wrap: wrap;">
             <div class="toggle-wrapper"><label class="toggle"><input type="checkbox" id="eventFeatured"><span class="toggle-slider"></span></label><span class="toggle-label">Featured</span></div>
             <div class="toggle-wrapper"><label class="toggle"><input type="checkbox" id="eventPublished" checked><span class="toggle-slider"></span></label><span class="toggle-label">Veröffentlicht</span></div>
@@ -1303,29 +1465,7 @@
             { key: 'seo.meta_description', label: 'Meta Beschreibung', type: 'textarea' }
           ]}
         ]},
-        'service-karten': { title: 'Service-Karten', icon: 'fa-layer-group', file: 'global.json', url: '/index.html', desc: 'Gottesdienst, Gebet, Bibelstudium', sections: [
-          { id: 'service1', title: 'Gottesdienst', icon: 'fa-church', fields: [
-            { key: 'service_cards.0.image', label: 'Bild', type: 'image' },
-            { key: 'service_cards.0.label', label: 'Label (oben)', type: 'text' },
-            { key: 'service_cards.0.title', label: 'Titel', type: 'text' },
-            { key: 'service_cards.0.time', label: 'Zeit (z.B. Jeden Sonntag um 14:00 Uhr)', type: 'text' },
-            { key: 'service_cards.0.link', label: 'Link (optional)', type: 'text' }
-          ]},
-          { id: 'service2', title: 'Gebetsabend', icon: 'fa-pray', fields: [
-            { key: 'service_cards.1.image', label: 'Bild', type: 'image' },
-            { key: 'service_cards.1.label', label: 'Label (oben)', type: 'text' },
-            { key: 'service_cards.1.title', label: 'Titel', type: 'text' },
-            { key: 'service_cards.1.time', label: 'Zeit (z.B. Jeden Freitag um 19:00 Uhr)', type: 'text' },
-            { key: 'service_cards.1.link', label: 'Link (optional)', type: 'text' }
-          ]},
-          { id: 'service3', title: 'Bibelstudium', icon: 'fa-book-bible', fields: [
-            { key: 'service_cards.2.image', label: 'Bild', type: 'image' },
-            { key: 'service_cards.2.label', label: 'Label (oben)', type: 'text' },
-            { key: 'service_cards.2.title', label: 'Titel', type: 'text' },
-            { key: 'service_cards.2.time', label: 'Zeit (z.B. Jeden Montag um 19:00 Uhr)', type: 'text' },
-            { key: 'service_cards.2.link', label: 'Link (optional)', type: 'text' }
-          ]}
-        ]},
+        'service-karten': { title: 'Service-Boxen', icon: 'fa-layer-group', file: 'global.json', url: '/index.html', desc: 'Karten bearbeiten, ausblenden, löschen', editorType: 'serviceCards', sections: [] },
         global: { title: 'Header & Footer', icon: 'fa-globe', file: 'global.json', url: '/index.html', desc: 'Logo, Navigation', sections: [
           { id: 'header', title: 'Header / Logo', icon: 'fa-heading', fields: [
             { key: 'header.logo.text', label: 'Logo Text', type: 'text' },
@@ -1397,8 +1537,14 @@
 
       async api(endpoint, options = {}) {
         const res = await fetch(`${this.API}${endpoint}`, { ...options, headers: { 'Content-Type': 'application/json', ...options.headers } });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return await res.json();
+        let data = {};
+        try {
+          data = await res.json();
+        } catch {
+          data = {};
+        }
+        if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+        return data;
       },
 
       async checkServer() {
@@ -1451,6 +1597,16 @@
       renderEditor() {
         const container = document.getElementById('editorContent');
         let html = '';
+
+        if (this.currentPage.id === 'index') {
+          html += `<div class="editor-note"><span><i class="fa-solid fa-circle-info"></i>Service-Boxen werden separat bearbeitet.</span><button type="button" class="btn btn-secondary btn-sm" onclick="App.showView('editor', 'service-karten')"><i class="fa-solid fa-layer-group"></i> Service-Boxen öffnen</button></div>`;
+        }
+
+        if (this.currentPage.editorType === 'serviceCards') {
+          container.innerHTML = html + this.renderServiceCardsEditor();
+          return;
+        }
+
         for (const section of this.currentPage.sections) {
           html += `<div class="form-section" data-section="${section.id}"><div class="form-section-header" onclick="this.parentElement.classList.toggle('collapsed')"><i class="fa-solid ${section.icon}"></i><h3>${section.title}</h3><i class="fa-solid fa-chevron-down form-section-toggle"></i></div><div class="form-section-body">`;
           for (const field of section.fields) {
@@ -1470,6 +1626,156 @@
           html += `</div></div>`;
         }
         container.innerHTML = html;
+      },
+
+      ensureServiceCards() {
+        if (!Array.isArray(this.pageData.service_cards)) {
+          this.pageData.service_cards = [];
+        }
+        return this.pageData.service_cards;
+      },
+
+      createDefaultServiceCard() {
+        return {
+          label: '',
+          title: 'Neue Box',
+          time: '',
+          image: '',
+          link: '',
+          show: true
+        };
+      },
+
+      renderServiceCardsEditor() {
+        const cards = this.ensureServiceCards();
+        let html = `
+          <div class="editor-note">
+            <span><i class="fa-solid fa-pen-to-square"></i>Hier kannst du Boxen bearbeiten, ausblenden oder komplett entfernen.</span>
+          </div>
+          <div class="editor-toolbar">
+            <button type="button" class="btn btn-primary btn-sm" onclick="App.addServiceCard()"><i class="fa-solid fa-plus"></i> Box hinzufügen</button>
+          </div>
+        `;
+
+        if (!cards.length) {
+          html += `<div class="empty-state"><i class="fa-solid fa-layer-group"></i><h3>Keine Service-Boxen vorhanden</h3><p>Erstelle eine neue Box für die Startseite.</p><button type="button" class="btn btn-primary" onclick="App.addServiceCard()"><i class="fa-solid fa-plus"></i> Erste Box anlegen</button></div>`;
+          return html;
+        }
+
+        cards.forEach((card, index) => {
+          const current = card && typeof card === 'object' ? card : this.createDefaultServiceCard();
+          const title = this.escapeHtml(current.title || `Box ${index + 1}`);
+          const label = this.escapeHtml(current.label || '');
+          const time = this.escapeHtml(current.time || '');
+          const link = this.escapeHtml(current.link || '');
+          const image = current.image || '';
+          const showChecked = current.show !== false ? 'checked' : '';
+          const visibilityBadge = current.show !== false
+            ? '<span class="badge badge-success">Sichtbar</span>'
+            : '<span class="badge badge-warning">Versteckt</span>';
+
+          html += `
+            <div class="form-section" data-section="service-card-${index}">
+              <div class="form-section-header" onclick="this.parentElement.classList.toggle('collapsed')">
+                <i class="fa-solid fa-layer-group"></i>
+                <h3>Box ${index + 1}: ${title}</h3>
+                ${visibilityBadge}
+                <i class="fa-solid fa-chevron-down form-section-toggle"></i>
+              </div>
+              <div class="form-section-body">
+                <div class="section-actions">
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="App.moveServiceCard(${index}, -1)" ${index === 0 ? 'disabled' : ''}><i class="fa-solid fa-arrow-up"></i> Nach oben</button>
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="App.moveServiceCard(${index}, 1)" ${index === cards.length - 1 ? 'disabled' : ''}><i class="fa-solid fa-arrow-down"></i> Nach unten</button>
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="App.duplicateServiceCard(${index})"><i class="fa-solid fa-copy"></i> Duplizieren</button>
+                  <button type="button" class="btn btn-danger btn-sm" onclick="App.removeServiceCard(${index})"><i class="fa-solid fa-trash"></i> Löschen</button>
+                </div>
+
+                <div class="form-group">
+                  <div class="toggle-wrapper">
+                    <label class="toggle">
+                      <input type="checkbox" data-key="service_cards.${index}.show" ${showChecked} onchange="App.handleToggle(this)">
+                      <span class="toggle-slider"></span>
+                    </label>
+                    <span class="toggle-label">Auf Startseite anzeigen</span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Bild</label>
+                  <div class="image-field">
+                    <div class="image-preview">${image ? `<img src="${this.SITE}${image}" alt="">` : '<i class="fa-solid fa-image image-preview-empty"></i>'}</div>
+                    <div class="image-actions">
+                      <button type="button" class="btn btn-secondary btn-sm" onclick="App.openImagePicker('service_cards.${index}.image')"><i class="fa-solid fa-image"></i> Auswählen</button>
+                      ${image ? `<button type="button" class="btn btn-secondary btn-sm" onclick="App.removeImage('service_cards.${index}.image')"><i class="fa-solid fa-trash"></i></button>` : ''}
+                    </div>
+                  </div>
+                  <input type="hidden" data-key="service_cards.${index}.image" value="${this.escapeHtml(image)}">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Label (oben)</label>
+                  <input type="text" class="form-input" data-key="service_cards.${index}.label" value="${label}" oninput="App.handleInput(this)">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Titel</label>
+                  <input type="text" class="form-input" data-key="service_cards.${index}.title" value="${title}" oninput="App.handleInput(this)">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Zeit / Beschreibung</label>
+                  <input type="text" class="form-input" data-key="service_cards.${index}.time" value="${time}" oninput="App.handleInput(this)">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Link (optional)</label>
+                  <input type="text" class="form-input" data-key="service_cards.${index}.link" value="${link}" oninput="App.handleInput(this)">
+                </div>
+              </div>
+            </div>
+          `;
+        });
+
+        return html;
+      },
+
+      addServiceCard() {
+        const cards = this.ensureServiceCards();
+        cards.push(this.createDefaultServiceCard());
+        this.hasChanges = true;
+        this.updateEditorStatus();
+        this.renderEditor();
+      },
+
+      duplicateServiceCard(index) {
+        const cards = this.ensureServiceCards();
+        if (!cards[index]) return;
+        const clone = JSON.parse(JSON.stringify(cards[index]));
+        cards.splice(index + 1, 0, clone);
+        this.hasChanges = true;
+        this.updateEditorStatus();
+        this.renderEditor();
+      },
+
+      removeServiceCard(index) {
+        const cards = this.ensureServiceCards();
+        if (!cards[index]) return;
+        if (!confirm('Diese Box wirklich entfernen?')) return;
+        cards.splice(index, 1);
+        this.hasChanges = true;
+        this.updateEditorStatus();
+        this.renderEditor();
+      },
+
+      moveServiceCard(index, direction) {
+        const cards = this.ensureServiceCards();
+        const newIndex = index + direction;
+        if (index < 0 || newIndex < 0 || index >= cards.length || newIndex >= cards.length) return;
+        const [item] = cards.splice(index, 1);
+        cards.splice(newIndex, 0, item);
+        this.hasChanges = true;
+        this.updateEditorStatus();
+        this.renderEditor();
       },
 
       handleInput(input) { this.setValue(this.pageData, input.dataset.key, input.value); this.hasChanges = true; this.updateEditorStatus(); },
@@ -1515,32 +1821,41 @@
           return;
         }
 
-        // Sort by date (newest first)
-        const sorted = [...items].sort((a, b) => new Date(b.date) - new Date(a.date));
+        // Sort by date (upcoming first) - gleiche Reihenfolge wie Website
+        const sorted = [...items].sort((a, b) => new Date(a.date) - new Date(b.date));
 
         grid.innerHTML = sorted.map(e => {
           const cat = categories.find(c => c.id === e.category) || { name: e.category, color: '#666', icon: 'fa-calendar' };
           const date = new Date(e.date);
+          const endDate = e.end_date ? new Date(e.end_date) : null;
+          const hasEndDate = endDate && !Number.isNaN(endDate.getTime()) && endDate > date;
+          const hasSchedule = Array.isArray(e.schedule) && e.schedule.length > 0;
+          const flyerStyle = this.normalizeFlyerStyle(e.flyer_style || {});
+          const imageStyle = `object-position:${flyerStyle.position}; transform:scale(${(flyerStyle.zoom / 100).toFixed(2)}); transform-origin:${flyerStyle.position};`;
           const dateStr = date.toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' });
+          const endDateStr = hasEndDate ? endDate.toLocaleDateString('de-DE', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' }) : '';
           const timeStr = date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+          const endTimeStr = hasEndDate ? endDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) : '';
+          const sameDayRange = hasEndDate && date.toDateString() === endDate.toDateString();
           const isPast = date < new Date();
 
           return `<div class="event-card ${e.published ? '' : 'unpublished'}">
             <div class="event-card-image" style="background: linear-gradient(135deg, ${cat.color}22, ${cat.color}44);">
-              ${e.image ? `<img src="${this.SITE}${e.image}" alt="${this.escapeHtml(e.title)}">` : `<i class="fa-solid ${cat.icon}" style="color: ${cat.color};"></i>`}
+              ${e.image ? `<img src="${this.SITE}${e.image}" alt="${this.escapeHtml(e.title)}" style="${imageStyle}">` : `<i class="fa-solid ${cat.icon}" style="color: ${cat.color};"></i>`}
               <div class="event-card-badges">
                 ${e.featured ? '<span class="badge badge-warning"><i class="fa-solid fa-star"></i> Featured</span>' : ''}
                 ${!e.published ? '<span class="badge badge-secondary">Entwurf</span>' : ''}
                 ${isPast ? '<span class="badge badge-secondary">Vergangen</span>' : ''}
                 ${e.flyerLayout ? '<span class="badge badge-info"><i class="fa-solid fa-image"></i> Flyer</span>' : ''}
+                ${hasSchedule ? `<span class="badge badge-info"><i class="fa-solid fa-list-check"></i> ${e.schedule.length} Tage</span>` : ''}
               </div>
             </div>
             <div class="event-card-body">
               <div class="event-card-category" style="background: ${cat.color}22; color: ${cat.color};"><i class="fa-solid ${cat.icon}"></i> ${cat.name}</div>
               <div class="event-card-title">${this.escapeHtml(e.title)}</div>
               <div class="event-card-info">
-                <div class="event-card-info-item"><i class="fa-solid fa-calendar"></i> ${dateStr}</div>
-                <div class="event-card-info-item"><i class="fa-solid fa-clock"></i> ${timeStr} Uhr</div>
+                <div class="event-card-info-item"><i class="fa-solid fa-calendar"></i> ${hasEndDate ? `${dateStr} - ${endDateStr}` : dateStr}</div>
+                <div class="event-card-info-item"><i class="fa-solid fa-clock"></i> ${sameDayRange ? `${timeStr} - ${endTimeStr} Uhr` : `${timeStr} Uhr`}</div>
                 ${e.location ? `<div class="event-card-info-item"><i class="fa-solid fa-location-dot"></i> ${this.escapeHtml(e.location)}</div>` : ''}
               </div>
               ${e.description ? `<div class="event-card-desc">${this.escapeHtml(e.description)}</div>` : ''}
@@ -1593,6 +1908,17 @@
           document.getElementById('eventFeatured').checked = event.featured || false;
           document.getElementById('eventPublished').checked = event.published !== false;
           document.getElementById('eventFlyerLayout').checked = event.flyerLayout || false;
+          this.setEventEndDateTime(event.end_date || '');
+          this.renderEventScheduleRows(event.schedule || []);
+          const flyerStyle = (event.flyer_style && typeof event.flyer_style === 'object') ? event.flyer_style : {};
+          const flyerPosition = flyerStyle.position || 'center center';
+          const flyerZoom = Number.isFinite(Number(flyerStyle.zoom)) ? Math.round(Number(flyerStyle.zoom)) : 100;
+          const flyerOverlay = Number.isFinite(Number(flyerStyle.overlay)) ? Math.round(Number(flyerStyle.overlay)) : 85;
+          const flyerPositionEl = document.getElementById('eventFlyerPosition');
+          flyerPositionEl.value = flyerPosition;
+          if (flyerPositionEl.value !== flyerPosition) flyerPositionEl.value = 'center center';
+          document.getElementById('eventFlyerZoom').value = flyerZoom;
+          document.getElementById('eventFlyerOverlay').value = flyerOverlay;
           // Icon and color
           const icon = event.icon || 'fa-calendar';
           const color = event.color || '#2563EB';
@@ -1602,16 +1928,23 @@
             b.classList.toggle('selected', b.dataset.icon === icon);
           });
           this.updateEventImagePreview(event.image);
+          this.updateFlyerStylePreviewLabels();
         } else {
           document.getElementById('eventForm').reset();
           document.getElementById('eventId').value = '';
           document.getElementById('eventPublished').checked = true;
+          this.setEventEndDateTime('');
+          this.renderEventScheduleRows([]);
+          document.getElementById('eventFlyerPosition').value = 'center center';
+          document.getElementById('eventFlyerZoom').value = 100;
+          document.getElementById('eventFlyerOverlay').value = 85;
           document.getElementById('eventIcon').value = 'fa-calendar';
           document.getElementById('eventColor').value = '#2563EB';
           document.querySelectorAll('#iconPicker .icon-option').forEach(b => {
             b.classList.toggle('selected', b.dataset.icon === 'fa-calendar');
           });
           this.updateEventImagePreview('');
+          this.updateFlyerStylePreviewLabels();
         }
       },
 
@@ -1619,14 +1952,150 @@
         const preview = document.getElementById('eventImagePreview');
         const removeBtn = document.getElementById('removeEventImageBtn');
         if (imageUrl) {
-          preview.innerHTML = `<img src="${this.SITE}${imageUrl}" alt="Event Bild">`;
+          preview.innerHTML = `<img src="${this.SITE}${imageUrl}" alt="Event Bild" id="eventImagePreviewImg">`;
           preview.classList.add('has-image');
           removeBtn.style.display = 'block';
+          this.applyFlyerPreviewStyle();
         } else {
           preview.innerHTML = '<i class="fa-solid fa-image"></i><span>Kein Bild ausgewählt</span>';
           preview.classList.remove('has-image');
           removeBtn.style.display = 'none';
         }
+      },
+
+      updateFlyerStylePreviewLabels() {
+        const zoom = parseInt(document.getElementById('eventFlyerZoom').value, 10);
+        const overlay = parseInt(document.getElementById('eventFlyerOverlay').value, 10);
+        document.getElementById('eventFlyerZoomValue').textContent = `${Number.isFinite(zoom) ? zoom : 100}%`;
+        document.getElementById('eventFlyerOverlayValue').textContent = `${Number.isFinite(overlay) ? overlay : 85}%`;
+        this.applyFlyerPreviewStyle();
+      },
+
+      getCurrentFlyerStyle() {
+        const position = document.getElementById('eventFlyerPosition').value || 'center center';
+        const zoomRaw = parseInt(document.getElementById('eventFlyerZoom').value, 10);
+        const overlayRaw = parseInt(document.getElementById('eventFlyerOverlay').value, 10);
+        const zoom = Number.isFinite(zoomRaw) ? Math.min(200, Math.max(80, zoomRaw)) : 100;
+        const overlay = Number.isFinite(overlayRaw) ? Math.min(95, Math.max(35, overlayRaw)) : 85;
+        return { position, zoom, overlay };
+      },
+
+      normalizeFlyerStyle(raw = {}) {
+        const allowed = new Set([
+          'center center',
+          'center top',
+          'center 30%',
+          'center 70%',
+          'center bottom',
+          'left center',
+          'right center'
+        ]);
+        const position = allowed.has(raw.position) ? raw.position : 'center center';
+        const zoomNum = Number(raw.zoom);
+        const overlayNum = Number(raw.overlay);
+        const zoom = Number.isFinite(zoomNum) ? Math.min(200, Math.max(80, Math.round(zoomNum))) : 100;
+        const overlay = Number.isFinite(overlayNum) ? Math.min(95, Math.max(35, Math.round(overlayNum))) : 85;
+        return { position, zoom, overlay };
+      },
+
+      applyFlyerPreviewStyle() {
+        const img = document.getElementById('eventImagePreviewImg');
+        if (!img) return;
+        const style = this.getCurrentFlyerStyle();
+        img.style.objectPosition = style.position;
+        img.style.transform = `scale(${(style.zoom / 100).toFixed(2)})`;
+        img.style.transformOrigin = style.position;
+      },
+
+      setEventEndDateTime(endDateTime) {
+        const endDateInput = document.getElementById('eventEndDate');
+        const endTimeInput = document.getElementById('eventEndTime');
+        if (!endDateTime || typeof endDateTime !== 'string') {
+          endDateInput.value = '';
+          endTimeInput.value = '';
+          return;
+        }
+        const [datePart, timePart = ''] = endDateTime.split('T');
+        endDateInput.value = datePart || '';
+        endTimeInput.value = timePart.substring(0, 5);
+      },
+
+      renderEventScheduleRows(schedule = []) {
+        const list = document.getElementById('eventScheduleList');
+        if (!list) return;
+        list.innerHTML = '';
+        if (!Array.isArray(schedule) || schedule.length === 0) {
+          list.innerHTML = '<div class="schedule-empty">Noch keine Programmpunkte.</div>';
+          return;
+        }
+        schedule.forEach(slot => this.addEventScheduleRow(slot));
+      },
+
+      addEventScheduleRow(slot = {}) {
+        const list = document.getElementById('eventScheduleList');
+        if (!list) return;
+        const empty = list.querySelector('.schedule-empty');
+        if (empty) empty.remove();
+
+        const date = this.escapeHtml((slot.date || '').toString());
+        const start = this.escapeHtml((slot.start_time || '').toString());
+        const end = this.escapeHtml((slot.end_time || '').toString());
+        const label = this.escapeHtml((slot.label || '').toString());
+        const timeText = this.escapeHtml((slot.time || '').toString());
+
+        list.insertAdjacentHTML('beforeend', `
+          <div class="schedule-row">
+            <div class="schedule-row-grid">
+              <input type="date" class="form-input schedule-date" value="${date}">
+              <input type="time" class="form-input schedule-start" value="${start}">
+              <input type="time" class="form-input schedule-end" value="${end}">
+              <input type="text" class="form-input schedule-label" value="${label}" placeholder="Label (optional)">
+            </div>
+            <div class="schedule-row-grid" style="grid-template-columns: 1fr;">
+              <input type="text" class="form-input schedule-time-text" value="${timeText}" placeholder="Alternative Zeitangabe (optional, z.B. Ganztägig)">
+            </div>
+            <div class="schedule-row-actions">
+              <button type="button" class="btn btn-ghost btn-sm" onclick="App.removeEventScheduleRow(this)"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </div>
+        `);
+      },
+
+      removeEventScheduleRow(button) {
+        const row = button.closest('.schedule-row');
+        if (!row) return;
+        row.remove();
+        const list = document.getElementById('eventScheduleList');
+        if (list && list.querySelectorAll('.schedule-row').length === 0) {
+          list.innerHTML = '<div class="schedule-empty">Noch keine Programmpunkte.</div>';
+        }
+      },
+
+      collectEventScheduleRows() {
+        const list = document.getElementById('eventScheduleList');
+        if (!list) return [];
+        const rows = Array.from(list.querySelectorAll('.schedule-row'));
+
+        return rows
+          .map((row) => {
+            const date = (row.querySelector('.schedule-date')?.value || '').trim();
+            const start = (row.querySelector('.schedule-start')?.value || '').trim();
+            const end = (row.querySelector('.schedule-end')?.value || '').trim();
+            const label = (row.querySelector('.schedule-label')?.value || '').trim();
+            const timeText = (row.querySelector('.schedule-time-text')?.value || '').trim();
+
+            if (!date && !label) return null;
+            if (!start && !end && !timeText) return null;
+
+            const slot = {};
+            if (date) slot.date = date;
+            if (label) slot.label = label;
+            if (start) slot.start_time = start;
+            if (end) slot.end_time = end;
+            if (timeText) slot.time = timeText;
+            return slot;
+          })
+          .filter(Boolean);
       },
 
       openEventImagePicker() {
@@ -1673,10 +2142,18 @@
 
       async saveEvent() {
         const id = document.getElementById('eventId').value || Date.now().toString();
+        const flyerStyle = this.getCurrentFlyerStyle();
+        const existing = this.eventsData.items.find(e => e.id === id) || {};
+        const startDate = document.getElementById('eventDate').value;
+        const startTime = document.getElementById('eventTime').value;
+        const endDate = document.getElementById('eventEndDate').value;
+        const endTime = document.getElementById('eventEndTime').value || startTime || '23:59';
+        const schedule = this.collectEventScheduleRows();
         const event = {
+          ...existing,
           id,
           title: document.getElementById('eventTitle').value,
-          date: `${document.getElementById('eventDate').value}T${document.getElementById('eventTime').value}:00`,
+          date: `${startDate}T${startTime}:00`,
           location: document.getElementById('eventLocation').value,
           category: document.getElementById('eventCategory').value,
           image: document.getElementById('eventImage').value,
@@ -1685,8 +2162,23 @@
           description: document.getElementById('eventDescription').value,
           featured: document.getElementById('eventFeatured').checked,
           published: document.getElementById('eventPublished').checked,
-          flyerLayout: document.getElementById('eventFlyerLayout').checked
+          flyerLayout: document.getElementById('eventFlyerLayout').checked,
+          flyer_style: flyerStyle
         };
+        if (endDate) {
+          event.end_date = `${endDate}T${endTime}:00`;
+          if (new Date(event.end_date) < new Date(event.date)) {
+            this.toast('Enddatum darf nicht vor dem Startdatum liegen.', 'error');
+            return;
+          }
+        } else {
+          delete event.end_date;
+        }
+        if (schedule.length > 0) {
+          event.schedule = schedule;
+        } else {
+          delete event.schedule;
+        }
         const idx = this.eventsData.items.findIndex(e => e.id === id);
         if (idx >= 0) this.eventsData.items[idx] = event; else this.eventsData.items.push(event);
         try {
@@ -1713,8 +2205,31 @@
         try {
           this.imagesData = await this.api('/images');
           if (this.imagesData.length === 0) container.innerHTML = '<div class="empty-state"><i class="fa-solid fa-images"></i><h3>Keine Bilder</h3></div>';
-          else container.innerHTML = `<div class="media-grid">${this.imagesData.map(img => { const url = typeof img === 'string' ? img : img.url; const name = typeof img === 'string' ? img.split('/').pop() : img.name; return `<div class="media-item" onclick="App.copyToClipboard('${url}')"><img src="${this.SITE}${url}" alt="${name}"><div class="media-item-overlay">${name}</div></div>`; }).join('')}</div>`;
+          else container.innerHTML = `<div class="media-grid">${this.imagesData.map(img => {
+            const url = typeof img === 'string' ? img : img.url;
+            const name = typeof img === 'string' ? img.split('/').pop() : img.name;
+            const safeName = this.escapeHtml(name);
+            const safeUrlAttr = this.escapeHtml(url || '');
+            const safeNameAttr = this.escapeHtml(name || '');
+            return `<div class="media-item" onclick="App.copyMediaUrl(this)" data-url="${safeUrlAttr}" data-name="${safeNameAttr}"><img src="${this.SITE}${url}" alt="${safeName}"><div class="media-item-actions"><button type="button" class="media-delete-btn" title="Bild löschen" data-url="${safeUrlAttr}" data-name="${safeNameAttr}" onclick="event.stopPropagation(); App.deleteImageFromButton(this)"><i class="fa-solid fa-trash"></i></button></div><div class="media-item-overlay">${safeName}</div></div>`;
+          }).join('')}</div>`;
         } catch { container.innerHTML = '<div class="empty-state"><p>Fehler</p></div>'; }
+      },
+
+      async deleteImage(url, name) {
+        const label = name || (url || '').split('/').pop() || 'dieses Bild';
+        if (!confirm(`Bild wirklich löschen?\n${label}`)) return;
+        try {
+          await this.api(`/images?url=${encodeURIComponent(url)}`, { method: 'DELETE' });
+          if (this.selectedImage === url) this.selectedImage = null;
+          await this.loadMedia();
+          if (document.getElementById('imageModal').classList.contains('active')) {
+            await this.loadImageGrid();
+          }
+          this.toast('Bild gelöscht!', 'success');
+        } catch (err) {
+          this.toast(`Löschen fehlgeschlagen: ${err.message}`, 'error');
+        }
       },
 
       async uploadFiles(files) {
@@ -1727,6 +2242,22 @@
       },
 
       copyToClipboard(text) { navigator.clipboard.writeText(text); this.toast('Pfad kopiert!', 'success'); },
+      copyMediaUrl(el) {
+        const text = (el && el.dataset && el.dataset.url) ? el.dataset.url : '';
+        if (!text) return;
+        this.copyToClipboard(text);
+      },
+
+      deleteImageFromButton(btn) {
+        const row = btn ? btn.closest('.media-item') : null;
+        const url = (btn && btn.dataset && btn.dataset.url) || (row && row.dataset && row.dataset.url) || '';
+        const name = (btn && btn.dataset && btn.dataset.name) || (row && row.dataset && row.dataset.name) || '';
+        if (!url) {
+          this.toast('Bild-URL fehlt', 'error');
+          return;
+        }
+        this.deleteImage(url, name);
+      },
 
       openImagePicker(fieldKey) {
         this.imageFieldCallback = fieldKey; this.selectedImage = null;
@@ -1741,13 +2272,21 @@
         grid.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
         try {
           const images = await this.api('/images');
-          grid.innerHTML = images.map(img => { const url = typeof img === 'string' ? img : img.url; return `<div class="media-item" onclick="App.selectImageItem(this, '${url}')" data-url="${url}"><img src="${this.SITE}${url}" alt=""></div>`; }).join('');
+          grid.innerHTML = images.map(img => {
+            const url = typeof img === 'string' ? img : img.url;
+            const name = typeof img === 'string' ? img.split('/').pop() : img.name;
+            const safeUrlAttr = this.escapeHtml(url || '');
+            const safeNameAttr = this.escapeHtml(name || '');
+            return `<div class="media-item" onclick="App.selectImageItem(this)" data-url="${safeUrlAttr}" data-name="${safeNameAttr}"><img src="${this.SITE}${url}" alt="${this.escapeHtml(name || '')}"><div class="media-item-actions"><button type="button" class="media-delete-btn" title="Bild löschen" data-url="${safeUrlAttr}" data-name="${safeNameAttr}" onclick="event.stopPropagation(); App.deleteImageFromButton(this)"><i class="fa-solid fa-trash"></i></button></div></div>`;
+          }).join('');
         } catch { grid.innerHTML = '<p>Fehler</p>'; }
       },
 
       selectImageItem(el, url) {
+        const resolvedUrl = url || (el && el.dataset ? el.dataset.url : '');
+        if (!resolvedUrl) return;
         document.querySelectorAll('#imageModalGrid .media-item').forEach(i => i.classList.remove('selected'));
-        el.classList.add('selected'); this.selectedImage = url;
+        el.classList.add('selected'); this.selectedImage = resolvedUrl;
       },
 
       selectImage() {
@@ -1780,33 +2319,99 @@
       async loadSettings() {
         const container = document.getElementById('settingsContent');
         try { this.settingsData = await this.api('/data/settings.json'); } catch { this.settingsData = {}; }
+        if (!this.settingsData.contact) this.settingsData.contact = {};
+        if (!this.settingsData.social_media) this.settingsData.social_media = {};
+        if (!this.settingsData.footer) this.settingsData.footer = {};
+        if (!this.settingsData.service_times) this.settingsData.service_times = {};
+        if (!this.settingsData.service_times.main_service) this.settingsData.service_times.main_service = {};
+        const esc = (value) => this.escapeHtml(value || '');
+        const showSocialChecked = this.settingsData.footer.show_social_icons !== false ? 'checked' : '';
         container.innerHTML = `
-          <div class="card"><div class="card-header"><h3 class="card-title">Kontakt</h3></div><div class="card-body">
-            <div class="form-group"><label class="form-label">E-Mail</label><input type="email" class="form-input" id="set_email" value="${this.settingsData.contact?.email || ''}"></div>
-            <div class="form-group"><label class="form-label">Telefon</label><input type="text" class="form-input" id="set_phone" value="${this.settingsData.contact?.phone || ''}"></div>
-            <div class="form-group"><label class="form-label">Adresse</label><input type="text" class="form-input" id="set_address" value="${this.settingsData.contact?.address || ''}"></div>
-            <div class="form-group"><label class="form-label">Stadt</label><input type="text" class="form-input" id="set_city" value="${this.settingsData.contact?.city || ''}"></div>
+          <div class="card"><div class="card-header"><h3 class="card-title">Website</h3></div><div class="card-body">
+            <div class="form-group"><label class="form-label">Seitentitel</label><input type="text" class="form-input" id="set_site_title" value="${esc(this.settingsData.site_title)}"></div>
+            <div class="form-group"><label class="form-label">Seitenbeschreibung (SEO)</label><textarea class="form-textarea" id="set_site_description">${esc(this.settingsData.site_description)}</textarea></div>
+          </div></div>
+          <div class="card"><div class="card-header"><h3 class="card-title">Kontakt & Adresse</h3></div><div class="card-body">
+            <div class="form-group"><label class="form-label">E-Mail</label><input type="email" class="form-input" id="set_email" value="${esc(this.settingsData.contact.email)}"></div>
+            <div class="form-group"><label class="form-label">Telefon</label><input type="text" class="form-input" id="set_phone" value="${esc(this.settingsData.contact.phone)}"></div>
+            <div class="form-group"><label class="form-label">WhatsApp</label><input type="text" class="form-input" id="set_whatsapp" value="${esc(this.settingsData.contact.whatsapp)}" placeholder="+49... oder 49..."></div>
+            <div class="form-group"><label class="form-label">Adresse</label><input type="text" class="form-input" id="set_address" value="${esc(this.settingsData.contact.address)}"></div>
+            <div class="form-group"><label class="form-label">Stadt</label><input type="text" class="form-input" id="set_city" value="${esc(this.settingsData.contact.city)}"></div>
+            <div class="form-group"><label class="form-label">Land</label><input type="text" class="form-input" id="set_country" value="${esc(this.settingsData.contact.country)}"></div>
+            <div class="form-group"><label class="form-label">Google Maps URL</label><input type="text" class="form-input" id="set_maps_url" value="${esc(this.settingsData.contact.maps_url)}"></div>
           </div></div>
           <div class="card"><div class="card-header"><h3 class="card-title">Social Media</h3></div><div class="card-body">
-            <div class="form-group"><label class="form-label">Instagram</label><input type="text" class="form-input" id="set_instagram" value="${this.settingsData.social_media?.instagram || ''}"></div>
-            <div class="form-group"><label class="form-label">Facebook</label><input type="text" class="form-input" id="set_facebook" value="${this.settingsData.social_media?.facebook || ''}"></div>
-            <div class="form-group"><label class="form-label">YouTube</label><input type="text" class="form-input" id="set_youtube" value="${this.settingsData.social_media?.youtube || ''}"></div>
+            <div class="form-group"><label class="form-label">Instagram</label><input type="text" class="form-input" id="set_instagram" value="${esc(this.settingsData.social_media.instagram)}"></div>
+            <div class="form-group"><label class="form-label">Facebook</label><input type="text" class="form-input" id="set_facebook" value="${esc(this.settingsData.social_media.facebook)}"></div>
+            <div class="form-group"><label class="form-label">YouTube</label><input type="text" class="form-input" id="set_youtube" value="${esc(this.settingsData.social_media.youtube)}"></div>
+            <div class="form-group"><label class="form-label">TikTok</label><input type="text" class="form-input" id="set_tiktok" value="${esc(this.settingsData.social_media.tiktok)}"></div>
+          </div></div>
+          <div class="card"><div class="card-header"><h3 class="card-title">Footer & Gottesdienst</h3></div><div class="card-body">
+            <div class="form-group"><label class="form-label">Copyright</label><input type="text" class="form-input" id="set_footer_copyright" value="${esc(this.settingsData.footer.copyright_text)}"></div>
+            <div class="form-group"><div class="toggle-wrapper"><label class="toggle"><input type="checkbox" id="set_show_social_icons" ${showSocialChecked}><span class="toggle-slider"></span></label><span class="toggle-label">Social Icons im Footer anzeigen</span></div></div>
+            <div class="form-group"><label class="form-label">Hauptgottesdienst: Tag</label><input type="text" class="form-input" id="set_main_service_day" value="${esc(this.settingsData.service_times.main_service.day)}"></div>
+            <div class="form-group"><label class="form-label">Hauptgottesdienst: Uhrzeit</label><input type="text" class="form-input" id="set_main_service_time" value="${esc(this.settingsData.service_times.main_service.time)}"></div>
+            <div class="form-group"><label class="form-label">Hauptgottesdienst: Beschreibung</label><input type="text" class="form-input" id="set_main_service_description" value="${esc(this.settingsData.service_times.main_service.description)}"></div>
           </div></div>`;
       },
 
-      async saveSettings() {
+      async saveSettings(shouldBuild = false) {
+        this.settingsData.site_title = document.getElementById('set_site_title').value;
+        this.settingsData.site_description = document.getElementById('set_site_description').value;
         if (!this.settingsData.contact) this.settingsData.contact = {};
         if (!this.settingsData.social_media) this.settingsData.social_media = {};
+        if (!this.settingsData.footer) this.settingsData.footer = {};
+        if (!this.settingsData.service_times) this.settingsData.service_times = {};
+        if (!this.settingsData.service_times.main_service) this.settingsData.service_times.main_service = {};
         this.settingsData.contact.email = document.getElementById('set_email').value;
         this.settingsData.contact.phone = document.getElementById('set_phone').value;
+        this.settingsData.contact.whatsapp = document.getElementById('set_whatsapp').value;
         this.settingsData.contact.address = document.getElementById('set_address').value;
         this.settingsData.contact.city = document.getElementById('set_city').value;
-        this.settingsData.social_media.instagram = document.getElementById('set_instagram').value;
-        this.settingsData.social_media.facebook = document.getElementById('set_facebook').value;
-        this.settingsData.social_media.youtube = document.getElementById('set_youtube').value;
-        try { await this.api('/data/settings.json', { method: 'PUT', body: JSON.stringify(this.settingsData) }); this.toast('Einstellungen gespeichert!', 'success'); }
+        this.settingsData.contact.country = document.getElementById('set_country').value;
+        this.settingsData.contact.maps_url = document.getElementById('set_maps_url').value;
+        this.settingsData.social_media.instagram = this.normalizeSocialUrl(document.getElementById('set_instagram').value, 'instagram');
+        this.settingsData.social_media.facebook = this.normalizeSocialUrl(document.getElementById('set_facebook').value, 'facebook');
+        this.settingsData.social_media.youtube = this.normalizeSocialUrl(document.getElementById('set_youtube').value, 'youtube');
+        this.settingsData.social_media.tiktok = this.normalizeSocialUrl(document.getElementById('set_tiktok').value, 'tiktok');
+        delete this.settingsData.social_media.twitter;
+        this.settingsData.footer.copyright_text = document.getElementById('set_footer_copyright').value;
+        this.settingsData.footer.show_social_icons = document.getElementById('set_show_social_icons').checked;
+        this.settingsData.service_times.main_service.day = document.getElementById('set_main_service_day').value;
+        this.settingsData.service_times.main_service.time = document.getElementById('set_main_service_time').value;
+        this.settingsData.service_times.main_service.description = document.getElementById('set_main_service_description').value;
+        try {
+          await this.api('/data/settings.json', { method: 'PUT', body: JSON.stringify(this.settingsData) });
+          if (shouldBuild) {
+            await this.api('/build', { method: 'POST' });
+            this.toast('Einstellungen veröffentlicht!', 'success');
+          } else {
+            this.toast('Einstellungen gespeichert!', 'success');
+          }
+        }
         catch (err) { console.error('Save error:', err); this.toast('Fehler: ' + err.message, 'error'); }
       },
+
+      normalizeSocialUrl(value, platform) {
+        const raw = (value || '').trim();
+        if (!raw) return '';
+        if (/^(https?:)?\/\//i.test(raw)) return raw.startsWith('//') ? `https:${raw}` : raw;
+
+        const cleaned = raw.replace(/^@/, '');
+        const hostByPlatform = {
+          instagram: 'instagram.com',
+          facebook: 'facebook.com',
+          youtube: 'youtube.com',
+          tiktok: 'tiktok.com'
+        };
+        const host = hostByPlatform[platform] || '';
+        if (!host) return cleaned;
+
+        if (cleaned.includes('/')) return `https://${cleaned}`;
+        return `https://${host}/${cleaned}`;
+      },
+
+      async saveSettingsAndBuild() { await this.saveSettings(true); },
 
       getValue(obj, path) {
         return path.split('.').reduce((o, k) => {

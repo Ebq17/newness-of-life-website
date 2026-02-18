@@ -402,6 +402,67 @@ function createRequestHandler({ rootDir = __dirname } = {}) {
     }
   }
 
+  function resolveImageUrl(imageUrl) {
+    if (!imageUrl || typeof imageUrl !== 'string') return null;
+    let clean = imageUrl.trim();
+    if (/^https?:\/\//i.test(clean)) {
+      try {
+        clean = new URL(clean).pathname || '';
+      } catch {
+        return null;
+      }
+    }
+    clean = decodeURIComponent(clean.split('?')[0].split('#')[0]).trim();
+    if (!clean.startsWith('/images/')) return null;
+
+    const rel = clean.replace(/^\/images\//, '');
+    if (!rel) return null;
+
+    const normalized = path.posix.normalize(rel);
+    if (!normalized || normalized.startsWith('../') || normalized.includes('/../')) return null;
+
+    const root = path.resolve(IMAGES_DIR);
+    const absolute = path.resolve(root, normalized);
+    if (absolute === root || !absolute.startsWith(root + path.sep)) return null;
+
+    return {
+      url: `/images/${normalized}`,
+      path: absolute
+    };
+  }
+
+  async function deleteImage(imageUrl) {
+    const resolved = resolveImageUrl(imageUrl);
+    if (!resolved) {
+      const err = new Error('Invalid image URL');
+      err.code = 'INVALID_IMAGE_URL';
+      throw err;
+    }
+
+    try {
+      const stat = await fs.stat(resolved.path);
+      if (!stat.isFile()) {
+        const err = new Error('Image not found');
+        err.code = 'IMAGE_NOT_FOUND';
+        throw err;
+      }
+    } catch (err) {
+      if (err.code === 'ENOENT') {
+        const notFound = new Error('Image not found');
+        notFound.code = 'IMAGE_NOT_FOUND';
+        throw notFound;
+      }
+      throw err;
+    }
+
+    await fs.unlink(resolved.path);
+
+    return {
+      success: true,
+      deleted: resolved.url
+    };
+  }
+
   async function handleRequest(req, res) {
     const parsedUrl = url.parse(req.url, true);
     const pathname = parsedUrl.pathname;
@@ -447,6 +508,38 @@ function createRequestHandler({ rootDir = __dirname } = {}) {
         if (method === 'GET' && route === 'images') {
           const images = await listImages();
           jsonResponse(res, images);
+          return;
+        }
+
+        // DELETE /api/images - Delete image
+        if (method === 'DELETE' && route === 'images') {
+          let body = {};
+          try {
+            body = await parseBody(req);
+          } catch (err) {
+            body = {};
+          }
+
+          const imageUrl = normalizeText(body.url || parsedUrl.query.url);
+          if (!imageUrl) {
+            jsonResponse(res, { error: 'Image URL is required' }, 400);
+            return;
+          }
+
+          try {
+            const result = await deleteImage(imageUrl);
+            jsonResponse(res, result);
+          } catch (err) {
+            if (err.code === 'INVALID_IMAGE_URL') {
+              jsonResponse(res, { error: err.message }, 400);
+              return;
+            }
+            if (err.code === 'IMAGE_NOT_FOUND') {
+              jsonResponse(res, { error: err.message }, 404);
+              return;
+            }
+            throw err;
+          }
           return;
         }
 
@@ -640,6 +733,7 @@ if (require.main === module) {
     console.log(`  PUT  /api/data/:file  - Save JSON file`);
     console.log(`  POST /api/build       - Run build script`);
     console.log(`  GET  /api/images      - List images`);
+    console.log(`  DELETE /api/images    - Delete image`);
     console.log(`  POST /api/upload      - Upload image\n`);
     console.log(`  POST /api/contact     - Contact form\n`);
   });

@@ -44,25 +44,18 @@
     "title": "Weitere Treffen",
     "items": [
       {
-        "title": "Gebetstreffen",
-        "day": "Mittwoch",
+        "title": "Gebetsabend",
+        "day": "Freitag",
         "time": "19:00 Uhr",
         "description": "Gemeinsames Gebet und Fürbitte",
         "icon": "fa-pray"
       },
       {
-        "title": "Bibelstunde",
-        "day": "Freitag",
+        "title": "Bibelstudium",
+        "day": "Montag & Mittwoch",
         "time": "19:00 Uhr",
         "description": "Vertiefendes Bibelstudium",
         "icon": "fa-book-bible"
-      },
-      {
-        "title": "Jugendgruppe",
-        "day": "Samstag",
-        "time": "17:00 Uhr",
-        "description": "Für Jugendliche und junge Erwachsene",
-        "icon": "fa-users"
       }
     ]
   },

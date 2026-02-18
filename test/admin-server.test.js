@@ -75,6 +75,69 @@ test('GET /api/images returns an array', async () => {
   }
 });
 
+test('DELETE /api/images deletes a file inside images directory', async (t) => {
+  const imagesDir = path.join(__dirname, '..', 'images');
+  const fileName = `delete-test-${Date.now()}.png`;
+  const filePath = path.join(imagesDir, fileName);
+  await fs.writeFile(filePath, Buffer.from('test-image'), 'utf8');
+
+  t.after(async () => {
+    try {
+      await fs.unlink(filePath);
+    } catch {}
+  });
+
+  const res = await runRequest({
+    method: 'DELETE',
+    url: '/api/images',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ url: `/images/${fileName}` })
+  });
+
+  assert.equal(res.status, 200);
+  const json = parseJsonBody(res);
+  assert.equal(json.success, true);
+  assert.equal(json.deleted, `/images/${fileName}`);
+
+  await assert.rejects(fs.access(filePath));
+});
+
+test('DELETE /api/images rejects invalid urls', async () => {
+  const res = await runRequest({
+    method: 'DELETE',
+    url: '/api/images',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ url: '../secret.txt' })
+  });
+  assert.equal(res.status, 400);
+  const json = parseJsonBody(res);
+  assert.equal(json.error, 'Invalid image URL');
+});
+
+test('DELETE /api/images accepts absolute image URLs', async (t) => {
+  const imagesDir = path.join(__dirname, '..', 'images');
+  const fileName = `delete-abs-test-${Date.now()}.png`;
+  const filePath = path.join(imagesDir, fileName);
+  await fs.writeFile(filePath, Buffer.from('test-image'), 'utf8');
+
+  t.after(async () => {
+    try {
+      await fs.unlink(filePath);
+    } catch {}
+  });
+
+  const absoluteUrl = `http://localhost:8080/images/${fileName}`;
+  const res = await runRequest({
+    method: 'DELETE',
+    url: `/api/images?url=${encodeURIComponent(absoluteUrl)}`
+  });
+  assert.equal(res.status, 200);
+  const json = parseJsonBody(res);
+  assert.equal(json.success, true);
+  assert.equal(json.deleted, `/images/${fileName}`);
+  await assert.rejects(fs.access(filePath));
+});
+
 test('GET/PUT /api/data/homepage.json roundtrip', async (t) => {
   const homepagePath = path.join(__dirname, '..', 'data', 'homepage.json');
   const originalRaw = await fs.readFile(homepagePath, 'utf8');

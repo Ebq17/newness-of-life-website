@@ -173,19 +173,14 @@
       "other_meetings": "Weitere Treffen",
       "other_meetings_items": [
         {
-          "title": "Gebetstreffen",
-          "day": "Mittwoch",
+          "title": "Gebetsabend",
+          "day": "Freitag",
           "description": "Gemeinsames Gebet und Fürbitte"
         },
         {
-          "title": "Bibelstunde",
-          "day": "Freitag",
+          "title": "Bibelstudium",
+          "day": "Montag & Mittwoch",
           "description": "Vertiefendes Bibelstudium"
-        },
-        {
-          "title": "Jugendgruppe",
-          "day": "Samstag",
-          "description": "Für Jugendliche und junge Erwachsene"
         }
       ],
       "directions": "Anfahrt",
@@ -389,19 +384,14 @@
       "other_meetings": "Other Meetings",
       "other_meetings_items": [
         {
-          "title": "Prayer Meeting",
-          "day": "Wednesday",
+          "title": "Prayer Evening",
+          "day": "Friday",
           "description": "Joint prayer and intercession"
         },
         {
           "title": "Bible Study",
-          "day": "Friday",
+          "day": "Monday & Wednesday",
           "description": "In-depth Bible study"
-        },
-        {
-          "title": "Youth Group",
-          "day": "Saturday",
-          "description": "For teenagers and young adults"
         }
       ],
       "directions": "Directions",

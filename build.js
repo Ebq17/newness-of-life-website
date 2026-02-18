@@ -51,6 +51,7 @@ function prepareEvents(eventsRaw) {
     .map(e => {
       // Kategorie-Infos hinzufügen
       const category = categories.find(c => c.id === e.category) || {};
+      const flyerStyle = normalizeFlyerStyle(e.flyer_style);
 
       const dateObj = new Date(e.date);
       const monthNames = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
@@ -58,9 +59,15 @@ function prepareEvents(eventsRaw) {
       return {
         ...e,
         date_de: formatDateDE(e.date),
+        date_display_de: formatDateDisplayDE(e.date, e.end_date),
         end_date_de: e.end_date ? formatDateDE(e.end_date) : '',
+        schedule_de: formatScheduleDE(e.schedule),
         day: dateObj.getDate(),
         monthShort: monthNames[dateObj.getMonth()],
+        flyer_style: flyerStyle,
+        flyer_card_style: buildFlyerCardStyle(e.image, flyerStyle),
+        flyer_overlay_style: buildFlyerOverlayStyle(flyerStyle),
+        image_inline_style: buildImageInlineStyle(flyerStyle),
         category_name: category.name || '',
         // Use custom color/icon if set, otherwise fall back to category defaults
         category_color: e.color || category.color || '#2563EB',
@@ -71,12 +78,32 @@ function prepareEvents(eventsRaw) {
   // Featured Events separieren
   const featuredEvents = processedItems.filter(e => e.featured);
   const regularEvents = processedItems.filter(e => !e.featured);
+  const monthFormatter = new Intl.DateTimeFormat('de-DE', { month: 'long', year: 'numeric' });
+  const eventsByMonth = [];
+  const monthIndex = new Map();
+
+  for (const event of processedItems) {
+    const dateObj = new Date(event.date);
+    const key = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}`;
+    let bucket = monthIndex.get(key);
+    if (!bucket) {
+      bucket = {
+        key,
+        monthLabel: monthFormatter.format(dateObj),
+        items: []
+      };
+      monthIndex.set(key, bucket);
+      eventsByMonth.push(bucket);
+    }
+    bucket.items.push(event);
+  }
 
   return {
     all: processedItems,
     featured: featuredEvents,
     regular: regularEvents,
-    categories: categories
+    categories: categories,
+    byMonth: eventsByMonth
   };
 }
 
@@ -96,6 +123,112 @@ function formatDateDE(dateStr) {
     minute: '2-digit',
     hour12: false
   }) + ' Uhr';
+}
+
+function formatDateDisplayDE(startStr, endStr) {
+  if (!startStr) return '';
+  const start = new Date(startStr);
+  if (!endStr) return formatDateDE(startStr);
+
+  const end = new Date(endStr);
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end <= start) {
+    return formatDateDE(startStr);
+  }
+
+  const startLabel = start.toLocaleDateString('de-DE', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+  const endLabel = end.toLocaleDateString('de-DE', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+  return `${startLabel} bis ${endLabel}`;
+}
+
+function formatScheduleDE(schedule) {
+  if (!Array.isArray(schedule)) return [];
+
+  return schedule
+    .map((slot) => {
+      if (!slot || typeof slot !== 'object') return null;
+
+      let label = (slot.label || '').trim();
+      if (!label && slot.date) {
+        const d = new Date(slot.date);
+        if (!Number.isNaN(d.getTime())) {
+          label = d.toLocaleDateString('de-DE', {
+            weekday: 'long',
+            day: '2-digit',
+            month: '2-digit'
+          });
+        }
+      }
+      if (!label) return null;
+
+      const startTime = (slot.start_time || '').trim();
+      const endTime = (slot.end_time || '').trim();
+      let time = (slot.time || '').trim();
+      if (!time && startTime && endTime) time = `${startTime} - ${endTime} Uhr`;
+      if (!time && startTime) time = `${startTime} Uhr`;
+      if (!time) return null;
+
+      return {
+        label,
+        time
+      };
+    })
+    .filter(Boolean);
+}
+
+function normalizeFlyerStyle(raw) {
+  const source = raw && typeof raw === 'object' ? raw : {};
+  const allowedPositions = new Set([
+    'center center',
+    'center top',
+    'center 30%',
+    'center 70%',
+    'center bottom',
+    'left center',
+    'right center'
+  ]);
+  const position = allowedPositions.has(source.position) ? source.position : 'center center';
+  const zoom = clampNumber(source.zoom, 80, 200, 100);
+  const overlay = clampNumber(source.overlay, 35, 95, 85);
+
+  return { position, zoom, overlay };
+}
+
+function clampNumber(value, min, max, fallback) {
+  const num = Number(value);
+  if (!Number.isFinite(num)) return fallback;
+  if (num < min) return min;
+  if (num > max) return max;
+  return num;
+}
+
+function buildFlyerCardStyle(image, flyerStyle) {
+  const styleParts = [];
+  if (image) styleParts.push(`background-image: url(${image})`);
+  styleParts.push(`background-position: ${flyerStyle.position}`);
+  styleParts.push(`background-size: ${flyerStyle.zoom}%`);
+  return styleParts.join('; ');
+}
+
+function buildFlyerOverlayStyle(flyerStyle) {
+  const end = flyerStyle.overlay / 100;
+  const mid = Math.max(0.2, end - 0.35);
+  const start = Math.max(0.06, end - 0.7);
+  return `background: linear-gradient(to bottom, rgba(0, 0, 0, ${start.toFixed(2)}) 0%, rgba(0, 0, 0, ${mid.toFixed(2)}) 50%, rgba(0, 0, 0, ${end.toFixed(2)}) 100%)`;
+}
+
+function buildImageInlineStyle(flyerStyle) {
+  const zoomFactor = (flyerStyle.zoom / 100).toFixed(2);
+  return `object-position: ${flyerStyle.position}; transform: scale(${zoomFactor}); transform-origin: ${flyerStyle.position}`;
 }
 
 /**
@@ -204,6 +337,7 @@ async function build() {
       featuredEvents: events.featured,
       regularEvents: events.regular,
       eventCategories: events.categories,
+      eventsByMonth: events.byMonth,
       homepageEvents,
 
       // Team
