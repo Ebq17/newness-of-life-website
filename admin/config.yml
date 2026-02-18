@@ -9,7 +9,8 @@ public_folder: "/images/uploads"
 
 locale: 'de'
 
-site_url: "http://localhost:8080"
+site_url: "https://newnessoflife.netlify.app"
+display_url: "https://newnessoflife.netlify.app"
 
 collections:
   # =============================================

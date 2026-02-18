@@ -16,6 +16,19 @@ Dann Admin öffnen: `http://localhost:3001/admin/`
 npm run build
 ```
 
+## Admin ohne Localhost (Netlify)
+
+Für Online-Bearbeitung (inkl. Bilder) wird jetzt Decap CMS unter `https://newnessoflife.netlify.app/admin/cms.html` genutzt.
+
+In Netlify einmalig aktivieren:
+
+1. `Site settings -> Identity -> Enable Identity`
+2. `Identity -> Registration preferences -> Invite only` (empfohlen)
+3. `Identity -> Services -> Git Gateway -> Enable Git Gateway`
+4. Benutzer einladen und per E-Mail bestätigen
+
+Danach kannst du Inhalte direkt online bearbeiten und veröffentlichen, ohne lokalen Server.
+
 ## Tests
 
 ```bash

@@ -1350,6 +1350,7 @@
     const ADMIN_BASE = ADMIN_PATH.includes('/admin/')
       ? ADMIN_PATH.split('/admin/')[0]
       : (ADMIN_PATH.endsWith('/admin') ? ADMIN_PATH.slice(0, -6) : '');
+    const ADMIN_MODE = new URLSearchParams(window.location.search).get('mode');
     const QUERY_API = new URLSearchParams(window.location.search).get('api');
     const STORED_API = localStorage.getItem('admin-api');
     const IS_LOCALHOST = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
@@ -1374,6 +1375,7 @@
       eventImageCallback: false,
       readOnlyNoticeShown: false,
       readOnlyMode: false,
+      redirectedToCms: false,
 
       pages: {
         homepage: { title: 'Startseite', icon: 'fa-home', file: 'homepage.json', url: '/index.html', desc: 'Hero, Gottesdienste, Über uns', sections: [
@@ -1602,6 +1604,11 @@
           try {
             const staticRes = await fetch(this.getStaticDataUrl('/data/events.json'));
             if (!staticRes.ok) throw new Error('No static data');
+            if (!IS_LOCALHOST && ADMIN_MODE !== 'local' && !this.redirectedToCms) {
+              this.redirectedToCms = true;
+              window.location.replace('cms.html');
+              return;
+            }
             this.readOnlyMode = true;
             this.showReadOnlyNotice();
             dot.classList.add('online');
