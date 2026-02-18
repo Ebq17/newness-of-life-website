@@ -1,0 +1,65 @@
+{
+  "lastTicketNumber": 6,
+  "items": [
+    {
+      "ticketId": "NOL-2026-000001",
+      "name": "Emma",
+      "email": "emma@example.com",
+      "subject": "Kontaktanfrage",
+      "message": "Testnachricht",
+      "category": "Allgemein",
+      "createdAt": "2026-02-17T13:22:40.400Z",
+      "ip": "::1"
+    },
+    {
+      "ticketId": "NOL-2026-000002",
+      "name": "emm",
+      "email": "emma_quainoo@yahoo.de",
+      "subject": "Kontaktanfrage",
+      "message": "ghjkl",
+      "category": "Allgemein",
+      "createdAt": "2026-02-17T13:25:42.043Z",
+      "ip": "::1"
+    },
+    {
+      "ticketId": "NOL-2026-000003",
+      "name": "ConfigTest",
+      "email": "test@example.com",
+      "subject": "Kontaktanfrage",
+      "message": "mail setup test",
+      "category": "Allgemein",
+      "createdAt": "2026-02-17T14:00:01.525Z",
+      "ip": "::1"
+    },
+    {
+      "ticketId": "NOL-2026-000004",
+      "name": "emm",
+      "email": "emma_quainoo@yahoo.de",
+      "subject": "Kontaktanfrage",
+      "message": "hey test",
+      "category": "Allgemein",
+      "createdAt": "2026-02-17T14:23:11.299Z",
+      "ip": "::1"
+    },
+    {
+      "ticketId": "NOL-2026-000005",
+      "name": "MailCheck",
+      "email": "emma_quainoo@yahoo.de",
+      "subject": "Kontaktanfrage",
+      "message": "Bitte pruefen",
+      "category": "Allgemein",
+      "createdAt": "2026-02-17T14:26:34.889Z",
+      "ip": "::1"
+    },
+    {
+      "ticketId": "NOL-2026-000006",
+      "name": "emm",
+      "email": "emma_quainoo@yahoo.de",
+      "subject": "Kontaktanfrage",
+      "message": "snsnjn",
+      "category": "Allgemein",
+      "createdAt": "2026-02-17T14:39:26.688Z",
+      "ip": "::1"
+    }
+  ]
+}
