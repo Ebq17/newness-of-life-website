@@ -36,9 +36,9 @@
       "service": "Gottesdienst",
       "prayer_evening": "Gebetsabend",
       "bible_study": "Bibelstudium",
-      "every_sunday_at": "Jeden Sonntag um",
-      "every_friday_at": "Jeden Freitag um",
-      "every_monday_wednesday_at": "Jeden Montag & Mittwoch um",
+      "every_sunday_at": "Jeden Sonntag um 14:00 Uhr",
+      "every_friday_at": "Jeden Freitag um 19:00 Uhr",
+      "every_monday_wednesday_at": "Jeden Montag & Mittwoch um 19:00 Uhr",
       "learn_more": "Mehr erfahren"
     },
     "about_section": {
@@ -247,9 +247,9 @@
       "service": "Church Service",
       "prayer_evening": "Prayer Evening",
       "bible_study": "Bible Study",
-      "every_sunday_at": "Every Sunday at",
-      "every_friday_at": "Every Friday at",
-      "every_monday_wednesday_at": "Every Monday & Wednesday at",
+      "every_sunday_at": "Every Sunday at 14:00",
+      "every_friday_at": "Every Friday at 19:00",
+      "every_monday_wednesday_at": "Every Monday & Wednesday at 19:00",
       "learn_more": "Learn More"
     },
     "about_section": {

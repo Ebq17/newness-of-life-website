@@ -13,13 +13,13 @@
               <div class="service-card-image">
                 <img src="{{ card.image }}" alt="{{ card.title }}" data-cms-field="service_cards.{{ index }}.image" data-cms-label="Bild">
                 <if condition="card.label">
-                  <span class="service-card-label" data-cms-field="service_cards.{{ index }}.label" data-cms-label="Kategorie">{{ card.label }}</span>
+                  <span class="service-card-label" data-cms-field="service_cards.{{ index }}.label" data-cms-label="Kategorie" data-i18n="{{ index === 0 ? 'service_cards.fellowship' : index === 1 ? 'service_cards.prayer' : index === 2 ? 'service_cards.education' : '' }}">{{ card.label }}</span>
                 </if>
               </div>
             </if>
             <div class="service-card-content">
-              <h3 data-cms-field="service_cards.{{ index }}.title" data-cms-label="Titel">{{ card.title }}</h3>
-              <p class="service-card-time" data-cms-field="service_cards.{{ index }}.time" data-cms-label="Zeit/Beschreibung"><i class="fa-solid fa-clock"></i> {{ card.time }}</p>
+              <h3 data-cms-field="service_cards.{{ index }}.title" data-cms-label="Titel" data-i18n="{{ index === 0 ? 'service_cards.service' : index === 1 ? 'service_cards.prayer_evening' : index === 2 ? 'service_cards.bible_study' : '' }}">{{ card.title }}</h3>
+              <p class="service-card-time" data-cms-field="service_cards.{{ index }}.time" data-cms-label="Zeit/Beschreibung"><i class="fa-solid fa-clock"></i> <span data-i18n="{{ index === 0 ? 'service_cards.every_sunday_at' : index === 1 ? 'service_cards.every_friday_at' : index === 2 ? 'service_cards.every_monday_wednesday_at' : '' }}">{{ card.time }}</span></p>
               <if condition="card.link">
                 <a href="{{ card.link }}" class="service-card-link" data-cms-field="service_cards.{{ index }}.link" data-cms-label="Link" data-cms-attr="href"><span data-i18n="service_cards.learn_more">Mehr erfahren</span> <i class="fa-solid fa-arrow-right"></i></a>
               </if>

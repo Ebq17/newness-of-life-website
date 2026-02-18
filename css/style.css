@@ -909,6 +909,13 @@ p{ margin-bottom:1em; color:var(--text-dark); }
   color: #FFFFFF !important;
   font-size: 1.7em;
   font-weight: 800;
+  line-height: 1.2;
+  text-align: center;
+  width: 100%;
+  max-width: 100%;
+  margin-inline: auto;
+  overflow-wrap: anywhere;
+  hyphens: auto;
   text-shadow: 0 2px 4px rgba(0,0,0,0.6);
 }
 
