@@ -183,6 +183,7 @@
       background: var(--danger);
     }
     .status-dot.online { background: var(--success); }
+    .status-dot.readonly { background: var(--warning); }
 
     .main {
       flex: 1;
@@ -1372,6 +1373,7 @@
       imageFieldCallback: null,
       eventImageCallback: false,
       readOnlyNoticeShown: false,
+      readOnlyMode: false,
 
       pages: {
         homepage: { title: 'Startseite', icon: 'fa-home', file: 'homepage.json', url: '/index.html', desc: 'Hero, Gottesdienste, Über uns', sections: [
@@ -1590,8 +1592,28 @@
 
       async checkServer() {
         const dot = document.getElementById('statusDot'), text = document.getElementById('statusText');
-        try { await this.api('/status'); dot.classList.add('online'); text.textContent = 'Verbunden'; }
-        catch { dot.classList.remove('online'); text.textContent = 'Offline'; }
+        try {
+          await this.api('/status');
+          this.readOnlyMode = false;
+          dot.classList.remove('readonly');
+          dot.classList.add('online');
+          text.textContent = 'Verbunden';
+        } catch {
+          try {
+            const staticRes = await fetch(this.getStaticDataUrl('/data/events.json'));
+            if (!staticRes.ok) throw new Error('No static data');
+            this.readOnlyMode = true;
+            this.showReadOnlyNotice();
+            dot.classList.add('online');
+            dot.classList.add('readonly');
+            text.textContent = 'Nur Lesen';
+          } catch {
+            this.readOnlyMode = false;
+            dot.classList.remove('readonly');
+            dot.classList.remove('online');
+            text.textContent = 'Offline';
+          }
+        }
       },
 
       toast(message, type = 'info') {
@@ -1604,18 +1626,29 @@
       },
 
       async loadDashboard() {
+        const container = document.getElementById('dashboardEvents');
         try {
-          const [events, images] = await Promise.all([this.api('/data/events.json'), this.api('/images')]);
-          this.eventsData = events; this.imagesData = images;
+          const events = await this.api('/data/events.json');
+          let images = null;
+          try {
+            images = await this.api('/images');
+          } catch {
+            images = null;
+          }
+
+          this.eventsData = events;
+          this.imagesData = Array.isArray(images) ? images : [];
           document.getElementById('statEvents').textContent = events.items?.length || 0;
-          document.getElementById('statImages').textContent = images.length || 0;
+          document.getElementById('statImages').textContent = Array.isArray(images) ? images.length : '-';
           document.getElementById('eventsBadge').textContent = events.items?.length || 0;
 
-          const container = document.getElementById('dashboardEvents');
           const items = (events.items || []).filter(e => e.published).slice(0, 5);
           if (items.length === 0) container.innerHTML = '<div class="empty-state"><p>Keine Termine</p></div>';
           else container.innerHTML = items.map(e => `<div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border);"><div><div class="event-title">${e.title}</div><div class="event-meta">${new Date(e.date).toLocaleDateString('de-DE')}</div></div><span class="badge ${e.featured ? 'badge-warning' : 'badge-success'}">${e.featured ? 'Featured' : 'Aktiv'}</span></div>`).join('');
-        } catch { this.toast('Fehler beim Laden', 'error'); }
+        } catch {
+          container.innerHTML = '<div class="empty-state"><p>Termine konnten nicht geladen werden.</p></div>';
+          this.toast('Fehler beim Laden', 'error');
+        }
       },
 
       renderPagesGrid() {
@@ -1627,7 +1660,7 @@
         this.currentPage = { id: pageId, ...config };
         document.getElementById('editorTitle').textContent = config.title;
         document.getElementById('editorPageTitle').textContent = config.title;
-        document.getElementById('previewUrl').textContent = 'localhost:8080' + config.url;
+        document.getElementById('previewUrl').textContent = this.SITE + config.url;
         document.getElementById('previewIframe').src = this.SITE + config.url + '?t=' + Date.now();
         // Page data files are in data/pages/, others in data/
         const filePath = config.isPageData ? `pages/${config.file}` : config.file;
@@ -2254,7 +2287,13 @@
             const safeNameAttr = this.escapeHtml(name || '');
             return `<div class="media-item" onclick="App.copyMediaUrl(this)" data-url="${safeUrlAttr}" data-name="${safeNameAttr}"><img src="${this.SITE}${url}" alt="${safeName}"><div class="media-item-actions"><button type="button" class="media-delete-btn" title="Bild löschen" data-url="${safeUrlAttr}" data-name="${safeNameAttr}" onclick="event.stopPropagation(); App.deleteImageFromButton(this)"><i class="fa-solid fa-trash"></i></button></div><div class="media-item-overlay">${safeName}</div></div>`;
           }).join('')}</div>`;
-        } catch { container.innerHTML = '<div class="empty-state"><p>Fehler</p></div>'; }
+        } catch {
+          if (this.readOnlyMode) {
+            container.innerHTML = '<div class="empty-state"><p>Im Nur-Lesen-Modus ist die Medienverwaltung nicht verfügbar.</p></div>';
+          } else {
+            container.innerHTML = '<div class="empty-state"><p>Fehler</p></div>';
+          }
+        }
       },
 
       async deleteImage(url, name) {
@@ -2320,7 +2359,9 @@
             const safeNameAttr = this.escapeHtml(name || '');
             return `<div class="media-item" onclick="App.selectImageItem(this)" data-url="${safeUrlAttr}" data-name="${safeNameAttr}"><img src="${this.SITE}${url}" alt="${this.escapeHtml(name || '')}"><div class="media-item-actions"><button type="button" class="media-delete-btn" title="Bild löschen" data-url="${safeUrlAttr}" data-name="${safeNameAttr}" onclick="event.stopPropagation(); App.deleteImageFromButton(this)"><i class="fa-solid fa-trash"></i></button></div></div>`;
           }).join('');
-        } catch { grid.innerHTML = '<p>Fehler</p>'; }
+        } catch {
+          grid.innerHTML = this.readOnlyMode ? '<p>Nur Lesen: Bildauswahl nur lokal mit API verfügbar.</p>' : '<p>Fehler</p>';
+        }
       },
 
       selectImageItem(el, url) {
