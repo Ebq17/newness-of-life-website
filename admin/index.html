@@ -62,9 +62,48 @@
       min-height: 100vh;
       font-size: 14px;
       line-height: 1.5;
+      overflow-x: hidden;
     }
 
     .app { display: flex; min-height: 100vh; }
+
+    .mobile-nav-toggle {
+      display: none;
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      color: var(--text);
+      z-index: 220;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .mobile-nav-toggle:hover {
+      background: var(--bg-hover);
+      border-color: var(--border-light);
+    }
+
+    .mobile-sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.5);
+      border: none;
+      z-index: 90;
+      cursor: pointer;
+    }
+
+    body.no-scroll {
+      overflow: hidden;
+    }
 
     /* Sidebar */
     .sidebar {
@@ -78,6 +117,7 @@
       left: 0;
       height: 100vh;
       z-index: 100;
+      transition: transform 0.25s ease;
     }
 
     .sidebar-header { padding: 16px; border-bottom: 1px solid var(--border); }
@@ -1001,6 +1041,104 @@
       .schedule-row-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
+    @media (max-width: 1024px) {
+      .mobile-nav-toggle { display: inline-flex; }
+
+      .sidebar {
+        transform: translateX(-100%);
+        box-shadow: 10px 0 24px rgba(0, 0, 0, 0.35);
+      }
+
+      body.sidebar-open .sidebar {
+        transform: translateX(0);
+      }
+
+      body.sidebar-open .mobile-sidebar-overlay {
+        display: block;
+      }
+
+      .main {
+        margin-left: 0;
+        width: 100%;
+      }
+
+      .header {
+        padding: 0 14px 0 64px;
+      }
+
+      .content {
+        padding: 18px;
+      }
+
+      .header-actions {
+        gap: 6px;
+      }
+
+      .header-actions .btn {
+        padding: 7px 10px;
+        font-size: 12px;
+      }
+
+      .editor-layout {
+        margin: -18px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .header {
+        height: auto;
+        min-height: 56px;
+        padding-top: 8px;
+        padding-bottom: 8px;
+      }
+
+      .header-subtitle {
+        display: none;
+      }
+
+      .header-actions {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .stats-grid,
+      .quick-actions,
+      .page-grid,
+      .events-grid,
+      .settings-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .schedule-row-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .content {
+        padding: 14px;
+      }
+
+      .editor-layout {
+        margin: -14px;
+      }
+
+      .modal {
+        width: calc(100% - 20px);
+      }
+
+      .modal-lg {
+        max-width: none;
+      }
+
+      .image-field,
+      .event-image-picker {
+        flex-direction: column;
+      }
+
+      .upload-zone {
+        padding: 24px 16px;
+      }
+    }
+
     ::-webkit-scrollbar { width: 8px; height: 8px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
@@ -1009,7 +1147,12 @@
 </head>
 <body>
   <div class="app">
-    <aside class="sidebar">
+    <button class="mobile-nav-toggle" id="mobileNavToggle" type="button" aria-label="Menü öffnen" aria-controls="adminSidebar" aria-expanded="false">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <button class="mobile-sidebar-overlay" id="mobileSidebarOverlay" type="button" aria-label="Menü schließen"></button>
+
+    <aside class="sidebar" id="adminSidebar">
       <div class="sidebar-header">
         <a href="#" class="logo">
           <div class="logo-icon"><i class="fa-solid fa-church"></i></div>
@@ -1391,6 +1534,7 @@
       readOnlyNoticeShown: false,
       readOnlyMode: false,
       redirectedToCms: false,
+      mobileBreakpoint: 1024,
 
       pages: {
         homepage: { title: 'Startseite', icon: 'fa-home', file: 'homepage.json', url: '/index.html', desc: 'Hero, Gottesdienste, Über uns', sections: [
@@ -1517,11 +1661,13 @@
 
       init() {
         this.setupNavigation();
+        this.setupMobileSidebar();
         this.loadTheme();
         this.checkServer();
         this.loadDashboard();
         setInterval(() => this.checkServer(), 30000);
         document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') this.closeSidebar();
           if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); if (this.currentPage) this.savePage(); }
         });
         window.addEventListener('beforeunload', (e) => { if (this.hasChanges) { e.preventDefault(); e.returnValue = ''; } });
@@ -1556,11 +1702,63 @@
         });
       },
 
+      setupMobileSidebar() {
+        const toggleBtn = document.getElementById('mobileNavToggle');
+        const overlay = document.getElementById('mobileSidebarOverlay');
+        if (!toggleBtn || !overlay) return;
+
+        toggleBtn.addEventListener('click', () => this.toggleSidebar());
+        overlay.addEventListener('click', () => this.closeSidebar());
+        window.addEventListener('resize', () => this.syncSidebarForViewport());
+        this.syncSidebarForViewport();
+      },
+
+      isMobileViewport() {
+        return window.matchMedia(`(max-width: ${this.mobileBreakpoint}px)`).matches;
+      },
+
+      toggleSidebar(forceOpen) {
+        if (!this.isMobileViewport()) return;
+
+        const shouldOpen = typeof forceOpen === 'boolean'
+          ? forceOpen
+          : !document.body.classList.contains('sidebar-open');
+        document.body.classList.toggle('sidebar-open', shouldOpen);
+        document.body.classList.toggle('no-scroll', shouldOpen);
+
+        const toggleBtn = document.getElementById('mobileNavToggle');
+        if (toggleBtn) {
+          toggleBtn.setAttribute('aria-expanded', String(shouldOpen));
+          toggleBtn.setAttribute('aria-label', shouldOpen ? 'Menü schließen' : 'Menü öffnen');
+          const icon = toggleBtn.querySelector('i');
+          if (icon) icon.className = shouldOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+        }
+      },
+
+      closeSidebar() {
+        if (!document.body.classList.contains('sidebar-open')) return;
+        document.body.classList.remove('sidebar-open', 'no-scroll');
+
+        const toggleBtn = document.getElementById('mobileNavToggle');
+        if (toggleBtn) {
+          toggleBtn.setAttribute('aria-expanded', 'false');
+          toggleBtn.setAttribute('aria-label', 'Menü öffnen');
+          const icon = toggleBtn.querySelector('i');
+          if (icon) icon.className = 'fa-solid fa-bars';
+        }
+      },
+
+      syncSidebarForViewport() {
+        if (this.isMobileViewport()) return;
+        this.closeSidebar();
+      },
+
       showView(viewId, pageId = null) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.getElementById(`view-${viewId}`).classList.add('active');
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         document.querySelector(`[data-view="${viewId}"]`)?.classList.add('active');
+        if (this.isMobileViewport()) this.closeSidebar();
 
         if (viewId === 'dashboard') this.loadDashboard();
         else if (viewId === 'pages') this.renderPagesGrid();

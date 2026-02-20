@@ -10,7 +10,7 @@
     background-color: var(--color-white);
     box-shadow: 0 2px 15px rgba(0,0,0,0.1);
     z-index: 1000;
-    padding: 0 20px;
+    padding: 0 clamp(12px, 2.5vw, 20px);
     transition: background-color 0.4s ease, box-shadow 0.4s ease;
 }
 
@@ -18,6 +18,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 12px;
     height: 80px;
 }
 
@@ -26,7 +27,8 @@
     align-items: center;
     text-decoration: none;
     color: var(--color-dark);
-    flex-shrink: 0;
+    flex: 1 1 auto;
+    min-width: 0;
 }
 
 .logo-img-pro {
@@ -116,6 +118,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
+    flex-shrink: 0;
 }
 
 .lang-toggle {
@@ -158,8 +161,35 @@
 }
 
 @media (max-width: 1200px) {
+    .site-header-pro {
+        padding: 0 12px;
+    }
+
     .main-nav-pro {
         height: 64px;
+        gap: 8px;
+    }
+
+    .logo-text-container {
+        min-width: 0;
+        overflow: hidden;
+    }
+
+    .logo-subtext-pro {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 42vw;
+    }
+
+    .header-actions {
+        gap: 8px;
+    }
+
+    .lang-toggle {
+        width: 32px;
+        height: 32px;
+        font-size: 11px;
     }
 
     .site-header-pro .nav-links-pro {
@@ -226,6 +256,27 @@
 }
 
 /* Kleinere Bildschirme - Logo noch kompakter */
+@media (max-width: 768px) {
+    .logo-subtext-pro {
+        display: none;
+    }
+
+    .logo-text-pro {
+        font-size: 0.95rem;
+    }
+
+    .menu-toggle-pro {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 420px) {
+    .lang-toggle {
+        display: none;
+    }
+}
+
 @media (max-width: 400px) {
     .logo-img-pro {
         height: 40px;
@@ -243,6 +294,7 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
+  overflow: hidden;
 }
 
 .logo-subtext-pro {
