@@ -96,6 +96,130 @@ h3{ font-size:1.8em; color:var(--color-dark); margin-bottom:1em; }
 p{ margin-bottom:1em; color:var(--text-dark); }
 
 /* ========================================================================== */
+/*                          Motion / Visual Effects                           */
+/* ========================================================================== */
+.btn-primary,
+.btn-secondary,
+.btn-ghost,
+.btn-footer-donate {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.28s ease, box-shadow 0.28s ease, background-color 0.28s ease;
+  will-change: transform;
+}
+
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-ghost:hover,
+.btn-footer-donate:hover {
+  transform: translateY(-2px);
+}
+
+.btn-primary:active,
+.btn-secondary:active,
+.btn-ghost:active,
+.btn-footer-donate:active {
+  transform: translateY(0);
+}
+
+.btn-primary::after,
+.btn-secondary::after,
+.btn-ghost::after,
+.btn-footer-donate::after {
+  content: '';
+  position: absolute;
+  top: -130%;
+  left: -45%;
+  width: 42%;
+  height: 300%;
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.45), rgba(255,255,255,0));
+  transform: rotate(18deg);
+  opacity: 0;
+  transition: transform 0.65s ease, opacity 0.65s ease;
+  pointer-events: none;
+}
+
+.btn-primary:hover::after,
+.btn-secondary:hover::after,
+.btn-ghost:hover::after,
+.btn-footer-donate:hover::after {
+  transform: translateX(230%) rotate(18deg);
+  opacity: 1;
+}
+
+.service-card-item,
+.event-card,
+.gottesdienste-card-professional,
+.expect-pro-card-enhanced,
+.upcoming-event-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.service-card-item::after,
+.event-card::after,
+.gottesdienste-card-professional::after,
+.expect-pro-card-enhanced::after,
+.upcoming-event-item::after {
+  content: '';
+  position: absolute;
+  top: -135%;
+  left: -48%;
+  width: 44%;
+  height: 320%;
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.36), rgba(255,255,255,0));
+  transform: rotate(20deg);
+  opacity: 0;
+  transition: transform 0.8s ease, opacity 0.65s ease;
+  pointer-events: none;
+}
+
+.service-card-item:hover::after,
+.event-card:hover::after,
+.gottesdienste-card-professional:hover::after,
+.expect-pro-card-enhanced:hover::after,
+.upcoming-event-item:hover::after {
+  transform: translateX(240%) rotate(20deg);
+  opacity: 1;
+}
+
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(26px) scale(0.98);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary,
+  .btn-secondary,
+  .btn-ghost,
+  .btn-footer-donate {
+    transition: none;
+  }
+  .reveal-on-scroll {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .service-card-item::after,
+  .event-card::after,
+  .gottesdienste-card-professional::after,
+  .expect-pro-card-enhanced::after,
+  .upcoming-event-item::after,
+  .btn-primary::after,
+  .btn-secondary::after,
+  .btn-ghost::after,
+  .btn-footer-donate::after {
+    display: none;
+  }
+}
+
+/* ========================================================================== */
 /*                                  Hero Section                              */
 /* ========================================================================== */
 .hero{

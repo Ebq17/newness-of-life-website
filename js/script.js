@@ -1,21 +1,51 @@
 document.addEventListener('DOMContentLoaded', function () {
     const pagePath = window.location.pathname.split('/').pop();
+    document.body.classList.add('has-motion');
+    window.requestAnimationFrame(() => document.body.classList.add('is-loaded'));
 
     // --- Mobile Menü ---
     const menuToggle = document.querySelector('.menu-toggle-pro');
     const navLinks = document.querySelector('.nav-links-pro');
     if (menuToggle && navLinks) {
-        menuToggle.addEventListener('click', () => {
+        const menuBackdrop = document.createElement('button');
+        menuBackdrop.type = 'button';
+        menuBackdrop.className = 'menu-backdrop-pro';
+        menuBackdrop.setAttribute('aria-label', 'Menü schließen');
+        document.body.appendChild(menuBackdrop);
+
+        const closeMenu = () => {
+            navLinks.classList.remove('is-open');
+            menuToggle.classList.remove('is-open');
+            menuBackdrop.classList.remove('is-visible');
+            menuToggle.setAttribute('aria-expanded', 'false');
+            document.body.classList.remove('no-scroll', 'menu-open');
+        };
+
+        const toggleMenu = () => {
             const open = navLinks.classList.toggle('is-open');
+            menuToggle.classList.toggle('is-open', open);
+            menuBackdrop.classList.toggle('is-visible', open);
             menuToggle.setAttribute('aria-expanded', String(open));
             document.body.classList.toggle('no-scroll', open);
-        });
+            document.body.classList.toggle('menu-open', open);
+        };
+
+        menuToggle.addEventListener('click', toggleMenu);
+        menuBackdrop.addEventListener('click', closeMenu);
+
         navLinks.querySelectorAll('a').forEach(a =>
             a.addEventListener('click', () => {
-                navLinks.classList.remove('is-open');
-                menuToggle.setAttribute('aria-expanded', 'false');
+                closeMenu();
             })
         );
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') closeMenu();
+        });
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 1200) closeMenu();
+        });
     }
 
     // --- Active Link automatisch setzen ---
@@ -50,6 +80,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     updateActiveNav();
 
+    const siteHeader = document.querySelector('.site-header-pro');
+    if (siteHeader) {
+        const updateHeaderScrollState = () => {
+            siteHeader.classList.toggle('is-scrolled', window.scrollY > 12);
+        };
+        updateHeaderScrollState();
+        window.addEventListener('scroll', updateHeaderScrollState, { passive: true });
+    }
+
     // Update on hash change
     window.addEventListener('hashchange', updateActiveNav);
 
@@ -65,17 +104,35 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // --- Fade-In Effekt ---
-    const sections = document.querySelectorAll('.fade-in-section');
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.1 });
-    sections.forEach(section => observer.observe(section));
+    // --- Reveal / Scroll Animation ---
+    const revealTargets = document.querySelectorAll([
+        '.fade-in-section',
+        '.service-card-item',
+        '.event-card',
+        '.gottesdienste-card-professional',
+        '.expect-pro-card-enhanced',
+        '.upcoming-event-item',
+        '.team-member-card',
+        '.feature'
+    ].join(','));
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    revealTargets.forEach(target => target.classList.add('reveal-on-scroll'));
+
+    if (prefersReducedMotion) {
+        revealTargets.forEach(target => target.classList.add('is-visible'));
+    } else {
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.16, rootMargin: '0px 0px -40px 0px' });
+
+        revealTargets.forEach(target => observer.observe(target));
+    }
 
     // --- Content Loader ---
     if (typeof content !== 'undefined') {

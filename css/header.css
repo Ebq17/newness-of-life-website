@@ -11,7 +11,21 @@
     box-shadow: 0 2px 15px rgba(0,0,0,0.1);
     z-index: 1000;
     padding: 0 clamp(12px, 2.5vw, 20px);
-    transition: background-color 0.4s ease, box-shadow 0.4s ease;
+    transition: background-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease, opacity 0.4s ease;
+    transform: translateY(0);
+    opacity: 1;
+}
+
+body.has-motion:not(.is-loaded) .site-header-pro {
+    transform: translateY(-14px);
+    opacity: 0;
+}
+
+.site-header-pro.is-scrolled {
+    background-color: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.12);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 
 .main-nav-pro {
@@ -29,6 +43,11 @@
     color: var(--color-dark);
     flex: 1 1 auto;
     min-width: 0;
+    transition: transform 0.3s ease;
+}
+
+.logo-pro:hover {
+    transform: translateY(-1px);
 }
 
 .logo-img-pro {
@@ -149,6 +168,27 @@
     padding: 12px 25px;
     border-radius: 50px;
     font-weight: 700;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-spenden-pro::after {
+    content: '';
+    position: absolute;
+    top: -120%;
+    left: -40%;
+    width: 40%;
+    height: 280%;
+    background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.5), rgba(255,255,255,0));
+    transform: rotate(18deg);
+    opacity: 0;
+    transition: transform 0.65s ease, opacity 0.65s ease;
+    pointer-events: none;
+}
+
+.btn-spenden-pro:hover::after {
+    transform: translateX(230%) rotate(18deg);
+    opacity: 1;
 }
 
 .menu-toggle-pro {
@@ -158,6 +198,57 @@
     font-size: 1.5rem;
     color: var(--color-dark);
     cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.menu-toggle-pro i {
+    transition: transform 0.26s ease, opacity 0.2s ease;
+}
+
+.menu-toggle-pro::before {
+    content: '\00d7';
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: 1.9rem;
+    font-weight: 600;
+    color: var(--color-dark);
+    opacity: 0;
+    transform: scale(0.72) rotate(-90deg);
+    transition: transform 0.26s ease, opacity 0.18s ease;
+    pointer-events: none;
+}
+
+.menu-toggle-pro.is-open i {
+    opacity: 0;
+    transform: scale(0.75) rotate(90deg);
+}
+
+.menu-toggle-pro.is-open::before {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+}
+
+.menu-backdrop-pro {
+    position: fixed;
+    inset: 64px 0 0 0;
+    border: none;
+    background: rgba(15, 23, 42, 0.38);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.28s ease, visibility 0.28s ease;
+    z-index: 1000;
+}
+
+.menu-backdrop-pro.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
 }
 
 @media (max-width: 1200px) {
@@ -203,18 +294,44 @@
         padding: 24px 20px;
 
         transform: translateX(100%);
-        transition: transform 0.3s ease-in-out;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: transform 0.34s ease, opacity 0.25s ease, visibility 0.25s ease;
         z-index: 1001;
         overflow-y: auto;
     }
 
     .site-header-pro .nav-links-pro.is-open {
         transform: translateX(0);
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
     }
 
     .site-header-pro .nav-links-pro li {
         width: 100%;
         border-bottom: 1px solid rgba(0,0,0,0.06);
+        opacity: 0;
+        transform: translateX(18px);
+        transition: transform 0.34s ease, opacity 0.34s ease;
+    }
+
+    .site-header-pro .nav-links-pro.is-open li {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .site-header-pro .nav-links-pro li:nth-child(1) { transition-delay: 0.06s; }
+    .site-header-pro .nav-links-pro li:nth-child(2) { transition-delay: 0.1s; }
+    .site-header-pro .nav-links-pro li:nth-child(3) { transition-delay: 0.14s; }
+    .site-header-pro .nav-links-pro li:nth-child(4) { transition-delay: 0.18s; }
+    .site-header-pro .nav-links-pro li:nth-child(5) { transition-delay: 0.22s; }
+    .site-header-pro .nav-links-pro li:nth-child(6) { transition-delay: 0.26s; }
+    .site-header-pro .nav-links-pro li:nth-child(7) { transition-delay: 0.3s; }
+
+    .site-header-pro .nav-links-pro:not(.is-open) li {
+        transition-delay: 0s;
     }
 
     .site-header-pro .nav-links-pro a {
@@ -243,11 +360,12 @@
         border-radius: 8px;
         z-index: 1002;
         position: relative;
-        transition: background-color 0.2s ease;
+        transition: background-color 0.2s ease, transform 0.2s ease;
     }
 
     .menu-toggle-pro:hover {
         background-color: rgba(0,0,0,0.05);
+        transform: translateY(-1px);
     }
 
     body.no-scroll {
