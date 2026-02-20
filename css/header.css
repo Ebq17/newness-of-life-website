@@ -9,15 +9,9 @@
     width: 100%;
     background-color: var(--color-white);
     box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-    z-index: 1100;
+    z-index: 20000;
     padding: 0 clamp(12px, 2.5vw, 20px);
-    transition: background-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease, opacity 0.4s ease;
-    opacity: 1;
-}
-
-body.has-motion:not(.is-loaded) .site-header-pro {
-    transform: translateY(-14px);
-    opacity: 0;
+    transition: background-color 0.35s ease, box-shadow 0.35s ease;
 }
 
 .site-header-pro.is-scrolled {
@@ -197,6 +191,7 @@ body.has-motion:not(.is-loaded) .site-header-pro {
     cursor: pointer;
     position: relative;
     overflow: hidden;
+    transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
 }
 
 .menu-toggle-pro i {
@@ -205,6 +200,11 @@ body.has-motion:not(.is-loaded) .site-header-pro {
 
 .menu-toggle-pro.is-open i {
     transform: rotate(90deg) scale(1.06);
+}
+
+.menu-toggle-pro.is-open {
+    color: var(--color-primary);
+    background: rgba(37, 99, 235, 0.12);
 }
 
 @media (max-width: 1200px) {
@@ -241,33 +241,40 @@ body.has-motion:not(.is-loaded) .site-header-pro {
 
     .site-header-pro .nav-links-pro {
         position: fixed;
-        inset: 64px 0 0 0;
-        background: linear-gradient(180deg, var(--color-white) 0%, #f8fafc 100%);
+        top: 64px;
+        left: 0;
+        right: 0;
+        bottom: auto;
+        max-height: calc(100dvh - 64px);
+        background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(248,250,252,0.98) 100%);
+        backdrop-filter: blur(8px);
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
         gap: 0;
         padding: 24px 20px;
-
-        transform: translateX(100%);
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
-        transition: transform 0.34s ease, opacity 0.25s ease, visibility 0.25s ease;
-        z-index: 1101;
+        display: none;
+        z-index: 20001;
         overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        box-shadow: 0 14px 30px rgba(15, 23, 42, 0.14);
     }
 
     .site-header-pro .nav-links-pro.is-open {
-        transform: translateX(0);
-        opacity: 1;
-        visibility: visible;
-        pointer-events: auto;
+        display: flex;
+        animation: mobileMenuIn 0.28s ease;
     }
 
     .site-header-pro .nav-links-pro li {
         width: 100%;
         border-bottom: 1px solid rgba(0,0,0,0.06);
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    .site-header-pro .nav-links-pro.is-open li {
+        animation: mobileMenuItemIn 0.34s ease forwards;
+        animation-delay: var(--menu-item-delay, 0ms);
     }
 
     .site-header-pro .nav-links-pro a {
@@ -283,6 +290,10 @@ body.has-motion:not(.is-loaded) .site-header-pro {
         background-color: rgba(37, 99, 235, 0.05);
     }
 
+    .site-header-pro .nav-links-pro a.active {
+        background: linear-gradient(90deg, rgba(37,99,235,0.12) 0%, rgba(16,185,129,0.08) 100%);
+    }
+
     .site-header-pro .nav-links-pro a::after {
         display: none;
     }
@@ -294,18 +305,58 @@ body.has-motion:not(.is-loaded) .site-header-pro {
         width: 44px;
         height: 44px;
         border-radius: 8px;
-        z-index: 1102;
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        background: rgba(15, 23, 42, 0.04);
+        z-index: 20002;
         position: relative;
-        transition: background-color 0.2s ease, transform 0.2s ease;
+        transition: background-color 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
     }
 
     .menu-toggle-pro:hover {
         background-color: rgba(0,0,0,0.05);
         transform: translateY(-1px);
+        border-color: rgba(37, 99, 235, 0.24);
     }
 
+}
+
+@keyframes mobileMenuIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes mobileMenuItemIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 1200px) {
     body.no-scroll {
-        overflow: hidden;
+        overflow: auto;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .menu-toggle-pro,
+    .menu-toggle-pro i {
+        transition: none;
+    }
+
+    .site-header-pro .nav-links-pro.is-open,
+    .site-header-pro .nav-links-pro.is-open li {
+        animation: none;
     }
 }
 

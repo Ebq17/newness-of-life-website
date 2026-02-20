@@ -44,6 +44,10 @@
   --shadow-sm: 0 6px 22px rgba(15,23,42,.06);
   --shadow-md: 0 18px 40px rgba(15,23,42,.12);
   --radius: 16px;
+  --ease-smooth: cubic-bezier(.22, .61, .36, 1);
+  --ease-snappy: cubic-bezier(.34, 1.56, .64, 1);
+  --duration-fast: 220ms;
+  --duration-medium: 420ms;
 }
 
 /* ========================================================================== */
@@ -57,8 +61,26 @@ body{
   font-size: var(--font-size-base);
   line-height: var(--line-height-base);
   color: var(--text-dark);
-  background-color: var(--color-light);
+  background:
+    radial-gradient(900px 420px at -6% -10%, rgba(37,99,235,.1), transparent 58%),
+    radial-gradient(700px 360px at 104% 8%, rgba(16,185,129,.09), transparent 56%),
+    var(--color-light);
   padding-top: var(--header-height);
+  overflow-x: hidden;
+}
+
+.scroll-progress{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:3px;
+  transform-origin:left center;
+  transform: scaleX(0);
+  background: linear-gradient(90deg, #2563EB 0%, #10B981 100%);
+  box-shadow: 0 0 18px rgba(37,99,235,.45);
+  z-index: 25000;
+  pointer-events:none;
 }
 
 img{ max-width:100%; height:auto; display:block; }
@@ -104,7 +126,7 @@ p{ margin-bottom:1em; color:var(--text-dark); }
 .btn-footer-donate {
   position: relative;
   overflow: hidden;
-  transition: transform 0.28s ease, box-shadow 0.28s ease, background-color 0.28s ease;
+  transition: transform var(--duration-fast) var(--ease-smooth), box-shadow var(--duration-fast) var(--ease-smooth), background-color var(--duration-fast) var(--ease-smooth);
   will-change: transform;
 }
 
@@ -151,16 +173,33 @@ p{ margin-bottom:1em; color:var(--text-dark); }
 .event-card,
 .gottesdienste-card-professional,
 .expect-pro-card-enhanced,
-.upcoming-event-item {
+.upcoming-event-item,
+.impact-card,
+.donate-option-card,
+.regular-card,
+.roots-card,
+.feature,
+.event-info-card,
+.event-sidebar-card,
+.timeline-content {
   position: relative;
   overflow: hidden;
+  isolation: isolate;
 }
 
 .service-card-item::after,
 .event-card::after,
 .gottesdienste-card-professional::after,
 .expect-pro-card-enhanced::after,
-.upcoming-event-item::after {
+.upcoming-event-item::after,
+.impact-card::after,
+.donate-option-card::after,
+.regular-card::after,
+.roots-card::after,
+.feature::after,
+.event-info-card::after,
+.event-sidebar-card::after,
+.timeline-content::after {
   content: '';
   position: absolute;
   top: -135%;
@@ -178,7 +217,15 @@ p{ margin-bottom:1em; color:var(--text-dark); }
 .event-card:hover::after,
 .gottesdienste-card-professional:hover::after,
 .expect-pro-card-enhanced:hover::after,
-.upcoming-event-item:hover::after {
+.upcoming-event-item:hover::after,
+.impact-card:hover::after,
+.donate-option-card:hover::after,
+.regular-card:hover::after,
+.roots-card:hover::after,
+.feature:hover::after,
+.event-info-card:hover::after,
+.event-sidebar-card:hover::after,
+.timeline-content:hover::after {
   transform: translateX(240%) rotate(20deg);
   opacity: 1;
 }
@@ -186,17 +233,70 @@ p{ margin-bottom:1em; color:var(--text-dark); }
 .reveal-on-scroll {
   opacity: 1;
   transform: none;
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  filter: blur(0);
+  transition: opacity 0.7s var(--ease-smooth), transform 0.7s var(--ease-smooth), filter 0.55s var(--ease-smooth);
+  transition-delay: var(--reveal-delay, 0ms);
 }
 
 .reveal-on-scroll.will-reveal {
   opacity: 0;
   transform: translateY(26px) scale(0.98);
+  filter: blur(2px);
 }
 
 .reveal-on-scroll.will-reveal.is-visible {
   opacity: 1;
   transform: none;
+  filter: blur(0);
+}
+
+body.has-entry-motion .hero-left h1,
+body.has-entry-motion .hero-left p,
+body.has-entry-motion .hero-left .btn-ghost,
+body.has-entry-motion .gd-hero-pro .hero-content > *,
+body.has-entry-motion .events-hero .hero-content > *,
+body.has-entry-motion .hero-ueber-uns .hero-container > *,
+body.has-entry-motion .donate-hero-content > *,
+body.has-entry-motion .event-detail-hero .container > * {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0);
+}
+
+body.has-entry-motion.is-ready .hero-left h1,
+body.has-entry-motion.is-ready .hero-left p,
+body.has-entry-motion.is-ready .hero-left .btn-ghost,
+body.has-entry-motion.is-ready .gd-hero-pro .hero-content > *,
+body.has-entry-motion.is-ready .events-hero .hero-content > *,
+body.has-entry-motion.is-ready .hero-ueber-uns .hero-container > *,
+body.has-entry-motion.is-ready .donate-hero-content > *,
+body.has-entry-motion.is-ready .event-detail-hero .container > * {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition: opacity 0.7s var(--ease-smooth), transform 0.7s var(--ease-smooth);
+}
+
+body.has-entry-motion.is-ready .hero-left h1,
+body.has-entry-motion.is-ready .gd-hero-pro .hero-content > h1,
+body.has-entry-motion.is-ready .events-hero .hero-content > h1,
+body.has-entry-motion.is-ready .hero-ueber-uns .hero-container > h1,
+body.has-entry-motion.is-ready .donate-hero-content > h1,
+body.has-entry-motion.is-ready .event-detail-title {
+  transition-delay: 80ms;
+}
+
+body.has-entry-motion.is-ready .hero-left p,
+body.has-entry-motion.is-ready .gd-hero-pro .hero-content > .lead,
+body.has-entry-motion.is-ready .events-hero .hero-content > .lead,
+body.has-entry-motion.is-ready .hero-ueber-uns .hero-container > p,
+body.has-entry-motion.is-ready .donate-hero-content > .lead {
+  transition-delay: 180ms;
+}
+
+body.has-entry-motion.is-ready .hero-left .btn-ghost,
+body.has-entry-motion.is-ready .gd-hero-pro .hero-content > .gd-hero-info,
+body.has-entry-motion.is-ready .donate-hero-content > .btn,
+body.has-entry-motion.is-ready .event-detail-hero .back-link {
+  transition-delay: 280ms;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -209,13 +309,38 @@ p{ margin-bottom:1em; color:var(--text-dark); }
   .reveal-on-scroll {
     opacity: 1;
     transform: none;
+    filter: none;
     transition: none;
+  }
+  body.has-entry-motion .hero-left h1,
+  body.has-entry-motion .hero-left p,
+  body.has-entry-motion .hero-left .btn-ghost,
+  body.has-entry-motion .gd-hero-pro .hero-content > *,
+  body.has-entry-motion .events-hero .hero-content > *,
+  body.has-entry-motion .hero-ueber-uns .hero-container > *,
+  body.has-entry-motion .donate-hero-content > *,
+  body.has-entry-motion .event-detail-hero .container > * {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .hero::before,
+  .church-icon {
+    animation: none;
   }
   .service-card-item::after,
   .event-card::after,
   .gottesdienste-card-professional::after,
   .expect-pro-card-enhanced::after,
   .upcoming-event-item::after,
+  .impact-card::after,
+  .donate-option-card::after,
+  .regular-card::after,
+  .roots-card::after,
+  .feature::after,
+  .event-info-card::after,
+  .event-sidebar-card::after,
+  .timeline-content::after,
   .btn-primary::after,
   .btn-secondary::after,
   .btn-ghost::after,
@@ -275,6 +400,7 @@ p{ margin-bottom:1em; color:var(--text-dark); }
   content:''; position:absolute; top:50%; right:0%; transform:translate(50%,-50%);
   width:600px; height:600px; background: radial-gradient(circle, rgba(255,255,255,.1) 0%, rgba(255,255,255,0) 70%);
   border-radius:50%; pointer-events:none;
+  animation: heroOrbDrift 14s ease-in-out infinite;
 }
 .hero-grid{
   display:grid; grid-template-columns: 1fr;
@@ -300,7 +426,21 @@ p{ margin-bottom:1em; color:var(--text-dark); }
 }
 .btn-ghost:hover{ background:rgba(255,255,255,.15); border-color:rgba(255,255,255,.6); transform:translateY(-2px); }
 .hero-right{ display:flex; justify-content:flex-end; align-items:center; }
-.church-icon{ font-size:min(30vw, 300px); color:var(--color-white); opacity:.28; filter: drop-shadow(-5px -5px 10px rgba(255,255,255,.15)) drop-shadow(10px 10px 20px rgba(0,0,0,.4)); }
+.church-icon{
+  font-size:min(30vw, 300px); color:var(--color-white); opacity:.28;
+  filter: drop-shadow(-5px -5px 10px rgba(255,255,255,.15)) drop-shadow(10px 10px 20px rgba(0,0,0,.4));
+  animation: heroIconFloat 9s ease-in-out infinite;
+}
+
+@keyframes heroOrbDrift {
+  0%, 100% { transform: translate(50%, -50%); }
+  50% { transform: translate(42%, -56%); }
+}
+
+@keyframes heroIconFloat {
+  0%, 100% { transform: translateY(0); opacity: .28; }
+  50% { transform: translateY(-8px); opacity: .36; }
+}
 
 /* ========================================================================== */
 /*                                Image Section                               */

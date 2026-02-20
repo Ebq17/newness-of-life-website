@@ -1,7 +1,42 @@
 document.addEventListener('DOMContentLoaded', function () {
     const pagePath = window.location.pathname.split('/').pop();
-    document.body.classList.add('has-motion');
-    window.requestAnimationFrame(() => document.body.classList.add('is-loaded'));
+    const searchParams = new URLSearchParams(window.location.search);
+    const isCmsPreview = searchParams.has('cms-preview');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!isCmsPreview && !prefersReducedMotion) {
+        document.body.classList.add('has-entry-motion');
+        window.requestAnimationFrame(() => {
+            window.requestAnimationFrame(() => {
+                document.body.classList.add('is-ready');
+            });
+        });
+    } else {
+        document.body.classList.add('is-ready');
+    }
+
+    const initScrollProgress = () => {
+        const progressBar = document.createElement('div');
+        progressBar.className = 'scroll-progress';
+        progressBar.setAttribute('aria-hidden', 'true');
+        document.body.appendChild(progressBar);
+
+        const updateProgress = () => {
+            const scrollTop = window.scrollY || window.pageYOffset;
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = scrollHeight > 0 ? Math.min(scrollTop / scrollHeight, 1) : 0;
+            progressBar.style.transform = `scaleX(${progress})`;
+            progressBar.style.opacity = scrollHeight > 220 ? '1' : '0';
+        };
+
+        updateProgress();
+        window.addEventListener('scroll', updateProgress, { passive: true });
+        window.addEventListener('resize', updateProgress);
+    };
+
+    if (!isCmsPreview) {
+        initScrollProgress();
+    }
 
     // --- Mobile Menü ---
     const menuToggle = document.querySelector('.menu-toggle-pro');
@@ -9,12 +44,14 @@ document.addEventListener('DOMContentLoaded', function () {
     if (menuToggle && navLinks) {
         const menuIcon = menuToggle.querySelector('i');
         const isMobileMenu = () => window.matchMedia('(max-width: 1200px)').matches;
+        navLinks.querySelectorAll('li').forEach((item, index) => {
+            item.style.setProperty('--menu-item-delay', `${Math.min(index, 12) * 45}ms`);
+        });
 
         const closeMenu = () => {
             navLinks.classList.remove('is-open');
             menuToggle.classList.remove('is-open');
             menuToggle.setAttribute('aria-expanded', 'false');
-            document.body.classList.remove('no-scroll');
             if (menuIcon) {
                 menuIcon.classList.add('fa-bars');
                 menuIcon.classList.remove('fa-xmark');
@@ -26,7 +63,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const open = navLinks.classList.toggle('is-open');
             menuToggle.classList.toggle('is-open', open);
             menuToggle.setAttribute('aria-expanded', String(open));
-            document.body.classList.toggle('no-scroll', open);
             if (menuIcon) {
                 menuIcon.classList.toggle('fa-bars', !open);
                 menuIcon.classList.toggle('fa-xmark', open);
@@ -109,18 +145,60 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // --- Reveal / Scroll Animation ---
+    const applyRevealStagger = (groupSelector, itemSelector, stepMs = 75) => {
+        document.querySelectorAll(groupSelector).forEach(group => {
+            const items = Array.from(group.children).filter(child => child.matches(itemSelector));
+            items.forEach((item, index) => {
+                item.style.setProperty('--reveal-delay', `${Math.min(index, 10) * stepMs}ms`);
+            });
+        });
+    };
+
+    [
+        ['.service-cards-grid', '.service-card-item'],
+        ['.expect-pro-grid', '.expect-pro-card-enhanced'],
+        ['.impact-grid', '.impact-card'],
+        ['.donate-options-grid', '.donate-option-card'],
+        ['.regular-grid', '.regular-card'],
+        ['.events-grid', '.event-card'],
+        ['.roots-grid', '.roots-card'],
+        ['.feature-grid', '.feature'],
+        ['.event-info-cards', '.event-info-card'],
+        ['.history-timeline', '.timeline-item'],
+        ['.upcoming-events-list', '.upcoming-event-item'],
+        ['.footer-grid', '.footer-column'],
+        ['.contact-grid', '.contact-form'],
+        ['.contact-grid', '.contact-details']
+    ].forEach(([groupSelector, itemSelector]) => {
+        applyRevealStagger(groupSelector, itemSelector);
+    });
+
     const revealTargets = document.querySelectorAll([
         '.fade-in-section',
+        '.section-intro',
+        '.section-header',
         '.service-card-item',
         '.event-card',
+        '.regular-card',
         '.gottesdienste-card-professional',
         '.expect-pro-card-enhanced',
+        '.impact-card',
+        '.donate-option-card',
         '.upcoming-event-item',
         '.team-member-card',
-        '.feature'
+        '.feature',
+        '.roots-card',
+        '.timeline-item',
+        '.timeline-content',
+        '.contact-form',
+        '.contact-details',
+        '.event-info-card',
+        '.event-sidebar-card',
+        '.month-block',
+        '.footer-column',
+        '.history-intro'
     ].join(','));
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     revealTargets.forEach(target => target.classList.add('reveal-on-scroll'));
 
     if (prefersReducedMotion || typeof IntersectionObserver !== 'function') {
@@ -158,8 +236,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     
     // --- CMS Preview Click-to-Edit ---
-    const searchParams = new URLSearchParams(window.location.search);
-    const isCmsPreview = searchParams.has('cms-preview');
     if (isCmsPreview) {
         document.body.classList.add('cms-preview');
 
