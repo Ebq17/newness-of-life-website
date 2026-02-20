@@ -8,18 +8,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const navLinks = document.querySelector('.nav-links-pro');
     if (menuToggle && navLinks) {
         const menuIcon = menuToggle.querySelector('i');
-        const menuBackdrop = document.createElement('button');
-        menuBackdrop.type = 'button';
-        menuBackdrop.className = 'menu-backdrop-pro';
-        menuBackdrop.setAttribute('aria-label', 'Menü schließen');
-        document.body.appendChild(menuBackdrop);
+        const isMobileMenu = () => window.matchMedia('(max-width: 1200px)').matches;
 
         const closeMenu = () => {
             navLinks.classList.remove('is-open');
             menuToggle.classList.remove('is-open');
-            menuBackdrop.classList.remove('is-visible');
             menuToggle.setAttribute('aria-expanded', 'false');
-            document.body.classList.remove('no-scroll', 'menu-open');
+            document.body.classList.remove('no-scroll');
             if (menuIcon) {
                 menuIcon.classList.add('fa-bars');
                 menuIcon.classList.remove('fa-xmark');
@@ -27,12 +22,11 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         const toggleMenu = () => {
+            if (!isMobileMenu()) return;
             const open = navLinks.classList.toggle('is-open');
             menuToggle.classList.toggle('is-open', open);
-            menuBackdrop.classList.toggle('is-visible', open);
             menuToggle.setAttribute('aria-expanded', String(open));
             document.body.classList.toggle('no-scroll', open);
-            document.body.classList.toggle('menu-open', open);
             if (menuIcon) {
                 menuIcon.classList.toggle('fa-bars', !open);
                 menuIcon.classList.toggle('fa-xmark', open);
@@ -40,7 +34,6 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         menuToggle.addEventListener('click', toggleMenu);
-        menuBackdrop.addEventListener('click', closeMenu);
 
         navLinks.querySelectorAll('a').forEach(a =>
             a.addEventListener('click', () => {
@@ -55,6 +48,8 @@ document.addEventListener('DOMContentLoaded', function () {
         window.addEventListener('resize', () => {
             if (window.innerWidth > 1200) closeMenu();
         });
+
+        closeMenu();
     }
 
     // --- Active Link automatisch setzen ---
