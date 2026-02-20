@@ -23,8 +23,6 @@ body.has-motion:not(.is-loaded) .site-header-pro {
 .site-header-pro.is-scrolled {
     background-color: rgba(255, 255, 255, 0.94);
     box-shadow: 0 10px 26px rgba(15, 23, 42, 0.12);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
 }
 
 .main-nav-pro {
