@@ -12,7 +12,6 @@
     z-index: 1100;
     padding: 0 clamp(12px, 2.5vw, 20px);
     transition: background-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease, opacity 0.4s ease;
-    transform: translateY(0);
     opacity: 1;
 }
 
