@@ -203,32 +203,11 @@ body.has-motion:not(.is-loaded) .site-header-pro {
 }
 
 .menu-toggle-pro i {
-    transition: transform 0.26s ease, opacity 0.2s ease;
-}
-
-.menu-toggle-pro::before {
-    content: '\00d7';
-    position: absolute;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    font-size: 1.9rem;
-    font-weight: 600;
-    color: var(--color-dark);
-    opacity: 0;
-    transform: scale(0.72) rotate(-90deg);
-    transition: transform 0.26s ease, opacity 0.18s ease;
-    pointer-events: none;
+    transition: transform 0.24s ease;
 }
 
 .menu-toggle-pro.is-open i {
-    opacity: 0;
-    transform: scale(0.75) rotate(90deg);
-}
-
-.menu-toggle-pro.is-open::before {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
+    transform: rotate(90deg) scale(1.06);
 }
 
 .menu-backdrop-pro {

@@ -184,14 +184,19 @@ p{ margin-bottom:1em; color:var(--text-dark); }
 }
 
 .reveal-on-scroll {
-  opacity: 0;
-  transform: translateY(26px) scale(0.98);
+  opacity: 1;
+  transform: none;
   transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
-.reveal-on-scroll.is-visible {
+.reveal-on-scroll.will-reveal {
+  opacity: 0;
+  transform: translateY(26px) scale(0.98);
+}
+
+.reveal-on-scroll.will-reveal.is-visible {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

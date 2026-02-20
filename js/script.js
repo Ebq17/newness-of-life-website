@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const menuToggle = document.querySelector('.menu-toggle-pro');
     const navLinks = document.querySelector('.nav-links-pro');
     if (menuToggle && navLinks) {
+        const menuIcon = menuToggle.querySelector('i');
         const menuBackdrop = document.createElement('button');
         menuBackdrop.type = 'button';
         menuBackdrop.className = 'menu-backdrop-pro';
@@ -19,6 +20,10 @@ document.addEventListener('DOMContentLoaded', function () {
             menuBackdrop.classList.remove('is-visible');
             menuToggle.setAttribute('aria-expanded', 'false');
             document.body.classList.remove('no-scroll', 'menu-open');
+            if (menuIcon) {
+                menuIcon.classList.add('fa-bars');
+                menuIcon.classList.remove('fa-xmark');
+            }
         };
 
         const toggleMenu = () => {
@@ -28,6 +33,10 @@ document.addEventListener('DOMContentLoaded', function () {
             menuToggle.setAttribute('aria-expanded', String(open));
             document.body.classList.toggle('no-scroll', open);
             document.body.classList.toggle('menu-open', open);
+            if (menuIcon) {
+                menuIcon.classList.toggle('fa-bars', !open);
+                menuIcon.classList.toggle('fa-xmark', open);
+            }
         };
 
         menuToggle.addEventListener('click', toggleMenu);
@@ -119,9 +128,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     revealTargets.forEach(target => target.classList.add('reveal-on-scroll'));
 
-    if (prefersReducedMotion) {
+    if (prefersReducedMotion || typeof IntersectionObserver !== 'function') {
         revealTargets.forEach(target => target.classList.add('is-visible'));
     } else {
+        revealTargets.forEach(target => target.classList.add('will-reveal'));
         const observer = new IntersectionObserver(entries => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
