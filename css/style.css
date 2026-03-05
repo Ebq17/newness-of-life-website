@@ -799,6 +799,58 @@ body.has-entry-motion.is-ready .event-detail-hero .back-link {
 .amount-input-container span{ font-size:1.5em; }
 .amount-input-container input{ width:100%; padding:10px; border:1px solid var(--color-gray); border-radius:5px; font-size:1.2em; }
 
+.donation-confirmation-section{ background:var(--color-light); }
+.donation-confirmation-card{
+  background:var(--color-white);
+  border:1px solid var(--color-gray);
+  border-radius:12px;
+  padding:32px;
+  box-shadow:0 8px 24px rgba(0,0,0,.05);
+}
+.donation-confirmation-lead{ margin-bottom:8px; }
+.donation-confirmation-note{
+  font-size:.95rem;
+  color:#46506b;
+  margin-bottom:20px;
+}
+.donation-form-grid{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap:14px;
+}
+.donation-form .form-group{ display:flex; flex-direction:column; gap:8px; }
+.donation-form .form-group-span{ grid-column:1 / -1; }
+.donation-form label{ font-weight:600; color:var(--color-dark); }
+.donation-form input,
+.donation-form select,
+.donation-form textarea{
+  width:100%;
+  border:1px solid var(--color-gray);
+  border-radius:8px;
+  padding:12px 14px;
+  font-size:1rem;
+  font-family:inherit;
+  background:#fff;
+}
+.donation-form textarea{ resize:vertical; min-height:90px; }
+.donation-checkbox-row{
+  margin:16px 0 18px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:16px;
+}
+.donation-checkbox-row label{
+  font-weight:500;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:.96rem;
+}
+@media (max-width: 768px){
+  .donation-form-grid{ grid-template-columns:1fr; }
+  .donation-confirmation-card{ padding:22px; }
+}
+
 .faq-section{ background:var(--color-light); }
 .faq-accordion details{ background:var(--color-white); border-radius:8px; margin-bottom:10px; padding:20px; }
 .faq-accordion summary{ font-weight:600; cursor:pointer; }

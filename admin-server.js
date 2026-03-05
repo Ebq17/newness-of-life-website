@@ -107,6 +107,119 @@ function normalizeText(value) {
   return (value || '').toString().trim();
 }
 
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function parseAmount(value) {
+  const normalized = normalizeText(value).replace(',', '.');
+  const amount = Number.parseFloat(normalized);
+  if (!Number.isFinite(amount)) return null;
+  if (amount <= 0) return null;
+  return Math.round(amount * 100) / 100;
+}
+
+function formatCurrency(amount, currency = 'EUR') {
+  try {
+    return new Intl.NumberFormat('de-DE', {
+      style: 'currency',
+      currency: currency || 'EUR'
+    }).format(amount);
+  } catch {
+    return `${amount.toFixed(2)} ${currency || 'EUR'}`;
+  }
+}
+
+function formatDateDE(dateInput) {
+  const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
+  if (Number.isNaN(date.getTime())) return '';
+  return new Intl.DateTimeFormat('de-DE', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  }).format(date);
+}
+
+function normalizeBoolean(value) {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'string') {
+    const v = value.trim().toLowerCase();
+    return v === '1' || v === 'true' || v === 'on' || v === 'yes' || v === 'ja';
+  }
+  if (typeof value === 'number') return value === 1;
+  return false;
+}
+
+function escapeHtml(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function escapePdfText(value) {
+  return String(value == null ? '' : value)
+    .replace(/\\/g, '\\\\')
+    .replace(/\(/g, '\\(')
+    .replace(/\)/g, '\\)')
+    .replace(/\r?\n/g, ' ');
+}
+
+function buildSimplePdf(lines) {
+  const pageWidth = 595;
+  const pageHeight = 842;
+  const startY = 790;
+  const lineHeight = 18;
+  const safeLines = lines
+    .map((line) => normalizeText(line).replace(/\s+/g, ' '))
+    .filter(Boolean)
+    .slice(0, 40);
+
+  const textOps = safeLines.map((line, index) => {
+    const y = startY - (index * lineHeight);
+    return `1 0 0 1 50 ${y} Tm (${escapePdfText(line)}) Tj`;
+  }).join('\n');
+
+  const stream = `BT\n/F1 12 Tf\n${textOps}\nET`;
+  const streamLength = Buffer.byteLength(stream, 'utf8');
+
+  const objects = [
+    '1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n',
+    '2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n',
+    `3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageWidth} ${pageHeight}] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>\nendobj\n`,
+    '4 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n',
+    `5 0 obj\n<< /Length ${streamLength} >>\nstream\n${stream}\nendstream\nendobj\n`
+  ];
+
+  let pdf = '%PDF-1.4\n';
+  const offsets = [];
+  for (const obj of objects) {
+    offsets.push(Buffer.byteLength(pdf, 'utf8'));
+    pdf += obj;
+  }
+
+  const startXref = Buffer.byteLength(pdf, 'utf8');
+  pdf += `xref\n0 ${objects.length + 1}\n`;
+  pdf += '0000000000 65535 f \n';
+  for (const offset of offsets) {
+    pdf += `${String(offset).padStart(10, '0')} 00000 n \n`;
+  }
+  pdf += `trailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\nstartxref\n${startXref}\n%%EOF`;
+
+  return Buffer.from(pdf, 'utf8');
+}
+
+function nextDonationId(lastDonationNumber) {
+  const year = new Date().getFullYear();
+  const nextNumber = lastDonationNumber + 1;
+  return {
+    donationId: `DON-${year}-${String(nextNumber).padStart(6, '0')}`,
+    nextNumber
+  };
+}
+
 function classifyCategory(subject, message) {
   const text = `${subject} ${message}`.toLowerCase();
   const rules = [
@@ -138,7 +251,7 @@ function toHtml(text) {
   return text.replace(/\n/g, '<br>');
 }
 
-async function sendEmail({ to, subject, html, replyTo, from }) {
+async function sendEmail({ to, subject, html, replyTo, from, attachments }) {
   // In tests / local runs we want to be able to hit /api/contact without network access.
   if (process.env.NODE_ENV === 'test' || process.env.DISABLE_EMAIL === '1') {
     return { ok: true, skipped: true };
@@ -157,6 +270,7 @@ async function sendEmail({ to, subject, html, replyTo, from }) {
       subject,
       html,
       ...(replyTo ? { reply_to: replyTo } : {}),
+      ...(attachments && attachments.length ? { attachments } : {}),
     });
 
     if (error) {
@@ -317,6 +431,7 @@ function createRequestHandler({ rootDir = __dirname } = {}) {
   const PAGES_DATA_DIR = path.join(DATA_DIR, 'pages');
   const IMAGES_DIR = path.join(ROOT_DIR, 'images');
   const CONTACTS_FILE = path.join(DATA_DIR, 'contacts.json');
+  const DONATIONS_FILE = path.join(DATA_DIR, 'donations.json');
 
   async function loadJson(filename) {
     if (!isSafeJsonFileName(filename)) {
@@ -368,6 +483,20 @@ function createRequestHandler({ rootDir = __dirname } = {}) {
   async function saveContacts(data) {
     await fs.mkdir(path.dirname(CONTACTS_FILE), { recursive: true });
     await fs.writeFile(CONTACTS_FILE, JSON.stringify(data, null, 2), 'utf8');
+  }
+
+  async function loadDonations() {
+    try {
+      const raw = await fs.readFile(DONATIONS_FILE, 'utf8');
+      return JSON.parse(raw);
+    } catch {
+      return { lastDonationNumber: 0, items: [] };
+    }
+  }
+
+  async function saveDonations(data) {
+    await fs.mkdir(path.dirname(DONATIONS_FILE), { recursive: true });
+    await fs.writeFile(DONATIONS_FILE, JSON.stringify(data, null, 2), 'utf8');
   }
 
   async function listImages() {
@@ -669,6 +798,190 @@ function createRequestHandler({ rootDir = __dirname } = {}) {
           return;
         }
 
+        // POST /api/donations - Donation confirmation request
+        if (method === 'POST' && route === 'donations') {
+          const TO_EMAIL = process.env.DONATION_TO_EMAIL || process.env.TO_EMAIL || process.env.INTERNAL_EMAIL || 'newnessoflife@clgi.org';
+          const FROM_EMAIL = process.env.DONATION_FROM_EMAIL || process.env.FROM_EMAIL || process.env.RESEND_FROM || 'Newness of Life <kontakt@newnessoflife.de>';
+          const NOREPLY_EMAIL = process.env.DONATION_NOREPLY_EMAIL || process.env.NOREPLY_EMAIL || 'Newness of Life <noreply@newnessoflife.de>';
+          const ORG_NAME = process.env.ORG_NAME || 'Newness of Life';
+          const SITE_URL = process.env.SITE_URL || 'https://www.newnessoflife.de';
+
+          const ip = getClientIp(req);
+          if (isRateLimited(ip)) {
+            jsonResponse(res, { error: 'Zu viele Anfragen. Bitte spaeter erneut versuchen.' }, 429);
+            return;
+          }
+
+          const body = await parseBody(req);
+          const honeypot = normalizeText(body.website);
+          if (honeypot) {
+            jsonResponse(res, { success: true });
+            return;
+          }
+
+          const name = normalizeText(body.name);
+          const email = normalizeText(body.email).toLowerCase();
+          const amount = parseAmount(body.amount);
+          const currency = normalizeText(body.currency || 'EUR').toUpperCase().replace(/[^A-Z]/g, '').slice(0, 3) || 'EUR';
+          const message = normalizeText(body.message);
+          const address = normalizeText(body.address);
+          const anonymous = normalizeBoolean(body.anonymous);
+          const needsReceipt = normalizeBoolean(body.needsReceipt);
+          const rawPaymentMethod = normalizeText(body.paymentMethod).toLowerCase();
+          const donationDateInput = normalizeText(body.donationDate);
+
+          if (!email || !isValidEmail(email)) {
+            jsonResponse(res, { error: 'Bitte eine gueltige E-Mail-Adresse angeben.' }, 400);
+            return;
+          }
+
+          if (!amount) {
+            jsonResponse(res, { error: 'Bitte einen gueltigen Spendenbetrag angeben.' }, 400);
+            return;
+          }
+
+          if (!anonymous && !name) {
+            jsonResponse(res, { error: 'Bitte deinen Namen angeben oder anonym auswaehlen.' }, 400);
+            return;
+          }
+
+          if (needsReceipt && (anonymous || !name || !address)) {
+            jsonResponse(res, { error: 'Fuer eine Spendenquittung werden Name und Adresse benoetigt.' }, 400);
+            return;
+          }
+
+          const paymentMethodMap = {
+            paypal: 'PayPal',
+            bank_transfer: 'Bankueberweisung',
+            bank: 'Bankueberweisung',
+            ueberweisung: 'Bankueberweisung',
+            card: 'Karte',
+            cash: 'Bar',
+            other: 'Sonstiges'
+          };
+          const paymentMethod = rawPaymentMethod || 'other';
+          const paymentMethodLabel = paymentMethodMap[paymentMethod] || normalizeText(body.paymentMethod) || 'Sonstiges';
+          const donationDateValue = donationDateInput && !Number.isNaN(new Date(donationDateInput).getTime())
+            ? donationDateInput
+            : new Date().toISOString().slice(0, 10);
+
+          const donations = await loadDonations();
+          const { donationId, nextNumber } = nextDonationId(donations.lastDonationNumber || 0);
+          donations.lastDonationNumber = nextNumber;
+
+          const donorName = anonymous ? 'Anonym' : name;
+          const createdAt = new Date().toISOString();
+          const record = {
+            donationId,
+            name: donorName,
+            email,
+            amount,
+            currency,
+            paymentMethod,
+            paymentMethodLabel,
+            donationDate: donationDateValue,
+            message,
+            address,
+            anonymous,
+            needsReceipt,
+            createdAt,
+            ip
+          };
+          donations.items.push(record);
+          await saveDonations(donations);
+
+          const amountLabel = formatCurrency(amount, currency);
+          const donationDateLabel = formatDateDE(donationDateValue) || donationDateValue;
+          const pdfLines = [
+            ORG_NAME,
+            'Spendenbestaetigung',
+            '',
+            `Belegnummer: ${donationId}`,
+            `Name: ${donorName}`,
+            `E-Mail: ${email}`,
+            `Betrag: ${amountLabel}`,
+            `Datum: ${donationDateLabel}`,
+            `Zahlungsmethode: ${paymentMethodLabel}`,
+            needsReceipt ? 'Spendenquittung angefragt: Ja' : 'Spendenquittung angefragt: Nein',
+            '',
+            'Vielen Dank fuer deine Unterstuetzung.',
+            SITE_URL
+          ];
+          const pdfBuffer = buildSimplePdf(pdfLines);
+          const attachments = [{
+            filename: `spendenbestaetigung-${donationId}.pdf`,
+            content: pdfBuffer.toString('base64')
+          }];
+
+          const safeMessageHtml = message ? escapeHtml(message).replace(/\r?\n/g, '<br>') : '-';
+          const safeAddressHtml = address ? escapeHtml(address).replace(/\r?\n/g, '<br>') : '-';
+
+          const emailStatus = { donor_confirmation: 'skipped', internal_notification: 'skipped' };
+          const emailErrors = {};
+
+          try {
+            const donorSubject = `Vielen Dank fuer deine Spende - ${ORG_NAME} (${donationId})`;
+            const donorHtml = `
+              <p>Liebe/r ${escapeHtml(donorName)},</p>
+              <p>vielen Dank fuer deine Unterstuetzung von ${escapeHtml(ORG_NAME)}.</p>
+              <p>Wir haben deine Spende erfolgreich erfasst.</p>
+              <p><strong>Details deiner Spende:</strong><br>
+              Belegnummer: ${escapeHtml(donationId)}<br>
+              Betrag: ${escapeHtml(amountLabel)}<br>
+              Datum: ${escapeHtml(donationDateLabel)}<br>
+              Zahlungsmethode: ${escapeHtml(paymentMethodLabel)}</p>
+              <p>Im Anhang findest du eine Bestaetigung als PDF.</p>
+              <p>Falls du eine offizielle Spendenquittung fuer das Finanzamt benoetigst, antworte bitte auf diese E-Mail mit deiner vollstaendigen Adresse.</p>
+              <p>Vielen Dank fuer deine Unterstuetzung.<br>${escapeHtml(ORG_NAME)}</p>
+            `;
+            await sendEmail({
+              from: NOREPLY_EMAIL,
+              to: email,
+              subject: donorSubject,
+              html: donorHtml,
+              attachments
+            });
+            emailStatus.donor_confirmation = 'sent';
+          } catch (err) {
+            emailStatus.donor_confirmation = 'failed';
+            emailErrors.donor_confirmation = err.message || String(err);
+            console.error(`Failed to send donor confirmation for ${donationId}:`, err);
+          }
+
+          try {
+            const internalSubject = `Neue Spende erhalten (${donationId})`;
+            const internalHtml = `
+              <p><strong>Neue Spende erhalten</strong></p>
+              <p>Belegnummer: ${escapeHtml(donationId)}<br>
+              Name: ${escapeHtml(donorName)}<br>
+              E-Mail: ${escapeHtml(email)}<br>
+              Betrag: ${escapeHtml(amountLabel)}<br>
+              Datum: ${escapeHtml(donationDateLabel)}<br>
+              Zahlung: ${escapeHtml(paymentMethodLabel)}<br>
+              Anonym: ${anonymous ? 'Ja' : 'Nein'}<br>
+              Spendenquittung angefragt: ${needsReceipt ? 'Ja' : 'Nein'}</p>
+              <p><strong>Adresse:</strong><br>${safeAddressHtml}</p>
+              <p><strong>Nachricht:</strong><br>${safeMessageHtml}</p>
+            `;
+            await sendEmail({
+              from: FROM_EMAIL,
+              to: TO_EMAIL,
+              subject: internalSubject,
+              html: internalHtml,
+              replyTo: email,
+              attachments
+            });
+            emailStatus.internal_notification = 'sent';
+          } catch (err) {
+            emailStatus.internal_notification = 'failed';
+            emailErrors.internal_notification = err.message || String(err);
+            console.error(`Failed to send internal donation mail for ${donationId}:`, err);
+          }
+
+          jsonResponse(res, { success: true, donationId, emailStatus, ...(Object.keys(emailErrors).length ? { emailErrors } : {}) });
+          return;
+        }
+
         jsonResponse(res, { error: 'Not found' }, 404);
         return;
       }
@@ -736,5 +1049,6 @@ if (require.main === module) {
     console.log(`  DELETE /api/images    - Delete image`);
     console.log(`  POST /api/upload      - Upload image\n`);
     console.log(`  POST /api/contact     - Contact form\n`);
+    console.log(`  POST /api/donations   - Donation confirmation form\n`);
   });
 }

@@ -38,6 +38,8 @@ npm test
 ## E-Mail (Kontaktformular)
 
 Der Endpoint `POST /api/contact` verschickt E-Mails über Resend.
+Der Endpoint `POST /api/donations` verschickt eine Spendenbestaetigung mit PDF-Anhang an den Spender und eine interne Kopie an die Gemeinde.
+Auf Netlify wird dafuer automatisch `/.netlify/functions/donations` verwendet (gleiche Nutzlast).
 
 - Konfiguration über `.env` (siehe `.env.example`)
 - Wichtige Variablen:
@@ -45,5 +47,11 @@ Der Endpoint `POST /api/contact` verschickt E-Mails über Resend.
   - `TO_EMAIL`
   - `FROM_EMAIL`
   - `NOREPLY_EMAIL`
+  - Optional fuer Spenden-Mails:
+    - `DONATION_TO_EMAIL`
+    - `DONATION_FROM_EMAIL`
+    - `DONATION_NOREPLY_EMAIL`
+    - `ORG_NAME`
+    - `SITE_URL`
 
 Hinweis: Wenn ein API-Key jemals in GitHub gelandet ist, bitte im Resend-Dashboard rotieren und den alten Key deaktivieren.

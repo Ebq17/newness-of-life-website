@@ -219,3 +219,85 @@ test('POST /api/contact stores request and returns a ticketId', async (t) => {
   assert.ok(Array.isArray(contacts.items));
   assert.ok(contacts.items.find((i) => i.ticketId === json.ticketId));
 });
+
+test('POST /api/donations stores donation and returns a donationId', async (t) => {
+  const donationsPath = path.join(__dirname, '..', 'data', 'donations.json');
+  let hadDonations = true;
+  let originalRaw = '';
+  try {
+    originalRaw = await fs.readFile(donationsPath, 'utf8');
+  } catch {
+    hadDonations = false;
+  }
+
+  t.after(async () => {
+    if (hadDonations) {
+      await fs.writeFile(donationsPath, originalRaw, 'utf8');
+      return;
+    }
+    try {
+      await fs.unlink(donationsPath);
+    } catch {}
+  });
+
+  const payload = {
+    name: 'Max Mustermann',
+    email: 'max@example.com',
+    amount: '50',
+    currency: 'EUR',
+    paymentMethod: 'paypal',
+    donationDate: '2026-03-05',
+    message: 'Danke fuer eure Arbeit.',
+    address: 'Musterstrasse 1\n55127 Mainz',
+    anonymous: false,
+    needsReceipt: true,
+    website: ''
+  };
+
+  const res = await runRequest({
+    method: 'POST',
+    url: '/api/donations',
+    headers: { 'content-type': 'application/json', 'x-forwarded-for': '203.0.113.11' },
+    body: JSON.stringify(payload)
+  });
+
+  assert.equal(res.status, 200);
+  const json = parseJsonBody(res);
+  assert.equal(json.success, true);
+  assert.ok(json.donationId);
+
+  const donationsRaw = await fs.readFile(donationsPath, 'utf8');
+  const donations = JSON.parse(donationsRaw);
+  assert.ok(Array.isArray(donations.items));
+  const stored = donations.items.find((i) => i.donationId === json.donationId);
+  assert.ok(stored);
+  assert.equal(stored.amount, 50);
+  assert.equal(stored.paymentMethod, 'paypal');
+  assert.equal(stored.needsReceipt, true);
+});
+
+test('POST /api/donations rejects anonymous requests with receipt enabled', async () => {
+  const payload = {
+    name: '',
+    email: 'anon@example.com',
+    amount: '25',
+    currency: 'EUR',
+    paymentMethod: 'bank_transfer',
+    donationDate: '2026-03-05',
+    anonymous: true,
+    needsReceipt: true,
+    address: '',
+    website: ''
+  };
+
+  const res = await runRequest({
+    method: 'POST',
+    url: '/api/donations',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+
+  assert.equal(res.status, 400);
+  const json = parseJsonBody(res);
+  assert.equal(json.error, 'Fuer eine Spendenquittung werden Name und Adresse benoetigt.');
+});

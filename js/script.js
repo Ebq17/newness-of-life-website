@@ -336,25 +336,30 @@ document.addEventListener('DOMContentLoaded', function () {
             return data || {};
         }
 
-        async function submitToNetlifyForm(payload) {
+        async function submitToNetlifyForm(formData) {
             const formName = contactForm.getAttribute('name') || 'contact';
-            const encodedBody = new URLSearchParams({
-                'form-name': formName,
-                name: payload.name,
-                email: payload.email,
-                subject: payload.subject,
-                message: payload.message,
-                website: payload.website
-            });
+            const action = contactForm.getAttribute('action') || location.pathname || '/';
+            const encodedBody = new URLSearchParams();
 
-            const res = await fetch('/', {
+            for (const [key, value] of formData.entries()) {
+                if (typeof value !== 'string') continue;
+                encodedBody.append(key, value);
+            }
+
+            if (!encodedBody.get('form-name')) {
+                encodedBody.set('form-name', formName);
+            }
+
+            const res = await fetch(action, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: encodedBody.toString()
             });
 
             if (!res.ok) {
-                throw new Error('Fehler beim Senden');
+                const netlifyError = new Error(`Fehler beim Senden (Netlify, HTTP ${res.status})`);
+                netlifyError.code = 'NETLIFY_SUBMIT_FAILED';
+                throw netlifyError;
             }
 
             return {};
@@ -398,13 +403,18 @@ document.addEventListener('DOMContentLoaded', function () {
                     const shouldFallbackToNetlify =
                         hasNetlifyForm &&
                         !isLocalStaticSite &&
-                        (apiErr.code === 'API_UNAVAILABLE' || apiErr.code === 'API_NON_JSON' || apiErr.code === 'API_NETWORK');
+                        (
+                            apiErr.code === 'API_UNAVAILABLE' ||
+                            apiErr.code === 'API_NON_JSON' ||
+                            apiErr.code === 'API_NETWORK' ||
+                            apiErr.code === 'API_VALIDATION'
+                        );
 
                     if (!shouldFallbackToNetlify) {
                         throw apiErr;
                     }
 
-                    data = await submitToNetlifyForm(payload);
+                    data = await submitToNetlifyForm(formData);
                 }
 
                 if (statusEl) {
@@ -424,6 +434,235 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 }
                 contactForm.reset();
+            } catch (err) {
+                if (statusEl) {
+                    statusEl.textContent = err.message || 'Fehler beim Senden';
+                    statusEl.className = 'form-status is-error';
+                }
+            } finally {
+                if (submitBtn) submitBtn.disabled = false;
+            }
+        });
+    }
+
+    // --- Donation Confirmation Form (API + Netlify Fallback) ---
+    const donationForm = document.getElementById('donation-form');
+    if (donationForm) {
+        const statusEl = document.getElementById('donation-status');
+        const submitBtn = donationForm.querySelector('button[type="submit"]');
+        const dateInput = donationForm.querySelector('input[name="donationDate"]');
+        const nameInput = donationForm.querySelector('input[name="name"]');
+        const addressInput = donationForm.querySelector('textarea[name="address"]');
+        const anonymousInput = donationForm.querySelector('input[name="anonymous"]');
+        const needsReceiptInput = donationForm.querySelector('input[name="needsReceipt"]');
+        const hasNetlifyForm = donationForm.getAttribute('data-netlify') === 'true';
+        const isLocalStaticSite = location.hostname === 'localhost' && location.port === '8080';
+
+        function updateDonationRequirements() {
+            const anonymous = !!(anonymousInput && anonymousInput.checked);
+            const needsReceipt = !!(needsReceiptInput && needsReceiptInput.checked);
+            if (nameInput) nameInput.required = !anonymous || needsReceipt;
+            if (addressInput) addressInput.required = needsReceipt;
+        }
+
+        function resetDonationDate() {
+            if (dateInput && !dateInput.value) {
+                dateInput.value = new Date().toISOString().slice(0, 10);
+            }
+        }
+
+        resetDonationDate();
+        updateDonationRequirements();
+        if (anonymousInput) anonymousInput.addEventListener('change', updateDonationRequirements);
+        if (needsReceiptInput) needsReceiptInput.addEventListener('change', updateDonationRequirements);
+
+        async function submitDonationToApi(payload) {
+            const apiEndpoints = isLocalStaticSite
+                ? ['http://localhost:3001/api/donations']
+                : ['/api/donations', '/.netlify/functions/donations'];
+            let lastError = null;
+
+            for (const endpoint of apiEndpoints) {
+                let res;
+                try {
+                    res = await fetch(endpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                } catch (err) {
+                    const networkError = new Error('Spenden-Server nicht erreichbar. Bitte spaeter erneut versuchen.');
+                    networkError.code = 'API_NETWORK';
+                    lastError = networkError;
+                    continue;
+                }
+
+                const contentType = (res.headers.get('content-type') || '').toLowerCase();
+                let data = null;
+
+                if (contentType.includes('application/json')) {
+                    try {
+                        data = await res.json();
+                    } catch (err) {
+                        const parseError = new Error('Ungueltige Antwort vom Spenden-Server.');
+                        parseError.code = 'API_NON_JSON';
+                        lastError = parseError;
+                        continue;
+                    }
+                } else {
+                    data = { raw: await res.text() };
+                }
+
+                if (!res.ok) {
+                    const apiError = new Error((data && data.error) ? data.error : 'Fehler beim Senden');
+                    apiError.code = (res.status === 400 || res.status === 422 || res.status === 429)
+                        ? 'API_VALIDATION'
+                        : 'API_UNAVAILABLE';
+
+                    if (apiError.code === 'API_VALIDATION') {
+                        throw apiError;
+                    }
+
+                    lastError = apiError;
+                    continue;
+                }
+
+                if (!contentType.includes('application/json')) {
+                    const unexpectedResponseError = new Error('Spenden-API hat keine JSON-Antwort geliefert.');
+                    unexpectedResponseError.code = 'API_NON_JSON';
+                    lastError = unexpectedResponseError;
+                    continue;
+                }
+
+                return data || {};
+            }
+
+            if (lastError) {
+                throw lastError;
+            }
+
+            const fallbackError = new Error('Spenden-Server nicht erreichbar. Bitte spaeter erneut versuchen.');
+            fallbackError.code = 'API_NETWORK';
+            throw fallbackError;
+        }
+
+        async function submitDonationToNetlify(formData) {
+            const formName = donationForm.getAttribute('name') || 'donation-confirmation';
+            const action = donationForm.getAttribute('action') || location.pathname || '/spenden.html';
+            const encodedBody = new URLSearchParams();
+
+            for (const [key, value] of formData.entries()) {
+                if (typeof value !== 'string') continue;
+                encodedBody.append(key, value);
+            }
+
+            if (!encodedBody.get('form-name')) {
+                encodedBody.set('form-name', formName);
+            }
+
+            const res = await fetch(action, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: encodedBody.toString()
+            });
+
+            if (!res.ok) {
+                const netlifyError = new Error(`Fehler beim Senden (Netlify, HTTP ${res.status})`);
+                netlifyError.code = 'NETLIFY_SUBMIT_FAILED';
+                throw netlifyError;
+            }
+
+            return { netlifyFallback: true };
+        }
+
+        donationForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            updateDonationRequirements();
+
+            const formData = new FormData(donationForm);
+            const payload = {
+                name: formData.get('name') || '',
+                email: formData.get('email') || '',
+                amount: formData.get('amount') || '',
+                currency: formData.get('currency') || 'EUR',
+                paymentMethod: formData.get('paymentMethod') || '',
+                donationDate: formData.get('donationDate') || '',
+                address: formData.get('address') || '',
+                message: formData.get('message') || '',
+                anonymous: formData.get('anonymous') ? true : false,
+                needsReceipt: formData.get('needsReceipt') ? true : false,
+                website: formData.get('website') || ''
+            };
+
+            if (!isValidEmail(payload.email)) {
+                if (statusEl) {
+                    statusEl.textContent = 'Bitte gib eine gueltige E-Mail-Adresse ein.';
+                    statusEl.className = 'form-status is-error';
+                }
+                return;
+            }
+
+            if (!payload.amount || Number(payload.amount) <= 0) {
+                if (statusEl) {
+                    statusEl.textContent = 'Bitte gib einen gueltigen Betrag ein.';
+                    statusEl.className = 'form-status is-error';
+                }
+                return;
+            }
+
+            if (payload.needsReceipt && (payload.anonymous || !payload.name || !payload.address)) {
+                if (statusEl) {
+                    statusEl.textContent = 'Fuer eine Spendenquittung bitte Name und Adresse angeben (nicht anonym).';
+                    statusEl.className = 'form-status is-error';
+                }
+                return;
+            }
+
+            if (submitBtn) submitBtn.disabled = true;
+            if (statusEl) {
+                statusEl.textContent = 'Sende...';
+                statusEl.className = 'form-status';
+            }
+
+            try {
+                let data;
+
+                try {
+                    data = await submitDonationToApi(payload);
+                } catch (apiErr) {
+                    const shouldFallbackToNetlify =
+                        hasNetlifyForm &&
+                        !isLocalStaticSite &&
+                        (
+                            apiErr.code === 'API_UNAVAILABLE' ||
+                            apiErr.code === 'API_NON_JSON' ||
+                            apiErr.code === 'API_NETWORK'
+                        );
+
+                    if (!shouldFallbackToNetlify) {
+                        throw apiErr;
+                    }
+
+                    data = await submitDonationToNetlify(formData);
+                }
+
+                if (statusEl) {
+                    if (data && data.netlifyFallback) {
+                        statusEl.textContent = 'Danke! Deine Anfrage wurde gespeichert. Wir melden uns per E-Mail.';
+                        statusEl.className = 'form-status is-success';
+                    } else {
+                        const donationInfo = data && data.donationId ? ` Beleg: ${data.donationId}` : '';
+                        statusEl.textContent = `Danke! Deine Spendenbestaetigung wurde angefragt.${donationInfo}`;
+                        statusEl.className = 'form-status is-success';
+                    }
+                }
+
+                donationForm.reset();
+                resetDonationDate();
+                updateDonationRequirements();
             } catch (err) {
                 if (statusEl) {
                     statusEl.textContent = err.message || 'Fehler beim Senden';
