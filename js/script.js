@@ -277,6 +277,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const statusEl = document.getElementById('contact-status');
         const submitBtn = contactForm.querySelector('button[type="submit"]');
         const isLocalStaticSite = location.hostname === 'localhost' && location.port === '8080';
+        const hasNetlifyForm = contactForm.getAttribute('data-netlify') === 'true';
 
         // E-Mail Validierung
         function isValidEmail(email) {
@@ -326,7 +327,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (!res.ok) {
                     const apiError = new Error((data && data.error) ? data.error : 'Fehler beim Senden');
-                    apiError.code = (res.status === 400 || res.status === 422 || res.status === 429)
+                    const hasConfigError = apiError.message && (
+                        apiError.message.includes('RESEND_API_KEY is not set') ||
+                        apiError.message.includes('CONFIG_MISSING_RESEND_API_KEY')
+                    );
+                    apiError.code = hasConfigError
+                        ? 'API_CONFIG'
+                        : (res.status === 400 || res.status === 422 || res.status === 429)
                         ? 'API_VALIDATION'
                         : 'API_UNAVAILABLE';
 
@@ -355,6 +362,35 @@ document.addEventListener('DOMContentLoaded', function () {
             const fallbackError = new Error('Kontakt-Server nicht erreichbar. Bitte spaeter erneut versuchen.');
             fallbackError.code = 'API_NETWORK';
             throw fallbackError;
+        }
+
+        async function submitToNetlifyForm(formData) {
+            const formName = contactForm.getAttribute('name') || 'contact';
+            const action = contactForm.getAttribute('action') || location.pathname || '/';
+            const encodedBody = new URLSearchParams();
+
+            for (const [key, value] of formData.entries()) {
+                if (typeof value !== 'string') continue;
+                encodedBody.append(key, value);
+            }
+
+            if (!encodedBody.get('form-name')) {
+                encodedBody.set('form-name', formName);
+            }
+
+            const res = await fetch(action, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: encodedBody.toString()
+            });
+
+            if (!res.ok) {
+                const netlifyError = new Error(`Fehler beim Senden (Netlify, HTTP ${res.status})`);
+                netlifyError.code = 'NETLIFY_SUBMIT_FAILED';
+                throw netlifyError;
+            }
+
+            return { netlifyFallback: true };
         }
 
         contactForm.addEventListener('submit', async (e) => {
@@ -387,17 +423,41 @@ document.addEventListener('DOMContentLoaded', function () {
             };
 
             try {
-                const data = await submitToContactApi(payload);
+                let data;
+
+                try {
+                    data = await submitToContactApi(payload);
+                } catch (apiErr) {
+                    const shouldFallbackToNetlify =
+                        hasNetlifyForm &&
+                        !isLocalStaticSite &&
+                        (
+                            apiErr.code === 'API_UNAVAILABLE' ||
+                            apiErr.code === 'API_NON_JSON' ||
+                            apiErr.code === 'API_NETWORK' ||
+                            apiErr.code === 'API_CONFIG'
+                        );
+
+                    if (!shouldFallbackToNetlify) {
+                        throw apiErr;
+                    }
+
+                    data = await submitToNetlifyForm(formData);
+                }
 
                 if (statusEl) {
                     const ticketInfo = data.ticketId ? ` Ticket: ${data.ticketId}` : '';
+                    const isNetlifyFallback = !!(data && data.netlifyFallback);
                     const internalMailFailed =
                         data &&
                         data.emailStatus &&
                         data.emailStatus.internal_notification &&
                         data.emailStatus.internal_notification !== 'sent';
 
-                    if (internalMailFailed) {
+                    if (isNetlifyFallback) {
+                        statusEl.textContent = 'Nachricht gespeichert. E-Mail-Service wird gerade konfiguriert.';
+                        statusEl.className = 'form-status is-success';
+                    } else if (internalMailFailed) {
                         statusEl.textContent = `Nachricht gespeichert.${ticketInfo} E-Mail-Zustellung ist fehlgeschlagen.`;
                         statusEl.className = 'form-status is-error';
                     } else {

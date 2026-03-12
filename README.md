@@ -39,6 +39,7 @@ npm test
 
 Der Endpoint `POST /api/contact` (lokaler Admin-Server) verschickt E-Mails über Resend.
 Auf Netlify nutzt das Kontaktformular als Fallback `/.netlify/functions/contact-email` (Mail an Gemeinde + Bestätigung an Absender).
+Falls der Mail-Service nicht konfiguriert ist, wird das Formular trotzdem als Netlify Form gespeichert (kein Datenverlust).
 
 Der Endpoint `POST /api/donations` verschickt eine Spendenbestaetigung mit PDF-Anhang an den Spender und eine interne Kopie an die Gemeinde.
 Auf Netlify wird dafuer automatisch `/.netlify/functions/donations` verwendet (gleiche Nutzlast).
@@ -46,6 +47,7 @@ Auf Netlify wird dafuer automatisch `/.netlify/functions/donations` verwendet (g
 - Konfiguration über `.env` (siehe `.env.example`)
 - Wichtige Variablen:
   - `RESEND_API_KEY`
+  - `CONTACT_RESEND_API_KEY` (optional, überschreibt `RESEND_API_KEY` nur für Kontakt)
   - `CHURCH_EMAIL` (primäre Zieladresse)
   - `TO_EMAIL` (Legacy-Fallback)
   - `FROM_EMAIL`
