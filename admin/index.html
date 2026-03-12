@@ -7,17 +7,7 @@
   <script>
     (function () {
       try {
-        const params = new URLSearchParams(window.location.search);
-        const mode = params.get('mode');
-        const queryApi = params.get('api');
-        const storedApi = localStorage.getItem('admin-api');
-        const host = window.location.hostname;
-        const isLocal = host === 'localhost' || host === '127.0.0.1';
-        const hasCustomApi = Boolean((queryApi || storedApi || '').trim());
-        const forceLocalMode = mode === 'local';
-        if (!isLocal && !hasCustomApi && !forceLocalMode) {
-          window.location.replace('cms.html');
-        }
+        // Keep page accessible in all environments.
       } catch (e) {
         // Ignore and continue with current page.
       }
@@ -1789,17 +1779,13 @@
 
       readOnlyActionHint() {
         return (!IS_LOCALHOST && !HAS_CUSTOM_API)
-          ? 'Bitte /admin/cms.html nutzen.'
+          ? 'Diese Umgebung ist nur lesend verfügbar.'
           : 'Bitte API-Verbindung prüfen.';
       },
 
       ensureWritable(action = 'Speichern') {
         if (!this.readOnlyMode) return true;
         this.toast(`Nur Lesen: ${action} nicht möglich. ${this.readOnlyActionHint()}`, 'error');
-        if (!IS_LOCALHOST && !HAS_CUSTOM_API && !FORCE_LOCAL_MODE && !this.redirectedToCms) {
-          this.redirectedToCms = true;
-          setTimeout(() => window.location.replace('cms.html'), 800);
-        }
         return false;
       },
 
@@ -1841,11 +1827,6 @@
           try {
             const staticRes = await fetch(this.getStaticDataUrl('/data/events.json'));
             if (!staticRes.ok) throw new Error('No static data');
-            if (!IS_LOCALHOST && !HAS_CUSTOM_API && !FORCE_LOCAL_MODE && !this.redirectedToCms) {
-              this.redirectedToCms = true;
-              window.location.replace('cms.html');
-              return;
-            }
             this.readOnlyMode = true;
             this.showReadOnlyNotice();
             dot.classList.add('online');
