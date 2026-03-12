@@ -143,6 +143,22 @@ function parsePayload(event) {
   }
 }
 
+function resolveResendApiKey() {
+  const candidates = [
+    process.env.DONATION_RESEND_API_KEY,
+    process.env.CONTACT_RESEND_API_KEY,
+    process.env.RESEND_API_KEY,
+    process.env.RESEND_KEY,
+    process.env.MAIL_API_KEY
+  ];
+
+  for (const key of candidates) {
+    const normalized = normalizeText(key);
+    if (normalized) return normalized;
+  }
+  return '';
+}
+
 exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 204, headers: CORS_HEADERS, body: '' };
@@ -152,7 +168,7 @@ exports.handler = async (event) => {
     return json(405, { error: 'Method not allowed' });
   }
 
-  const apiKey = process.env.RESEND_API_KEY;
+  const apiKey = resolveResendApiKey();
   if (!apiKey) {
     return json(500, {
       error: 'Mail-Service nicht konfiguriert (RESEND_API_KEY fehlt).',
