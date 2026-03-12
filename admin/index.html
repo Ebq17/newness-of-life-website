@@ -8,12 +8,14 @@
     (function () {
       try {
         const params = new URLSearchParams(window.location.search);
+        const mode = params.get('mode');
         const queryApi = params.get('api');
         const storedApi = localStorage.getItem('admin-api');
         const host = window.location.hostname;
         const isLocal = host === 'localhost' || host === '127.0.0.1';
         const hasCustomApi = Boolean((queryApi || storedApi || '').trim());
-        if (!isLocal && !hasCustomApi) {
+        const forceLocalMode = mode === 'local';
+        if (!isLocal && !hasCustomApi && !forceLocalMode) {
           window.location.replace('cms.html');
         }
       } catch (e) {
@@ -1510,6 +1512,7 @@
     const ADMIN_BASE = ADMIN_PATH.includes('/admin/')
       ? ADMIN_PATH.split('/admin/')[0]
       : (ADMIN_PATH.endsWith('/admin') ? ADMIN_PATH.slice(0, -6) : '');
+    const ADMIN_MODE = new URLSearchParams(window.location.search).get('mode');
     const QUERY_API = new URLSearchParams(window.location.search).get('api');
     const STORED_API = localStorage.getItem('admin-api');
     const IS_LOCALHOST = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
@@ -1521,6 +1524,7 @@
       : `${window.location.origin}${ADMIN_BASE}`;
     const API_OVERRIDE = (QUERY_API || STORED_API || '').trim();
     const HAS_CUSTOM_API = Boolean(API_OVERRIDE);
+    const FORCE_LOCAL_MODE = ADMIN_MODE === 'local';
     const RESOLVED_API = (API_OVERRIDE || DEFAULT_API).replace(/\/+$/, '');
 
     const App = {
@@ -1792,7 +1796,7 @@
       ensureWritable(action = 'Speichern') {
         if (!this.readOnlyMode) return true;
         this.toast(`Nur Lesen: ${action} nicht möglich. ${this.readOnlyActionHint()}`, 'error');
-        if (!IS_LOCALHOST && !HAS_CUSTOM_API && !this.redirectedToCms) {
+        if (!IS_LOCALHOST && !HAS_CUSTOM_API && !FORCE_LOCAL_MODE && !this.redirectedToCms) {
           this.redirectedToCms = true;
           setTimeout(() => window.location.replace('cms.html'), 800);
         }
@@ -1837,7 +1841,7 @@
           try {
             const staticRes = await fetch(this.getStaticDataUrl('/data/events.json'));
             if (!staticRes.ok) throw new Error('No static data');
-            if (!IS_LOCALHOST && !HAS_CUSTOM_API && !this.redirectedToCms) {
+            if (!IS_LOCALHOST && !HAS_CUSTOM_API && !FORCE_LOCAL_MODE && !this.redirectedToCms) {
               this.redirectedToCms = true;
               window.location.replace('cms.html');
               return;
