@@ -1520,7 +1520,21 @@
       : (ADMIN_PATH.endsWith('/admin') ? ADMIN_PATH.slice(0, -6) : '');
     const ADMIN_MODE = new URLSearchParams(window.location.search).get('mode');
     const QUERY_API = new URLSearchParams(window.location.search).get('api');
-    const STORED_API = localStorage.getItem('admin-api');
+    const safeStorageGet = (key) => {
+      try {
+        return window.localStorage.getItem(key);
+      } catch {
+        return null;
+      }
+    };
+    const safeStorageSet = (key, value) => {
+      try {
+        window.localStorage.setItem(key, value);
+      } catch {
+        // Ignore storage errors (private mode / blocked storage).
+      }
+    };
+    const STORED_API = safeStorageGet('admin-api');
     const IS_LOCALHOST = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
     const DEFAULT_API = IS_LOCALHOST
       ? 'http://localhost:3001/api'
@@ -1688,7 +1702,7 @@
       },
 
       loadTheme() {
-        const saved = localStorage.getItem('admin-theme') || 'dark';
+        const saved = safeStorageGet('admin-theme') || 'dark';
         document.documentElement.setAttribute('data-theme', saved);
         this.updateThemeLabel(saved);
       },
@@ -1697,7 +1711,7 @@
         const current = document.documentElement.getAttribute('data-theme') || 'dark';
         const next = current === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', next);
-        localStorage.setItem('admin-theme', next);
+        safeStorageSet('admin-theme', next);
         this.updateThemeLabel(next);
       },
 
@@ -2783,7 +2797,19 @@
       escapeHtml(str) { const div = document.createElement('div'); div.textContent = str || ''; return div.innerHTML; }
     };
 
-    App.init();
+    try {
+      App.init();
+    } catch (err) {
+      console.error('Admin init failed:', err);
+      const container = document.getElementById('toastContainer');
+      if (container) {
+        const fatal = document.createElement('div');
+        fatal.className = 'toast error';
+        fatal.style.maxWidth = '520px';
+        fatal.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Admin konnte nicht vollständig gestartet werden. Bitte Seite neu laden (Ctrl+F5) oder <a href="cms.html" style="color:#fff;text-decoration:underline;">CMS öffnen</a>.';
+        container.appendChild(fatal);
+      }
+    }
   </script>
 </body>
 </html>
