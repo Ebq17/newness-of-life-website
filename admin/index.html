@@ -225,6 +225,19 @@
       color: var(--text-muted);
     }
 
+    .cms-hint {
+      margin-top: 8px;
+      font-size: 12px;
+    }
+    .cms-hint a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .cms-hint a:hover {
+      text-decoration: underline;
+    }
+
     .status-dot {
       width: 8px;
       height: 8px;
@@ -1198,6 +1211,9 @@
           <span class="status-dot" id="statusDot"></span>
           <span id="statusText">Verbinde...</span>
         </div>
+        <div class="cms-hint" id="cmsHint" style="display: none;">
+          <a href="cms.html">Online speichern im CMS</a>
+        </div>
       </div>
     </aside>
 
@@ -1817,12 +1833,14 @@
 
       async checkServer() {
         const dot = document.getElementById('statusDot'), text = document.getElementById('statusText');
+        const cmsHint = document.getElementById('cmsHint');
         try {
           await this.api('/status');
           this.readOnlyMode = false;
           dot.classList.remove('readonly');
           dot.classList.add('online');
           text.textContent = 'Verbunden';
+          if (cmsHint) cmsHint.style.display = 'none';
         } catch {
           try {
             const staticRes = await fetch(this.getStaticDataUrl('/data/events.json'));
@@ -1832,11 +1850,13 @@
             dot.classList.add('online');
             dot.classList.add('readonly');
             text.textContent = 'Nur Lesen';
+            if (cmsHint) cmsHint.style.display = (!IS_LOCALHOST && !HAS_CUSTOM_API) ? 'block' : 'none';
           } catch {
             this.readOnlyMode = false;
             dot.classList.remove('readonly');
             dot.classList.remove('online');
             text.textContent = 'Offline';
+            if (cmsHint) cmsHint.style.display = 'none';
           }
         }
       },
