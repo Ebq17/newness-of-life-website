@@ -327,9 +327,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (!res.ok) {
                     const apiError = new Error((data && data.error) ? data.error : 'Fehler beim Senden');
-                    const hasConfigError = apiError.message && (
-                        apiError.message.includes('RESEND_API_KEY is not set') ||
-                        apiError.message.includes('CONFIG_MISSING_RESEND_API_KEY')
+                    const responseCode = data && data.code ? String(data.code) : '';
+                    const hasConfigError = responseCode === 'CONFIG_MISSING_RESEND_API_KEY' || (
+                        apiError.message && (
+                            apiError.message.includes('RESEND_API_KEY is not set') ||
+                            apiError.message.includes('Mail-Service nicht konfiguriert') ||
+                            apiError.message.includes('RESEND_API_KEY fehlt') ||
+                            apiError.message.includes('CONFIG_MISSING_RESEND_API_KEY')
+                        )
                     );
                     apiError.code = hasConfigError
                         ? 'API_CONFIG'
@@ -439,6 +444,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         );
 
                     if (!shouldFallbackToNetlify) {
+                        if (apiErr.code === 'API_CONFIG') {
+                            apiErr.message = 'Mail-Service wird gerade konfiguriert. Bitte spaeter erneut versuchen.';
+                        }
                         throw apiErr;
                     }
 
@@ -559,7 +567,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (!res.ok) {
                     const apiError = new Error((data && data.error) ? data.error : 'Fehler beim Senden');
-                    apiError.code = (res.status === 400 || res.status === 422 || res.status === 429)
+                    const responseCode = data && data.code ? String(data.code) : '';
+                    const hasConfigError = responseCode === 'CONFIG_MISSING_RESEND_API_KEY' || (
+                        apiError.message && (
+                            apiError.message.includes('RESEND_API_KEY is not set') ||
+                            apiError.message.includes('Mail-Service nicht konfiguriert') ||
+                            apiError.message.includes('RESEND_API_KEY fehlt') ||
+                            apiError.message.includes('CONFIG_MISSING_RESEND_API_KEY')
+                        )
+                    );
+                    apiError.code = hasConfigError
+                        ? 'API_CONFIG'
+                        : (res.status === 400 || res.status === 422 || res.status === 429)
                         ? 'API_VALIDATION'
                         : 'API_UNAVAILABLE';
 
@@ -680,10 +699,14 @@ document.addEventListener('DOMContentLoaded', function () {
                         (
                             apiErr.code === 'API_UNAVAILABLE' ||
                             apiErr.code === 'API_NON_JSON' ||
-                            apiErr.code === 'API_NETWORK'
+                            apiErr.code === 'API_NETWORK' ||
+                            apiErr.code === 'API_CONFIG'
                         );
 
                     if (!shouldFallbackToNetlify) {
+                        if (apiErr.code === 'API_CONFIG') {
+                            apiErr.message = 'Mail-Service wird gerade konfiguriert. Bitte spaeter erneut versuchen.';
+                        }
                         throw apiErr;
                     }
 

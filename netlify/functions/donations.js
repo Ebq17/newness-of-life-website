@@ -154,7 +154,10 @@ exports.handler = async (event) => {
 
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
-    return json(500, { error: 'RESEND_API_KEY is not set' });
+    return json(500, {
+      error: 'Mail-Service nicht konfiguriert (RESEND_API_KEY fehlt).',
+      code: 'CONFIG_MISSING_RESEND_API_KEY'
+    });
   }
 
   const body = parsePayload(event);
