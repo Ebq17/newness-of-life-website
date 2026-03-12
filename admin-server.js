@@ -687,9 +687,9 @@ function createRequestHandler({ rootDir = __dirname } = {}) {
 
         // POST /api/contact - Contact form handler
         if (method === 'POST' && route === 'contact') {
-          const TO_EMAIL = process.env.TO_EMAIL || process.env.INTERNAL_EMAIL || 'newnessoflife@clgi.org';
-          const FROM_EMAIL = process.env.FROM_EMAIL || process.env.RESEND_FROM || 'Newness of Life <kontakt@newnessoflife.de>';
-          const NOREPLY_EMAIL = process.env.NOREPLY_EMAIL || 'Newness of Life <noreply@newnessoflife.de>';
+          const TO_EMAIL = process.env.CONTACT_TO_EMAIL || process.env.CHURCH_EMAIL || process.env.TO_EMAIL || process.env.INTERNAL_EMAIL || 'newnessoflife@clgi.org';
+          const FROM_EMAIL = process.env.CONTACT_FROM_EMAIL || process.env.FROM_EMAIL || process.env.RESEND_FROM || 'Newness of Life <kontakt@newnessoflife.de>';
+          const NOREPLY_EMAIL = process.env.CONTACT_NOREPLY_EMAIL || process.env.NOREPLY_EMAIL || 'Newness of Life <noreply@newnessoflife.de>';
 
           const ip = getClientIp(req);
           if (isRateLimited(ip)) {
@@ -800,7 +800,7 @@ function createRequestHandler({ rootDir = __dirname } = {}) {
 
         // POST /api/donations - Donation confirmation request
         if (method === 'POST' && route === 'donations') {
-          const TO_EMAIL = process.env.DONATION_TO_EMAIL || process.env.TO_EMAIL || process.env.INTERNAL_EMAIL || 'newnessoflife@clgi.org';
+          const TO_EMAIL = process.env.DONATION_TO_EMAIL || process.env.CHURCH_EMAIL || process.env.TO_EMAIL || process.env.INTERNAL_EMAIL || 'newnessoflife@clgi.org';
           const FROM_EMAIL = process.env.DONATION_FROM_EMAIL || process.env.FROM_EMAIL || process.env.RESEND_FROM || 'Newness of Life <kontakt@newnessoflife.de>';
           const NOREPLY_EMAIL = process.env.DONATION_NOREPLY_EMAIL || process.env.NOREPLY_EMAIL || 'Newness of Life <noreply@newnessoflife.de>';
           const ORG_NAME = process.env.ORG_NAME || 'Newness of Life';

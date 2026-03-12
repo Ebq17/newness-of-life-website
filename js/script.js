@@ -277,7 +277,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const statusEl = document.getElementById('contact-status');
         const submitBtn = contactForm.querySelector('button[type="submit"]');
         const isLocalStaticSite = location.hostname === 'localhost' && location.port === '8080';
-        const hasNetlifyForm = contactForm.getAttribute('data-netlify') === 'true';
 
         // E-Mail Validierung
         function isValidEmail(email) {
@@ -286,83 +285,76 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         async function submitToContactApi(payload) {
-            const apiBase = isLocalStaticSite ? 'http://localhost:3001' : '';
-            let res;
+            const apiEndpoints = isLocalStaticSite
+                ? ['http://localhost:3001/api/contact']
+                : ['/api/contact', '/.netlify/functions/contact-email'];
+            let lastError = null;
 
-            try {
-                res = await fetch(`${apiBase}/api/contact`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
-                });
-            } catch (err) {
-                const networkError = new Error('Kontakt-Server nicht erreichbar. Bitte spaeter erneut versuchen.');
-                networkError.code = 'API_NETWORK';
-                throw networkError;
-            }
-
-            const contentType = (res.headers.get('content-type') || '').toLowerCase();
-            let data = null;
-
-            if (contentType.includes('application/json')) {
+            for (const endpoint of apiEndpoints) {
+                let res;
                 try {
-                    data = await res.json();
+                    res = await fetch(endpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
                 } catch (err) {
-                    const parseError = new Error('Ungueltige Antwort vom Kontakt-Server.');
-                    parseError.code = 'API_NON_JSON';
-                    throw parseError;
+                    const networkError = new Error('Kontakt-Server nicht erreichbar. Bitte spaeter erneut versuchen.');
+                    networkError.code = 'API_NETWORK';
+                    lastError = networkError;
+                    continue;
                 }
-            } else {
-                data = { raw: await res.text() };
+
+                const contentType = (res.headers.get('content-type') || '').toLowerCase();
+                let data = null;
+
+                if (contentType.includes('application/json')) {
+                    try {
+                        data = await res.json();
+                    } catch (err) {
+                        const parseError = new Error('Ungueltige Antwort vom Kontakt-Server.');
+                        parseError.code = 'API_NON_JSON';
+                        lastError = parseError;
+                        continue;
+                    }
+                } else {
+                    data = { raw: await res.text() };
+                }
+
+                if (!res.ok) {
+                    const apiError = new Error((data && data.error) ? data.error : 'Fehler beim Senden');
+                    apiError.code = (res.status === 400 || res.status === 422 || res.status === 429)
+                        ? 'API_VALIDATION'
+                        : 'API_UNAVAILABLE';
+
+                    if (apiError.code === 'API_VALIDATION') {
+                        throw apiError;
+                    }
+
+                    lastError = apiError;
+                    continue;
+                }
+
+                if (!contentType.includes('application/json')) {
+                    const unexpectedResponseError = new Error('Kontakt-API hat keine JSON-Antwort geliefert.');
+                    unexpectedResponseError.code = 'API_NON_JSON';
+                    lastError = unexpectedResponseError;
+                    continue;
+                }
+
+                return data || {};
             }
 
-            if (!res.ok) {
-                const apiError = new Error((data && data.error) ? data.error : 'Fehler beim Senden');
-                apiError.code = (res.status === 404 || res.status === 405 || res.status >= 500)
-                    ? 'API_UNAVAILABLE'
-                    : 'API_VALIDATION';
-                throw apiError;
+            if (lastError) {
+                throw lastError;
             }
 
-            if (!contentType.includes('application/json')) {
-                const unexpectedResponseError = new Error('Kontakt-API hat keine JSON-Antwort geliefert.');
-                unexpectedResponseError.code = 'API_NON_JSON';
-                throw unexpectedResponseError;
-            }
-
-            return data || {};
-        }
-
-        async function submitToNetlifyForm(formData) {
-            const formName = contactForm.getAttribute('name') || 'contact';
-            const action = contactForm.getAttribute('action') || location.pathname || '/';
-            const encodedBody = new URLSearchParams();
-
-            for (const [key, value] of formData.entries()) {
-                if (typeof value !== 'string') continue;
-                encodedBody.append(key, value);
-            }
-
-            if (!encodedBody.get('form-name')) {
-                encodedBody.set('form-name', formName);
-            }
-
-            const res = await fetch(action, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: encodedBody.toString()
-            });
-
-            if (!res.ok) {
-                const netlifyError = new Error(`Fehler beim Senden (Netlify, HTTP ${res.status})`);
-                netlifyError.code = 'NETLIFY_SUBMIT_FAILED';
-                throw netlifyError;
-            }
-
-            return {};
+            const fallbackError = new Error('Kontakt-Server nicht erreichbar. Bitte spaeter erneut versuchen.');
+            fallbackError.code = 'API_NETWORK';
+            throw fallbackError;
         }
 
         contactForm.addEventListener('submit', async (e) => {
@@ -395,27 +387,7 @@ document.addEventListener('DOMContentLoaded', function () {
             };
 
             try {
-                let data;
-
-                try {
-                    data = await submitToContactApi(payload);
-                } catch (apiErr) {
-                    const shouldFallbackToNetlify =
-                        hasNetlifyForm &&
-                        !isLocalStaticSite &&
-                        (
-                            apiErr.code === 'API_UNAVAILABLE' ||
-                            apiErr.code === 'API_NON_JSON' ||
-                            apiErr.code === 'API_NETWORK' ||
-                            apiErr.code === 'API_VALIDATION'
-                        );
-
-                    if (!shouldFallbackToNetlify) {
-                        throw apiErr;
-                    }
-
-                    data = await submitToNetlifyForm(formData);
-                }
+                const data = await submitToContactApi(payload);
 
                 if (statusEl) {
                     const ticketInfo = data.ticketId ? ` Ticket: ${data.ticketId}` : '';

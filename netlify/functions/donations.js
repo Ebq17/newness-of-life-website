@@ -204,7 +204,7 @@ exports.handler = async (event) => {
 
   const orgName = process.env.ORG_NAME || 'Newness of Life';
   const siteUrl = process.env.SITE_URL || 'https://www.newnessoflife.de';
-  const donationTo = process.env.DONATION_TO_EMAIL || process.env.TO_EMAIL || 'newnessoflife@clgi.org';
+  const donationTo = process.env.DONATION_TO_EMAIL || process.env.CHURCH_EMAIL || process.env.TO_EMAIL || 'newnessoflife@clgi.org';
   const donationFrom = process.env.DONATION_FROM_EMAIL || process.env.FROM_EMAIL || process.env.RESEND_FROM || 'Newness of Life <kontakt@newnessoflife.de>';
   const donationNoReply = process.env.DONATION_NOREPLY_EMAIL || process.env.NOREPLY_EMAIL || 'Newness of Life <noreply@newnessoflife.de>';
 
