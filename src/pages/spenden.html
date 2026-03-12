@@ -81,12 +81,13 @@
               <h3 data-cms-field="bank_details.title" data-cms-label="Titel" data-i18n="donate_page.bank_transfer">{{ pages.spenden.bank_details.title || 'Banküberweisung' }}</h3>
             </div>
             <div class="donate-option-body">
-              <p data-i18n="donate_page.bank_transfer_desc">Spende direkt auf unser Konto. Für eine Spendenquittung gib bitte deine Adresse im Verwendungszweck an.</p>
+              <p data-i18n="donate_page.bank_transfer_desc">Spende direkt auf unser Konto. Wenn du eine Spendenquittung brauchst, kannst du sie danach per E-Mail anfragen.</p>
               <ul class="bank-details-list-professional">
                 <li><strong data-i18n="donate_page.recipient">Empfänger</strong>: <span id="bank-receiver" data-cms-field="bank_details.account_holder" data-cms-label="Kontoinhaber">{{ pages.spenden.bank_details.account_holder || 'Newness of Life e.V.' }}</span></li>
                 <li><strong>IBAN:</strong> <span id="bank-iban" data-cms-field="bank_details.iban" data-cms-label="IBAN">{{ pages.spenden.bank_details.iban || 'folgt' }}</span> <button class="copy-btn" data-copy="#bank-iban"><i class="fa-regular fa-copy"></i></button></li>
                 <li><strong>BIC:</strong> <span id="bank-bic" data-cms-field="bank_details.bic" data-cms-label="BIC">{{ pages.spenden.bank_details.bic || 'folgt' }}</span> <button class="copy-btn" data-copy="#bank-bic"><i class="fa-regular fa-copy"></i></button></li>
                 <li><strong data-i18n="donate_page.bank">Bank</strong>: <span id="bank-name" data-cms-field="bank_details.bank_name" data-cms-label="Bank">{{ pages.spenden.bank_details.bank_name || 'folgt' }}</span></li>
+                <li><strong>Verwendungszweck:</strong> <span id="bank-reference" data-cms-field="bank_details.reference" data-cms-label="Verwendungszweck">{{ pages.spenden.bank_details.reference || 'Spende' }}</span> <button class="copy-btn" data-copy="#bank-reference"><i class="fa-regular fa-copy"></i></button></li>
               </ul>
             </div>
           </div>
@@ -122,70 +123,17 @@
     <section class="content-section donation-confirmation-section">
       <div class="container">
         <div class="donation-confirmation-card">
-          <h2>Spendenbestaetigung anfordern</h2>
+          <h2>Spendenquittung nur bei Bedarf</h2>
           <p class="donation-confirmation-lead">
-            Nach deiner Spende kannst du hier direkt eine automatische Bestaetigung als PDF erhalten.
-            Gleichzeitig bekommt unser Team eine interne Kopie zur Dokumentation.
+            Du musst kein Formular mehr ausfuellen. Spende einfach per Ueberweisung oder PayPal.
           </p>
           <p class="donation-confirmation-note">
-            Spenden koennen auch anonym erfolgen. Fuer eine offizielle Spendenquittung sind Name und Adresse erforderlich.
+            Wenn du eine Spendenquittung brauchst, schick uns danach eine kurze E-Mail mit Betrag, Datum und Zahlungsweg.
+            Fuer die Quittung brauchen wir deinen vollstaendigen Namen und Adresse.
           </p>
-
-          <form id="donation-form" class="donation-form" name="donation-confirmation" method="POST" action="/spenden.html" data-netlify="true" netlify-honeypot="website">
-            <input type="hidden" name="form-name" value="donation-confirmation">
-            <input type="hidden" name="currency" value="EUR">
-            <input type="text" name="website" class="is-hidden" tabindex="-1" autocomplete="off">
-
-            <div class="donation-form-grid">
-              <div class="form-group">
-                <label for="donation-name">Name</label>
-                <input id="donation-name" type="text" name="name" placeholder="Max Mustermann">
-              </div>
-
-              <div class="form-group">
-                <label for="donation-email">E-Mail</label>
-                <input id="donation-email" type="email" name="email" placeholder="name@example.com" required>
-              </div>
-
-              <div class="form-group">
-                <label for="donation-amount">Betrag (EUR)</label>
-                <input id="donation-amount" type="number" name="amount" min="1" step="0.01" required>
-              </div>
-
-              <div class="form-group">
-                <label for="donation-payment-method">Zahlungsmethode</label>
-                <select id="donation-payment-method" name="paymentMethod" required>
-                  <option value="paypal">PayPal</option>
-                  <option value="bank_transfer">Bankueberweisung</option>
-                  <option value="cash">Bar</option>
-                  <option value="other">Sonstiges</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="donation-date">Spenden-Datum</label>
-                <input id="donation-date" type="date" name="donationDate" required>
-              </div>
-
-              <div class="form-group form-group-span">
-                <label for="donation-address">Adresse (nur noetig fuer Spendenquittung)</label>
-                <textarea id="donation-address" name="address" rows="3" placeholder="Strasse, Hausnummer&#10;PLZ Ort"></textarea>
-              </div>
-
-              <div class="form-group form-group-span">
-                <label for="donation-message">Nachricht (optional)</label>
-                <textarea id="donation-message" name="message" rows="3" placeholder="Optionaler Hinweis"></textarea>
-              </div>
-            </div>
-
-            <div class="donation-checkbox-row">
-              <label><input type="checkbox" name="anonymous" value="1"> Ich moechte anonym spenden</label>
-              <label><input type="checkbox" name="needsReceipt" value="1"> Ich benoetige eine Spendenquittung</label>
-            </div>
-
-            <button type="submit" class="btn-primary">Bestaetigung anfordern</button>
-            <p class="form-status" id="donation-status" aria-live="polite"></p>
-          </form>
+          <a class="btn-primary" href="mailto:{{ settings.contact.email || 'newnessoflife@clgi.org' }}?subject=Spendenquittung%20anfordern">
+            <i class="fa-solid fa-envelope"></i> Spendenquittung per E-Mail anfragen
+          </a>
         </div>
       </div>
     </section>
