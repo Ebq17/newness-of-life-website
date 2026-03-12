@@ -458,7 +458,16 @@ document.addEventListener('DOMContentLoaded', function () {
         const hasNetlifyForm = donationForm.getAttribute('data-netlify') === 'true';
         const isLocalStaticSite = location.hostname === 'localhost' && location.port === '8080';
 
-        function updateDonationRequirements() {
+        function updateDonationRequirements(source = '') {
+            if (anonymousInput && needsReceiptInput) {
+                if (source === 'anonymous' && anonymousInput.checked && needsReceiptInput.checked) {
+                    needsReceiptInput.checked = false;
+                }
+                if (source === 'needsReceipt' && needsReceiptInput.checked && anonymousInput.checked) {
+                    anonymousInput.checked = false;
+                }
+            }
+
             const anonymous = !!(anonymousInput && anonymousInput.checked);
             const needsReceipt = !!(needsReceiptInput && needsReceiptInput.checked);
             if (nameInput) nameInput.required = !anonymous || needsReceipt;
@@ -473,8 +482,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         resetDonationDate();
         updateDonationRequirements();
-        if (anonymousInput) anonymousInput.addEventListener('change', updateDonationRequirements);
-        if (needsReceiptInput) needsReceiptInput.addEventListener('change', updateDonationRequirements);
+        if (anonymousInput) anonymousInput.addEventListener('change', () => updateDonationRequirements('anonymous'));
+        if (needsReceiptInput) needsReceiptInput.addEventListener('change', () => updateDonationRequirements('needsReceipt'));
 
         async function submitDonationToApi(payload) {
             const apiEndpoints = isLocalStaticSite

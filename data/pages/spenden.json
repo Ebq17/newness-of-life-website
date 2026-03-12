@@ -39,15 +39,15 @@
   "bank_details": {
     "title": "Bankverbindung",
     "account_holder": "Die Kirche des lebendigen Gottes International e.V.",
-    "iban": "",
-    "bic": "",
-    "bank_name": "",
+    "iban": "DE26 5509 1200 0040 3569 08",
+    "bic": "GENODE61AZY",
+    "bank_name": "Volksbank Alzey-Worms eG",
     "reference": "Spende"
   },
 
   "online_donation": {
-    "enabled": false,
-    "paypal_link": "",
+    "enabled": true,
+    "paypal_link": "https://www.paypal.com/donate/?hosted_button_id=JFM46GE836RP8",
     "other_link": ""
   },
 

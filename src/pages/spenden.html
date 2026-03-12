@@ -99,25 +99,20 @@
             </div>
             <div class="donate-option-body">
               <p data-i18n="donate_page.paypal_desc">Sicher und schnell online spenden – auch ohne PayPal-Konto möglich.</p>
-              <form class="paypal-form" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
-                <input type="hidden" name="cmd" value="_donations">
-                <input type="hidden" name="business" value="newnessoflife@clgi.org">
-                <input type="hidden" name="item_name" value="Spende für Newness of Life e.V.">
-                <input type="hidden" name="currency_code" value="EUR">
-                <div class="amount-selection">
-                  <div class="amount-chip" data-amount="25">25€</div>
-                  <div class="amount-chip active" data-amount="50">50€</div>
-                  <div class="amount-chip" data-amount="100">100€</div>
-                  <div class="amount-chip" data-amount="" data-i18n="donate_page.other_amount">Andere</div>
-                </div>
-                <div class="amount-input-container">
-                  <span>€</span>
-                  <input type="number" name="amount" value="50" min="1" step="1" required>
-                </div>
-                <button type="submit" class="btn-primary btn-block">
-                  <i class="fa-brands fa-paypal"></i> <span data-i18n="donate_page.donate_with_paypal">Mit PayPal spenden</span>
-                </button>
-              </form>
+              <a
+                id="paypal-donate-link"
+                class="btn-primary btn-block"
+                data-cms-field="online_donation.paypal_link"
+                data-cms-label="PayPal Spenden-Link"
+                href="{{ pages.spenden.online_donation.paypal_link || 'https://www.paypal.com/donate/?hosted_button_id=JFM46GE836RP8' }}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <i class="fa-brands fa-paypal"></i> <span data-i18n="donate_page.donate_with_paypal">Mit PayPal spenden</span>
+              </a>
+              <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.85;">
+                Betrag und Zahlungsart waehlst du direkt bei PayPal.
+              </p>
             </div>
           </div>
         </div>
