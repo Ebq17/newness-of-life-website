@@ -8,10 +8,12 @@
     (function () {
       try {
         const params = new URLSearchParams(window.location.search);
-        const mode = params.get('mode');
+        const queryApi = params.get('api');
+        const storedApi = localStorage.getItem('admin-api');
         const host = window.location.hostname;
         const isLocal = host === 'localhost' || host === '127.0.0.1';
-        if (!isLocal && mode !== 'local') {
+        const hasCustomApi = Boolean((queryApi || storedApi || '').trim());
+        if (!isLocal && !hasCustomApi) {
           window.location.replace('cms.html');
         }
       } catch (e) {
@@ -1508,7 +1510,6 @@
     const ADMIN_BASE = ADMIN_PATH.includes('/admin/')
       ? ADMIN_PATH.split('/admin/')[0]
       : (ADMIN_PATH.endsWith('/admin') ? ADMIN_PATH.slice(0, -6) : '');
-    const ADMIN_MODE = new URLSearchParams(window.location.search).get('mode');
     const QUERY_API = new URLSearchParams(window.location.search).get('api');
     const STORED_API = localStorage.getItem('admin-api');
     const IS_LOCALHOST = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
@@ -1518,9 +1519,12 @@
     const DEFAULT_SITE = IS_LOCALHOST
       ? 'http://localhost:8080'
       : `${window.location.origin}${ADMIN_BASE}`;
+    const API_OVERRIDE = (QUERY_API || STORED_API || '').trim();
+    const HAS_CUSTOM_API = Boolean(API_OVERRIDE);
+    const RESOLVED_API = (API_OVERRIDE || DEFAULT_API).replace(/\/+$/, '');
 
     const App = {
-      API: (QUERY_API || STORED_API || DEFAULT_API).replace(/\/+$/, ''),
+      API: RESOLVED_API,
       SITE: DEFAULT_SITE.replace(/\/+$/, ''),
       currentPage: null,
       pageData: {},
@@ -1779,6 +1783,22 @@
         this.toast('API offline: Daten werden nur lesend aus statischen JSON-Dateien geladen.', 'info');
       },
 
+      readOnlyActionHint() {
+        return (!IS_LOCALHOST && !HAS_CUSTOM_API)
+          ? 'Bitte /admin/cms.html nutzen.'
+          : 'Bitte API-Verbindung prüfen.';
+      },
+
+      ensureWritable(action = 'Speichern') {
+        if (!this.readOnlyMode) return true;
+        this.toast(`Nur Lesen: ${action} nicht möglich. ${this.readOnlyActionHint()}`, 'error');
+        if (!IS_LOCALHOST && !HAS_CUSTOM_API && !this.redirectedToCms) {
+          this.redirectedToCms = true;
+          setTimeout(() => window.location.replace('cms.html'), 800);
+        }
+        return false;
+      },
+
       async api(endpoint, options = {}) {
         const method = (options.method || 'GET').toUpperCase();
         const isReadableDataEndpoint = method === 'GET' && /^\/data\/.+\.json$/.test(endpoint);
@@ -1817,7 +1837,7 @@
           try {
             const staticRes = await fetch(this.getStaticDataUrl('/data/events.json'));
             if (!staticRes.ok) throw new Error('No static data');
-            if (!IS_LOCALHOST && ADMIN_MODE !== 'local' && !this.redirectedToCms) {
+            if (!IS_LOCALHOST && !HAS_CUSTOM_API && !this.redirectedToCms) {
               this.redirectedToCms = true;
               window.location.replace('cms.html');
               return;
@@ -2077,6 +2097,7 @@
       updateEditorStatus() { const s = document.getElementById('editorStatus'); s.textContent = this.hasChanges ? '• Ungespeichert' : ''; s.style.color = this.hasChanges ? 'var(--warning)' : ''; },
 
       async savePage() {
+        if (!this.ensureWritable('Speichern')) return;
         if (!this.currentPage) return;
         const filePath = this.currentPage.isPageData ? `pages/${this.currentPage.file}` : this.currentPage.file;
         try {
@@ -2091,6 +2112,7 @@
       async saveAndBuild() { await this.savePage(); await this.build(); this.refreshPreview(); },
 
       async build() {
+        if (!this.ensureWritable('Veröffentlichen')) return;
         try { this.toast('Baue Website...', 'info'); await this.api('/build', { method: 'POST' }); this.toast('Website gebaut!', 'success'); }
         catch { this.toast('Build fehlgeschlagen', 'error'); }
       },
@@ -2164,6 +2186,7 @@
       },
 
       async duplicateEvent(id) {
+        if (!this.ensureWritable('Duplizieren')) return;
         const event = this.eventsData.items.find(e => e.id === id);
         if (!event) return;
         const newEvent = { ...event, id: Date.now().toString(), title: event.title + ' (Kopie)', published: false };
@@ -2176,6 +2199,7 @@
       },
 
       async quickDeleteEvent(id) {
+        if (!this.ensureWritable('Löschen')) return;
         if (!confirm('Termin wirklich löschen?')) return;
         this.eventsData.items = this.eventsData.items.filter(e => e.id !== id);
         try {
@@ -2435,6 +2459,7 @@
       editEvent(id) { const event = this.eventsData.items.find(e => e.id === id); if (event) this.openEventModal(event); },
 
       async saveEvent() {
+        if (!this.ensureWritable('Speichern')) return;
         const id = document.getElementById('eventId').value || Date.now().toString();
         const flyerStyle = this.getCurrentFlyerStyle();
         const existing = this.eventsData.items.find(e => e.id === id) || {};
@@ -2488,6 +2513,7 @@
       },
 
       async deleteEvent() {
+        if (!this.ensureWritable('Löschen')) return;
         const id = document.getElementById('eventId').value; if (!id || !confirm('Termin wirklich löschen?')) return;
         this.eventsData.items = this.eventsData.items.filter(e => e.id !== id);
         try { await this.api('/data/events.json', { method: 'PUT', body: JSON.stringify(this.eventsData) }); await this.api('/build', { method: 'POST' }); this.closeEventModal(); this.renderEventsTable(); this.toast('Termin gelöscht!', 'success'); }
@@ -2517,6 +2543,7 @@
       },
 
       async deleteImage(url, name) {
+        if (!this.ensureWritable('Löschen')) return;
         const label = name || (url || '').split('/').pop() || 'dieses Bild';
         if (!confirm(`Bild wirklich löschen?\n${label}`)) return;
         try {
@@ -2533,6 +2560,7 @@
       },
 
       async uploadFiles(files) {
+        if (!this.ensureWritable('Upload')) return;
         for (const file of files) {
           const formData = new FormData(); formData.append('file', file);
           try { await fetch(`${this.API}/upload`, { method: 'POST', body: formData }); this.toast(`${file.name} hochgeladen!`, 'success'); }
@@ -2610,6 +2638,7 @@
       removeImage(fieldKey) { this.setValue(this.pageData, fieldKey, ''); this.hasChanges = true; this.updateEditorStatus(); this.renderEditor(); },
 
       async uploadForModal(files) {
+        if (!this.ensureWritable('Upload')) return;
         for (const file of files) {
           const formData = new FormData(); formData.append('file', file);
           try { const result = await fetch(`${this.API}/upload`, { method: 'POST', body: formData }).then(r => r.json()); if (result.url) { this.selectedImage = result.url; this.toast('Hochgeladen!', 'success'); } }
@@ -2658,6 +2687,7 @@
       },
 
       async saveSettings(shouldBuild = false) {
+        if (!this.ensureWritable(shouldBuild ? 'Veröffentlichen' : 'Speichern')) return;
         this.settingsData.site_title = document.getElementById('set_site_title').value;
         this.settingsData.site_description = document.getElementById('set_site_description').value;
         if (!this.settingsData.contact) this.settingsData.contact = {};
