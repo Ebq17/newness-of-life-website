@@ -45,6 +45,7 @@ Der Endpoint `POST /api/donations` verschickt eine Spendenbestaetigung mit PDF-A
 Auf Netlify wird dafuer automatisch `/.netlify/functions/donations` verwendet (gleiche Nutzlast).
 
 - Konfiguration über `.env` (siehe `.env.example`)
+- Lokale Tests mit echtem Mailversand brauchen in der lokalen `.env` denselben `RESEND_API_KEY`, der auch in Netlify hinterlegt ist. `.env` bleibt lokal und darf nicht committed werden.
 - Wichtige Variablen:
   - `RESEND_API_KEY`
   - `CONTACT_RESEND_API_KEY` (optional, überschreibt `RESEND_API_KEY` nur für Kontakt)
