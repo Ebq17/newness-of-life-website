@@ -35,6 +35,9 @@
 
   <script src="https://unpkg.com/decap-cms@^3.4.0/dist/decap-cms.js"></script>
   <script>
+    var loadingEl = document.querySelector('.loading');
+    if (loadingEl) loadingEl.style.display = 'none';
+
     if (window.netlifyIdentity) {
       window.netlifyIdentity.on('init', function(user) {
         if (!user) {
