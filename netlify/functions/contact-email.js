@@ -217,7 +217,8 @@ exports.handler = async (event) => {
       html: `
         <p>Hallo ${escapeHtml(name)},</p>
         <p>vielen Dank fuer deine Nachricht an ${escapeHtml(orgName)}.</p>
-        <p>Wir haben deine Anfrage erhalten und melden uns so schnell wie moeglich.</p>
+        <p>Wir haben deine Anfrage erhalten und melden uns so schnell wie moeglich bei dir.</p>
+        <p><strong>Deine Nachricht:</strong><br>${safeMessage}</p>
         <p><strong>Ticket:</strong> ${escapeHtml(ticketId)}</p>
         <p>Gottes Segen<br>${escapeHtml(orgName)}</p>
       `,

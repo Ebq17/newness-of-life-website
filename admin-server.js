@@ -732,28 +732,28 @@ function createRequestHandler({ rootDir = __dirname } = {}) {
           const templates = {
             Allgemein: {
               subject: 'Wir haben deine Nachricht erhalten (Ticket {{ticketId}})',
-              body: `Hallo {{name}},\n\nvielen Dank fuer deine Nachricht an Newness of Life. Wir haben sie erhalten und melden uns in der Regel innerhalb von 24–48 Stunden.\n\nBetreff: {{subject}}\nTicket: {{ticketId}}\n\nWenn du noch Infos ergaenzen moechtest, antworte einfach auf diese E-Mail und nenne die Ticket-Nummer.\n\nHerzliche Gruesse\nNewness of Life (Verein)\nDatenschutz: Deine Daten werden nur zur Bearbeitung deiner Anfrage genutzt.`
+              body: `Hallo {{name}},\n\nvielen Dank fuer deine Nachricht an Newness of Life. Wir haben sie erhalten und melden uns in der Regel innerhalb von 24–48 Stunden bei dir.\n\nDeine Nachricht:\n{{message}}\n\nBetreff: {{subject}}\nTicket: {{ticketId}}\n\nWenn du noch Infos ergaenzen moechtest, antworte einfach auf diese E-Mail und nenne die Ticket-Nummer.\n\nHerzliche Gruesse\nNewness of Life (Verein)\nDatenschutz: Deine Daten werden nur zur Bearbeitung deiner Anfrage genutzt.`
             },
             Spende: {
               subject: 'Danke fuer deine Spendenanfrage (Ticket {{ticketId}})',
-              body: `Hallo {{name}},\n\ndanke, dass du Newness of Life unterstuetzen moechtest.\nWir haben deine Nachricht erhalten und melden uns in der Regel innerhalb von 24–48 Stunden.\n\nBankdaten (IBAN/BIC) folgen in Kuerze.\nWenn du eine Spendenquittung brauchst, antworte bitte mit deiner vollstaendigen Adresse.\n\nTicket: {{ticketId}}\n\nHerzliche Gruesse\nNewness of Life (Verein)`
+              body: `Hallo {{name}},\n\ndanke, dass du Newness of Life unterstuetzen moechtest.\nWir haben deine Nachricht erhalten und melden uns in der Regel innerhalb von 24–48 Stunden bei dir.\n\nDeine Nachricht:\n{{message}}\n\nBankdaten (IBAN/BIC) folgen in Kuerze.\nWenn du eine Spendenquittung brauchst, antworte bitte mit deiner vollstaendigen Adresse.\n\nTicket: {{ticketId}}\n\nHerzliche Gruesse\nNewness of Life (Verein)`
             },
             'Event/Anmeldung': {
               subject: 'Event-Anfrage erhalten (Ticket {{ticketId}})',
-              body: `Hallo {{name}},\n\ndanke fuer deine Nachricht an Newness of Life. Wir haben deine Event-Anfrage erhalten und melden uns in der Regel innerhalb von 24–48 Stunden.\n\nDamit wir dir schnell helfen koennen, schick uns bitte (falls noch nicht drin):\n- Event-Name & Datum\n- Anzahl Personen\n- Worum geht's genau? (Infos/Anmeldung/Mitarbeit)\n\nTicket: {{ticketId}}\n\nHerzliche Gruesse\nNewness of Life (Verein)`
+              body: `Hallo {{name}},\n\ndanke fuer deine Nachricht an Newness of Life. Wir haben deine Event-Anfrage erhalten und melden uns in der Regel innerhalb von 24–48 Stunden bei dir.\n\nDeine Nachricht:\n{{message}}\n\nDamit wir dir schnell helfen koennen, schick uns bitte (falls noch nicht drin):\n- Event-Name & Datum\n- Anzahl Personen\n- Worum geht's genau? (Infos/Anmeldung/Mitarbeit)\n\nTicket: {{ticketId}}\n\nHerzliche Gruesse\nNewness of Life (Verein)`
             },
             'Raum/Technik': {
               subject: 'Anfrage zur Location/Technik erhalten (Ticket {{ticketId}})',
-              body: `Hallo {{name}},\n\ndanke fuer deine Nachricht. Wir haben deine Anfrage erhalten und melden uns in der Regel innerhalb von 24–48 Stunden.\n\nDamit wir dir direkt antworten koennen, schick uns bitte (falls noch nicht enthalten):\n- Datum/Uhrzeit\n- Was genau planst du?\n- Brauchst du Starkstrom? (Ja/Nein)\n- Brauchst du WLAN? (Ja/Nein)\n\nTicket: {{ticketId}}\n\nHerzliche Gruesse\nNewness of Life (Verein)`
+              body: `Hallo {{name}},\n\ndanke fuer deine Nachricht. Wir haben deine Anfrage erhalten und melden uns in der Regel innerhalb von 24–48 Stunden bei dir.\n\nDeine Nachricht:\n{{message}}\n\nDamit wir dir direkt antworten koennen, schick uns bitte (falls noch nicht enthalten):\n- Datum/Uhrzeit\n- Was genau planst du?\n- Brauchst du Starkstrom? (Ja/Nein)\n- Brauchst du WLAN? (Ja/Nein)\n\nTicket: {{ticketId}}\n\nHerzliche Gruesse\nNewness of Life (Verein)`
             },
             'Seelsorge/Gebet': {
               subject: 'Wir haben deine Nachricht erhalten (vertraulich) – Ticket {{ticketId}}',
-              body: `Hallo {{name}},\n\ndanke, dass du dich gemeldet hast. Wir behandeln deine Nachricht vertraulich und melden uns in der Regel innerhalb von 24–48 Stunden.\n\nWenn es dringend ist und du sofort Hilfe brauchst, wende dich bitte in akuten Notfaellen an 112.\n\nTicket: {{ticketId}}\n\nHerzliche Gruesse\nNewness of Life (Verein)`
+              body: `Hallo {{name}},\n\ndanke, dass du dich gemeldet hast. Wir behandeln deine Nachricht vertraulich und melden uns in der Regel innerhalb von 24–48 Stunden bei dir.\n\nDeine Nachricht:\n{{message}}\n\nWenn es dringend ist und du sofort Hilfe brauchst, wende dich bitte in akuten Notfaellen an 112.\n\nTicket: {{ticketId}}\n\nHerzliche Gruesse\nNewness of Life (Verein)`
             }
           };
 
           const template = templates[category] || templates.Allgemein;
-          const vars = { ticketId, name, subject };
+          const vars = { ticketId, name, subject, message };
 
           // --- Send Emails ---
           const emailStatus = { auto_reply: 'skipped', internal_notification: 'skipped' };
@@ -905,6 +905,10 @@ function createRequestHandler({ rootDir = __dirname } = {}) {
             needsReceipt ? 'Spendenquittung angefragt: Ja' : 'Spendenquittung angefragt: Nein',
             '',
             'Vielen Dank fuer deine Unterstuetzung.',
+            '',
+            '"Der HERR segne dich und behuete dich. Der HERR lasse sein Angesicht',
+            'leuchten ueber dir und sei dir gnaedig. Der HERR hebe sein Angesicht',
+            'ueber dich und gebe dir Frieden." (4. Mose 6,24-26)',
             SITE_URL
           ];
           const pdfBuffer = buildSimplePdf(pdfLines);
@@ -932,7 +936,9 @@ function createRequestHandler({ rootDir = __dirname } = {}) {
               Zahlungsmethode: ${escapeHtml(paymentMethodLabel)}</p>
               <p>Im Anhang findest du eine Bestaetigung als PDF.</p>
               <p>Falls du eine offizielle Spendenquittung fuer das Finanzamt benoetigst, antworte bitte auf diese E-Mail mit deiner vollstaendigen Adresse.</p>
-              <p>Vielen Dank fuer deine Unterstuetzung.<br>${escapeHtml(ORG_NAME)}</p>
+              <p>Vielen Dank fuer deine Unterstuetzung.</p>
+              <p style="font-style:italic;">&bdquo;Der HERR segne dich und behuete dich. Der HERR lasse sein Angesicht leuchten ueber dir und sei dir gnaedig. Der HERR hebe sein Angesicht ueber dich und gebe dir Frieden.&ldquo;<br>(4. Mose 6,24-26)</p>
+              <p>${escapeHtml(ORG_NAME)}</p>
             `;
             await sendEmail({
               from: NOREPLY_EMAIL,

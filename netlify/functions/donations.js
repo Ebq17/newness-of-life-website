@@ -224,6 +224,10 @@ exports.handler = async (event) => {
     needsReceipt ? 'Spendenquittung angefragt: Ja' : 'Spendenquittung angefragt: Nein',
     '',
     'Vielen Dank fuer deine Unterstuetzung.',
+    '',
+    '"Der HERR segne dich und behuete dich. Der HERR lasse sein Angesicht',
+    'leuchten ueber dir und sei dir gnaedig. Der HERR hebe sein Angesicht',
+    'ueber dich und gebe dir Frieden." (4. Mose 6,24-26)',
     siteUrl
   ];
   const pdfBuffer = buildSimplePdf(pdfLines);
@@ -252,7 +256,9 @@ exports.handler = async (event) => {
         Zahlungsmethode: ${escapeHtml(paymentMethodLabel)}</p>
         <p>Im Anhang findest du eine Bestaetigung als PDF.</p>
         <p>Falls du eine offizielle Spendenquittung fuer das Finanzamt benoetigst, antworte bitte auf diese E-Mail mit deiner vollstaendigen Adresse.</p>
-        <p>Vielen Dank fuer deine Unterstuetzung.<br>${escapeHtml(orgName)}</p>
+        <p>Vielen Dank fuer deine Unterstuetzung.</p>
+        <p style="font-style:italic;">&bdquo;Der HERR segne dich und behuete dich. Der HERR lasse sein Angesicht leuchten ueber dir und sei dir gnaedig. Der HERR hebe sein Angesicht ueber dich und gebe dir Frieden.&ldquo;<br>(4. Mose 6,24-26)</p>
+        <p>${escapeHtml(orgName)}</p>
       `,
       attachments
     });
