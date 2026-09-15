@@ -420,7 +420,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 email: email,
                 subject: formData.get('subject') || '',
                 message: formData.get('message') || '',
-                website: formData.get('website') || ''
+                website: formData.get('website') || '',
+                lang: (window.I18n && I18n.currentLang) || 'de'
             };
 
             try {
@@ -636,7 +637,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 message: formData.get('message') || '',
                 anonymous: formData.get('anonymous') ? true : false,
                 needsReceipt: formData.get('needsReceipt') ? true : false,
-                website: formData.get('website') || ''
+                website: formData.get('website') || '',
+                lang: (window.I18n && I18n.currentLang) || 'de'
             };
 
             if (!isValidEmail(payload.email)) {

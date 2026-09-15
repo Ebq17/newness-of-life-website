@@ -137,10 +137,11 @@ function buildReceiptPdf({ orgName, orgSubtitle, docTitle, rows, noteLines, foot
 // Shared branded HTML shell (logo + org name in a blue header band, the
 // caller's body in the middle, address/site in a light footer) used by both
 // emails this function sends.
-function renderEmailShell({ orgName, siteUrl, bodyHtml }) {
+function renderEmailShell({ orgName, siteUrl, bodyHtml, legalName }) {
   const cleanSiteUrl = (siteUrl || 'https://newnessoflife.de').replace(/\/$/, '');
   const logoUrl = `${cleanSiteUrl}/images/Logo_Schwarz_Transparent_KS.png`;
   const displayUrl = cleanSiteUrl.replace(/^https?:\/\//, '');
+  const shellLegalName = legalName || ORG_LEGAL_NAME;
   return `<!doctype html>
 <html lang="de">
   <body style="margin:0;padding:0;background:#F3F4F6;">
@@ -152,7 +153,7 @@ function renderEmailShell({ orgName, siteUrl, bodyHtml }) {
               <td style="padding:28px 32px 18px;text-align:center;border-bottom:3px solid #2563EB;">
                 <img src="${logoUrl}" width="52" height="52" alt="${escapeHtml(orgName)}" style="display:block;margin:0 auto 10px;">
                 <div style="font-family:Georgia,'Times New Roman',serif;font-size:19px;font-weight:bold;color:#111827;">${escapeHtml(orgName)}</div>
-                <div style="font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif;font-size:11px;color:#6B7280;margin-top:3px;">${escapeHtml(ORG_LEGAL_NAME)}</div>
+                <div style="font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif;font-size:11px;color:#6B7280;margin-top:3px;">${escapeHtml(shellLegalName)}</div>
               </td>
             </tr>
             <tr>
@@ -269,6 +270,7 @@ exports.handler = async (event) => {
   const phone = normalizeText(body.phone);
   const message = normalizeText(body.message);
   const subjectInput = normalizeText(body.subject);
+  const lang = normalizeText(body.lang).toLowerCase() === 'en' ? 'en' : 'de';
 
   if (!name || !email || !message) {
     return json(400, { error: 'Bitte alle Pflichtfelder ausfuellen.' });
@@ -278,7 +280,7 @@ exports.handler = async (event) => {
   }
 
   const ticketId = `CNT-${new Date().getFullYear()}-${crypto.randomUUID().slice(0, 8).toUpperCase()}`;
-  const subject = subjectInput || 'Kontaktanfrage';
+  const subject = subjectInput || (lang === 'en' ? 'Contact request' : 'Kontaktanfrage');
   const orgName = process.env.ORG_NAME || 'Newness of Life';
   const siteUrl = process.env.SITE_URL || 'https://www.newnessoflife.de';
   const churchEmail = process.env.CHURCH_EMAIL || process.env.TO_EMAIL || 'newnessoflife@clgi.org';
@@ -341,7 +343,17 @@ exports.handler = async (event) => {
   }
 
   try {
-    const autoReplyBodyHtml = `
+    const autoReplyBodyHtml = lang === 'en' ? `
+      <p style="margin:0 0 14px;">Hi ${escapeHtml(name)},</p>
+      <p style="margin:0 0 14px;">great to hear from you! Thank you for reaching out to <strong>${escapeHtml(orgName)}</strong> – we've received your message and will get back to you as soon as possible, usually within 1&ndash;2 days.</p>
+      <div style="background:#F9FAFB;border-radius:10px;padding:16px 18px;margin:18px 0;">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#9CA3AF;margin-bottom:6px;">Your message</div>
+        <div style="font-size:14px;color:#374151;">${safeMessage}</div>
+      </div>
+      <p style="margin:18px 0 0;">Talk soon – we look forward to connecting with you!</p>
+      <p style="margin:14px 0 0;">Blessings 🕊️<br><strong>${escapeHtml(orgName)}</strong></p>
+      <p style="margin:22px 0 0;font-size:11px;color:#D1D5DB;">Reference: ${escapeHtml(ticketId)}</p>
+    ` : `
       <p style="margin:0 0 14px;">Hallo ${escapeHtml(name)},</p>
       <p style="margin:0 0 14px;">schön, von dir zu hören! Vielen Dank für deine Nachricht an <strong>${escapeHtml(orgName)}</strong> – wir haben sie erhalten und melden uns so schnell wie möglich bei dir, meistens innerhalb von 1&ndash;2 Tagen.</p>
       <div style="background:#F9FAFB;border-radius:10px;padding:16px 18px;margin:18px 0;">
@@ -352,14 +364,19 @@ exports.handler = async (event) => {
       <p style="margin:14px 0 0;">Gottes Segen 🕊️<br><strong>${escapeHtml(orgName)}</strong></p>
       <p style="margin:22px 0 0;font-size:11px;color:#D1D5DB;">Referenz: ${escapeHtml(ticketId)}</p>
     `;
+    const autoReplySubject = lang === 'en' ? `Thank you for your message – ${orgName}` : `Vielen Dank für deine Nachricht – ${orgName}`;
+    const autoReplyText = lang === 'en'
+      ? `Hi ${name},\n\nthank you for reaching out to ${orgName}. We've received your message and will get back to you as soon as possible.\n\nYour message:\n${message}\n\nBlessings\n${orgName}`
+      : `Hallo ${name},\n\nvielen Dank fuer deine Nachricht an ${orgName}. Wir haben sie erhalten und melden uns so schnell wie moeglich bei dir.\n\nDeine Nachricht:\n${message}\n\nGottes Segen\n${orgName}`;
+    const shellLegalName = lang === 'en' ? 'Church of the Living God International e.V.' : undefined;
     await sendBrevoEmail({
       apiKey,
       from: noReplyEmail,
       to: email,
       replyTo: churchEmail,
-      subject: `Vielen Dank für deine Nachricht – ${orgName}`,
-      html: renderEmailShell({ orgName, siteUrl, bodyHtml: autoReplyBodyHtml }),
-      text: `Hallo ${name},\n\nvielen Dank fuer deine Nachricht an ${orgName}. Wir haben sie erhalten und melden uns so schnell wie moeglich bei dir.\n\nDeine Nachricht:\n${message}\n\nGottes Segen\n${orgName}`,
+      subject: autoReplySubject,
+      html: renderEmailShell({ orgName, siteUrl, bodyHtml: autoReplyBodyHtml, legalName: shellLegalName }),
+      text: autoReplyText,
       attachments: attachmentData
     });
     emailStatus.auto_reply = 'sent';

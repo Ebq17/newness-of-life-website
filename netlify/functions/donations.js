@@ -165,10 +165,11 @@ function buildReceiptPdf({ orgName, orgSubtitle, docTitle, rows, verseLines, foo
 // Shared branded HTML shell (logo + org name in a blue header band, the
 // caller's body in the middle, address/site in a light footer) used by both
 // emails this function sends.
-function renderEmailShell({ orgName, siteUrl, bodyHtml }) {
+function renderEmailShell({ orgName, siteUrl, bodyHtml, legalName }) {
   const cleanSiteUrl = (siteUrl || 'https://newnessoflife.de').replace(/\/$/, '');
   const logoUrl = `${cleanSiteUrl}/images/Logo_Schwarz_Transparent_KS.png`;
   const displayUrl = cleanSiteUrl.replace(/^https?:\/\//, '');
+  const shellLegalName = legalName || ORG_LEGAL_NAME;
   return `<!doctype html>
 <html lang="de">
   <body style="margin:0;padding:0;background:#F3F4F6;">
@@ -180,7 +181,7 @@ function renderEmailShell({ orgName, siteUrl, bodyHtml }) {
               <td style="padding:28px 32px 18px;text-align:center;border-bottom:3px solid #2563EB;">
                 <img src="${logoUrl}" width="52" height="52" alt="${escapeHtml(orgName)}" style="display:block;margin:0 auto 10px;">
                 <div style="font-family:Georgia,'Times New Roman',serif;font-size:19px;font-weight:bold;color:#111827;">${escapeHtml(orgName)}</div>
-                <div style="font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif;font-size:11px;color:#6B7280;margin-top:3px;">${escapeHtml(ORG_LEGAL_NAME)}</div>
+                <div style="font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif;font-size:11px;color:#6B7280;margin-top:3px;">${escapeHtml(shellLegalName)}</div>
               </td>
             </tr>
             <tr>
@@ -299,6 +300,7 @@ exports.handler = async (event) => {
   const needsReceipt = normalizeBoolean(body.needsReceipt);
   const rawPaymentMethod = normalizeText(body.paymentMethod).toLowerCase();
   const donationDateInput = normalizeText(body.donationDate);
+  const lang = normalizeText(body.lang).toLowerCase() === 'en' ? 'en' : 'de';
 
   if (!email || !isValidEmail(email)) {
     return json(400, { error: 'Bitte eine gueltige E-Mail-Adresse angeben.' });
@@ -314,19 +316,32 @@ exports.handler = async (event) => {
   }
 
   const paymentMethodMap = {
-    paypal: 'PayPal',
-    bank_transfer: 'Banküberweisung',
-    bank: 'Banküberweisung',
-    ueberweisung: 'Banküberweisung',
-    card: 'Karte',
-    cash: 'Bar',
-    other: 'Sonstiges'
+    de: {
+      paypal: 'PayPal',
+      bank_transfer: 'Banküberweisung',
+      bank: 'Banküberweisung',
+      ueberweisung: 'Banküberweisung',
+      card: 'Karte',
+      cash: 'Bar',
+      other: 'Sonstiges'
+    },
+    en: {
+      paypal: 'PayPal',
+      bank_transfer: 'Bank transfer',
+      bank: 'Bank transfer',
+      ueberweisung: 'Bank transfer',
+      card: 'Card',
+      cash: 'Cash',
+      other: 'Other'
+    }
   };
-  const paymentMethodLabel = paymentMethodMap[rawPaymentMethod] || normalizeText(body.paymentMethod) || 'Sonstiges';
+  const paymentMethodLabel = paymentMethodMap[lang][rawPaymentMethod] || normalizeText(body.paymentMethod) || paymentMethodMap[lang].other;
   const donationDateValue = donationDateInput && !Number.isNaN(new Date(donationDateInput).getTime())
     ? donationDateInput
     : new Date().toISOString().slice(0, 10);
-  const donationDateLabel = formatDateDE(donationDateValue) || donationDateValue;
+  const donationDateLabel = lang === 'en'
+    ? (new Date(donationDateValue).toLocaleDateString('en-GB') || donationDateValue)
+    : (formatDateDE(donationDateValue) || donationDateValue);
 
   const orgName = process.env.ORG_NAME || 'Newness of Life';
   const siteUrl = process.env.SITE_URL || 'https://www.newnessoflife.de';
@@ -335,10 +350,33 @@ exports.handler = async (event) => {
   const donationNoReply = process.env.DONATION_NOREPLY_EMAIL || process.env.NOREPLY_EMAIL || 'Newness of Life <noreply@newnessoflife.de>';
 
   const donationId = `DON-${new Date().getFullYear()}-${crypto.randomUUID().slice(0, 8).toUpperCase()}`;
-  const donorName = anonymous ? 'Anonym' : name;
+  const donorName = anonymous ? (lang === 'en' ? 'Anonymous' : 'Anonym') : name;
   const amountLabel = formatCurrency(amount, currency);
+  const legalNameEn = 'Church of the Living God International e.V.';
 
-  const pdfBuffer = buildReceiptPdf({
+  const pdfBuffer = lang === 'en' ? buildReceiptPdf({
+    orgName,
+    orgSubtitle: legalNameEn,
+    docTitle: 'Donation Receipt',
+    rows: [
+      ['Receipt No.', donationId],
+      ['Name', donorName],
+      ['E-Mail', email],
+      ['Amount', amountLabel],
+      ['Date', donationDateLabel],
+      ['Payment method', paymentMethodLabel],
+      ['Receipt requested', needsReceipt ? 'Yes' : 'No']
+    ],
+    verseLines: [
+      '"The LORD bless you and keep you; the LORD make his face shine on',
+      'you and be gracious to you; the LORD turn his face toward you',
+      'and give you peace." (Numbers 6:24-26)'
+    ],
+    footerLines: [
+      `${orgName} e.V. - Hebbelstr. 56-60 - 55127 Mainz, Germany`,
+      siteUrl.replace(/^https?:\/\//, '')
+    ]
+  }) : buildReceiptPdf({
     orgName,
     orgSubtitle: 'die Kirche des lebendigen Gottes International e.V.',
     docTitle: 'Spendenbestaetigung',
@@ -370,7 +408,23 @@ exports.handler = async (event) => {
   const emailErrors = {};
 
   try {
-    const donorBodyHtml = `
+    const donorBodyHtml = lang === 'en' ? `
+      <p style="margin:0 0 14px;">Dear ${escapeHtml(donorName)},</p>
+      <p style="margin:0 0 14px;">thank you so much for supporting <strong>${escapeHtml(orgName)}</strong>! We've successfully recorded your donation.</p>
+      <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;font-size:14px;margin:18px 0;background:#F9FAFB;border-radius:10px;">
+        <tr><td style="padding:14px 18px 4px;color:#6B7280;width:140px;">Receipt No.</td><td style="padding:14px 18px 4px;font-weight:600;color:#111827;">${escapeHtml(donationId)}</td></tr>
+        <tr><td style="padding:4px 18px;color:#6B7280;">Amount</td><td style="padding:4px 18px;font-weight:600;color:#111827;">${escapeHtml(amountLabel)}</td></tr>
+        <tr><td style="padding:4px 18px;color:#6B7280;">Date</td><td style="padding:4px 18px;color:#111827;">${escapeHtml(donationDateLabel)}</td></tr>
+        <tr><td style="padding:4px 18px 14px;color:#6B7280;">Payment method</td><td style="padding:4px 18px 14px;color:#111827;">${escapeHtml(paymentMethodLabel)}</td></tr>
+      </table>
+      <p style="margin:0 0 14px;">You'll find a PDF confirmation attached for your records.</p>
+      <p style="margin:0 0 6px;">If you need an official donation receipt for tax purposes, just reply to this email with your full address &ndash; we'll take care of it.</p>
+      <div style="border-left:3px solid #10B981;padding:2px 16px;margin:24px 0 4px;font-style:italic;color:#4B5563;font-size:14px;line-height:1.6;">
+        &bdquo;The LORD bless you and keep you; the LORD make his face shine on you and be gracious to you; the LORD turn his face toward you and give you peace.&ldquo;<br>
+        <span style="font-style:normal;font-size:12px;color:#9CA3AF;">Numbers 6:24&ndash;26</span>
+      </div>
+      <p style="margin:22px 0 0;">${escapeHtml(orgName)} 🙏</p>
+    ` : `
       <p style="margin:0 0 14px;">Liebe/r ${escapeHtml(donorName)},</p>
       <p style="margin:0 0 14px;">von Herzen Dank für deine Unterstützung von <strong>${escapeHtml(orgName)}</strong>! Wir haben deine Spende erfolgreich erfasst.</p>
       <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;font-size:14px;margin:18px 0;background:#F9FAFB;border-radius:10px;">
@@ -387,13 +441,17 @@ exports.handler = async (event) => {
       </div>
       <p style="margin:22px 0 0;">${escapeHtml(orgName)} 🙏</p>
     `;
+    const donorSubject = lang === 'en' ? `Thank you for your donation – ${orgName}` : `Vielen Dank für deine Spende – ${orgName}`;
+    const donorText = lang === 'en'
+      ? `Dear ${donorName},\n\nthank you for supporting ${orgName}. We've successfully recorded your donation.\n\nReceipt No.: ${donationId}\nAmount: ${amountLabel}\nDate: ${donationDateLabel}\nPayment method: ${paymentMethodLabel}\n\nA PDF confirmation is attached. If you need an official donation receipt for tax purposes, just reply with your full address.\n\n${orgName}`
+      : `Liebe/r ${donorName},\n\nvielen Dank fuer deine Unterstuetzung von ${orgName}. Wir haben deine Spende erfolgreich erfasst.\n\nBelegnummer: ${donationId}\nBetrag: ${amountLabel}\nDatum: ${donationDateLabel}\nZahlungsmethode: ${paymentMethodLabel}\n\nIm Anhang findest du eine PDF-Bestaetigung. Falls du eine offizielle Spendenquittung fuers Finanzamt brauchst, antworte einfach mit deiner vollstaendigen Adresse.\n\n${orgName}`;
     await sendBrevoEmail({
       apiKey,
       from: donationNoReply,
       to: email,
-      subject: `Vielen Dank für deine Spende – ${orgName}`,
-      html: renderEmailShell({ orgName, siteUrl, bodyHtml: donorBodyHtml }),
-      text: `Liebe/r ${donorName},\n\nvielen Dank fuer deine Unterstuetzung von ${orgName}. Wir haben deine Spende erfolgreich erfasst.\n\nBelegnummer: ${donationId}\nBetrag: ${amountLabel}\nDatum: ${donationDateLabel}\nZahlungsmethode: ${paymentMethodLabel}\n\nIm Anhang findest du eine PDF-Bestaetigung. Falls du eine offizielle Spendenquittung fuers Finanzamt brauchst, antworte einfach mit deiner vollstaendigen Adresse.\n\n${orgName}`,
+      subject: donorSubject,
+      html: renderEmailShell({ orgName, siteUrl, bodyHtml: donorBodyHtml, legalName: lang === 'en' ? legalNameEn : undefined }),
+      text: donorText,
       attachments
     });
     emailStatus.donor_confirmation = 'sent';
