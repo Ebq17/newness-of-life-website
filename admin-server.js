@@ -7,7 +7,6 @@ const fs = require('fs').promises;
 const path = require('path');
 const { exec } = require('child_process');
 const url = require('url');
-const { Resend } = require('resend');
 const https = require('https');
 
 function loadEnvFile(filePath) {
@@ -251,39 +250,62 @@ function toHtml(text) {
   return text.replace(/\n/g, '<br>');
 }
 
+function parseEmailAddress(value, fallbackName) {
+  const str = (value || '').toString().trim();
+  const match = str.match(/^(.*)<(.+)>$/);
+  if (match) {
+    const name = match[1].trim().replace(/^"|"$/g, '');
+    return { email: match[2].trim(), name: name || fallbackName };
+  }
+  return { email: str, name: fallbackName };
+}
+
 async function sendEmail({ to, subject, html, replyTo, from, attachments }) {
   // In tests / local runs we want to be able to hit /api/contact without network access.
   if (process.env.NODE_ENV === 'test' || process.env.DISABLE_EMAIL === '1') {
     return { ok: true, skipped: true };
   }
 
-  const RESEND_API_KEY = process.env.RESEND_API_KEY;
-  if (!RESEND_API_KEY) {
-    throw new Error('RESEND_API_KEY is not set (emails disabled)');
+  const BREVO_API_KEY = process.env.BREVO_API_KEY;
+  if (!BREVO_API_KEY) {
+    throw new Error('BREVO_API_KEY is not set (emails disabled)');
   }
 
+  const payload = {
+    sender: parseEmailAddress(from),
+    to: [parseEmailAddress(to)],
+    subject,
+    htmlContent: html,
+    ...(replyTo ? { replyTo: parseEmailAddress(replyTo) } : {}),
+    ...(attachments && attachments.length
+      ? { attachment: attachments.map((a) => ({ content: a.content, name: a.filename })) }
+      : {}),
+  };
+
   try {
-    const resend = new Resend(RESEND_API_KEY);
-    const { data, error } = await resend.emails.send({
-      from,
-      to,
-      subject,
-      html,
-      ...(replyTo ? { reply_to: replyTo } : {}),
-      ...(attachments && attachments.length ? { attachments } : {}),
+    const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        'api-key': BREVO_API_KEY,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(payload),
     });
 
-    if (error) {
+    if (!res.ok) {
+      const errBody = await res.json().catch(() => null);
       // NOTE: Logging the full error for more detailed debugging.
-      console.error('Resend API Error:', JSON.stringify(error, null, 2));
-      throw new Error(`Resend API Error: ${error.name} - ${error.message}`);
+      console.error('Brevo API Error:', JSON.stringify(errBody, null, 2));
+      throw new Error(`Brevo API Error: ${errBody && errBody.message ? errBody.message : `HTTP ${res.status}`}`);
     }
 
+    const data = await res.json().catch(() => ({}));
     return { ok: true, data };
   } catch (err) {
     console.error('Failed to send email:', err);
     // Re-throw a generic but informative error to the caller.
-    throw new Error(`Failed to send email via Resend: ${err.message || 'Unknown error'}`);
+    throw new Error(`Failed to send email via Brevo: ${err.message || 'Unknown error'}`);
   }
 }
 
@@ -688,7 +710,7 @@ function createRequestHandler({ rootDir = __dirname } = {}) {
         // POST /api/contact - Contact form handler
         if (method === 'POST' && route === 'contact') {
           const TO_EMAIL = process.env.CONTACT_TO_EMAIL || process.env.CHURCH_EMAIL || process.env.TO_EMAIL || process.env.INTERNAL_EMAIL || 'newnessoflife@clgi.org';
-          const FROM_EMAIL = process.env.CONTACT_FROM_EMAIL || process.env.FROM_EMAIL || process.env.RESEND_FROM || 'Newness of Life <kontakt@newnessoflife.de>';
+          const FROM_EMAIL = process.env.CONTACT_FROM_EMAIL || process.env.FROM_EMAIL || 'Newness of Life <kontakt@newnessoflife.de>';
           const NOREPLY_EMAIL = process.env.CONTACT_NOREPLY_EMAIL || process.env.NOREPLY_EMAIL || 'Newness of Life <noreply@newnessoflife.de>';
 
           const ip = getClientIp(req);
@@ -801,7 +823,7 @@ function createRequestHandler({ rootDir = __dirname } = {}) {
         // POST /api/donations - Donation confirmation request
         if (method === 'POST' && route === 'donations') {
           const TO_EMAIL = process.env.DONATION_TO_EMAIL || process.env.CHURCH_EMAIL || process.env.TO_EMAIL || process.env.INTERNAL_EMAIL || 'newnessoflife@clgi.org';
-          const FROM_EMAIL = process.env.DONATION_FROM_EMAIL || process.env.FROM_EMAIL || process.env.RESEND_FROM || 'Newness of Life <kontakt@newnessoflife.de>';
+          const FROM_EMAIL = process.env.DONATION_FROM_EMAIL || process.env.FROM_EMAIL || 'Newness of Life <kontakt@newnessoflife.de>';
           const NOREPLY_EMAIL = process.env.DONATION_NOREPLY_EMAIL || process.env.NOREPLY_EMAIL || 'Newness of Life <noreply@newnessoflife.de>';
           const ORG_NAME = process.env.ORG_NAME || 'Newness of Life';
           const SITE_URL = process.env.SITE_URL || 'https://www.newnessoflife.de';

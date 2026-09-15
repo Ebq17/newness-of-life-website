@@ -37,7 +37,7 @@ npm test
 
 ## E-Mail (Kontaktformular)
 
-Der Endpoint `POST /api/contact` (lokaler Admin-Server) verschickt E-Mails über Resend.
+Der Endpoint `POST /api/contact` (lokaler Admin-Server) verschickt E-Mails über Brevo.
 Auf Netlify nutzt das Kontaktformular als Fallback `/.netlify/functions/contact-email` (Mail an Gemeinde + Bestätigung an Absender).
 Falls der Mail-Service nicht konfiguriert ist, wird das Formular trotzdem als Netlify Form gespeichert (kein Datenverlust).
 
@@ -45,12 +45,12 @@ Der Endpoint `POST /api/donations` verschickt eine Spendenbestaetigung mit PDF-A
 Auf Netlify wird dafuer automatisch `/.netlify/functions/donations` verwendet (gleiche Nutzlast).
 
 - Konfiguration über `.env` (siehe `.env.example`)
-- Fuer lokale Tests brauchst du eine private `.env` mit demselben `RESEND_API_KEY`, der auch in Netlify gesetzt ist.
+- Fuer lokale Tests brauchst du eine private `.env` mit demselben `BREVO_API_KEY`, der auch in Netlify gesetzt ist.
 - Netlify-Umgebungsvariablen sind lokal nicht automatisch verfuegbar.
-- `CONTACT_RESEND_API_KEY` leer lassen, solange du nicht bewusst einen separaten Key nur fuer das Kontaktformular verwenden willst.
+- `CONTACT_BREVO_API_KEY` leer lassen, solange du nicht bewusst einen separaten Key nur fuer das Kontaktformular verwenden willst.
 - Wichtige Variablen:
-  - `RESEND_API_KEY`
-  - `CONTACT_RESEND_API_KEY` (optional, überschreibt `RESEND_API_KEY` nur für Kontakt)
+  - `BREVO_API_KEY`
+  - `CONTACT_BREVO_API_KEY` (optional, überschreibt `BREVO_API_KEY` nur für Kontakt)
   - `CHURCH_EMAIL` (primäre Zieladresse)
   - `TO_EMAIL` (Legacy-Fallback)
   - `FROM_EMAIL`
@@ -67,4 +67,4 @@ Auf Netlify wird dafuer automatisch `/.netlify/functions/donations` verwendet (g
     - `ORG_NAME`
     - `SITE_URL`
 
-Hinweis: Wenn ein API-Key jemals in GitHub gelandet ist, bitte im Resend-Dashboard rotieren und den alten Key deaktivieren.
+Hinweis: Wenn ein API-Key jemals in GitHub gelandet ist, bitte im Brevo-Dashboard rotieren und den alten Key deaktivieren.

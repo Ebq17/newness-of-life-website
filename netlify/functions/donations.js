@@ -1,7 +1,6 @@
 'use strict';
 
 const crypto = require('node:crypto');
-const { Resend } = require('resend');
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -122,6 +121,46 @@ function buildSimplePdf(lines) {
   return Buffer.from(pdf, 'utf8');
 }
 
+function parseAddress(value, fallbackName) {
+  const str = (value || '').toString().trim();
+  const match = str.match(/^(.*)<(.+)>$/);
+  if (match) {
+    const name = match[1].trim().replace(/^"|"$/g, '');
+    return { email: match[2].trim(), name: name || fallbackName };
+  }
+  return { email: str, name: fallbackName };
+}
+
+async function sendBrevoEmail({ apiKey, from, to, replyTo, subject, html, attachments }) {
+  const payload = {
+    sender: parseAddress(from),
+    to: [parseAddress(to)],
+    subject,
+    htmlContent: html,
+    ...(replyTo ? { replyTo: parseAddress(replyTo) } : {}),
+    ...(attachments && attachments.length
+      ? { attachment: attachments.map((a) => ({ content: a.content, name: a.filename })) }
+      : {})
+  };
+
+  const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+    method: 'POST',
+    headers: {
+      'api-key': apiKey,
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  });
+
+  if (!res.ok) {
+    const errBody = await res.json().catch(() => null);
+    throw new Error(errBody && errBody.message ? errBody.message : `Brevo API Error (HTTP ${res.status})`);
+  }
+
+  return res.json().catch(() => ({}));
+}
+
 function parsePayload(event) {
   const headers = event.headers || {};
   const contentType = (headers['content-type'] || headers['Content-Type'] || '').toLowerCase();
@@ -152,9 +191,9 @@ exports.handler = async (event) => {
     return json(405, { error: 'Method not allowed' });
   }
 
-  const apiKey = process.env.RESEND_API_KEY;
+  const apiKey = process.env.BREVO_API_KEY;
   if (!apiKey) {
-    return json(500, { error: 'RESEND_API_KEY is not set' });
+    return json(500, { error: 'BREVO_API_KEY is not set' });
   }
 
   const body = parsePayload(event);
@@ -205,7 +244,7 @@ exports.handler = async (event) => {
   const orgName = process.env.ORG_NAME || 'Newness of Life';
   const siteUrl = process.env.SITE_URL || 'https://www.newnessoflife.de';
   const donationTo = process.env.DONATION_TO_EMAIL || process.env.CHURCH_EMAIL || process.env.TO_EMAIL || 'newnessoflife@clgi.org';
-  const donationFrom = process.env.DONATION_FROM_EMAIL || process.env.FROM_EMAIL || process.env.RESEND_FROM || 'Newness of Life <kontakt@newnessoflife.de>';
+  const donationFrom = process.env.DONATION_FROM_EMAIL || process.env.FROM_EMAIL || 'Newness of Life <kontakt@newnessoflife.de>';
   const donationNoReply = process.env.DONATION_NOREPLY_EMAIL || process.env.NOREPLY_EMAIL || 'Newness of Life <noreply@newnessoflife.de>';
 
   const donationId = `DON-${new Date().getFullYear()}-${crypto.randomUUID().slice(0, 8).toUpperCase()}`;
@@ -236,12 +275,12 @@ exports.handler = async (event) => {
     content: pdfBuffer.toString('base64')
   }];
 
-  const resend = new Resend(apiKey);
   const emailStatus = { donor_confirmation: 'skipped', internal_notification: 'skipped' };
   const emailErrors = {};
 
   try {
-    await resend.emails.send({
+    await sendBrevoEmail({
+      apiKey,
       from: donationNoReply,
       to: email,
       subject: `Vielen Dank fuer deine Spende - ${orgName} (${donationId})`,
@@ -269,11 +308,12 @@ exports.handler = async (event) => {
   }
 
   try {
-    await resend.emails.send({
+    await sendBrevoEmail({
+      apiKey,
       from: donationFrom,
       to: donationTo,
       subject: `Neue Spende erhalten (${donationId})`,
-      reply_to: email,
+      replyTo: email,
       html: `
         <p><strong>Neue Spende erhalten</strong></p>
         <p>Belegnummer: ${escapeHtml(donationId)}<br>

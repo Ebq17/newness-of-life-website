@@ -1,7 +1,6 @@
 'use strict';
 
 const crypto = require('node:crypto');
-const { Resend } = require('resend');
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -97,6 +96,46 @@ function buildSimplePdf(lines) {
   return Buffer.from(pdf, 'utf8');
 }
 
+function parseAddress(value, fallbackName) {
+  const str = (value || '').toString().trim();
+  const match = str.match(/^(.*)<(.+)>$/);
+  if (match) {
+    const name = match[1].trim().replace(/^"|"$/g, '');
+    return { email: match[2].trim(), name: name || fallbackName };
+  }
+  return { email: str, name: fallbackName };
+}
+
+async function sendBrevoEmail({ apiKey, from, to, replyTo, subject, html, attachments }) {
+  const payload = {
+    sender: parseAddress(from),
+    to: [parseAddress(to)],
+    subject,
+    htmlContent: html,
+    ...(replyTo ? { replyTo: parseAddress(replyTo) } : {}),
+    ...(attachments && attachments.length
+      ? { attachment: attachments.map((a) => ({ content: a.content, name: a.filename })) }
+      : {})
+  };
+
+  const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+    method: 'POST',
+    headers: {
+      'api-key': apiKey,
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  });
+
+  if (!res.ok) {
+    const errBody = await res.json().catch(() => null);
+    throw new Error(errBody && errBody.message ? errBody.message : `Brevo API Error (HTTP ${res.status})`);
+  }
+
+  return res.json().catch(() => ({}));
+}
+
 function parsePayload(event) {
   const headers = event.headers || {};
   const contentType = (headers['content-type'] || headers['Content-Type'] || '').toLowerCase();
@@ -127,11 +166,11 @@ exports.handler = async (event) => {
     return json(405, { error: 'Method not allowed' });
   }
 
-  const apiKey = process.env.CONTACT_RESEND_API_KEY || process.env.RESEND_API_KEY;
+  const apiKey = process.env.CONTACT_BREVO_API_KEY || process.env.BREVO_API_KEY;
   if (!apiKey) {
     return json(500, {
-      error: 'Mail-Service nicht konfiguriert (RESEND_API_KEY fehlt).',
-      code: 'CONFIG_MISSING_RESEND_API_KEY'
+      error: 'Mail-Service nicht konfiguriert (BREVO_API_KEY fehlt).',
+      code: 'CONFIG_MISSING_BREVO_API_KEY'
     });
   }
 
@@ -158,7 +197,7 @@ exports.handler = async (event) => {
   const subject = subjectInput || 'Kontaktanfrage';
   const orgName = process.env.ORG_NAME || 'Newness of Life';
   const churchEmail = process.env.CHURCH_EMAIL || process.env.TO_EMAIL || 'newnessoflife@clgi.org';
-  const fromEmail = process.env.CONTACT_FROM_EMAIL || process.env.FROM_EMAIL || process.env.RESEND_FROM || 'Newness of Life <kontakt@newnessoflife.de>';
+  const fromEmail = process.env.CONTACT_FROM_EMAIL || process.env.FROM_EMAIL || 'Newness of Life <kontakt@newnessoflife.de>';
   const noReplyEmail = process.env.CONTACT_NOREPLY_EMAIL || process.env.NOREPLY_EMAIL || 'Newness of Life <noreply@newnessoflife.de>';
   const attachPdf = normalizeBoolean(process.env.CONTACT_ATTACH_PDF || '');
 
@@ -180,13 +219,13 @@ exports.handler = async (event) => {
       }]
     : undefined;
 
-  const resend = new Resend(apiKey);
-  const emailStatus = { church_mail: 'skipped', user_confirmation: 'skipped' };
+  const emailStatus = { internal_notification: 'skipped', auto_reply: 'skipped' };
   const emailErrors = {};
   const safeMessage = escapeHtml(message).replace(/\r?\n/g, '<br>');
 
   try {
-    await resend.emails.send({
+    await sendBrevoEmail({
+      apiKey,
       from: fromEmail,
       to: churchEmail,
       replyTo: email,
@@ -202,14 +241,15 @@ exports.handler = async (event) => {
       `,
       attachments: attachmentData
     });
-    emailStatus.church_mail = 'sent';
+    emailStatus.internal_notification = 'sent';
   } catch (err) {
-    emailStatus.church_mail = 'failed';
-    emailErrors.church_mail = err.message || String(err);
+    emailStatus.internal_notification = 'failed';
+    emailErrors.internal_notification = err.message || String(err);
   }
 
   try {
-    await resend.emails.send({
+    await sendBrevoEmail({
+      apiKey,
       from: noReplyEmail,
       to: email,
       replyTo: churchEmail,
@@ -224,10 +264,10 @@ exports.handler = async (event) => {
       `,
       attachments: attachmentData
     });
-    emailStatus.user_confirmation = 'sent';
+    emailStatus.auto_reply = 'sent';
   } catch (err) {
-    emailStatus.user_confirmation = 'failed';
-    emailErrors.user_confirmation = err.message || String(err);
+    emailStatus.auto_reply = 'failed';
+    emailErrors.auto_reply = err.message || String(err);
   }
 
   return json(200, {

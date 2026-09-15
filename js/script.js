@@ -328,8 +328,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (!res.ok) {
                     const apiError = new Error((data && data.error) ? data.error : 'Fehler beim Senden');
                     const hasConfigError = apiError.message && (
-                        apiError.message.includes('RESEND_API_KEY is not set') ||
-                        apiError.message.includes('CONFIG_MISSING_RESEND_API_KEY')
+                        apiError.message.includes('BREVO_API_KEY is not set') ||
+                        apiError.message.includes('BREVO_API_KEY fehlt') ||
+                        apiError.message.includes('CONFIG_MISSING_BREVO_API_KEY')
                     );
                     apiError.code = hasConfigError
                         ? 'API_CONFIG'
