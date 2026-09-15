@@ -166,30 +166,75 @@ function escapePdfText(value) {
     .replace(/\r?\n/g, ' ');
 }
 
-function buildSimplePdf(lines) {
+// Branded, single-page document: blue header band, a label/value table and
+// an optional closing verse. Kept to PDF's core text/fill operators (no
+// embedded images) so the generator has no dependency beyond Helvetica.
+function buildReceiptPdf({ orgName, orgSubtitle, docTitle, rows, noteLines, verseLines, footerLines }) {
   const pageWidth = 595;
   const pageHeight = 842;
-  const startY = 790;
-  const lineHeight = 18;
-  const safeLines = lines
-    .map((line) => normalizeText(line).replace(/\s+/g, ' '))
-    .filter(Boolean)
-    .slice(0, 40);
+  const marginX = 50;
+  const headerHeight = 112;
+  const clip = (s) => normalizeText(s).replace(/\s+/g, ' ');
+  const esc = (s) => escapePdfText(clip(s));
 
-  const textOps = safeLines.map((line, index) => {
-    const y = startY - (index * lineHeight);
-    return `1 0 0 1 50 ${y} Tm (${escapePdfText(line)}) Tj`;
-  }).join('\n');
+  const ops = [];
 
-  const stream = `BT\n/F1 12 Tf\n${textOps}\nET`;
+  ops.push('0.145 0.388 0.922 rg');
+  ops.push(`0 ${pageHeight - headerHeight} ${pageWidth} ${headerHeight} re f`);
+  ops.push('1 1 1 rg');
+  ops.push(`BT /F2 19 Tf 1 0 0 1 ${marginX} ${pageHeight - 38} Tm (${esc(orgName)}) Tj ET`);
+  ops.push(`BT /F1 10 Tf 1 0 0 1 ${marginX} ${pageHeight - 55} Tm (${esc(orgSubtitle)}) Tj ET`);
+  ops.push(`BT /F2 15 Tf 1 0 0 1 ${marginX} ${pageHeight - 88} Tm (${esc(docTitle)}) Tj ET`);
+
+  let y = pageHeight - headerHeight - 46;
+  const rowHeight = 24;
+  for (const [label, value] of rows.slice(0, 12)) {
+    ops.push('0.42 0.45 0.5 rg');
+    ops.push(`BT /F1 10 Tf 1 0 0 1 ${marginX} ${y} Tm (${esc(label)}) Tj ET`);
+    ops.push('0.067 0.094 0.153 rg');
+    ops.push(`BT /F2 12 Tf 1 0 0 1 ${marginX + 150} ${y - 1} Tm (${esc(value)}) Tj ET`);
+    y -= rowHeight;
+  }
+
+  if (noteLines && noteLines.length) {
+    y -= 12;
+    ops.push('0.85 0.86 0.88 rg');
+    ops.push(`${marginX} ${y} ${pageWidth - marginX * 2} 1 re f`);
+    y -= 26;
+    ops.push('0.22 0.25 0.32 rg');
+    for (const line of noteLines) {
+      ops.push(`BT /F1 11 Tf 1 0 0 1 ${marginX} ${y} Tm (${esc(line)}) Tj ET`);
+      y -= 16;
+    }
+  }
+
+  if (verseLines && verseLines.length) {
+    y -= 10;
+    ops.push('0.30 0.33 0.41 rg');
+    for (const line of verseLines) {
+      ops.push(`BT /F3 11 Tf 1 0 0 1 ${marginX} ${y} Tm (${esc(line)}) Tj ET`);
+      y -= 16;
+    }
+  }
+
+  let fy = 64;
+  ops.push('0.61 0.64 0.69 rg');
+  for (const line of (footerLines || [])) {
+    ops.push(`BT /F1 9 Tf 1 0 0 1 ${marginX} ${fy} Tm (${esc(line)}) Tj ET`);
+    fy -= 12;
+  }
+
+  const stream = ops.join('\n');
   const streamLength = Buffer.byteLength(stream, 'utf8');
 
   const objects = [
     '1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n',
     '2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n',
-    `3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageWidth} ${pageHeight}] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>\nendobj\n`,
+    `3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageWidth} ${pageHeight}] /Resources << /Font << /F1 4 0 R /F2 5 0 R /F3 6 0 R >> >> /Contents 7 0 R >>\nendobj\n`,
     '4 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n',
-    `5 0 obj\n<< /Length ${streamLength} >>\nstream\n${stream}\nendstream\nendobj\n`
+    '5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>\nendobj\n',
+    '6 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Oblique >>\nendobj\n',
+    `7 0 obj\n<< /Length ${streamLength} >>\nstream\n${stream}\nendstream\nendobj\n`
   ];
 
   let pdf = '%PDF-1.4\n';
@@ -242,12 +287,52 @@ function nextTicketId(lastTicketNumber) {
   };
 }
 
-function renderTemplate(text, vars) {
-  return text.replace(/\{\{(\w+)\}\}/g, (_, key) => vars[key] ?? '');
-}
+const ORG_LEGAL_NAME = 'die Kirche des lebendigen Gottes International e.V.';
+const ORG_ADDRESS_LINE = 'Hebbelstr. 56–60 · 55127 Mainz';
+const ORG_EMAIL = 'newnessoflife@clgi.org';
 
-function toHtml(text) {
-  return text.replace(/\n/g, '<br>');
+// Shared branded HTML shell (logo + org name in a blue header band, the
+// caller's body in the middle, address/site in a light footer).
+function renderEmailShell({ orgName, siteUrl, bodyHtml }) {
+  const cleanSiteUrl = (siteUrl || 'https://newnessoflife.de').replace(/\/$/, '');
+  const logoUrl = `${cleanSiteUrl}/images/Logo_Schwarz_Transparent_KS.png`;
+  const displayUrl = cleanSiteUrl.replace(/^https?:\/\//, '');
+  return `<!doctype html>
+<html lang="de">
+  <body style="margin:0;padding:0;background:#F3F4F6;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F3F4F6;padding:32px 16px;">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 1px 4px rgba(17,24,39,0.08);">
+            <tr>
+              <td style="padding:28px 32px 18px;text-align:center;border-bottom:3px solid #2563EB;">
+                <img src="${logoUrl}" width="52" height="52" alt="${escapeHtml(orgName)}" style="display:block;margin:0 auto 10px;">
+                <div style="font-family:Georgia,'Times New Roman',serif;font-size:19px;font-weight:bold;color:#111827;">${escapeHtml(orgName)}</div>
+                <div style="font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif;font-size:11px;color:#6B7280;margin-top:3px;">${escapeHtml(ORG_LEGAL_NAME)}</div>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:32px;font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif;font-size:15px;line-height:1.65;color:#1F2937;">
+                ${bodyHtml}
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:0 32px 28px;">
+                <div style="height:1px;background:#E5E7EB;margin-bottom:20px;"></div>
+                <p style="margin:0;font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif;font-size:12px;color:#9CA3AF;text-align:center;line-height:1.7;">
+                  ${escapeHtml(ORG_ADDRESS_LINE)}<br>
+                  <a href="${cleanSiteUrl}" style="color:#2563EB;text-decoration:none;">${escapeHtml(displayUrl)}</a>
+                  &middot;
+                  <a href="mailto:${ORG_EMAIL}" style="color:#2563EB;text-decoration:none;">${ORG_EMAIL}</a>
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>`;
 }
 
 function parseEmailAddress(value, fallbackName) {
@@ -750,32 +835,40 @@ function createRequestHandler({ rootDir = __dirname } = {}) {
           await saveContacts(contacts);
           // --- End of saving logic ---
 
-          // --- Email Templating ---
-          const templates = {
+          // --- Email content per category ---
+          const orgName = process.env.ORG_NAME || 'Newness of Life';
+          const siteUrl = process.env.SITE_URL || 'https://www.newnessoflife.de';
+          const infoBox = (html) => `<div style="background:#F9FAFB;border-radius:10px;padding:14px 18px;margin-top:14px;font-size:14px;color:#374151;line-height:1.6;">${html}</div>`;
+          const categoryContent = {
             Allgemein: {
-              subject: 'Wir haben deine Nachricht erhalten (Ticket {{ticketId}})',
-              body: `Hallo {{name}},\n\nvielen Dank fuer deine Nachricht an Newness of Life. Wir haben sie erhalten und melden uns in der Regel innerhalb von 24–48 Stunden bei dir.\n\nDeine Nachricht:\n{{message}}\n\nBetreff: {{subject}}\nTicket: {{ticketId}}\n\nWenn du noch Infos ergaenzen moechtest, antworte einfach auf diese E-Mail und nenne die Ticket-Nummer.\n\nHerzliche Gruesse\nNewness of Life (Verein)\nDatenschutz: Deine Daten werden nur zur Bearbeitung deiner Anfrage genutzt.`
+              subject: 'Wir haben deine Nachricht erhalten',
+              intro: `vielen Dank für deine Nachricht an <strong>${escapeHtml(orgName)}</strong>! Wir haben sie erhalten und melden uns in der Regel innerhalb von 24&ndash;48 Stunden bei dir.`,
+              extraHtml: ''
             },
             Spende: {
-              subject: 'Danke fuer deine Spendenanfrage (Ticket {{ticketId}})',
-              body: `Hallo {{name}},\n\ndanke, dass du Newness of Life unterstuetzen moechtest.\nWir haben deine Nachricht erhalten und melden uns in der Regel innerhalb von 24–48 Stunden bei dir.\n\nDeine Nachricht:\n{{message}}\n\nBankdaten (IBAN/BIC) folgen in Kuerze.\nWenn du eine Spendenquittung brauchst, antworte bitte mit deiner vollstaendigen Adresse.\n\nTicket: {{ticketId}}\n\nHerzliche Gruesse\nNewness of Life (Verein)`
+              subject: 'Danke für deine Spendenanfrage',
+              intro: `danke, dass du <strong>${escapeHtml(orgName)}</strong> unterstützen möchtest! Wir haben deine Nachricht erhalten und melden uns in der Regel innerhalb von 24&ndash;48 Stunden bei dir.`,
+              extraHtml: infoBox('Unsere Bankdaten (IBAN/BIC) schicken wir dir in Kürze. Falls du eine Spendenquittung fürs Finanzamt brauchst, antworte einfach mit deiner vollständigen Adresse.')
             },
             'Event/Anmeldung': {
-              subject: 'Event-Anfrage erhalten (Ticket {{ticketId}})',
-              body: `Hallo {{name}},\n\ndanke fuer deine Nachricht an Newness of Life. Wir haben deine Event-Anfrage erhalten und melden uns in der Regel innerhalb von 24–48 Stunden bei dir.\n\nDeine Nachricht:\n{{message}}\n\nDamit wir dir schnell helfen koennen, schick uns bitte (falls noch nicht drin):\n- Event-Name & Datum\n- Anzahl Personen\n- Worum geht's genau? (Infos/Anmeldung/Mitarbeit)\n\nTicket: {{ticketId}}\n\nHerzliche Gruesse\nNewness of Life (Verein)`
+              subject: 'Deine Event-Anfrage ist bei uns angekommen',
+              intro: `danke für deine Nachricht an <strong>${escapeHtml(orgName)}</strong>! Wir haben deine Event-Anfrage erhalten und melden uns in der Regel innerhalb von 24&ndash;48 Stunden bei dir.`,
+              extraHtml: infoBox('<div style="font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#9CA3AF;margin-bottom:8px;">Damit wir dir schnell helfen können, sag uns gern noch</div>&bull; Event-Name &amp; Datum<br>&bull; Anzahl Personen<br>&bull; Worum geht’s genau? (Infos / Anmeldung / Mitarbeit)')
             },
             'Raum/Technik': {
-              subject: 'Anfrage zur Location/Technik erhalten (Ticket {{ticketId}})',
-              body: `Hallo {{name}},\n\ndanke fuer deine Nachricht. Wir haben deine Anfrage erhalten und melden uns in der Regel innerhalb von 24–48 Stunden bei dir.\n\nDeine Nachricht:\n{{message}}\n\nDamit wir dir direkt antworten koennen, schick uns bitte (falls noch nicht enthalten):\n- Datum/Uhrzeit\n- Was genau planst du?\n- Brauchst du Starkstrom? (Ja/Nein)\n- Brauchst du WLAN? (Ja/Nein)\n\nTicket: {{ticketId}}\n\nHerzliche Gruesse\nNewness of Life (Verein)`
+              subject: 'Deine Anfrage zu Location & Technik ist da',
+              intro: `danke für deine Nachricht! Wir haben deine Anfrage erhalten und melden uns in der Regel innerhalb von 24&ndash;48 Stunden bei dir.`,
+              extraHtml: infoBox('<div style="font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#9CA3AF;margin-bottom:8px;">Damit wir dir direkt antworten können, sag uns gern noch</div>&bull; Datum / Uhrzeit<br>&bull; Was genau planst du?<br>&bull; Brauchst du Starkstrom?<br>&bull; Brauchst du WLAN?')
             },
             'Seelsorge/Gebet': {
-              subject: 'Wir haben deine Nachricht erhalten (vertraulich) – Ticket {{ticketId}}',
-              body: `Hallo {{name}},\n\ndanke, dass du dich gemeldet hast. Wir behandeln deine Nachricht vertraulich und melden uns in der Regel innerhalb von 24–48 Stunden bei dir.\n\nDeine Nachricht:\n{{message}}\n\nWenn es dringend ist und du sofort Hilfe brauchst, wende dich bitte in akuten Notfaellen an 112.\n\nTicket: {{ticketId}}\n\nHerzliche Gruesse\nNewness of Life (Verein)`
+              subject: 'Wir haben deine Nachricht erhalten (vertraulich)',
+              intro: 'danke, dass du dich gemeldet hast. Wir behandeln deine Nachricht vertraulich und melden uns in der Regel innerhalb von 24&ndash;48 Stunden bei dir.',
+              extraHtml: `<div style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:10px;padding:14px 18px;margin-top:14px;font-size:13px;color:#92400E;">Wenn es dringend ist und du sofort Hilfe brauchst, wende dich bitte in akuten Notfällen an <strong>112</strong>.</div>`
             }
           };
 
-          const template = templates[category] || templates.Allgemein;
-          const vars = { ticketId, name, subject, message };
+          const content = categoryContent[category] || categoryContent.Allgemein;
+          const safeMessageHtml = escapeHtml(message).replace(/\r?\n/g, '<br>');
 
           // --- Send Emails ---
           const emailStatus = { auto_reply: 'skipped', internal_notification: 'skipped' };
@@ -783,13 +876,23 @@ function createRequestHandler({ rootDir = __dirname } = {}) {
 
           // 1. Auto-Reply to sender
           try {
-            const autoSubject = renderTemplate(template.subject, vars);
-            const autoBody = renderTemplate(template.body, vars);
+            const autoReplyBodyHtml = `
+              <p style="margin:0 0 14px;">Hallo ${escapeHtml(name)},</p>
+              <p style="margin:0 0 14px;">${content.intro}</p>
+              <div style="background:#F9FAFB;border-radius:10px;padding:16px 18px;margin:18px 0;">
+                <div style="font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#9CA3AF;margin-bottom:6px;">Deine Nachricht</div>
+                <div style="font-size:14px;color:#374151;">${safeMessageHtml}</div>
+              </div>
+              ${content.extraHtml}
+              <p style="margin:18px 0 0;">Bis bald &ndash; wir freuen uns auf den Austausch mit dir!</p>
+              <p style="margin:14px 0 0;">Gottes Segen 🕊️<br><strong>${escapeHtml(orgName)}</strong></p>
+              <p style="margin:22px 0 0;font-size:11px;color:#D1D5DB;">Referenz: ${escapeHtml(ticketId)}</p>
+            `;
             await sendEmail({
               from: NOREPLY_EMAIL,
               to: email,
-              subject: autoSubject,
-              html: toHtml(autoBody)
+              subject: `${content.subject} – ${orgName}`,
+              html: renderEmailShell({ orgName, siteUrl, bodyHtml: autoReplyBodyHtml })
             });
             emailStatus.auto_reply = 'sent';
           } catch (err) {
@@ -800,13 +903,22 @@ function createRequestHandler({ rootDir = __dirname } = {}) {
 
           // 2. Internal notification
           try {
-            const internalSubject = `Neue Website-Anfrage (${ticketId}) – ${subject}`;
-            const internalBody = `Ticket: ${ticketId}\nName: ${name}\nE-Mail: ${email}\nKategorie: ${category}\nZeit: ${createdAt}\n\nNachricht:\n${message}\n\nWichtig: Antwort an ${email} senden.`;
+            const internalBodyHtml = `
+              <h2 style="margin:0 0 18px;font-size:17px;color:#111827;">📬 Neue Kontaktanfrage</h2>
+              <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;font-size:14px;margin-bottom:18px;">
+                <tr><td style="padding:5px 12px 5px 0;color:#6B7280;width:110px;vertical-align:top;">Name</td><td style="padding:5px 0;font-weight:600;color:#111827;">${escapeHtml(name)}</td></tr>
+                <tr><td style="padding:5px 12px 5px 0;color:#6B7280;vertical-align:top;">E-Mail</td><td style="padding:5px 0;"><a href="mailto:${escapeHtml(email)}" style="color:#2563EB;text-decoration:none;">${escapeHtml(email)}</a></td></tr>
+                <tr><td style="padding:5px 12px 5px 0;color:#6B7280;vertical-align:top;">Kategorie</td><td style="padding:5px 0;color:#111827;">${escapeHtml(category)}</td></tr>
+                <tr><td style="padding:5px 12px 5px 0;color:#6B7280;vertical-align:top;">Betreff</td><td style="padding:5px 0;color:#111827;">${escapeHtml(subject)}</td></tr>
+              </table>
+              <div style="background:#F9FAFB;border-left:3px solid #2563EB;border-radius:0 8px 8px 0;padding:14px 16px;font-size:14px;color:#374151;">${safeMessageHtml}</div>
+              <p style="margin:18px 0 0;font-size:12px;color:#9CA3AF;">Referenz: ${escapeHtml(ticketId)} &middot; Antworten geht direkt an ${escapeHtml(email)} (Reply-To).</p>
+            `;
             await sendEmail({
               from: FROM_EMAIL,
               to: TO_EMAIL,
-              subject: internalSubject,
-              html: toHtml(internalBody),
+              subject: `Neue Website-Anfrage (${ticketId}) – ${subject}`,
+              html: renderEmailShell({ orgName, siteUrl, bodyHtml: internalBodyHtml }),
               replyTo: email
             });
             emailStatus.internal_notification = 'sent';
@@ -914,59 +1026,64 @@ function createRequestHandler({ rootDir = __dirname } = {}) {
 
           const amountLabel = formatCurrency(amount, currency);
           const donationDateLabel = formatDateDE(donationDateValue) || donationDateValue;
-          const pdfLines = [
-            ORG_NAME,
-            'Spendenbestaetigung',
-            '',
-            `Belegnummer: ${donationId}`,
-            `Name: ${donorName}`,
-            `E-Mail: ${email}`,
-            `Betrag: ${amountLabel}`,
-            `Datum: ${donationDateLabel}`,
-            `Zahlungsmethode: ${paymentMethodLabel}`,
-            needsReceipt ? 'Spendenquittung angefragt: Ja' : 'Spendenquittung angefragt: Nein',
-            '',
-            'Vielen Dank fuer deine Unterstuetzung.',
-            '',
-            '"Der HERR segne dich und behuete dich. Der HERR lasse sein Angesicht',
-            'leuchten ueber dir und sei dir gnaedig. Der HERR hebe sein Angesicht',
-            'ueber dich und gebe dir Frieden." (4. Mose 6,24-26)',
-            SITE_URL
-          ];
-          const pdfBuffer = buildSimplePdf(pdfLines);
+
+          const pdfBuffer = buildReceiptPdf({
+            orgName: ORG_NAME,
+            orgSubtitle: 'die Kirche des lebendigen Gottes International e.V.',
+            docTitle: 'Spendenbestaetigung',
+            rows: [
+              ['Belegnummer', donationId],
+              ['Name', donorName],
+              ['E-Mail', email],
+              ['Betrag', amountLabel],
+              ['Datum', donationDateLabel],
+              ['Zahlungsmethode', paymentMethodLabel],
+              ['Spendenquittung angefragt', needsReceipt ? 'Ja' : 'Nein']
+            ],
+            verseLines: [
+              '"Der HERR segne dich und behuete dich. Der HERR lasse sein Angesicht',
+              'leuchten ueber dir und sei dir gnaedig. Der HERR hebe sein Angesicht',
+              'ueber dich und gebe dir Frieden." (4. Mose 6,24-26)'
+            ],
+            footerLines: [
+              `${ORG_NAME} e.V. - Hebbelstr. 56-60 - 55127 Mainz`,
+              SITE_URL.replace(/^https?:\/\//, '')
+            ]
+          });
           const attachments = [{
             filename: `spendenbestaetigung-${donationId}.pdf`,
             content: pdfBuffer.toString('base64')
           }];
 
-          const safeMessageHtml = message ? escapeHtml(message).replace(/\r?\n/g, '<br>') : '-';
-          const safeAddressHtml = address ? escapeHtml(address).replace(/\r?\n/g, '<br>') : '-';
+          const safeMessageHtml = message ? escapeHtml(message).replace(/\r?\n/g, '<br>') : '–';
+          const safeAddressHtml = address ? escapeHtml(address).replace(/\r?\n/g, '<br>') : '–';
 
           const emailStatus = { donor_confirmation: 'skipped', internal_notification: 'skipped' };
           const emailErrors = {};
 
           try {
-            const donorSubject = `Vielen Dank fuer deine Spende - ${ORG_NAME} (${donationId})`;
-            const donorHtml = `
-              <p>Liebe/r ${escapeHtml(donorName)},</p>
-              <p>vielen Dank fuer deine Unterstuetzung von ${escapeHtml(ORG_NAME)}.</p>
-              <p>Wir haben deine Spende erfolgreich erfasst.</p>
-              <p><strong>Details deiner Spende:</strong><br>
-              Belegnummer: ${escapeHtml(donationId)}<br>
-              Betrag: ${escapeHtml(amountLabel)}<br>
-              Datum: ${escapeHtml(donationDateLabel)}<br>
-              Zahlungsmethode: ${escapeHtml(paymentMethodLabel)}</p>
-              <p>Im Anhang findest du eine Bestaetigung als PDF.</p>
-              <p>Falls du eine offizielle Spendenquittung fuer das Finanzamt benoetigst, antworte bitte auf diese E-Mail mit deiner vollstaendigen Adresse.</p>
-              <p>Vielen Dank fuer deine Unterstuetzung.</p>
-              <p style="font-style:italic;">&bdquo;Der HERR segne dich und behuete dich. Der HERR lasse sein Angesicht leuchten ueber dir und sei dir gnaedig. Der HERR hebe sein Angesicht ueber dich und gebe dir Frieden.&ldquo;<br>(4. Mose 6,24-26)</p>
-              <p>${escapeHtml(ORG_NAME)}</p>
+            const donorBodyHtml = `
+              <p style="margin:0 0 14px;">Liebe/r ${escapeHtml(donorName)},</p>
+              <p style="margin:0 0 14px;">von Herzen Dank für deine Unterstützung von <strong>${escapeHtml(ORG_NAME)}</strong>! Wir haben deine Spende erfolgreich erfasst.</p>
+              <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;font-size:14px;margin:18px 0;background:#F9FAFB;border-radius:10px;">
+                <tr><td style="padding:14px 18px 4px;color:#6B7280;width:140px;">Belegnummer</td><td style="padding:14px 18px 4px;font-weight:600;color:#111827;">${escapeHtml(donationId)}</td></tr>
+                <tr><td style="padding:4px 18px;color:#6B7280;">Betrag</td><td style="padding:4px 18px;font-weight:600;color:#111827;">${escapeHtml(amountLabel)}</td></tr>
+                <tr><td style="padding:4px 18px;color:#6B7280;">Datum</td><td style="padding:4px 18px;color:#111827;">${escapeHtml(donationDateLabel)}</td></tr>
+                <tr><td style="padding:4px 18px 14px;color:#6B7280;">Zahlungsmethode</td><td style="padding:4px 18px 14px;color:#111827;">${escapeHtml(paymentMethodLabel)}</td></tr>
+              </table>
+              <p style="margin:0 0 14px;">Im Anhang findest du eine PDF-Bestätigung für deine Unterlagen.</p>
+              <p style="margin:0 0 6px;">Falls du eine offizielle Spendenquittung fürs Finanzamt brauchst, antworte einfach auf diese E-Mail mit deiner vollständigen Adresse &ndash; wir kümmern uns darum.</p>
+              <div style="border-left:3px solid #10B981;padding:2px 16px;margin:24px 0 4px;font-style:italic;color:#4B5563;font-size:14px;line-height:1.6;">
+                &bdquo;Der HERR segne dich und behüte dich. Der HERR lasse sein Angesicht leuchten über dir und sei dir gnädig. Der HERR hebe sein Angesicht über dich und gebe dir Frieden.&ldquo;<br>
+                <span style="font-style:normal;font-size:12px;color:#9CA3AF;">4. Mose 6,24&ndash;26</span>
+              </div>
+              <p style="margin:22px 0 0;">${escapeHtml(ORG_NAME)} 🙏</p>
             `;
             await sendEmail({
               from: NOREPLY_EMAIL,
               to: email,
-              subject: donorSubject,
-              html: donorHtml,
+              subject: `Vielen Dank für deine Spende – ${ORG_NAME}`,
+              html: renderEmailShell({ orgName: ORG_NAME, siteUrl: SITE_URL, bodyHtml: donorBodyHtml }),
               attachments
             });
             emailStatus.donor_confirmation = 'sent';
@@ -977,25 +1094,32 @@ function createRequestHandler({ rootDir = __dirname } = {}) {
           }
 
           try {
-            const internalSubject = `Neue Spende erhalten (${donationId})`;
-            const internalHtml = `
-              <p><strong>Neue Spende erhalten</strong></p>
-              <p>Belegnummer: ${escapeHtml(donationId)}<br>
-              Name: ${escapeHtml(donorName)}<br>
-              E-Mail: ${escapeHtml(email)}<br>
-              Betrag: ${escapeHtml(amountLabel)}<br>
-              Datum: ${escapeHtml(donationDateLabel)}<br>
-              Zahlung: ${escapeHtml(paymentMethodLabel)}<br>
-              Anonym: ${anonymous ? 'Ja' : 'Nein'}<br>
-              Spendenquittung angefragt: ${needsReceipt ? 'Ja' : 'Nein'}</p>
-              <p><strong>Adresse:</strong><br>${safeAddressHtml}</p>
-              <p><strong>Nachricht:</strong><br>${safeMessageHtml}</p>
+            const internalBodyHtml = `
+              <h2 style="margin:0 0 18px;font-size:17px;color:#111827;">💚 Neue Spende erhalten</h2>
+              <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;font-size:14px;margin-bottom:18px;">
+                <tr><td style="padding:5px 12px 5px 0;color:#6B7280;width:150px;vertical-align:top;">Belegnummer</td><td style="padding:5px 0;font-weight:600;color:#111827;">${escapeHtml(donationId)}</td></tr>
+                <tr><td style="padding:5px 12px 5px 0;color:#6B7280;vertical-align:top;">Name</td><td style="padding:5px 0;color:#111827;">${escapeHtml(donorName)}</td></tr>
+                <tr><td style="padding:5px 12px 5px 0;color:#6B7280;vertical-align:top;">E-Mail</td><td style="padding:5px 0;"><a href="mailto:${escapeHtml(email)}" style="color:#2563EB;text-decoration:none;">${escapeHtml(email)}</a></td></tr>
+                <tr><td style="padding:5px 12px 5px 0;color:#6B7280;vertical-align:top;">Betrag</td><td style="padding:5px 0;font-weight:600;color:#111827;">${escapeHtml(amountLabel)}</td></tr>
+                <tr><td style="padding:5px 12px 5px 0;color:#6B7280;vertical-align:top;">Datum</td><td style="padding:5px 0;color:#111827;">${escapeHtml(donationDateLabel)}</td></tr>
+                <tr><td style="padding:5px 12px 5px 0;color:#6B7280;vertical-align:top;">Zahlung</td><td style="padding:5px 0;color:#111827;">${escapeHtml(paymentMethodLabel)}</td></tr>
+                <tr><td style="padding:5px 12px 5px 0;color:#6B7280;vertical-align:top;">Anonym</td><td style="padding:5px 0;color:#111827;">${anonymous ? 'Ja' : 'Nein'}</td></tr>
+                <tr><td style="padding:5px 12px 5px 0;color:#6B7280;vertical-align:top;">Quittung angefragt</td><td style="padding:5px 0;color:#111827;">${needsReceipt ? 'Ja' : 'Nein'}</td></tr>
+              </table>
+              <div style="background:#F9FAFB;border-left:3px solid #2563EB;border-radius:0 8px 8px 0;padding:14px 16px;font-size:14px;color:#374151;margin-bottom:14px;">
+                <div style="font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#9CA3AF;margin-bottom:6px;">Adresse</div>
+                ${safeAddressHtml}
+              </div>
+              <div style="background:#F9FAFB;border-left:3px solid #2563EB;border-radius:0 8px 8px 0;padding:14px 16px;font-size:14px;color:#374151;">
+                <div style="font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#9CA3AF;margin-bottom:6px;">Nachricht</div>
+                ${safeMessageHtml}
+              </div>
             `;
             await sendEmail({
               from: FROM_EMAIL,
               to: TO_EMAIL,
-              subject: internalSubject,
-              html: internalHtml,
+              subject: `Neue Spende erhalten (${donationId})`,
+              html: renderEmailShell({ orgName: ORG_NAME, siteUrl: SITE_URL, bodyHtml: internalBodyHtml }),
               replyTo: email,
               attachments
             });

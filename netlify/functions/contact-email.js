@@ -8,6 +8,10 @@ const CORS_HEADERS = {
   'Access-Control-Allow-Headers': 'Content-Type'
 };
 
+const ORG_LEGAL_NAME = 'die Kirche des lebendigen Gottes International e.V.';
+const ORG_ADDRESS_LINE = 'Hebbelstr. 56–60 · 55127 Mainz';
+const ORG_EMAIL = 'newnessoflife@clgi.org';
+
 function json(statusCode, body) {
   return {
     statusCode,
@@ -52,30 +56,64 @@ function escapePdfText(value) {
     .replace(/\r?\n/g, ' ');
 }
 
-function buildSimplePdf(lines) {
+// Branded, single-page summary: blue header band + a label/value table.
+// Only used when CONTACT_ATTACH_PDF=1.
+function buildReceiptPdf({ orgName, orgSubtitle, docTitle, rows, noteLines, footerLines }) {
   const pageWidth = 595;
   const pageHeight = 842;
-  const startY = 790;
-  const lineHeight = 18;
-  const safeLines = lines
-    .map((line) => normalizeText(line).replace(/\s+/g, ' '))
-    .filter(Boolean)
-    .slice(0, 40);
+  const marginX = 50;
+  const headerHeight = 112;
+  const clip = (s) => normalizeText(s).replace(/\s+/g, ' ');
+  const esc = (s) => escapePdfText(clip(s));
 
-  const textOps = safeLines.map((line, index) => {
-    const y = startY - (index * lineHeight);
-    return `1 0 0 1 50 ${y} Tm (${escapePdfText(line)}) Tj`;
-  }).join('\n');
+  const ops = [];
 
-  const stream = `BT\n/F1 12 Tf\n${textOps}\nET`;
+  ops.push('0.145 0.388 0.922 rg');
+  ops.push(`0 ${pageHeight - headerHeight} ${pageWidth} ${headerHeight} re f`);
+  ops.push('1 1 1 rg');
+  ops.push(`BT /F2 19 Tf 1 0 0 1 ${marginX} ${pageHeight - 38} Tm (${esc(orgName)}) Tj ET`);
+  ops.push(`BT /F1 10 Tf 1 0 0 1 ${marginX} ${pageHeight - 55} Tm (${esc(orgSubtitle)}) Tj ET`);
+  ops.push(`BT /F2 15 Tf 1 0 0 1 ${marginX} ${pageHeight - 88} Tm (${esc(docTitle)}) Tj ET`);
+
+  let y = pageHeight - headerHeight - 46;
+  const rowHeight = 24;
+  for (const [label, value] of rows.slice(0, 12)) {
+    ops.push('0.42 0.45 0.5 rg');
+    ops.push(`BT /F1 10 Tf 1 0 0 1 ${marginX} ${y} Tm (${esc(label)}) Tj ET`);
+    ops.push('0.067 0.094 0.153 rg');
+    ops.push(`BT /F2 12 Tf 1 0 0 1 ${marginX + 120} ${y - 1} Tm (${esc(value)}) Tj ET`);
+    y -= rowHeight;
+  }
+
+  if (noteLines && noteLines.length) {
+    y -= 12;
+    ops.push('0.85 0.86 0.88 rg');
+    ops.push(`${marginX} ${y} ${pageWidth - marginX * 2} 1 re f`);
+    y -= 26;
+    ops.push('0.22 0.25 0.32 rg');
+    for (const line of noteLines) {
+      ops.push(`BT /F1 11 Tf 1 0 0 1 ${marginX} ${y} Tm (${esc(line)}) Tj ET`);
+      y -= 16;
+    }
+  }
+
+  let fy = 64;
+  ops.push('0.61 0.64 0.69 rg');
+  for (const line of (footerLines || [])) {
+    ops.push(`BT /F1 9 Tf 1 0 0 1 ${marginX} ${fy} Tm (${esc(line)}) Tj ET`);
+    fy -= 12;
+  }
+
+  const stream = ops.join('\n');
   const streamLength = Buffer.byteLength(stream, 'utf8');
 
   const objects = [
     '1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n',
     '2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n',
-    `3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageWidth} ${pageHeight}] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>\nendobj\n`,
+    `3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageWidth} ${pageHeight}] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> >> /Contents 6 0 R >>\nendobj\n`,
     '4 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n',
-    `5 0 obj\n<< /Length ${streamLength} >>\nstream\n${stream}\nendstream\nendobj\n`
+    '5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>\nendobj\n',
+    `6 0 obj\n<< /Length ${streamLength} >>\nstream\n${stream}\nendstream\nendobj\n`
   ];
 
   let pdf = '%PDF-1.4\n';
@@ -96,6 +134,51 @@ function buildSimplePdf(lines) {
   return Buffer.from(pdf, 'utf8');
 }
 
+// Shared branded HTML shell (logo + org name in a blue header band, the
+// caller's body in the middle, address/site in a light footer) used by both
+// emails this function sends.
+function renderEmailShell({ orgName, siteUrl, bodyHtml }) {
+  const cleanSiteUrl = (siteUrl || 'https://newnessoflife.de').replace(/\/$/, '');
+  const logoUrl = `${cleanSiteUrl}/images/Logo_Schwarz_Transparent_KS.png`;
+  const displayUrl = cleanSiteUrl.replace(/^https?:\/\//, '');
+  return `<!doctype html>
+<html lang="de">
+  <body style="margin:0;padding:0;background:#F3F4F6;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F3F4F6;padding:32px 16px;">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 1px 4px rgba(17,24,39,0.08);">
+            <tr>
+              <td style="padding:28px 32px 18px;text-align:center;border-bottom:3px solid #2563EB;">
+                <img src="${logoUrl}" width="52" height="52" alt="${escapeHtml(orgName)}" style="display:block;margin:0 auto 10px;">
+                <div style="font-family:Georgia,'Times New Roman',serif;font-size:19px;font-weight:bold;color:#111827;">${escapeHtml(orgName)}</div>
+                <div style="font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif;font-size:11px;color:#6B7280;margin-top:3px;">${escapeHtml(ORG_LEGAL_NAME)}</div>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:32px;font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif;font-size:15px;line-height:1.65;color:#1F2937;">
+                ${bodyHtml}
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:0 32px 28px;">
+                <div style="height:1px;background:#E5E7EB;margin-bottom:20px;"></div>
+                <p style="margin:0;font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif;font-size:12px;color:#9CA3AF;text-align:center;line-height:1.7;">
+                  ${escapeHtml(ORG_ADDRESS_LINE)}<br>
+                  <a href="${cleanSiteUrl}" style="color:#2563EB;text-decoration:none;">${escapeHtml(displayUrl)}</a>
+                  &middot;
+                  <a href="mailto:${ORG_EMAIL}" style="color:#2563EB;text-decoration:none;">${ORG_EMAIL}</a>
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>`;
+}
+
 function parseAddress(value, fallbackName) {
   const str = (value || '').toString().trim();
   const match = str.match(/^(.*)<(.+)>$/);
@@ -106,12 +189,13 @@ function parseAddress(value, fallbackName) {
   return { email: str, name: fallbackName };
 }
 
-async function sendBrevoEmail({ apiKey, from, to, replyTo, subject, html, attachments }) {
+async function sendBrevoEmail({ apiKey, from, to, replyTo, subject, html, text, attachments }) {
   const payload = {
     sender: parseAddress(from),
     to: [parseAddress(to)],
     subject,
     htmlContent: html,
+    ...(text ? { textContent: text } : {}),
     ...(replyTo ? { replyTo: parseAddress(replyTo) } : {}),
     ...(attachments && attachments.length
       ? { attachment: attachments.map((a) => ({ content: a.content, name: a.filename })) }
@@ -196,6 +280,7 @@ exports.handler = async (event) => {
   const ticketId = `CNT-${new Date().getFullYear()}-${crypto.randomUUID().slice(0, 8).toUpperCase()}`;
   const subject = subjectInput || 'Kontaktanfrage';
   const orgName = process.env.ORG_NAME || 'Newness of Life';
+  const siteUrl = process.env.SITE_URL || 'https://www.newnessoflife.de';
   const churchEmail = process.env.CHURCH_EMAIL || process.env.TO_EMAIL || 'newnessoflife@clgi.org';
   const fromEmail = process.env.CONTACT_FROM_EMAIL || process.env.FROM_EMAIL || 'Newness of Life <kontakt@newnessoflife.de>';
   const noReplyEmail = process.env.CONTACT_NOREPLY_EMAIL || process.env.NOREPLY_EMAIL || 'Newness of Life <noreply@newnessoflife.de>';
@@ -204,18 +289,23 @@ exports.handler = async (event) => {
   const attachmentData = attachPdf
     ? [{
         filename: `kontaktanfrage-${ticketId}.pdf`,
-        content: buildSimplePdf([
+        content: buildReceiptPdf({
           orgName,
-          'Kontaktanfrage',
-          '',
-          `Ticket: ${ticketId}`,
-          `Name: ${name}`,
-          `E-Mail: ${email}`,
-          phone ? `Telefon: ${phone}` : '',
-          `Betreff: ${subject}`,
-          '',
-          message
-        ]).toString('base64')
+          orgSubtitle: 'die Kirche des lebendigen Gottes International e.V.',
+          docTitle: 'Kontaktanfrage',
+          rows: [
+            ['Referenz', ticketId],
+            ['Name', name],
+            ['E-Mail', email],
+            ...(phone ? [['Telefon', phone]] : []),
+            ['Betreff', subject]
+          ],
+          noteLines: [message],
+          footerLines: [
+            `${orgName} e.V. - Hebbelstr. 56-60 - 55127 Mainz`,
+            siteUrl.replace(/^https?:\/\//, '')
+          ]
+        }).toString('base64')
       }]
     : undefined;
 
@@ -224,21 +314,24 @@ exports.handler = async (event) => {
   const safeMessage = escapeHtml(message).replace(/\r?\n/g, '<br>');
 
   try {
+    const internalBodyHtml = `
+      <h2 style="margin:0 0 18px;font-size:17px;color:#111827;">📬 Neue Kontaktanfrage</h2>
+      <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;font-size:14px;margin-bottom:18px;">
+        <tr><td style="padding:5px 12px 5px 0;color:#6B7280;width:110px;vertical-align:top;">Name</td><td style="padding:5px 0;font-weight:600;color:#111827;">${escapeHtml(name)}</td></tr>
+        <tr><td style="padding:5px 12px 5px 0;color:#6B7280;vertical-align:top;">E-Mail</td><td style="padding:5px 0;"><a href="mailto:${escapeHtml(email)}" style="color:#2563EB;text-decoration:none;">${escapeHtml(email)}</a></td></tr>
+        <tr><td style="padding:5px 12px 5px 0;color:#6B7280;vertical-align:top;">Telefon</td><td style="padding:5px 0;color:#111827;">${escapeHtml(phone || '–')}</td></tr>
+        <tr><td style="padding:5px 12px 5px 0;color:#6B7280;vertical-align:top;">Betreff</td><td style="padding:5px 0;color:#111827;">${escapeHtml(subject)}</td></tr>
+      </table>
+      <div style="background:#F9FAFB;border-left:3px solid #2563EB;border-radius:0 8px 8px 0;padding:14px 16px;font-size:14px;color:#374151;">${safeMessage}</div>
+      <p style="margin:18px 0 0;font-size:12px;color:#9CA3AF;">Referenz: ${escapeHtml(ticketId)} &middot; Antworten geht direkt an ${escapeHtml(email)} (Reply-To).</p>
+    `;
     await sendBrevoEmail({
       apiKey,
       from: fromEmail,
       to: churchEmail,
       replyTo: email,
       subject: `Neue Kontaktanfrage (${ticketId}) - ${subject}`,
-      html: `
-        <h2>Neue Kontaktanfrage ueber die Website</h2>
-        <p><strong>Ticket:</strong> ${escapeHtml(ticketId)}</p>
-        <p><strong>Name:</strong> ${escapeHtml(name)}</p>
-        <p><strong>E-Mail:</strong> ${escapeHtml(email)}</p>
-        <p><strong>Telefon:</strong> ${escapeHtml(phone || '-')}</p>
-        <p><strong>Betreff:</strong> ${escapeHtml(subject)}</p>
-        <p><strong>Nachricht:</strong><br>${safeMessage}</p>
-      `,
+      html: renderEmailShell({ orgName, siteUrl, bodyHtml: internalBodyHtml }),
       attachments: attachmentData
     });
     emailStatus.internal_notification = 'sent';
@@ -248,20 +341,25 @@ exports.handler = async (event) => {
   }
 
   try {
+    const autoReplyBodyHtml = `
+      <p style="margin:0 0 14px;">Hallo ${escapeHtml(name)},</p>
+      <p style="margin:0 0 14px;">schön, von dir zu hören! Vielen Dank für deine Nachricht an <strong>${escapeHtml(orgName)}</strong> – wir haben sie erhalten und melden uns so schnell wie möglich bei dir, meistens innerhalb von 1&ndash;2 Tagen.</p>
+      <div style="background:#F9FAFB;border-radius:10px;padding:16px 18px;margin:18px 0;">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#9CA3AF;margin-bottom:6px;">Deine Nachricht</div>
+        <div style="font-size:14px;color:#374151;">${safeMessage}</div>
+      </div>
+      <p style="margin:18px 0 0;">Bis bald – wir freuen uns auf den Austausch mit dir!</p>
+      <p style="margin:14px 0 0;">Gottes Segen 🕊️<br><strong>${escapeHtml(orgName)}</strong></p>
+      <p style="margin:22px 0 0;font-size:11px;color:#D1D5DB;">Referenz: ${escapeHtml(ticketId)}</p>
+    `;
     await sendBrevoEmail({
       apiKey,
       from: noReplyEmail,
       to: email,
       replyTo: churchEmail,
-      subject: `Vielen Dank fuer deine Nachricht (${ticketId})`,
-      html: `
-        <p>Hallo ${escapeHtml(name)},</p>
-        <p>vielen Dank fuer deine Nachricht an ${escapeHtml(orgName)}.</p>
-        <p>Wir haben deine Anfrage erhalten und melden uns so schnell wie moeglich bei dir.</p>
-        <p><strong>Deine Nachricht:</strong><br>${safeMessage}</p>
-        <p><strong>Ticket:</strong> ${escapeHtml(ticketId)}</p>
-        <p>Gottes Segen<br>${escapeHtml(orgName)}</p>
-      `,
+      subject: `Vielen Dank für deine Nachricht – ${orgName}`,
+      html: renderEmailShell({ orgName, siteUrl, bodyHtml: autoReplyBodyHtml }),
+      text: `Hallo ${name},\n\nvielen Dank fuer deine Nachricht an ${orgName}. Wir haben sie erhalten und melden uns so schnell wie moeglich bei dir.\n\nDeine Nachricht:\n${message}\n\nGottes Segen\n${orgName}`,
       attachments: attachmentData
     });
     emailStatus.auto_reply = 'sent';
