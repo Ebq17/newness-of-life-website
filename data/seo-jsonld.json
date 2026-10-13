@@ -8,7 +8,7 @@
       "Newness of Life Mainz",
       "Church of the Living God International Mainz"
     ],
-    "description": "Internationale Freikirche und Gospel-Gemeinde in Mainz mit Gottesdienst jeden Sonntag um 14 Uhr.",
+    "description": "Internationale Freikirche und Gospel-Gemeinde in Mainz. Gottesdienst jeden Sonntag um 14 Uhr, Predigt auf Deutsch und Englisch.",
     "url": "https://newnessoflife.de/",
     "logo": "https://newnessoflife.de/images/Logo_Schwarz_Transparent_KS.png",
     "image": "https://newnessoflife.de/images/church-service.jpg",
@@ -29,7 +29,11 @@
       "@type": "Organization",
       "name": "Church of the Living God International",
       "url": "https://clgi.org/"
-    }
+    },
+    "knowsLanguage": [
+      "de",
+      "en"
+    ]
   },
   "services": {
     "@context": "https://schema.org",
@@ -37,7 +41,7 @@
       {
         "@type": "Event",
         "name": "Gospel-Gottesdienst – Newness of Life Mainz",
-        "description": "Wöchentlicher Gottesdienst mit Gospel-Lobpreis, Predigt, Kinderprogramm und Gemeinschaft.",
+        "description": "Wöchentlicher Gottesdienst mit Gospel-Lobpreis, Predigt auf Deutsch und Englisch, Kinderprogramm und Gemeinschaft.",
         "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
         "eventSchedule": {
           "@type": "Schedule",
@@ -62,7 +66,11 @@
           "@id": "https://newnessoflife.de/#church"
         },
         "isAccessibleForFree": true,
-        "image": "https://newnessoflife.de/images/church-service.jpg"
+        "image": "https://newnessoflife.de/images/church-service.jpg",
+        "inLanguage": [
+          "de",
+          "en"
+        ]
       },
       {
         "@type": "Event",
@@ -92,7 +100,11 @@
           "@id": "https://newnessoflife.de/#church"
         },
         "isAccessibleForFree": true,
-        "image": "https://newnessoflife.de/images/Gebete.jpg"
+        "image": "https://newnessoflife.de/images/Gebete.jpg",
+        "inLanguage": [
+          "de",
+          "en"
+        ]
       },
       {
         "@type": "Event",
@@ -125,7 +137,11 @@
           "@id": "https://newnessoflife.de/#church"
         },
         "isAccessibleForFree": true,
-        "image": "https://newnessoflife.de/images/biblestunde_jugend.jpg"
+        "image": "https://newnessoflife.de/images/biblestunde_jugend.jpg",
+        "inLanguage": [
+          "de",
+          "en"
+        ]
       }
     ]
   }
