@@ -6,3 +6,5 @@ build/
 
 # Local Netlify folder
 .netlify
+data/contacts.json
+data/donations.json

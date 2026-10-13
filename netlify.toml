@@ -1,2 +1,47 @@
 [build]
+  command = "npm run build"
+  publish = "."
   functions = "netlify/functions"
+
+# Interne Dateien nie ausliefern (private Daten, Quellcode, Entwicklung)
+[[redirects]]
+  from = "/data/contacts.json"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/data/donations.json"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/admin-server.js"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/newness-of-life-nextjs/*"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/test/*"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/.env*"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/node_modules/*"
+  to = "/404"
+  status = 404
+  force = true
