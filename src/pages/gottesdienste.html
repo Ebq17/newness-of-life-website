@@ -1,123 +1,167 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <include src="partials/head-common.html"></include>
-  <title>{{ pages.gottesdienste.seo.meta_title }}</title>
-  <meta name="description" content="{{ pages.gottesdienste.seo.meta_description }}">
-  <link rel="canonical" href="https://newnessoflife.de/gottesdienste">
-  <meta property="og:title" content="{{ pages.gottesdienste.seo.meta_title }}">
-  <meta property="og:description" content="{{ pages.gottesdienste.seo.meta_description }}">
-  <meta property="og:url" content="https://newnessoflife.de/gottesdienste">
-  <meta property="og:image" content="https://newnessoflife.de{{ pages.gottesdienste.hero.background_image || '/images/Gebete.jpg' }}">
-  {{{ servicesJsonLd }}}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ pages.gottesdienste.seo.meta_title || 'Gottesdienste | Newness of Life' }}</title>
+  <meta name="description" content="{{ pages.gottesdienste.seo.meta_description || '' }}">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css?v=20260220r3" />
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="canonical" href="https://newnessoflife.de/gottesdienste">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="de_DE">
+    <meta property="og:site_name" content="Newness of Life Mainz">
+    <meta property="og:title" content="{{ pages.gottesdienste.seo.meta_title }}">
+    <meta property="og:description" content="{{ pages.gottesdienste.seo.meta_description }}">
+    <meta property="og:url" content="https://newnessoflife.de/gottesdienste">
+    <meta property="og:image" content="https://newnessoflife.de/images/church-service.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+{{{ servicesJsonLd }}}
 </head>
-<body class="page-services">
+<body>
+
   <include src="partials/header.html"></include>
 
-  <main id="inhalt">
-    <section class="hero hero-page" data-bg="pages.gottesdienste.hero.background_image">
-      <if condition="pages.gottesdienste.hero.video">
-        <video class="hero-video" src="{{ pages.gottesdienste.hero.video }}" autoplay muted loop playsinline aria-hidden="true"></video>
-      </if>
-      <div class="container hero-inner">
-        <h1 data-t="pages.gottesdienste.hero.title"></h1>
-        <p class="hero-lead" data-t="pages.gottesdienste.hero.subtitle"></p>
-        <p class="hero-facts">
-          <span><i class="fa-regular fa-clock" aria-hidden="true"></i><span data-t="pages.gottesdienste.main_service.day"></span>, <span data-t="pages.gottesdienste.main_service.time"></span></span>
-          <span><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span data-t="settings.contact.address"></span>, <span data-t="settings.contact.city"></span></span>
-        </p>
-      </div>
-    </section>
+  <main>
 
-    <section class="section">
-      <div class="container split">
-        <div class="split-text">
-          <h2 data-t="pages.gottesdienste.intro.title"></h2>
-          <p class="text-large" data-t="pages.gottesdienste.intro.text"></p>
+    <!-- Neuer, professioneller Hero -->
+    <section
+        class="gd-hero-pro"
+        data-cms-section="hero"
+        data-cms-field="hero.background_image"
+        data-cms-label="Hintergrundbild"
+        data-cms-attr="background-image"
+        data-cms-bg-overlay="linear-gradient(to bottom, rgba(0,0,0,.65), rgba(0,0,0,.2))"
+        data-has-image="{{ pages.gottesdienste.hero.background_image ? 'true' : 'false' }}"
+        style="{{ pages.gottesdienste.hero.background_image ? 'background-image: linear-gradient(to bottom, rgba(0,0,0,.65), rgba(0,0,0,.2)), url(' + pages.gottesdienste.hero.background_image + '); background-size: cover; background-position: center;' : '' }}"
+    >
+        <div class="video-background">
+            <video playsinline autoplay muted loop>
+                <source src="{{ pages.gottesdienste.hero.video || 'images/Black and Red Typographic Funny YouTube Video Intro.mp4' }}" type="video/mp4">
+            </video>
         </div>
-        <div class="time-card">
-          <h3 data-t="pages.gottesdienste.main_service.title"></h3>
-          <p data-t="pages.gottesdienste.main_service.description"></p>
-          <dl>
-            <dt><i class="fa-regular fa-calendar" aria-hidden="true"></i></dt><dd data-t="pages.gottesdienste.main_service.day"></dd>
-            <dt><i class="fa-regular fa-clock" aria-hidden="true"></i></dt><dd data-t="pages.gottesdienste.main_service.time"></dd>
-            <if condition="pages.gottesdienste.main_service.duration">
-              <dt><i class="fa-solid fa-hourglass-half" aria-hidden="true"></i></dt><dd data-t="pages.gottesdienste.main_service.duration"></dd>
-            </if>
-            <dt><i class="fa-solid fa-location-dot" aria-hidden="true"></i></dt><dd><span data-t="settings.contact.address"></span>, <span data-t="settings.contact.city"></span></dd>
-          </dl>
-        </div>
-      </div>
-      <div class="container">
-        <div class="feature-grid" style="margin-top: 64px">
-          <each loop="f, i in pages.gottesdienste.main_service.features">
-            <div class="feature">
-              <i class="fa-solid {{ f.icon || 'fa-star' }}" aria-hidden="true"></i>
-              <h3 data-t="pages.gottesdienste.main_service.features.{{ i }}.title"></h3>
-              <p data-t="pages.gottesdienste.main_service.features.{{ i }}.description"></p>
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <h1 data-cms-field="hero.title" data-cms-label="Titel" data-t="pages.gottesdienste.hero.title">{{ pages.gottesdienste.hero.title || 'Gottesdienste' }}</h1>
+            <p class="lead" data-cms-field="hero.subtitle" data-cms-label="Untertitel" data-t="pages.gottesdienste.hero.subtitle">{{ pages.gottesdienste.hero.subtitle || 'Erlebe Gottes Gegenwart in unserer Mitte' }}</p>
+            <div class="gd-hero-info">
+                <span><i class="fa-solid fa-clock"></i> <span data-cms-field="main_service.day" data-cms-label="Tag" data-t="pages.gottesdienste.main_service.day">{{ pages.gottesdienste.main_service.day || 'Sonntag' }}</span>, <span data-t="pages.gottesdienste.main_service.time">{{ pages.gottesdienste.main_service.time || '14:00 Uhr' }}</span></span>
+                <span><i class="fa-solid fa-map-marker-alt"></i> {{ settings.contact.address || 'Hebbelstr. 56-60' }}, {{ settings.contact.city || 'Mainz' }}</span>
             </div>
-          </each>
         </div>
-      </div>
     </section>
 
-    <section class="section section-tint">
-      <div class="container split split-reverse">
-        <div class="split-text">
-          <h2 data-t="pages.gottesdienste.first_visit.title"></h2>
-          <p class="text-large" data-t="pages.gottesdienste.first_visit.text"></p>
-        </div>
-        <figure class="split-media">
-          <img src="/images/bible.und.hand.hoch.jpg" data-src="pages.gottesdienste.first_visit.image" alt="" loading="lazy">
-        </figure>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
-        <div class="section-head">
-          <h2 data-t="pages.gottesdienste.other_meetings.title"></h2>
-        </div>
-        <div class="meetings-list">
-          <each loop="m, i in pages.gottesdienste.other_meetings.items">
-            <div class="meeting-item">
-              <i class="fa-solid {{ m.icon || 'fa-calendar' }}" aria-hidden="true"></i>
-              <div>
-                <h3 data-t="pages.gottesdienste.other_meetings.items.{{ i }}.title"></h3>
-                <p class="when"><span data-t="pages.gottesdienste.other_meetings.items.{{ i }}.day"></span>, <span data-t="pages.gottesdienste.other_meetings.items.{{ i }}.time"></span></p>
-                <p data-t="pages.gottesdienste.other_meetings.items.{{ i }}.description"></p>
-              </div>
+    <!-- Erlebe unsere Gottesdienste -->
+    <section class="content-section" data-cms-section="intro">
+        <div class="container">
+            <div class="section-intro">
+                <h2 data-cms-field="intro.title" data-cms-label="Titel" data-t="pages.gottesdienste.intro.title">{{ pages.gottesdienste.intro.title || 'Was dich erwartet' }}</h2>
             </div>
-          </each>
+            <p class="text-center" data-cms-field="intro.text" data-cms-label="Text" data-cms-format="html" data-t="pages.gottesdienste.intro.text">
+                {{ pages.gottesdienste.intro.text || '' }}
+            </p>
+            <div class="section-intro" style="margin-top: 2.5rem;">
+                <h2 data-t="pages.gottesdienste.first_visit.title">Dein erster Besuch</h2>
+            </div>
+            <p class="text-center" data-t="pages.gottesdienste.first_visit.text">Du warst noch nie bei uns? Kein Problem. Unser Gottesdienst beginnt jeden Sonntag um 14 Uhr in der Hebbelstraße 56-60 in Mainz und dauert etwa zwei Stunden. Freu dich auf mitreißenden Gospel-Lobpreis, eine bibeltreue, alltagsnahe Predigt und Menschen aus vielen Nationen. Gepredigt wird auf Deutsch und Englisch, sodass du alles verstehst. Für Kinder gibt es während der Predigt ein eigenes Programm. Komm einfach so, wie du bist – nach dem Gottesdienst ist Zeit für Gespräche und Gemeinschaft.</p>
         </div>
-      </div>
+
     </section>
 
-    <section class="section cta-band">
-      <div class="container narrow">
-        <h2 data-t="pages.gottesdienste.cta.title"></h2>
-        <p data-t="pages.gottesdienste.cta.text"></p>
-        <a class="btn btn-gold" href="{{ pages.gottesdienste.cta.button_link || '#anfahrt' }}" data-t="pages.gottesdienste.cta.button_text"></a>
-      </div>
+    <!-- Was dich erwartet -->
+    <section class="content-section expect-pro-section expect-pro-section-enhanced" data-cms-section="main_service">
+        <div class="container">
+            <div class="section-intro">
+                <h2 data-cms-field="main_service.title" data-cms-label="Titel" data-t="pages.gottesdienste.main_service.title">{{ pages.gottesdienste.main_service.title || 'Hauptgottesdienst' }}</h2>
+                <p data-cms-field="main_service.description" data-cms-label="Beschreibung" data-cms-format="html" data-t="pages.gottesdienste.main_service.description">{{ pages.gottesdienste.main_service.description || '' }}</p>
+            </div>
+            <div class="expect-pro-grid">
+                <each loop="feature, index in pages.gottesdienste.main_service.features">
+                    <div class="expect-pro-card-enhanced" data-cms-field="main_service.features" data-cms-label="Features">
+                        <div class="card-overlay"></div>
+                        <div class="card-content">
+                            <div class="icon"><i class="fa-solid {{ feature.icon }}"></i></div>
+                            <h3 data-t="pages.gottesdienste.main_service.features.{{ index }}.title">{{ feature.title }}</h3>
+                            <p data-t="pages.gottesdienste.main_service.features.{{ index }}.description">{{ feature.description }}</p>
+                        </div>
+                    </div>
+                </each>
+            </div>
+        </div>
     </section>
 
-    <section class="section" id="anfahrt">
-      <div class="container contact-grid">
-        <div>
-          <h2 data-t="pages.gottesdienste.anfahrt.title"></h2>
-          <p class="contact-address"><span data-t="settings.contact.address"></span><br><span data-t="settings.contact.city"></span></p>
-          <if condition="pages.gottesdienste.anfahrt.text">
-            <p data-t="pages.gottesdienste.anfahrt.text"></p>
-          </if>
-          <a class="btn btn-primary" href="https://www.google.com/maps/dir/?api=1&destination={{ encodeURIComponent((settings.contact.address || '') + ', ' + (settings.contact.city || '')) }}" target="_blank" rel="noopener" data-t="homepage.service_info.directions_text">Route planen</a>
+    <section class="content-section" data-cms-section="other_meetings">
+        <div class="container">
+            <div class="section-intro">
+                <h2 data-cms-field="other_meetings.title" data-cms-label="Titel" data-t="pages.gottesdienste.other_meetings.title">{{ pages.gottesdienste.other_meetings.title || 'Weitere Treffen' }}</h2>
+            </div>
+            <div class="expect-pro-grid">
+                <each loop="meeting, index in pages.gottesdienste.other_meetings.items">
+                    <div class="expect-pro-card-enhanced" data-cms-field="other_meetings.items" data-cms-label="Treffen">
+                        <div class="card-overlay"></div>
+                        <div class="card-content">
+                            <div class="icon"><i class="fa-solid {{ meeting.icon }}"></i></div>
+                            <h3 data-t="pages.gottesdienste.other_meetings.items.{{ index }}.title">{{ meeting.title }}</h3>
+                            <p><span data-t="pages.gottesdienste.other_meetings.items.{{ index }}.day">{{ meeting.day }}</span> · <span data-t="pages.gottesdienste.other_meetings.items.{{ index }}.time">{{ meeting.time }}</span></p>
+                            <p data-t="pages.gottesdienste.other_meetings.items.{{ index }}.description">{{ meeting.description }}</p>
+                        </div>
+                    </div>
+                </each>
+            </div>
         </div>
-        <div class="map">
-          <iframe title="Karte: {{ settings.contact.address }}, {{ settings.contact.city }}" src="https://www.google.com/maps?q={{ encodeURIComponent((settings.contact.address || '') + ', ' + (settings.contact.city || '')) }}&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-      </div>
     </section>
+
+    
+
+    
+    <!-- Call to Action -->
+    <section class="content-section cta-pro-section" data-cms-section="cta">
+        <div class="container">
+            <h2 data-cms-field="cta.title" data-cms-label="CTA Titel" data-t="pages.gottesdienste.cta.title">{{ pages.gottesdienste.cta.title || 'Komm, wie du bist' }}</h2>
+            <p data-cms-field="cta.text" data-cms-label="CTA Text" data-cms-format="html" data-t="pages.gottesdienste.cta.text">{{ pages.gottesdienste.cta.text || 'Ganz egal, wo du im Leben stehst, du bist bei uns herzlich willkommen. Wir freuen uns darauf, dich kennenzulernen.' }}</p>
+            <a href="{{ pages.gottesdienste.cta.button_link || '#anfahrt' }}" class="btn btn-primary" data-cms-field="cta.button_link" data-cms-label="CTA Button Link" data-cms-attr="href">
+              <span data-cms-field="cta.button_text" data-cms-label="CTA Button Text" data-t="pages.gottesdienste.cta.button_text">{{ pages.gottesdienste.cta.button_text || 'Zur Anfahrt' }}</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Anfahrt -->
+    <section id="anfahrt" class="content-section" data-cms-section="anfahrt">
+        <div class="container">
+            <h2 data-cms-field="anfahrt.title" data-cms-label="Anfahrt Titel" data-t="pages.gottesdienste.anfahrt.title">{{ pages.gottesdienste.anfahrt.title || 'Anfahrt' }}</h2>
+            <p class="narrow-center-text" data-cms-field="anfahrt.text" data-cms-label="Anfahrt Text" data-cms-format="html">
+              <if condition="pages.gottesdienste.anfahrt.text">
+                {{ pages.gottesdienste.anfahrt.text }}
+              </if>
+              <if condition="!pages.gottesdienste.anfahrt.text">
+                <span data-t="pages.gottesdienste.anfahrt.address_label">Adresse:</span> {{ settings.contact.address || 'Hebbelstr. 56–60' }}, {{ settings.contact.city || '55127 Mainz' }}
+              </if>
+            </p>
+            <div class="map-container">
+              <iframe
+                title="Karte – Newness of Life Mainz"
+                src="{{ settings.contact.maps_url || 'https://www.google.com/maps?q=Hebbelstr.+56-60,+55127+Mainz' }}&output=embed"
+                loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </section>
+
   </main>
-
-  <include src="partials/footer.html"></include>
+<include src="partials/footer.html"></include>
+  <script src="js/script.js?v=20260312r1"></script>
 </body>
 </html>

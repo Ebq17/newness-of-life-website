@@ -4,21 +4,48 @@
     "title_en": "Events & Dates in Mainz",
     "subtitle": "Alle kommenden Termine unserer Gemeinde auf einen Blick.",
     "subtitle_en": "All upcoming events at a glance.",
-    "background_image": "/images/Yellow_and_Black_Minimalist_Night_Worship_Instagram_Post.png"
+    "video": "images/Black and Red Typographic Funny YouTube Video Intro.mp4"
   },
   "regular": {
     "title": "Regelmäßige Termine",
     "title_en": "Regular Meetings",
     "subtitle": "Unsere wöchentlichen Treffen",
-    "subtitle_en": "Our weekly gatherings"
+    "subtitle_en": "Our weekly gatherings",
+    "items": [
+      {
+        "icon": "fa-church",
+        "title": "Gottesdienst",
+        "title_en": "Church Service",
+        "time": "Sonntag, 14:00 Uhr",
+        "time_en": "Sunday, 2:00 pm",
+        "description": "Lobpreis, Predigt & Gemeinschaft",
+        "description_en": "Worship, preaching & fellowship"
+      },
+      {
+        "icon": "fa-hands-praying",
+        "title": "Gebetsabend",
+        "title_en": "Prayer Evening",
+        "time": "Freitag, 19:00 Uhr",
+        "time_en": "Friday, 7:00 pm",
+        "description": "Gemeinsames Gebet & Fürbitte",
+        "description_en": "Joint prayer & intercession"
+      },
+      {
+        "icon": "fa-book-bible",
+        "title": "Bibelstudium",
+        "title_en": "Bible Study",
+        "time": "Mo & Mi, 19:00 Uhr",
+        "time_en": "Mon & Wed, 7:00 pm",
+        "description": "Vertiefendes Bibelstudium",
+        "description_en": "In-depth Bible study"
+      }
+    ]
   },
   "upcoming": {
     "title": "Kommende Veranstaltungen",
     "title_en": "Upcoming Events",
     "subtitle": "Besondere Events und Termine",
     "subtitle_en": "Special events and dates",
-    "all_label": "Alle Monate",
-    "all_label_en": "All months",
     "empty_text": "Keine aktuellen Veranstaltungen",
     "empty_text_en": "No current events",
     "calendar_button": "Zum Kalender",

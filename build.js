@@ -70,6 +70,8 @@ function cssUrl(value) {
 // posthtml-Plugin: füllt markierte Elemente mit Inhalten
 // ---------------------------------------------------------------------------
 
+const missingPaths = new Set();
+
 function fillPlugin(locals) {
   return function (tree) {
     tree.walk((node) => {
@@ -78,6 +80,7 @@ function fillPlugin(locals) {
 
       if (a['data-t']) {
         const v = getPath(locals, a['data-t']);
+        if (v === undefined) missingPaths.add(a['data-t']);
         if (isFilled(v)) node.content = [textToHtml(v)];
         const en = getEnPath(locals, a['data-t']);
         if (isFilled(en)) a['data-en'] = escapeHtml(en).replace(/\r?\n/g, '&#10;');
@@ -194,7 +197,8 @@ function prepareEvents(raw) {
         date_label_en: pe ? `${formatDate(p, 'en')} to ${formatDate(pe, 'en')}` : formatDate(p, 'en'),
         category_name: cat.name || '',
         category_name_en: cat.name_en || cat.name || '',
-        category_color: cat.color || '#2350B8',
+        category_color: e.color || cat.color || '#2563EB',
+        category_icon: e.icon || cat.icon || 'fa-calendar',
         calendar_link: `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${calText}&dates=${startStamp}/${endStamp}&ctz=Europe/Berlin&details=${calDetails}&location=${calLoc}`
       };
     })
@@ -320,6 +324,10 @@ async function build() {
     eventsByMonth: events.byMonth,
     upcomingEvents: events.items.slice(0, homeCount),
     year: new Date().getFullYear(),
+    // Werte für das bisherige Design
+    header: global.header || {},
+    footer: global.footer || {},
+    design: { theme: { primary_color: '#2563EB', secondary_color: '#10B981', accent_color: '#F59E0B', dark_color: '#111827', light_color: '#F9FAFB' } },
     churchJsonLd: seoJsonLd.church ? jsonLdScript(churchFromSettings(seoJsonLd.church, settings)) : '',
     servicesJsonLd: seoJsonLd.services ? jsonLdScript(seoJsonLd.services) : '',
     eventsJsonLd: buildEventsJsonLd(events.items)
@@ -330,6 +338,7 @@ async function build() {
     await renderPage(f, locals);
   }
   await writeSitemap();
+  if (missingPaths.size) console.warn('Hinweis – Inhalte ohne Datenfeld:', [...missingPaths].join(', '));
   console.log(`\nFertig: ${files.length} Seiten.\n`);
 }
 

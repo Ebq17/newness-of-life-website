@@ -1,0 +1,1084 @@
+document.addEventListener('DOMContentLoaded', function () {
+    const pagePath = window.location.pathname.split('/').pop();
+    const searchParams = new URLSearchParams(window.location.search);
+    const isCmsPreview = searchParams.has('cms-preview');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!isCmsPreview && !prefersReducedMotion) {
+        document.body.classList.add('has-entry-motion');
+        window.requestAnimationFrame(() => {
+            window.requestAnimationFrame(() => {
+                document.body.classList.add('is-ready');
+            });
+        });
+    } else {
+        document.body.classList.add('is-ready');
+    }
+
+    const initScrollProgress = () => {
+        const progressBar = document.createElement('div');
+        progressBar.className = 'scroll-progress';
+        progressBar.setAttribute('aria-hidden', 'true');
+        document.body.appendChild(progressBar);
+
+        const updateProgress = () => {
+            const scrollTop = window.scrollY || window.pageYOffset;
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = scrollHeight > 0 ? Math.min(scrollTop / scrollHeight, 1) : 0;
+            progressBar.style.transform = `scaleX(${progress})`;
+            progressBar.style.opacity = scrollHeight > 220 ? '1' : '0';
+        };
+
+        updateProgress();
+        window.addEventListener('scroll', updateProgress, { passive: true });
+        window.addEventListener('resize', updateProgress);
+    };
+
+    if (!isCmsPreview) {
+        initScrollProgress();
+    }
+
+    // --- Mobile Menü ---
+    const menuToggle = document.querySelector('.menu-toggle-pro');
+    const navLinks = document.querySelector('.nav-links-pro');
+    if (menuToggle && navLinks) {
+        const menuIcon = menuToggle.querySelector('i');
+        const isMobileMenu = () => window.matchMedia('(max-width: 1200px)').matches;
+        navLinks.querySelectorAll('li').forEach((item, index) => {
+            item.style.setProperty('--menu-item-delay', `${Math.min(index, 12) * 45}ms`);
+        });
+
+        const closeMenu = () => {
+            navLinks.classList.remove('is-open');
+            menuToggle.classList.remove('is-open');
+            menuToggle.setAttribute('aria-expanded', 'false');
+            if (menuIcon) {
+                menuIcon.classList.add('fa-bars');
+                menuIcon.classList.remove('fa-xmark');
+            }
+        };
+
+        const toggleMenu = () => {
+            if (!isMobileMenu()) return;
+            const open = navLinks.classList.toggle('is-open');
+            menuToggle.classList.toggle('is-open', open);
+            menuToggle.setAttribute('aria-expanded', String(open));
+            if (menuIcon) {
+                menuIcon.classList.toggle('fa-bars', !open);
+                menuIcon.classList.toggle('fa-xmark', open);
+            }
+        };
+
+        menuToggle.addEventListener('click', toggleMenu);
+
+        navLinks.querySelectorAll('a').forEach(a =>
+            a.addEventListener('click', () => {
+                closeMenu();
+            })
+        );
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') closeMenu();
+        });
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 1200) closeMenu();
+        });
+
+        closeMenu();
+    }
+
+    // --- Active Link automatisch setzen ---
+    function updateActiveNav() {
+        const currentPath = location.pathname.replace(/\/index\.html?$/, '/');
+        const currentHash = location.hash;
+
+        // First remove all active classes
+        document.querySelectorAll('.nav-links-pro a').forEach(a => {
+            a.classList.remove('active');
+        });
+
+        // Then add active to the correct link
+        document.querySelectorAll('.nav-links-pro a[href]').forEach(a => {
+            const href = a.getAttribute('href');
+            const url = new URL(href, location.origin);
+            const path = url.pathname.replace(/\/index\.html?$/, '/');
+            const hash = url.hash;
+
+            if (path === currentPath) {
+                // If current URL has a hash, only the link with that hash is active
+                if (currentHash && hash === currentHash) {
+                    a.classList.add('active');
+                }
+                // If current URL has no hash, only links without hash are active
+                else if (!currentHash && !hash) {
+                    a.classList.add('active');
+                }
+            }
+        });
+    }
+
+    updateActiveNav();
+
+    const siteHeader = document.querySelector('.site-header-pro');
+    if (siteHeader) {
+        const updateHeaderScrollState = () => {
+            siteHeader.classList.toggle('is-scrolled', window.scrollY > 12);
+        };
+        updateHeaderScrollState();
+        window.addEventListener('scroll', updateHeaderScrollState, { passive: true });
+    }
+
+    // Update on hash change
+    window.addEventListener('hashchange', updateActiveNav);
+
+    // --- Smooth Scrolling (nur bei existierendem Ziel) ---
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        const href = anchor.getAttribute('href');
+        if (!href || href === '#') return;
+        const target = document.querySelector(href);
+        if (!target) return;
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+
+    // --- Reveal / Scroll Animation ---
+    const applyRevealStagger = (groupSelector, itemSelector, stepMs = 75) => {
+        document.querySelectorAll(groupSelector).forEach(group => {
+            const items = Array.from(group.children).filter(child => child.matches(itemSelector));
+            items.forEach((item, index) => {
+                item.style.setProperty('--reveal-delay', `${Math.min(index, 10) * stepMs}ms`);
+            });
+        });
+    };
+
+    [
+        ['.service-cards-grid', '.service-card-item'],
+        ['.expect-pro-grid', '.expect-pro-card-enhanced'],
+        ['.impact-grid', '.impact-card'],
+        ['.donate-options-grid', '.donate-option-card'],
+        ['.regular-grid', '.regular-card'],
+        ['.events-grid', '.event-card'],
+        ['.roots-grid', '.roots-card'],
+        ['.feature-grid', '.feature'],
+        ['.event-info-cards', '.event-info-card'],
+        ['.history-timeline', '.timeline-item'],
+        ['.upcoming-events-list', '.upcoming-event-item'],
+        ['.footer-grid', '.footer-column'],
+        ['.contact-grid', '.contact-form'],
+        ['.contact-grid', '.contact-details']
+    ].forEach(([groupSelector, itemSelector]) => {
+        applyRevealStagger(groupSelector, itemSelector);
+    });
+
+    const revealTargets = document.querySelectorAll([
+        '.fade-in-section',
+        '.section-intro',
+        '.section-header',
+        '.service-card-item',
+        '.event-card',
+        '.regular-card',
+        '.gottesdienste-card-professional',
+        '.expect-pro-card-enhanced',
+        '.impact-card',
+        '.donate-option-card',
+        '.upcoming-event-item',
+        '.team-member-card',
+        '.feature',
+        '.roots-card',
+        '.timeline-item',
+        '.timeline-content',
+        '.contact-form',
+        '.contact-details',
+        '.event-info-card',
+        '.event-sidebar-card',
+        '.month-block',
+        '.footer-column',
+        '.history-intro'
+    ].join(','));
+
+    revealTargets.forEach(target => target.classList.add('reveal-on-scroll'));
+
+    if (prefersReducedMotion || typeof IntersectionObserver !== 'function') {
+        revealTargets.forEach(target => target.classList.add('is-visible'));
+    } else {
+        revealTargets.forEach(target => target.classList.add('will-reveal'));
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.16, rootMargin: '0px 0px -40px 0px' });
+
+        revealTargets.forEach(target => observer.observe(target));
+    }
+
+    // --- Content Loader ---
+    if (typeof content !== 'undefined') {
+        if ((pagePath === '' || pagePath === 'index.html') && content.index) {
+            loadIndexContent(content.index);
+        } else if (pagePath === 'ueber-uns.html' && content.ueber_uns_page) {
+            loadUeberUnsContent(content.ueber_uns_page);
+        } else if (pagePath === 'spenden.html' && content.spenden_page) {
+            loadSpendenContent(content.spenden_page);
+        } else if (pagePath === 'datenschutz.html' && content.datenschutz_page) {
+            loadDatenschutzContent(content.datenschutz_page);
+        } else if (pagePath === 'impressum.html' && content.impressum_page) {
+            loadImpressumContent(content.impressum_page);
+        } else if (pagePath === 'gottesdienste.html' && content.gottesdienste_page) {
+            loadGottesdiensteContent(content.gottesdienste_page);
+        }
+    }
+
+    
+    // --- CMS Preview Click-to-Edit ---
+    if (isCmsPreview) {
+        document.body.classList.add('cms-preview');
+
+        document.addEventListener('click', function (event) {
+            const target = event.target.closest('[data-cms-field]');
+            if (!target) return;
+            event.preventDefault();
+            event.stopPropagation();
+
+            document.querySelectorAll('.cms-selected-field').forEach(el => {
+                el.classList.remove('cms-selected-field');
+            });
+            target.classList.add('cms-selected-field');
+
+            window.parent.postMessage({
+                type: 'cms-select-field',
+                field: target.getAttribute('data-cms-field'),
+                label: target.getAttribute('data-cms-label') || '',
+                format: target.getAttribute('data-cms-format') || '',
+                attr: target.getAttribute('data-cms-attr') || ''
+            }, '*');
+        }, true);
+
+        window.addEventListener('message', function (event) {
+            if (!event.data || event.data.type !== 'cms-update-field') return;
+            const field = event.data.field;
+            const value = event.data.value;
+            if (!field) return;
+            updatePreviewField(field, value);
+            if (field === 'events_section.show_count') {
+                applyEventsCount(value);
+            }
+        });
+    }
+
+    // --- Contact Form (API + Netlify Fallback) ---
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        const statusEl = document.getElementById('contact-status');
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
+        const isLocalStaticSite = location.hostname === 'localhost' && location.port === '8080';
+        const hasNetlifyForm = contactForm.getAttribute('data-netlify') === 'true';
+
+        // E-Mail Validierung
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        async function submitToContactApi(payload) {
+            const apiEndpoints = isLocalStaticSite
+                ? ['http://localhost:3001/api/contact']
+                : ['/api/contact', '/.netlify/functions/contact-email'];
+            let lastError = null;
+
+            for (const endpoint of apiEndpoints) {
+                let res;
+                try {
+                    res = await fetch(endpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                } catch (err) {
+                    const networkError = new Error('Kontakt-Server nicht erreichbar. Bitte spaeter erneut versuchen.');
+                    networkError.code = 'API_NETWORK';
+                    lastError = networkError;
+                    continue;
+                }
+
+                const contentType = (res.headers.get('content-type') || '').toLowerCase();
+                let data = null;
+
+                if (contentType.includes('application/json')) {
+                    try {
+                        data = await res.json();
+                    } catch (err) {
+                        const parseError = new Error('Ungueltige Antwort vom Kontakt-Server.');
+                        parseError.code = 'API_NON_JSON';
+                        lastError = parseError;
+                        continue;
+                    }
+                } else {
+                    data = { raw: await res.text() };
+                }
+
+                if (!res.ok) {
+                    const apiError = new Error((data && data.error) ? data.error : 'Fehler beim Senden');
+                    const hasConfigError = apiError.message && (
+                        apiError.message.includes('BREVO_API_KEY is not set') ||
+                        apiError.message.includes('BREVO_API_KEY fehlt') ||
+                        apiError.message.includes('CONFIG_MISSING_BREVO_API_KEY')
+                    );
+                    apiError.code = hasConfigError
+                        ? 'API_CONFIG'
+                        : (res.status === 400 || res.status === 422 || res.status === 429)
+                        ? 'API_VALIDATION'
+                        : 'API_UNAVAILABLE';
+
+                    if (apiError.code === 'API_VALIDATION') {
+                        throw apiError;
+                    }
+
+                    lastError = apiError;
+                    continue;
+                }
+
+                if (!contentType.includes('application/json')) {
+                    const unexpectedResponseError = new Error('Kontakt-API hat keine JSON-Antwort geliefert.');
+                    unexpectedResponseError.code = 'API_NON_JSON';
+                    lastError = unexpectedResponseError;
+                    continue;
+                }
+
+                return data || {};
+            }
+
+            if (lastError) {
+                throw lastError;
+            }
+
+            const fallbackError = new Error('Kontakt-Server nicht erreichbar. Bitte spaeter erneut versuchen.');
+            fallbackError.code = 'API_NETWORK';
+            throw fallbackError;
+        }
+
+        async function submitToNetlifyForm(formData) {
+            const formName = contactForm.getAttribute('name') || 'contact';
+            const action = contactForm.getAttribute('action') || location.pathname || '/';
+            const encodedBody = new URLSearchParams();
+
+            for (const [key, value] of formData.entries()) {
+                if (typeof value !== 'string') continue;
+                encodedBody.append(key, value);
+            }
+
+            if (!encodedBody.get('form-name')) {
+                encodedBody.set('form-name', formName);
+            }
+
+            const res = await fetch(action, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: encodedBody.toString()
+            });
+
+            if (!res.ok) {
+                const netlifyError = new Error(`Fehler beim Senden (Netlify, HTTP ${res.status})`);
+                netlifyError.code = 'NETLIFY_SUBMIT_FAILED';
+                throw netlifyError;
+            }
+
+            return { netlifyFallback: true };
+        }
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(contactForm);
+            const email = formData.get('email') || '';
+
+            // E-Mail Format prüfen
+            if (!isValidEmail(email)) {
+                if (statusEl) {
+                    statusEl.textContent = 'Bitte geben Sie eine gültige E-Mail-Adresse ein (z.B. name@beispiel.de)';
+                    statusEl.className = 'form-status is-error';
+                }
+                return;
+            }
+
+            if (submitBtn) submitBtn.disabled = true;
+            if (statusEl) {
+                statusEl.textContent = 'Sende...';
+                statusEl.className = 'form-status';
+            }
+
+            const payload = {
+                name: formData.get('name') || '',
+                email: email,
+                subject: formData.get('subject') || '',
+                message: formData.get('message') || '',
+                website: formData.get('website') || '',
+                lang: (window.I18n && I18n.currentLang) || 'de'
+            };
+
+            try {
+                let data;
+
+                try {
+                    data = await submitToContactApi(payload);
+                } catch (apiErr) {
+                    const shouldFallbackToNetlify =
+                        hasNetlifyForm &&
+                        !isLocalStaticSite &&
+                        (
+                            apiErr.code === 'API_UNAVAILABLE' ||
+                            apiErr.code === 'API_NON_JSON' ||
+                            apiErr.code === 'API_NETWORK' ||
+                            apiErr.code === 'API_CONFIG'
+                        );
+
+                    if (!shouldFallbackToNetlify) {
+                        throw apiErr;
+                    }
+
+                    data = await submitToNetlifyForm(formData);
+                }
+
+                if (statusEl) {
+                    const ticketInfo = data.ticketId ? ` Ticket: ${data.ticketId}` : '';
+                    const isNetlifyFallback = !!(data && data.netlifyFallback);
+                    const internalMailFailed =
+                        data &&
+                        data.emailStatus &&
+                        data.emailStatus.internal_notification &&
+                        data.emailStatus.internal_notification !== 'sent';
+
+                    if (isNetlifyFallback) {
+                        statusEl.textContent = 'Nachricht gespeichert. E-Mail-Service wird gerade konfiguriert.';
+                        statusEl.className = 'form-status is-success';
+                    } else if (internalMailFailed) {
+                        statusEl.textContent = `Nachricht gespeichert.${ticketInfo} E-Mail-Zustellung ist fehlgeschlagen.`;
+                        statusEl.className = 'form-status is-error';
+                    } else {
+                        statusEl.textContent = `Danke! Wir haben deine Nachricht erhalten.${ticketInfo}`;
+                        statusEl.className = 'form-status is-success';
+                    }
+                }
+                contactForm.reset();
+            } catch (err) {
+                if (statusEl) {
+                    statusEl.textContent = err.message || 'Fehler beim Senden';
+                    statusEl.className = 'form-status is-error';
+                }
+            } finally {
+                if (submitBtn) submitBtn.disabled = false;
+            }
+        });
+    }
+
+    // --- Donation Confirmation Form (API + Netlify Fallback) ---
+    const donationForm = document.getElementById('donation-form');
+    if (donationForm) {
+        const statusEl = document.getElementById('donation-status');
+        const submitBtn = donationForm.querySelector('button[type="submit"]');
+        const dateInput = donationForm.querySelector('input[name="donationDate"]');
+        const nameInput = donationForm.querySelector('input[name="name"]');
+        const addressInput = donationForm.querySelector('textarea[name="address"]');
+        const anonymousInput = donationForm.querySelector('input[name="anonymous"]');
+        const needsReceiptInput = donationForm.querySelector('input[name="needsReceipt"]');
+        const hasNetlifyForm = donationForm.getAttribute('data-netlify') === 'true';
+        const isLocalStaticSite = location.hostname === 'localhost' && location.port === '8080';
+
+        function updateDonationRequirements(source = '') {
+            if (anonymousInput && needsReceiptInput) {
+                if (source === 'anonymous' && anonymousInput.checked && needsReceiptInput.checked) {
+                    needsReceiptInput.checked = false;
+                }
+                if (source === 'needsReceipt' && needsReceiptInput.checked && anonymousInput.checked) {
+                    anonymousInput.checked = false;
+                }
+            }
+
+            const anonymous = !!(anonymousInput && anonymousInput.checked);
+            const needsReceipt = !!(needsReceiptInput && needsReceiptInput.checked);
+            if (nameInput) nameInput.required = !anonymous || needsReceipt;
+            if (addressInput) addressInput.required = needsReceipt;
+        }
+
+        function resetDonationDate() {
+            if (dateInput && !dateInput.value) {
+                dateInput.value = new Date().toISOString().slice(0, 10);
+            }
+        }
+
+        resetDonationDate();
+        updateDonationRequirements();
+        if (anonymousInput) anonymousInput.addEventListener('change', () => updateDonationRequirements('anonymous'));
+        if (needsReceiptInput) needsReceiptInput.addEventListener('change', () => updateDonationRequirements('needsReceipt'));
+
+        async function submitDonationToApi(payload) {
+            const apiEndpoints = isLocalStaticSite
+                ? ['http://localhost:3001/api/donations']
+                : ['/api/donations', '/.netlify/functions/donations'];
+            let lastError = null;
+
+            for (const endpoint of apiEndpoints) {
+                let res;
+                try {
+                    res = await fetch(endpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                } catch (err) {
+                    const networkError = new Error('Spenden-Server nicht erreichbar. Bitte spaeter erneut versuchen.');
+                    networkError.code = 'API_NETWORK';
+                    lastError = networkError;
+                    continue;
+                }
+
+                const contentType = (res.headers.get('content-type') || '').toLowerCase();
+                let data = null;
+
+                if (contentType.includes('application/json')) {
+                    try {
+                        data = await res.json();
+                    } catch (err) {
+                        const parseError = new Error('Ungueltige Antwort vom Spenden-Server.');
+                        parseError.code = 'API_NON_JSON';
+                        lastError = parseError;
+                        continue;
+                    }
+                } else {
+                    data = { raw: await res.text() };
+                }
+
+                if (!res.ok) {
+                    const apiError = new Error((data && data.error) ? data.error : 'Fehler beim Senden');
+                    apiError.code = (res.status === 400 || res.status === 422 || res.status === 429)
+                        ? 'API_VALIDATION'
+                        : 'API_UNAVAILABLE';
+
+                    if (apiError.code === 'API_VALIDATION') {
+                        throw apiError;
+                    }
+
+                    lastError = apiError;
+                    continue;
+                }
+
+                if (!contentType.includes('application/json')) {
+                    const unexpectedResponseError = new Error('Spenden-API hat keine JSON-Antwort geliefert.');
+                    unexpectedResponseError.code = 'API_NON_JSON';
+                    lastError = unexpectedResponseError;
+                    continue;
+                }
+
+                return data || {};
+            }
+
+            if (lastError) {
+                throw lastError;
+            }
+
+            const fallbackError = new Error('Spenden-Server nicht erreichbar. Bitte spaeter erneut versuchen.');
+            fallbackError.code = 'API_NETWORK';
+            throw fallbackError;
+        }
+
+        async function submitDonationToNetlify(formData) {
+            const formName = donationForm.getAttribute('name') || 'donation-confirmation';
+            const action = donationForm.getAttribute('action') || location.pathname || '/spenden.html';
+            const encodedBody = new URLSearchParams();
+
+            for (const [key, value] of formData.entries()) {
+                if (typeof value !== 'string') continue;
+                encodedBody.append(key, value);
+            }
+
+            if (!encodedBody.get('form-name')) {
+                encodedBody.set('form-name', formName);
+            }
+
+            const res = await fetch(action, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: encodedBody.toString()
+            });
+
+            if (!res.ok) {
+                const netlifyError = new Error(`Fehler beim Senden (Netlify, HTTP ${res.status})`);
+                netlifyError.code = 'NETLIFY_SUBMIT_FAILED';
+                throw netlifyError;
+            }
+
+            return { netlifyFallback: true };
+        }
+
+        donationForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            updateDonationRequirements();
+
+            const formData = new FormData(donationForm);
+            const payload = {
+                name: formData.get('name') || '',
+                email: formData.get('email') || '',
+                amount: formData.get('amount') || '',
+                currency: formData.get('currency') || 'EUR',
+                paymentMethod: formData.get('paymentMethod') || '',
+                donationDate: formData.get('donationDate') || '',
+                address: formData.get('address') || '',
+                message: formData.get('message') || '',
+                anonymous: formData.get('anonymous') ? true : false,
+                needsReceipt: formData.get('needsReceipt') ? true : false,
+                website: formData.get('website') || '',
+                lang: (window.I18n && I18n.currentLang) || 'de'
+            };
+
+            if (!isValidEmail(payload.email)) {
+                if (statusEl) {
+                    statusEl.textContent = 'Bitte gib eine gueltige E-Mail-Adresse ein.';
+                    statusEl.className = 'form-status is-error';
+                }
+                return;
+            }
+
+            if (!payload.amount || Number(payload.amount) <= 0) {
+                if (statusEl) {
+                    statusEl.textContent = 'Bitte gib einen gueltigen Betrag ein.';
+                    statusEl.className = 'form-status is-error';
+                }
+                return;
+            }
+
+            if (payload.needsReceipt && (payload.anonymous || !payload.name || !payload.address)) {
+                if (statusEl) {
+                    statusEl.textContent = 'Fuer eine Spendenquittung bitte Name und Adresse angeben (nicht anonym).';
+                    statusEl.className = 'form-status is-error';
+                }
+                return;
+            }
+
+            if (submitBtn) submitBtn.disabled = true;
+            if (statusEl) {
+                statusEl.textContent = 'Sende...';
+                statusEl.className = 'form-status';
+            }
+
+            try {
+                let data;
+
+                try {
+                    data = await submitDonationToApi(payload);
+                } catch (apiErr) {
+                    const shouldFallbackToNetlify =
+                        hasNetlifyForm &&
+                        !isLocalStaticSite &&
+                        (
+                            apiErr.code === 'API_UNAVAILABLE' ||
+                            apiErr.code === 'API_NON_JSON' ||
+                            apiErr.code === 'API_NETWORK'
+                        );
+
+                    if (!shouldFallbackToNetlify) {
+                        throw apiErr;
+                    }
+
+                    data = await submitDonationToNetlify(formData);
+                }
+
+                if (statusEl) {
+                    if (data && data.netlifyFallback) {
+                        statusEl.textContent = 'Danke! Deine Anfrage wurde gespeichert. Wir melden uns per E-Mail.';
+                        statusEl.className = 'form-status is-success';
+                    } else {
+                        const donationInfo = data && data.donationId ? ` Beleg: ${data.donationId}` : '';
+                        statusEl.textContent = `Danke! Deine Spendenbestaetigung wurde angefragt.${donationInfo}`;
+                        statusEl.className = 'form-status is-success';
+                    }
+                }
+
+                donationForm.reset();
+                resetDonationDate();
+                updateDonationRequirements();
+            } catch (err) {
+                if (statusEl) {
+                    statusEl.textContent = err.message || 'Fehler beim Senden';
+                    statusEl.className = 'form-status is-error';
+                }
+            } finally {
+                if (submitBtn) submitBtn.disabled = false;
+            }
+        });
+    }
+});
+
+function updatePreviewField(field, value) {
+    const nodes = document.querySelectorAll(`[data-cms-field="${field}"]`);
+    if (!nodes.length) return;
+
+    nodes.forEach(node => {
+        const attr = node.getAttribute('data-cms-attr');
+        const format = node.getAttribute('data-cms-format');
+        if (attr) {
+            node.setAttribute(attr, value);
+            return;
+        }
+        if (format === 'html') {
+            node.innerHTML = normalizeCmsText(value);
+        } else {
+            node.textContent = value;
+        }
+    });
+}
+
+function normalizeCmsText(value) {
+    if (value == null) return '';
+    return String(value).replace(/\n/g, '<br>');
+}
+
+function applyEventsCount(value) {
+    const items = Array.from(document.querySelectorAll('[data-cms-role="upcoming-event-item"]'));
+    if (!items.length) return;
+    const max = parseInt(value, 10);
+    if (Number.isNaN(max) || max < 0) {
+        items.forEach(item => {
+            item.style.display = '';
+        });
+        return;
+    }
+    items.forEach((item, index) => {
+        item.style.display = index < max ? '' : 'none';
+    });
+}
+
+function loadIndexContent(pageContent) {
+    // Hero
+    if (pageContent.hero) {
+        const t = document.getElementById('hero-title');
+        const s = document.getElementById('hero-subtitle');
+        if (t) t.innerHTML = pageContent.hero.title;
+        if (s) s.innerHTML = pageContent.hero.subtitle;
+    }
+
+    // Gottesdienste
+    if (pageContent.gottesdienste) {
+        const img = document.getElementById('gottesdienste-image');
+        const ttl = document.getElementById('gottesdienste-title');
+        const desc = document.getElementById('gottesdienste-description');
+        const zt = document.getElementById('gottesdienste-zeiten-ort-title');
+        const zd = document.getElementById('gottesdienste-zeiten-ort-details');
+        const loc = document.getElementById('gottesdienste-location');
+        const kids = document.getElementById('gottesdienste-kids');
+        if (img) img.src = pageContent.gottesdienste.image;
+        if (ttl) ttl.innerHTML = pageContent.gottesdienste.title;
+        if (desc) desc.innerHTML = pageContent.gottesdienste.description;
+        if (zt) zt.innerHTML = pageContent.gottesdienste.zeiten_ort_title;
+        if (zd) zd.innerHTML = pageContent.gottesdienste.zeiten_ort_details;
+        if (loc) loc.innerHTML = pageContent.gottesdienste.location;
+        if (kids) kids.innerHTML = pageContent.gottesdienste.kids;
+    }
+
+    // Veranstaltungen
+    if (pageContent.veranstaltungen && pageContent.veranstaltungen.events) {
+        const titleEl = document.getElementById('veranstaltungen-title');
+        if (titleEl) titleEl.innerHTML = pageContent.veranstaltungen.title;
+        const eventGrid = document.getElementById('event-grid');
+        if (eventGrid) {
+            pageContent.veranstaltungen.events.forEach(event => {
+                const eventCard = document.createElement('div');
+                eventCard.className = 'event-card';
+                eventCard.innerHTML = `
+                    <img src="${event.image}" alt="${event.title}" class="event-image" loading="lazy">
+                    <div class="event-card-content">
+                        <span class="event-label">${event.label}</span>
+                        <h3>${event.title}</h3>
+                        <p class="event-subtitle">${event.subtitle}</p>
+                    </div>
+                `;
+                eventGrid.appendChild(eventCard);
+            });
+        }
+    }
+
+    // Über uns
+    if (pageContent.ueber_uns) {
+        const t = document.getElementById('ueber-uns-title');
+        const s = document.getElementById('ueber-uns-subtitle');
+        const p = document.getElementById('ueber-uns-text');
+        if (t) t.innerHTML = pageContent.ueber_uns.title;
+        if (s) s.innerHTML = pageContent.ueber_uns.subtitle;
+        if (p) p.innerHTML = pageContent.ueber_uns.text;
+    }
+
+    // Kontakt
+    if (pageContent.kontakt) {
+        const t = document.getElementById('kontakt-title');
+        const ft = document.getElementById('kontakt-form-title');
+        const at = document.getElementById('kontakt-address-title');
+        const a = document.getElementById('kontakt-address');
+        if (t) t.innerHTML = pageContent.kontakt.title;
+        if (ft) ft.innerHTML = pageContent.kontakt.form_title;
+        if (at) at.innerHTML = pageContent.kontakt.address_title;
+        if (a) a.innerHTML = pageContent.kontakt.address;
+    }
+
+    // Footer
+    if (pageContent.footer) {
+        if (pageContent.footer.ueber_uns) {
+            const t = document.getElementById('footer-ueber-uns-title');
+            const p = document.getElementById('footer-ueber-uns-text');
+            if (t) t.innerHTML = pageContent.footer.ueber_uns.title;
+            if (p) p.innerHTML = pageContent.footer.ueber_uns.text;
+        }
+        if (pageContent.footer.kontakt) {
+            const t = document.getElementById('footer-kontakt-title');
+            const addr = document.getElementById('footer-kontakt-address');
+            const mail = document.getElementById('footer-kontakt-email');
+            const phone = document.getElementById('footer-kontakt-phone');
+            if (t) t.innerHTML = pageContent.footer.kontakt.title;
+            if (addr) addr.innerHTML = pageContent.footer.kontakt.address;
+            if (mail) mail.innerHTML = pageContent.footer.kontakt.email;
+            if (phone) phone.innerHTML = pageContent.footer.kontakt.phone;
+        }
+    }
+}
+
+function loadGottesdiensteContent(pageContent) {
+    // Hero
+    const heroTitle = document.getElementById('gottesdienste-hero-title');
+    const heroSubtitle = document.getElementById('gottesdienste-hero-subtitle');
+    if (heroTitle) heroTitle.innerHTML = pageContent.hero.title;
+    if (heroSubtitle) heroSubtitle.innerHTML = pageContent.hero.subtitle;
+
+    // Expect
+    const expectTitle = document.getElementById('expect-title');
+    const expectGrid = document.getElementById('expect-grid');
+    if (expectTitle) expectTitle.innerHTML = pageContent.expect.title;
+    if (expectGrid) {
+        pageContent.expect.cards.forEach(card => {
+            const expectCard = document.createElement('div');
+            expectCard.className = 'expect-card';
+            expectCard.innerHTML = `
+                <div class="icon"><i class="${card.icon}"></i></div>
+                <h3>${card.title}</h3>
+                <p>${card.text}</p>
+            `;
+            expectGrid.appendChild(expectCard);
+        });
+    }
+
+    // Schedule
+    const scheduleTitle = document.getElementById('schedule-title');
+    const scheduleTimeline = document.getElementById('schedule-timeline');
+    if (scheduleTitle) scheduleTitle.innerHTML = pageContent.schedule.title;
+    if (scheduleTimeline) {
+        pageContent.schedule.items.forEach((item, index) => {
+            const scheduleItem = document.createElement('div');
+            scheduleItem.className = 'schedule-item';
+            if (index % 2 !== 0) {
+                scheduleItem.classList.add('right');
+            }
+            scheduleItem.innerHTML = `
+                <div class="icon"><i class="${item.icon}"></i></div>
+                <div class="content">
+                    <h4>${item.time}</h4>
+                    <h5>${item.title}</h5>
+                </div>
+            `;
+            scheduleTimeline.appendChild(scheduleItem);
+        });
+    }
+
+    // Meetings
+    const meetingsTitle = document.getElementById('meetings-title');
+    const meetingsGrid = document.getElementById('meetings-grid');
+    if (meetingsTitle) meetingsTitle.innerHTML = pageContent.meetings.title;
+    if (meetingsGrid) {
+        pageContent.meetings.cards.forEach(card => {
+            const meetingCard = document.createElement('div');
+            meetingCard.className = 'meeting-card';
+            meetingCard.innerHTML = `
+                <img src="${card.image}" alt="${card.title}" class="meeting-image">
+                <div class="meeting-content">
+                    <h3>${card.title}</h3>
+                    <p>${card.subtitle}</p>
+                </div>
+            `;
+            meetingsGrid.appendChild(meetingCard);
+        });
+    }
+}
+
+function loadUeberUnsContent(pageContent) {
+    // Hero
+    const heroTitle = document.getElementById('ueber-uns-hero-title');
+    const heroSubtitle = document.getElementById('ueber-uns-hero-subtitle');
+    if (heroTitle) heroTitle.innerHTML = pageContent.hero.title;
+    if (heroSubtitle) heroSubtitle.innerHTML = pageContent.hero.subtitle;
+
+    // Story
+    const storyTitle = document.getElementById('story-title');
+    const storyText = document.getElementById('story-text');
+    if (storyTitle) storyTitle.innerHTML = pageContent.story.title;
+    if (storyText) storyText.innerHTML = pageContent.story.text;
+
+    // Beliefs
+    const beliefsTitle = document.getElementById('beliefs-title');
+    const beliefsGrid = document.getElementById('beliefs-grid');
+    if (beliefsTitle) beliefsTitle.innerHTML = pageContent.beliefs.title;
+    if (beliefsGrid) {
+        pageContent.beliefs.cards.forEach(card => {
+            const beliefCard = document.createElement('div');
+            beliefCard.className = 'belief-card';
+            beliefCard.innerHTML = `
+                <div class="icon"><i class="${card.icon}"></i></div>
+                <h3>${card.title}</h3>
+                <p>${card.text}</p>
+            `;
+            beliefsGrid.appendChild(beliefCard);
+        });
+    }
+
+    // Team
+    const teamTitle = document.getElementById('team-title');
+    const teamIntro = document.getElementById('team-intro');
+    const teamGrid = document.getElementById('team-grid');
+    if (teamTitle) teamTitle.innerHTML = pageContent.unser_team.title;
+    if (teamIntro) teamIntro.innerHTML = pageContent.unser_team.intro;
+    if (teamGrid) {
+        pageContent.unser_team.members.forEach(member => {
+            const teamCard = document.createElement('div');
+            teamCard.className = 'team-card-professional';
+            teamCard.innerHTML = `
+                <img src="${member.image}" alt="${member.name}" class="team-image">
+                <div class="team-info">
+                    <h3>${member.name}</h3>
+                    <p class="team-role">${member.role}</p>
+                </div>
+            `;
+            teamGrid.appendChild(teamCard);
+        });
+    }
+}
+
+function loadSpendenContent(pageContent) {
+    // Hero
+    const heroTitle = document.getElementById('spenden-hero-title');
+    const heroSubtitle = document.getElementById('spenden-hero-subtitle');
+    if (heroTitle) heroTitle.innerHTML = pageContent.header.title;
+    if (heroSubtitle) heroSubtitle.innerHTML = pageContent.header.subtitle;
+
+    // Impact
+    const impactTitle = document.getElementById('impact-title');
+    const impactGrid = document.getElementById('impact-grid');
+    if (impactTitle) impactTitle.innerHTML = pageContent.impact.title;
+    if (impactGrid) {
+        pageContent.impact.cards.forEach(card => {
+            const impactCard = document.createElement('div');
+            impactCard.className = 'impact-card';
+            impactCard.innerHTML = `
+                <div class="icon"><i class="${card.icon}"></i></div>
+                <h3>${card.title}</h3>
+                <p>${card.text}</p>
+            `;
+            impactGrid.appendChild(impactCard);
+        });
+    }
+
+    // Bank Details
+    const bankReceiver = document.getElementById('bank-receiver');
+    const bankIban = document.getElementById('bank-iban');
+    const bankBic = document.getElementById('bank-bic');
+    const bankName = document.getElementById('bank-name');
+    if (bankReceiver) bankReceiver.innerHTML = pageContent.spenden_info.bank.receiver;
+    if (bankIban) bankIban.innerHTML = pageContent.spenden_info.bank.iban;
+    if (bankBic) bankBic.innerHTML = pageContent.spenden_info.bank.bic;
+    if (bankName) bankName.innerHTML = pageContent.spenden_info.bank.bank;
+
+    // FAQ
+    const faqTitle = document.getElementById('faq-title');
+    const faqAccordion = document.getElementById('faq-accordion');
+    if (faqTitle) faqTitle.innerHTML = pageContent.faq.title;
+    if (faqAccordion) {
+        pageContent.faq.questions.forEach(item => {
+            const details = document.createElement('details');
+            details.innerHTML = `
+                <summary>${item.question}</summary>
+                <p>${item.answer}</p>
+            `;
+            faqAccordion.appendChild(details);
+        });
+    }
+
+    // Amount Chips
+    document.querySelectorAll('.amount-chip').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        document.querySelectorAll('.amount-chip').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        const val = btn.dataset.amount;
+        const input = document.querySelector('.amount-input-container input[name="amount"]');
+        if (val && +val > 0) input.value = val; else input.focus();
+      });
+    });
+
+    // Copy Buttons
+    document.querySelectorAll('.copy-btn').forEach(btn=>{
+      btn.addEventListener('click', async ()=>{
+        const selector = btn.dataset.copy;
+        const elementToCopy = document.querySelector(selector);
+        if (!elementToCopy) return;
+        try{
+          await navigator.clipboard.writeText(elementToCopy.innerText || '');
+          btn.innerHTML = '<i class="fa-solid fa-check"></i>';
+          setTimeout(()=>btn.innerHTML='<i class="fa-regular fa-copy"></i>',1200);
+        }catch(e){ console.warn('Clipboard failed', e); }
+      });
+    });
+}
+
+function loadDatenschutzContent(pageContent) {
+    if (pageContent.header) {
+        const img = document.getElementById('datenschutz-header-image');
+        const ttl = document.getElementById('datenschutz-header-title');
+        if (img) img.src = pageContent.header.image;
+        if (ttl) ttl.innerHTML = pageContent.header.title;
+    }
+
+    if (pageContent.content) {
+        const contentContainer = document.getElementById('datenschutz-content');
+        if (contentContainer) {
+            pageContent.content.forEach(item => {
+                const el = document.createElement(item.type);
+                el.innerHTML = item.text;
+                contentContainer.appendChild(el);
+            });
+        }
+    }
+}
+
+function loadImpressumContent(pageContent) {
+    if (pageContent.header) {
+        const img = document.getElementById('impressum-header-image');
+        const ttl = document.getElementById('impressum-header-title');
+        if (img) img.src = pageContent.header.image;
+        if (ttl) ttl.innerHTML = pageContent.header.title;
+    }
+
+    if (pageContent.content) {
+        const contentContainer = document.getElementById('impressum-content');
+        if (contentContainer) {
+            pageContent.content.forEach(item => {
+                const el = document.createElement(item.type);
+                el.innerHTML = item.text;
+                contentContainer.appendChild(el);
+            });
+        }
+    }
+}

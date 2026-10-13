@@ -1,77 +1,145 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <include src="partials/head-common.html"></include>
-  <title>{{ pages.spenden.seo.meta_title }}</title>
-  <meta name="description" content="{{ pages.spenden.seo.meta_description }}">
-  <link rel="canonical" href="https://newnessoflife.de/spenden">
-  <meta property="og:title" content="{{ pages.spenden.seo.meta_title }}">
-  <meta property="og:description" content="{{ pages.spenden.seo.meta_description }}">
-  <meta property="og:url" content="https://newnessoflife.de/spenden">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ pages.spenden.seo.meta_title || 'Spenden | Newness of Life' }}</title>
+  <meta name="description" content="{{ pages.spenden.seo.meta_description || '' }}">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css?v=20260220r3" />
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="canonical" href="https://newnessoflife.de/spenden">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="de_DE">
+    <meta property="og:site_name" content="Newness of Life Mainz">
+    <meta property="og:title" content="{{ pages.spenden.seo.meta_title }}">
+    <meta property="og:description" content="{{ pages.spenden.seo.meta_description }}">
+    <meta property="og:url" content="https://newnessoflife.de/spenden">
+    <meta property="og:image" content="https://newnessoflife.de/images/church-service.jpg">
+    <meta name="twitter:card" content="summary_large_image">
 </head>
-<body class="page-donate">
+<body>
+
   <include src="partials/header.html"></include>
 
-  <main id="inhalt">
-    <section class="hero hero-page" data-bg="pages.spenden.hero.background_image">
-      <div class="container hero-inner">
-        <h1 data-t="pages.spenden.hero.title"></h1>
-        <p class="hero-lead" data-t="pages.spenden.hero.subtitle"></p>
-        <a class="btn btn-gold" href="#spenden-optionen" data-t="pages.spenden.hero.button_text"></a>
-      </div>
-    </section>
+  <main>
 
-    <section class="section">
+    <!-- HERO -->
+    <section
+      class="donate-hero-professional"
+      data-cms-section="hero"
+      data-cms-field="hero.background_image"
+      data-cms-label="Hintergrundbild"
+      data-cms-attr="background-image"
+      data-cms-bg-overlay="linear-gradient(135deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.25) 100%)"
+      data-has-image="{{ pages.spenden.hero.background_image ? 'true' : 'false' }}"
+      style="{{ pages.spenden.hero.background_image ? 'background-image: linear-gradient(135deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.25) 100%), url(' + pages.spenden.hero.background_image + '); background-size: cover; background-position: center;' : '' }}"
+    >
       <div class="container">
-        <div class="section-head"><h2 data-t="pages.spenden.impact.title"></h2></div>
-        <div class="impact-grid">
-          <each loop="it, i in pages.spenden.impact.items">
-            <div class="feature">
-              <i class="fa-solid {{ it.icon || 'fa-heart' }}" aria-hidden="true"></i>
-              <h3 data-t="pages.spenden.impact.items.{{ i }}.title"></h3>
-              <p data-t="pages.spenden.impact.items.{{ i }}.description"></p>
-            </div>
-          </each>
+        <div class="donate-hero-content">
+          <h1 id="spenden-hero-title" data-cms-field="hero.title" data-cms-label="Titel" data-t="pages.spenden.hero.title">{{ pages.spenden.hero.title || 'Deine Spende bewegt Herzen' }}</h1>
+          <p id="spenden-hero-subtitle" class="lead" data-cms-field="hero.subtitle" data-cms-label="Untertitel" data-cms-format="html" data-t="pages.spenden.hero.subtitle">{{ pages.spenden.hero.subtitle || 'Mit deiner Unterstützung können wir in Mainz einen Ort der Hoffnung, der Gemeinschaft und des Glaubens gestalten. Jeder Beitrag, ob groß oder klein, macht einen Unterschied.' }}</p>
+          <a href="#spenden-optionen" class="btn btn-primary btn-lg">
+            <i class="fa-solid fa-heart"></i> <span data-t="pages.spenden.hero.button_text">Jetzt spenden</span>
+          </a>
         </div>
       </div>
     </section>
 
-    <section class="section section-tint" id="spenden-optionen">
+    <!-- IMPACT SECTION -->
+    <section class="content-section impact-section" data-cms-section="impact">
+        <div class="container">
+            <h2 id="impact-title" data-cms-field="impact.title" data-cms-label="Titel" data-t="pages.spenden.impact.title">{{ pages.spenden.impact.title || 'Was deine Spende bewirkt' }}</h2>
+            <div id="impact-grid" class="impact-grid">
+                <each loop="it, i in pages.spenden.impact.items">
+                <div class="impact-card">
+                    <div class="icon"><i class="fa-solid {{ it.icon }}"></i></div>
+                    <h3 data-t="pages.spenden.impact.items.{{ i }}.title">{{ it.title }}</h3>
+                    <p data-t="pages.spenden.impact.items.{{ i }}.description">{{ it.description }}</p>
+                </div>
+                </each>
+            </div>
+        </div>
+    </section>
+
+    <!-- SPENDENWEGE -->
+    <section id="spenden-optionen" class="content-section donate-options-section" data-cms-section="bank_details">
       <div class="container">
-        <div class="section-head"><h2 data-t="pages.spenden.options.title"></h2></div>
-        <div class="donate-grid">
-          <div class="donate-card">
-            <h3><i class="fa-solid fa-building-columns" aria-hidden="true"></i> <span data-t="pages.spenden.bank_details.title"></span></h3>
-            <p data-t="pages.spenden.bank_details.text"></p>
-            <ul class="bank-list">
-              <li><span class="label" data-t="pages.spenden.bank_details.recipient_label"></span><span class="value" data-t="pages.spenden.bank_details.account_holder"></span><span></span></li>
-              <li><span class="label">IBAN</span><span class="value" id="bank-iban" data-t="pages.spenden.bank_details.iban"></span><button type="button" class="copy-btn" data-copy="#bank-iban" aria-label="IBAN kopieren"><i class="fa-regular fa-copy"></i></button></li>
-              <li><span class="label">BIC</span><span class="value" id="bank-bic" data-t="pages.spenden.bank_details.bic"></span><button type="button" class="copy-btn" data-copy="#bank-bic" aria-label="BIC kopieren"><i class="fa-regular fa-copy"></i></button></li>
-              <li><span class="label" data-t="pages.spenden.bank_details.bank_label"></span><span class="value" data-t="pages.spenden.bank_details.bank_name"></span><span></span></li>
-              <li><span class="label" data-t="pages.spenden.bank_details.reference_label"></span><span class="value" id="bank-ref" data-t="pages.spenden.bank_details.reference"></span><button type="button" class="copy-btn" data-copy="#bank-ref" aria-label="Verwendungszweck kopieren"><i class="fa-regular fa-copy"></i></button></li>
-            </ul>
+        <h2 data-t="pages.spenden.options.title">So kannst du uns unterstützen</h2>
+        <div class="donate-options-grid">
+          <!-- Banküberweisung -->
+          <div class="donate-option-card">
+            <div class="donate-option-header">
+              <i class="fa-solid fa-landmark"></i>
+              <h3 data-cms-field="bank_details.title" data-cms-label="Titel" data-t="pages.spenden.bank_details.title">{{ pages.spenden.bank_details.title || 'Banküberweisung' }}</h3>
+            </div>
+            <div class="donate-option-body">
+              <p data-t="pages.spenden.bank_details.text">Spende direkt auf unser Konto. Wenn du eine Spendenquittung brauchst, kannst du sie danach per E-Mail anfragen.</p>
+              <ul class="bank-details-list-professional">
+                <li><strong data-t="pages.spenden.bank_details.recipient_label">Empfänger</strong>: <span id="bank-receiver" data-t="pages.spenden.bank_details.account_holder" data-cms-field="bank_details.account_holder" data-cms-label="Kontoinhaber">{{ pages.spenden.bank_details.account_holder || 'Newness of Life e.V.' }}</span></li>
+                <li><strong>IBAN:</strong> <span id="bank-iban" data-t="pages.spenden.bank_details.iban" data-cms-field="bank_details.iban" data-cms-label="IBAN">{{ pages.spenden.bank_details.iban || 'folgt' }}</span> <button class="copy-btn" data-copy="#bank-iban"><i class="fa-regular fa-copy"></i></button></li>
+                <li><strong>BIC:</strong> <span id="bank-bic" data-t="pages.spenden.bank_details.bic" data-cms-field="bank_details.bic" data-cms-label="BIC">{{ pages.spenden.bank_details.bic || 'folgt' }}</span> <button class="copy-btn" data-copy="#bank-bic"><i class="fa-regular fa-copy"></i></button></li>
+                <li><strong data-t="pages.spenden.bank_details.bank_label">Bank</strong>: <span id="bank-name" data-t="pages.spenden.bank_details.bank_name" data-cms-field="bank_details.bank_name" data-cms-label="Bank">{{ pages.spenden.bank_details.bank_name || 'folgt' }}</span></li>
+                <li><strong data-t="pages.spenden.bank_details.reference_label">Verwendungszweck</strong>: <span id="bank-reference" data-t="pages.spenden.bank_details.reference" data-cms-field="bank_details.reference" data-cms-label="Verwendungszweck">{{ pages.spenden.bank_details.reference || 'Spende' }}</span> <button class="copy-btn" data-copy="#bank-reference"><i class="fa-regular fa-copy"></i></button></li>
+              </ul>
+            </div>
           </div>
-          <if condition="pages.spenden.online_donation.show !== false">
-            <div class="donate-card">
-              <h3><i class="fa-brands fa-paypal" aria-hidden="true"></i> <span data-t="pages.spenden.online_donation.title"></span></h3>
-              <p data-t="pages.spenden.online_donation.text"></p>
-              <a class="btn btn-primary" href="{{ pages.spenden.online_donation.paypal_link }}" target="_blank" rel="noopener" data-t="pages.spenden.online_donation.button_text"></a>
-              <p class="note" data-t="pages.spenden.online_donation.note"></p>
+
+          <!-- PayPal -->
+          <div class="donate-option-card">
+            <div class="donate-option-header">
+              <i class="fa-brands fa-paypal"></i>
+              <h3 data-t="pages.spenden.online_donation.title">PayPal</h3>
             </div>
-          </if>
+            <div class="donate-option-body">
+              <p data-t="pages.spenden.online_donation.text">Sicher und schnell online spenden – auch ohne PayPal-Konto möglich.</p>
+              <a
+                id="paypal-donate-link"
+                class="btn-primary btn-block"
+                data-cms-field="online_donation.paypal_link"
+                data-cms-label="PayPal Spenden-Link"
+                href="{{ pages.spenden.online_donation.paypal_link || 'https://www.paypal.com/donate/?hosted_button_id=JFM46GE836RP8' }}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <i class="fa-brands fa-paypal"></i> <span data-t="pages.spenden.online_donation.button_text">Mit PayPal spenden</span>
+              </a>
+              <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.85;" data-t="pages.spenden.online_donation.note">Betrag und Zahlungsart wählst du direkt bei PayPal.</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="section">
-      <div class="container narrow">
-        <h2 data-t="pages.spenden.receipt.title"></h2>
-        <p class="text-large" data-t="pages.spenden.receipt.text"></p>
-        <a class="btn btn-outline" href="mailto:{{ settings.contact.email }}?subject=Spendenquittung" data-t="pages.spenden.receipt.button_text"></a>
+    <section class="content-section donation-confirmation-section">
+      <div class="container">
+        <div class="donation-confirmation-card">
+          <h2 data-t="pages.spenden.receipt.title">Spendenquittung nur bei Bedarf</h2>
+          <p class="donation-confirmation-lead" data-t="pages.spenden.receipt.text"></p>
+          <if condition="pages.spenden.receipt.note"><p class="donation-confirmation-note" data-t="pages.spenden.receipt.note"></p></if>
+          <a class="btn-primary" href="mailto:{{ settings.contact.email || 'newnessoflife@clgi.org' }}?subject=Spendenquittung%20anfordern">
+            <i class="fa-solid fa-envelope"></i> <span data-t="pages.spenden.receipt.button_text">Spendenquittung per E-Mail anfragen</span>
+          </a>
+        </div>
       </div>
     </section>
+
   </main>
 
   <include src="partials/footer.html"></include>
+  <script src="js/script.js?v=20260312r1"></script>
 </body>
 </html>

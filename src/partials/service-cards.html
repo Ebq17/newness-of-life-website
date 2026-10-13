@@ -1,0 +1,32 @@
+<!-- Regelmäßige Treffen -->
+<section class="content-section service-cards-section">
+  <div class="container">
+    <div class="section-intro">
+      <h2 data-t="homepage.meetings.title">Unsere regelmäßigen Treffen</h2>
+      <p data-t="homepage.meetings.subtitle">Gemeinsam wachsen wir im Glauben</p>
+    </div>
+    <div class="service-cards-grid">
+      <each loop="card, index in homepage.meetings.items">
+        <if condition="card.show !== false">
+          <div class="service-card-item">
+            <if condition="card.image">
+              <div class="service-card-image">
+                <img src="{{ card.image }}" alt="{{ card.title }} – Freikirche Newness of Life Mainz">
+                <if condition="card.label">
+                  <span class="service-card-label" data-t="homepage.meetings.items.{{ index }}.label">{{ card.label }}</span>
+                </if>
+              </div>
+            </if>
+            <div class="service-card-content">
+              <h3 data-t="homepage.meetings.items.{{ index }}.title">{{ card.title }}</h3>
+              <p class="service-card-time"><i class="fa-solid fa-clock"></i> <span data-t="homepage.meetings.items.{{ index }}.time">{{ card.time }}</span></p>
+              <if condition="card.link">
+                <a href="{{ card.link }}" class="service-card-link"><span data-t="homepage.meetings.link_text">Mehr erfahren</span> <i class="fa-solid fa-arrow-right"></i></a>
+              </if>
+            </div>
+          </div>
+        </if>
+      </each>
+    </div>
+  </div>
+</section>

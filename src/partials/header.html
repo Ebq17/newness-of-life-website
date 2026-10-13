@@ -1,38 +1,49 @@
-<a class="skip-link" href="#inhalt">Zum Inhalt springen</a>
+<!-- Hinweisbalken (im Admin unter "Menü & Fußbereich") -->
 <if condition="global.announcement && global.announcement.show && global.announcement.text">
-  <div class="announcement">
+  <div class="site-banner" style="background-color: #F59E0B; color: #fff;">
     <div class="container">
-      <a href="{{ global.announcement.link || '#' }}" data-t="global.announcement.text">{{ global.announcement.text }}</a>
+      <p class="banner-text">
+        <if condition="global.announcement.link"><a href="{{ global.announcement.link }}" style="color: #fff;" data-t="global.announcement.text">{{ global.announcement.text }}</a></if>
+        <if condition="!global.announcement.link"><span data-t="global.announcement.text">{{ global.announcement.text }}</span></if>
+      </p>
+      <button class="banner-close" aria-label="Banner schließen">&times;</button>
     </div>
   </div>
 </if>
-<header class="site-header" id="top">
-  <div class="container header-inner">
-    <a class="brand" href="/" aria-label="Newness of Life – Startseite">
-      <img class="brand-logo" src="/images/Logo_Schwarz_Transparent_KS.png" data-src="global.header.logo.image" alt="{{ global.header.logo.alt }}" width="52" height="52">
-      <span class="brand-text">
-        <span class="brand-name" data-t="global.header.logo.text">Newness of Life</span>
-        <span class="brand-sub" data-t="global.header.logo.subtext">Die Kirche des lebendigen Gottes International e.V.</span>
-      </span>
-    </a>
-    <nav class="main-nav" id="main-nav" aria-label="Hauptnavigation">
-      <ul>
+
+<!-- Header (Partial) -->
+<link rel="stylesheet" href="/css/header.css?v=20260220r3" />
+<header class="site-header-pro" data-cms-section="header">
+  <div class="container">
+    <nav class="main-nav-pro" aria-label="Hauptnavigation">
+      <a href="/" class="logo-pro" data-cms-field="header.logo" data-cms-label="Logo">
+        <img src="{{ global.header.logo.image || '/images/Logo_Schwarz_Transparent_KS.png' }}" alt="{{ global.header.logo.alt || 'Newness of Life Logo' }}" class="logo-img-pro" data-cms-field="header.logo.image" data-cms-label="Logo Bild">
+        <div class="logo-text-container">
+          <span class="logo-text-pro" data-t="global.header.logo.text">{{ header.logo.text || settings.site_title || 'Newness of Life' }}</span>
+          <span class="logo-subtext-pro" data-cms-field="header.logo.subtext" data-cms-label="Logo Untertext" data-t="global.header.logo.subtext">{{ header.logo.subtext || 'die Kirche des lebendigen Gottes International e.V.' }}</span>
+        </div>
+      </a>
+
+      <ul id="mainnav-pro" class="nav-links-pro">
         <each loop="item, i in global.header.navigation">
           <if condition="item.show !== false">
-            <li><a href="{{ item.url }}" class="{{ (item.url === '/' + currentPage) || (currentPage === 'index' && item.url === '/') ? 'is-active' : '' }}" data-t="global.header.navigation.{{ i }}.label">{{ item.label }}</a></li>
+            <li><a href="{{ item.url }}" class="{{ (item.url === '/' + currentPage) || (currentPage === 'index' && item.url === '/') ? 'active' : '' }}" data-t="global.header.navigation.{{ i }}.label">{{ item.label }}</a></li>
           </if>
         </each>
-      </ul>
-      <div class="nav-actions">
-        <button type="button" class="lang-toggle" id="langToggle" aria-label="Switch to English">EN</button>
-        <if condition="global.header.cta_button && global.header.cta_button.show !== false">
-          <a class="btn btn-gold btn-sm" href="{{ global.header.cta_button.url }}" data-t="global.header.cta_button.text">Spenden</a>
+        <if condition="global.header.cta_button && global.header.cta_button.show">
+          <li class="show-on-mobile"><a href="{{ global.header.cta_button.url }}" data-t="global.header.cta_button.text">{{ global.header.cta_button.text }}</a></li>
         </if>
+      </ul>
+
+      <div class="header-actions">
+        <button id="langToggle" class="lang-toggle" onclick="window.I18n && I18n.toggleLanguage()" title="Switch to English">EN</button>
+        <if condition="global.header.cta_button && global.header.cta_button.show">
+          <a href="{{ global.header.cta_button.url }}" class="btn-primary btn-spenden-pro" data-t="global.header.cta_button.text">{{ global.header.cta_button.text }}</a>
+        </if>
+        <button class="menu-toggle-pro" aria-label="Menü öffnen" aria-controls="mainnav-pro" aria-expanded="false">
+          <i class="fa-solid fa-bars"></i>
+        </button>
       </div>
     </nav>
-    <button type="button" class="menu-toggle" aria-controls="main-nav" aria-expanded="false">
-      <span class="sr-only">Menü öffnen</span>
-      <span class="menu-bars" aria-hidden="true"></span>
-    </button>
   </div>
 </header>

@@ -4,8 +4,8 @@
     "title_en": "Church Services in Mainz – every Sunday at 2 pm",
     "subtitle": "Erlebe Gottes Gegenwart in unserer Mitte",
     "subtitle_en": "Experience God's presence among us",
-    "background_image": "/images/Gebete.jpg",
-    "video": ""
+    "background_image": "",
+    "video": "images/Black and Red Typographic Funny YouTube Video Intro.mp4"
   },
   "intro": {
     "title": "Was dich erwartet",
@@ -17,8 +17,7 @@
     "title": "Dein erster Besuch",
     "title_en": "Your first visit",
     "text": "Du warst noch nie bei uns? Kein Problem. Unser Gottesdienst beginnt jeden Sonntag um 14 Uhr in der Hebbelstraße 56-60 in Mainz und dauert etwa zwei Stunden. Freu dich auf mitreißenden Gospel-Lobpreis, eine bibeltreue, alltagsnahe Predigt und Menschen aus vielen Nationen. Gepredigt wird auf Deutsch und Englisch, sodass du alles verstehst. Für Kinder gibt es während der Predigt ein eigenes Programm. Komm einfach so, wie du bist – nach dem Gottesdienst ist Zeit für Gespräche und Gemeinschaft.",
-    "text_en": "Never been to church with us? No problem. Our service starts every Sunday at 2 pm at Hebbelstraße 56-60 in Mainz and lasts about two hours. Expect uplifting gospel worship, a Bible-based, practical sermon and people from many nations. We preach in both English and German, so you can follow everything. During the sermon there is a dedicated programme for children. Come as you are – after the service there is time to talk and connect.",
-    "image": "/images/bible.und.hand.hoch.jpg"
+    "text_en": "Never been to church with us? No problem. Our service starts every Sunday at 2 pm at Hebbelstraße 56-60 in Mainz and lasts about two hours. Expect uplifting gospel worship, a Bible-based, practical sermon and people from many nations. We preach in both English and German, so you can follow everything. During the sermon there is a dedicated programme for children. Come as you are – after the service there is time to talk and connect."
   },
   "main_service": {
     "title": "Hauptgottesdienst",
@@ -103,7 +102,9 @@
     "title": "Anfahrt",
     "title_en": "Directions",
     "text": "",
-    "text_en": ""
+    "text_en": "",
+    "address_label": "Adresse:",
+    "address_label_en": "Address:"
   },
   "seo": {
     "meta_title": "Gottesdienst sonntags 14 Uhr in Mainz | Newness of Life",

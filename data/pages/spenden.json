@@ -58,7 +58,6 @@
     "bank_label_en": "Bank"
   },
   "online_donation": {
-    "show": true,
     "title": "PayPal",
     "title_en": "PayPal",
     "text": "Sicher und schnell online spenden – auch ohne PayPal-Konto möglich.",
@@ -72,8 +71,10 @@
   "receipt": {
     "title": "Spendenquittung nur bei Bedarf",
     "title_en": "Donation receipt on request",
-    "text": "Du musst kein Formular ausfüllen. Spende einfach per Überweisung oder PayPal. Wenn du eine Spendenquittung brauchst, schick uns danach eine kurze E-Mail mit Betrag, Datum und Zahlungsweg. Für die Quittung brauchen wir deinen vollständigen Namen und deine Adresse.",
-    "text_en": "No form needed. Simply donate by bank transfer or PayPal. If you need a donation receipt, send us a short email afterwards with the amount, date and payment method. For the receipt we need your full name and address.",
+    "text": "Du musst kein Formular mehr ausfüllen. Spende einfach per Überweisung oder PayPal.",
+    "text_en": "No form needed. Simply donate by bank transfer or PayPal.",
+    "note": "Wenn du eine Spendenquittung brauchst, schick uns danach eine kurze E-Mail mit Betrag, Datum und Zahlungsweg. Für die Quittung brauchen wir deinen vollständigen Namen und Adresse.",
+    "note_en": "If you need a donation receipt, send us a short email afterwards with the amount, date and payment method. For the receipt we need your full name and address.",
     "button_text": "Spendenquittung per E-Mail anfragen",
     "button_text_en": "Request a receipt by email"
   },

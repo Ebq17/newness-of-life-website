@@ -1,0 +1,424 @@
+/* ========================================================================== */
+/*                           Professional Header Styles                       */
+/* ========================================================================== */
+
+.site-header-pro {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--color-white);
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    z-index: 20000;
+    padding: 0 clamp(12px, 2.5vw, 20px);
+    transition: background-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.site-header-pro.is-scrolled {
+    background-color: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.12);
+}
+
+.main-nav-pro {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    height: 80px;
+}
+
+.logo-pro {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--color-dark);
+    flex: 1 1 auto;
+    min-width: 0;
+    transition: transform 0.3s ease;
+}
+
+.logo-pro:hover {
+    transform: translateY(-1px);
+}
+
+.logo-img-pro {
+    height: 50px;
+    margin-right: 10px;
+}
+
+.logo-text-pro {
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+/* Tablet und Desktop Logo größer */
+@media (min-width: 768px) {
+    .logo-img-pro {
+        height: 70px;
+        margin-right: 12px;
+    }
+    .logo-text-pro {
+        font-size: 1.25rem;
+    }
+}
+
+@media (min-width: 1100px) {
+    .logo-img-pro {
+        height: 80px;
+        margin-right: 15px;
+    }
+    .logo-text-pro {
+        font-size: 1.5rem;
+    }
+}
+
+.site-header-pro .nav-links-pro {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+}
+
+/* Größere Abstände auf großen Bildschirmen */
+@media (min-width: 1400px) {
+    .site-header-pro .nav-links-pro {
+        gap: 30px;
+    }
+}
+
+.site-header-pro .nav-links-pro a {
+    text-decoration: none;
+    color: var(--color-dark);
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 10px 0;
+    position: relative;
+    transition: color .3s ease;
+    white-space: nowrap;
+}
+
+@media (min-width: 1400px) {
+    .site-header-pro .nav-links-pro a {
+        font-size: 1rem;
+    }
+}
+
+.site-header-pro .nav-links-pro a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--color-primary);
+    transition: width .3s ease;
+}
+
+.site-header-pro .nav-links-pro a:hover,
+.site-header-pro .nav-links-pro a.active {
+    color: var(--color-primary);
+}
+
+.site-header-pro .nav-links-pro a:hover::after,
+.site-header-pro .nav-links-pro a.active::after {
+    width: 100%;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.lang-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 2px solid var(--color-primary);
+    background: transparent;
+    color: var(--color-primary);
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.lang-toggle:hover {
+    background: var(--color-primary);
+    color: white;
+}
+
+.btn-spenden-pro {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-weight: 700;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-spenden-pro::after {
+    content: '';
+    position: absolute;
+    top: -120%;
+    left: -40%;
+    width: 40%;
+    height: 280%;
+    background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.5), rgba(255,255,255,0));
+    transform: rotate(18deg);
+    opacity: 0;
+    transition: transform 0.65s ease, opacity 0.65s ease;
+    pointer-events: none;
+}
+
+.btn-spenden-pro:hover::after {
+    transform: translateX(230%) rotate(18deg);
+    opacity: 1;
+}
+
+.menu-toggle-pro {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--color-dark);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.menu-toggle-pro i {
+    transition: transform 0.24s ease;
+}
+
+.menu-toggle-pro.is-open i {
+    transform: rotate(90deg) scale(1.06);
+}
+
+.menu-toggle-pro.is-open {
+    color: var(--color-primary);
+    background: rgba(37, 99, 235, 0.12);
+}
+
+@media (max-width: 1200px) {
+    .site-header-pro {
+        padding: 0 12px;
+    }
+
+    .main-nav-pro {
+        height: 64px;
+        gap: 8px;
+    }
+
+    .logo-text-container {
+        min-width: 0;
+        overflow: hidden;
+    }
+
+    .logo-subtext-pro {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 42vw;
+    }
+
+    .header-actions {
+        gap: 8px;
+    }
+
+    .lang-toggle {
+        width: 32px;
+        height: 32px;
+        font-size: 11px;
+    }
+
+    .site-header-pro .nav-links-pro {
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+        bottom: auto;
+        max-height: calc(100dvh - 64px);
+        background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(248,250,252,0.98) 100%);
+        backdrop-filter: blur(8px);
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0;
+        padding: 24px 20px;
+        display: none;
+        z-index: 20001;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        box-shadow: 0 14px 30px rgba(15, 23, 42, 0.14);
+    }
+
+    .site-header-pro .nav-links-pro.is-open {
+        display: flex;
+        animation: mobileMenuIn 0.28s ease;
+    }
+
+    .site-header-pro .nav-links-pro li {
+        width: 100%;
+        border-bottom: 1px solid rgba(0,0,0,0.06);
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    .site-header-pro .nav-links-pro.is-open li {
+        animation: mobileMenuItemIn 0.34s ease forwards;
+        animation-delay: var(--menu-item-delay, 0ms);
+    }
+
+    .site-header-pro .nav-links-pro a {
+        display: block;
+        color: var(--color-dark);
+        font-size: 1.1rem;
+        padding: 16px 0;
+        text-align: center;
+        transition: background-color 0.2s ease;
+    }
+
+    .site-header-pro .nav-links-pro a:hover {
+        background-color: rgba(37, 99, 235, 0.05);
+    }
+
+    .site-header-pro .nav-links-pro a.active {
+        background: linear-gradient(90deg, rgba(37,99,235,0.12) 0%, rgba(16,185,129,0.08) 100%);
+    }
+
+    .site-header-pro .nav-links-pro a::after {
+        display: none;
+    }
+
+    .menu-toggle-pro {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 8px;
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        background: rgba(15, 23, 42, 0.04);
+        z-index: 20002;
+        position: relative;
+        transition: background-color 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .menu-toggle-pro:hover {
+        background-color: rgba(0,0,0,0.05);
+        transform: translateY(-1px);
+        border-color: rgba(37, 99, 235, 0.24);
+    }
+
+}
+
+@keyframes mobileMenuIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes mobileMenuItemIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 1200px) {
+    body.no-scroll {
+        overflow: auto;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .menu-toggle-pro,
+    .menu-toggle-pro i {
+        transition: none;
+    }
+
+    .site-header-pro .nav-links-pro.is-open,
+    .site-header-pro .nav-links-pro.is-open li {
+        animation: none;
+    }
+}
+
+/* Kleinere Bildschirme - Logo noch kompakter */
+@media (max-width: 768px) {
+    .logo-subtext-pro {
+        display: none;
+    }
+
+    .logo-text-pro {
+        font-size: 1rem;
+    }
+
+    .menu-toggle-pro {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 420px) {
+    .header-actions {
+        gap: 6px;
+    }
+
+    .lang-toggle {
+        width: 30px;
+        height: 30px;
+        font-size: 10px;
+        border-width: 1.5px;
+    }
+
+    .menu-toggle-pro {
+        width: 38px;
+        height: 38px;
+    }
+}
+
+@media (max-width: 400px) {
+    .logo-img-pro {
+        height: 40px;
+        margin-right: 8px;
+    }
+    .logo-text-pro {
+        font-size: 0.95rem;
+    }
+    .logo-subtext-pro {
+        font-size: 0.65rem;
+    }
+}
+
+.logo-text-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.logo-subtext-pro {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.2;
+}
+.show-on-mobile { display: none; } @media (max-width: 1200px) { .show-on-mobile { display: list-item; } }
+@media (max-width: 1200px) { .btn-spenden-pro { display: none; } }

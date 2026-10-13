@@ -34,7 +34,7 @@
   // Beschriftungen
   // ------------------------------------------------------------------
   var SECTION_LABELS = {
-    hero: 'Großes Titelbild oben', service_info: 'Infokasten „Unser Gottesdienst“', services_section: 'Abschnitt Gottesdienst',
+    hero: 'Großer Bereich oben', service_info: 'Kasten „Unser Gottesdienst“', services_section: 'Abschnitt Gottesdienst',
     meetings: 'Regelmäßige Treffen', about_section: 'Abschnitt „Über uns“', events_section: 'Kommende Veranstaltungen',
     contact_section: 'Kontaktformular', seo: 'Google-Suche (Titel & Beschreibung)', intro: 'Einleitung',
     first_visit: 'Dein erster Besuch', main_service: 'Hauptgottesdienst', other_meetings: 'Weitere Treffen',
@@ -68,7 +68,9 @@
     whatsapp: 'WhatsApp-Nummer', address: 'Straße und Hausnummer', city: 'PLZ und Ort', maps_url: 'Google-Maps-Link',
     instagram: 'Instagram', facebook: 'Facebook', youtube: 'YouTube', tiktok: 'TikTok', date: 'Beginn', end_date: 'Ende (optional)',
     location: 'Ort', category: 'Kategorie', published: 'Veröffentlicht', content_html: 'Inhalt', all_label: 'Filter „Alle Monate“',
-    empty_text: 'Text, wenn keine Termine geplant sind', calendar_button: 'Link „Zum Kalender“', name: 'Name', color: 'Farbe'
+    empty_text: 'Text, wenn keine Termine geplant sind', at: 'Wort zwischen Tag und Uhrzeit (z. B. „um“)',
+    link_text: 'Link-Text „Mehr erfahren“', text_2: 'Text – 2. Absatz', text_3: 'Text – 3. Absatz', text_4: 'Text – 4. Absatz',
+    address_label: 'Bezeichnung „Adresse:“', calendar_button: 'Link „Zum Kalender“', name: 'Name', color: 'Farbe'
   };
 
   var HIDDEN_KEYS = ['id', 'i18n_key'];
@@ -76,7 +78,7 @@
     'color', 'date', 'end_date', 'category', 'email', 'phone', 'whatsapp', 'maps_url', 'iban', 'bic', 'account_holder',
     'bank_name', 'paypal_link', 'instagram', 'facebook', 'youtube', 'tiktok', 'address', 'city', 'site_title', 'meta_title',
     'meta_description', 'site_description', 'copyright', 'name'];
-  var LONG_KEYS = ['text', 'description', 'subtitle', 'about_text', 'note', 'site_description', 'meta_description',
+  var LONG_KEYS = ['text', 'text_2', 'text_3', 'text_4', 'intro', 'description', 'subtitle', 'about_text', 'note', 'site_description', 'meta_description',
     'success_message', 'error_message', 'donation_text', 'mission', 'empty_text'];
   var ICONS = [
     ['fa-church', 'Kirche'], ['fa-music', 'Musik'], ['fa-book-bible', 'Bibel'], ['fa-book-open', 'Buch'], ['fa-hands-praying', 'Gebet'],

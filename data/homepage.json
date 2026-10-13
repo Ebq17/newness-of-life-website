@@ -4,25 +4,10 @@
     "title_en": "Welcome to Newness of Life – your international church in Mainz",
     "subtitle": "Ein Ort des Glaubens, der Gemeinschaft und der Hoffnung. Entdecke, wer wir sind und was uns bewegt.",
     "subtitle_en": "A place of faith, community, and hope. Discover who we are and what moves us.",
-    "background_image": "/images/bible.und.hand.hoch.jpg",
-    "cta_text": "Gottesdienst besuchen",
-    "cta_text_en": "Visit a service",
-    "cta_link": "/gottesdienste",
-    "cta2_text": "Mehr erfahren",
-    "cta2_text_en": "Learn More",
-    "cta2_link": "/ueber-uns"
-  },
-  "service_info": {
-    "title": "Unser Gottesdienst",
-    "title_en": "Our Service",
-    "when": "Jeden Sonntag, 14:00 Uhr",
-    "when_en": "Every Sunday, 2:00 pm",
-    "kids": "Kinderprogramm während der Predigt",
-    "kids_en": "Kids program during the sermon",
-    "language": "Predigt auf Deutsch und Englisch",
-    "language_en": "Preaching in German and English",
-    "directions_text": "Route planen",
-    "directions_text_en": "Get directions"
+    "background_image": "",
+    "cta_text": "Mehr erfahren",
+    "cta_text_en": "Learn More",
+    "cta_link": "/ueber-uns"
   },
   "services_section": {
     "title": "Gospel-Gottesdienst in Mainz",
@@ -30,8 +15,19 @@
     "description": "Erlebe lebendigen Lobpreis, inspirierende Predigten und herzliche Gemeinschaft. Unsere Gottesdienste sind ein Ort, an dem du Gott begegnen und im Glauben wachsen kannst.",
     "description_en": "Experience vibrant worship, inspiring sermons, and warm fellowship. Our services are a place where you can encounter God and grow in faith.",
     "button_text": "Alle Gottesdienste",
-    "button_text_en": "All Services",
-    "image": "/images/Gebete.jpg"
+    "button_text_en": "All Services"
+  },
+  "service_info": {
+    "title": "Unser Gottesdienst",
+    "title_en": "Our Service",
+    "day": "Jeden Sonntag",
+    "day_en": "Every Sunday",
+    "at": "um",
+    "at_en": "at",
+    "time": "14:00 Uhr",
+    "time_en": "2:00 pm",
+    "kids": "Kinderprogramm während der Predigt",
+    "kids_en": "Kids program during the sermon"
   },
   "meetings": {
     "title": "Unsere regelmäßigen Treffen",
@@ -46,7 +42,7 @@
         "title_en": "Church Service",
         "time": "Jeden Sonntag um 14:00 Uhr",
         "time_en": "Every Sunday at 14:00",
-        "image": "/images/bible.und.hand.hoch.jpg",
+        "image": "/images/church-service.jpg",
         "link": "/gottesdienste",
         "show": true
       },
@@ -72,7 +68,9 @@
         "link": "",
         "show": true
       }
-    ]
+    ],
+    "link_text": "Mehr erfahren",
+    "link_text_en": "Learn More"
   },
   "about_section": {
     "title": "Über uns",
@@ -83,16 +81,6 @@
     "text_en": "We are Newness of Life – The Church of the Living God International e.V. in Mainz. Our heart is to reach people with God's love, strengthen faith, and live out community. With us you will experience vibrant services, inspiring music, practical Bible teaching, and a warm family where everyone is welcome—no matter where you come from or what story you bring. We believe every person is uniquely created by God and has a place in His plan. Together we want to grow, encourage one another, and shape our surroundings with hope and light.",
     "button_text": "Mehr erfahren",
     "button_text_en": "Learn More"
-  },
-  "events_section": {
-    "show": true,
-    "count": 3,
-    "title": "Kommende Veranstaltungen",
-    "title_en": "Upcoming Events",
-    "text": "Besondere Abende, Konzerte und Treffen – komm vorbei und bring Freunde mit.",
-    "text_en": "Special nights, concerts and gatherings – come along and bring your friends.",
-    "button_text": "Alle Termine ansehen",
-    "button_text_en": "See all events"
   },
   "contact_section": {
     "title": "Kontakt",
