@@ -1,26 +1,22 @@
 {
   "hero": {
-    "title": "Über uns",
+    "title": "Über uns – internationale Freikirche in Mainz",
     "subtitle": "Lerne unsere Gemeinde kennen",
     "background_image": ""
   },
-
   "intro": {
     "title": "Willkommen bei Newness of Life",
     "text": "Wir sind die Newness of Life – Die Kirche des lebendigen Gottes International e.V. aus Mainz. Unser Herz schlägt dafür, Menschen mit der Liebe Gottes zu erreichen, Glauben zu stärken und Gemeinschaft zu leben."
   },
-
   "story": {
     "title": "Unsere Geschichte",
     "text": "Bei uns erlebst du lebendige Gottesdienste, inspirierende Musik, praktische Bibellehre und eine herzliche Familie, in der jeder willkommen ist – egal, woher du kommst oder welche Geschichte du mitbringst.",
     "image": "images/Logo_Schwarz_Transparent_KS.png"
   },
-
   "vision": {
     "title": "Unsere Vision & Mission",
     "text": "Wir glauben, dass jeder Mensch von Gott einzigartig geschaffen ist und einen Platz in seinem Plan hat. Gemeinsam wollen wir wachsen, einander ermutigen und unsere Umgebung mit Hoffnung und Licht prägen."
   },
-
   "beliefs": {
     "title": "Was wir glauben",
     "items": [
@@ -46,9 +42,8 @@
       }
     ]
   },
-
   "seo": {
-    "meta_title": "Über uns - Newness of Life Mainz",
-    "meta_description": "Lerne unsere Gemeinde kennen. Wir sind die Kirche des lebendigen Gottes International e.V. in Mainz."
+    "meta_title": "Über uns – Internationale Freikirche Mainz | Newness of Life",
+    "meta_description": "Newness of Life ist eine internationale Freikirche in Mainz, entstanden Anfang der 1990er. Lerne Geschichte, Vision und Werte kennen – Teil der CLGI."
   }
 }

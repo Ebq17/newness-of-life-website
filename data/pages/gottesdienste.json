@@ -1,15 +1,13 @@
 {
   "hero": {
-    "title": "Gottesdienste",
+    "title": "Gottesdienste in Mainz – jeden Sonntag um 14 Uhr",
     "subtitle": "Erlebe Gottes Gegenwart in unserer Mitte",
     "background_image": ""
   },
-
   "intro": {
     "title": "Was dich erwartet",
     "text": "Unsere Gottesdienste sind ein Ort der Begegnung mit Gott und untereinander. Erlebe lebendigen Lobpreis, inspirierende Predigten und herzliche Gemeinschaft."
   },
-
   "main_service": {
     "title": "Hauptgottesdienst",
     "day": "Sonntag",
@@ -39,7 +37,6 @@
       }
     ]
   },
-
   "other_meetings": {
     "title": "Weitere Treffen",
     "items": [
@@ -59,27 +56,23 @@
       }
     ]
   },
-
   "cta": {
     "title": "Komm, wie du bist",
     "text": "Ganz egal, wo du im Leben stehst, du bist bei uns herzlich willkommen. Wir freuen uns darauf, dich kennenzulernen.",
     "button_text": "Zur Anfahrt",
     "button_link": "#anfahrt"
   },
-
   "anfahrt": {
     "title": "Anfahrt",
     "text": ""
   },
-
   "location": {
     "show_map": true,
     "parking_info": "Parkplätze sind vor dem Gebäude verfügbar.",
     "accessibility_info": "Barrierefreier Zugang vorhanden."
   },
-
   "seo": {
-    "meta_title": "Gottesdienste - Newness of Life Mainz",
-    "meta_description": "Besuche unsere Gottesdienste jeden Sonntag um 14:00 Uhr in Mainz. Erlebe Lobpreis, Predigt und Gemeinschaft."
+    "meta_title": "Gottesdienst sonntags 14 Uhr in Mainz | Newness of Life",
+    "meta_description": "Gospel-Gottesdienst jeden Sonntag um 14 Uhr in Mainz mit Lobpreis, Predigt und Kinderprogramm. Dazu Gebetsabend freitags und Bibelstudium Mo & Mi."
   }
 }

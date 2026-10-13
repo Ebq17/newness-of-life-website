@@ -2,7 +2,7 @@
 <section class="content-section service-cards-section" data-cms-section="service_cards" data-cms-field="service_cards" data-cms-label="Service-Karten">
   <div class="container">
     <div class="section-intro">
-      <h2 data-i18n="services_section.title">Unsere regelmaessigen Treffen</h2>
+      <h2 data-i18n="services_section.title">Unsere regelmäßigen Treffen</h2>
       <p data-i18n="services_section.subtitle">Gemeinsam wachsen wir im Glauben</p>
     </div>
     <div class="service-cards-grid">
@@ -11,7 +11,7 @@
           <div class="service-card-item" data-cms-field="service_cards[{{ index }}]" data-cms-label="{{ card.title }}">
             <if condition="card.image">
               <div class="service-card-image">
-                <img src="{{ card.image }}" alt="{{ card.title }}" data-cms-field="service_cards.{{ index }}.image" data-cms-label="Bild">
+                <img src="{{ card.image }}" alt="{{ card.title }} – Freikirche Newness of Life Mainz" data-cms-field="service_cards.{{ index }}.image" data-cms-label="Bild">
                 <if condition="card.label">
                   <span class="service-card-label" data-cms-field="service_cards.{{ index }}.label" data-cms-label="Kategorie" data-i18n="{{ index === 0 ? 'service_cards.fellowship' : index === 1 ? 'service_cards.prayer' : index === 2 ? 'service_cards.education' : '' }}">{{ card.label }}</span>
                 </if>

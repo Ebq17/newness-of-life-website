@@ -1,13 +1,13 @@
 {
   "hero": {
-    "title": "Willkommen in unserer Gemeinde",
+    "title": "Willkommen bei Newness of Life – deiner Freikirche in Mainz",
     "subtitle": "Ein Ort des Glaubens, der Gemeinschaft und der Hoffnung. Entdecke, wer wir sind und was uns bewegt.",
     "background_image": "",
     "cta_text": "Mehr erfahren",
     "cta_link": "ueber-uns.html"
   },
   "services_section": {
-    "title": "Gottesdienste",
+    "title": "Gospel-Gottesdienst in Mainz",
     "description": "Erlebe lebendigen Lobpreis, inspirierende Predigten und herzliche Gemeinschaft. Unsere Gottesdienste sind ein Ort, an dem du Gott begegnen und im Glauben wachsen kannst.",
     "service_day": "Jeden Sonntag",
     "service_time": "14:00 Uhr",
@@ -25,7 +25,7 @@
     "address_title": "Adresse & Anfahrt"
   },
   "seo": {
-    "meta_title": "Newness of Life - Willkommen",
-    "meta_description": "Newness of Life - Die Kirche des lebendigen Gottes International e.V. Ein Ort des Glaubens, der Gemeinschaft und der Hoffnung in Mainz."
+    "meta_title": "Freikirche & Gospel-Gottesdienst in Mainz | Newness of Life",
+    "meta_description": "Internationale Freikirche in Mainz: Gospel-Lobpreis, lebensnahe Predigt und Kinderprogramm. Gottesdienst jeden Sonntag um 14 Uhr – herzlich willkommen!"
   }
 }

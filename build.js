@@ -250,6 +250,70 @@ function prepareTeam(teamRaw) {
 }
 
 /**
+ * SEO: JSON-LD als <script>-Block (sicher gegen </script> im Text).
+ */
+function jsonLdScript(obj) {
+  const json = JSON.stringify(obj, null, 2).replace(/</g, '\\u003c');
+  return `    <script type="application/ld+json">\n${json}\n    </script>`;
+}
+
+/**
+ * SEO: kommende Veranstaltungen als schema.org Events.
+ */
+function buildEventsJsonLd(events) {
+  const now = new Date();
+  const address = {
+    '@type': 'PostalAddress',
+    streetAddress: 'Hebbelstr. 56-60',
+    postalCode: '55127',
+    addressLocality: 'Mainz',
+    addressRegion: 'Rheinland-Pfalz',
+    addressCountry: 'DE'
+  };
+  const graph = events
+    .filter(e => e.date && new Date(e.end_date || e.date) >= now)
+    .map(e => {
+      const item = {
+        '@type': 'Event',
+        name: `${e.title} – Newness of Life Mainz`,
+        startDate: e.date,
+        eventStatus: 'https://schema.org/EventScheduled',
+        eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+        location: { '@type': 'Place', name: 'Newness of Life Mainz', address },
+        organizer: { '@type': 'Organization', name: 'Newness of Life Mainz', url: 'https://newnessoflife.de/' }
+      };
+      if (e.end_date) item.endDate = e.end_date;
+      if (e.description) item.description = String(e.description).replace(/<[^>]*>/g, '').trim();
+      if (e.image) item.image = 'https://newnessoflife.de/' + String(e.image).replace(/^\//, '');
+      return item;
+    });
+  if (!graph.length) return '';
+  return jsonLdScript({ '@context': 'https://schema.org', '@graph': graph });
+}
+
+/**
+ * SEO: sitemap.xml neu schreiben (lastmod = Build-Datum).
+ */
+async function writeSitemap() {
+  const today = new Date().toISOString().slice(0, 10);
+  const urls = [
+    ['/', 'weekly', '1.0'],
+    ['/gottesdienste', 'monthly', '0.9'],
+    ['/veranstaltungen', 'weekly', '0.8'],
+    ['/ueber-uns', 'monthly', '0.8'],
+    ['/spenden', 'yearly', '0.5'],
+    ['/impressum', 'yearly', '0.2'],
+    ['/datenschutz', 'yearly', '0.2']
+  ];
+  const body = urls.map(([loc, freq, prio]) =>
+    `  <url>\n    <loc>https://newnessoflife.de${loc}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>${freq}</changefreq>\n    <priority>${prio}</priority>\n  </url>`
+  ).join('\n');
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>\n`;
+  await fs.writeFile(path.join(ROOT_DIR, 'sitemap.xml'), xml);
+  console.log('✓ Built sitemap.xml');
+}
+
+/**
  * Einzelne Seite rendern.
  * @param {string} file
  * @param {object} locals
@@ -306,6 +370,7 @@ async function build() {
       loadJson(path.join(PAGES_DATA_DIR, 'datenschutz.json')),
       loadJson(path.join(PAGES_DATA_DIR, 'impressum.json'))
     ]);
+    const seoJsonLd = await loadJson(path.join(DATA_DIR, 'seo-jsonld.json'));
 
     // Daten aufbereiten
     const events = prepareEvents(eventsRaw);
@@ -344,6 +409,11 @@ async function build() {
       team: team.members,
       teamPage: team.page,
 
+      // SEO: strukturierte Daten
+      churchJsonLd: seoJsonLd.church ? jsonLdScript(seoJsonLd.church) : '',
+      servicesJsonLd: seoJsonLd.services ? jsonLdScript(seoJsonLd.services) : '',
+      eventsJsonLd: buildEventsJsonLd(events.all),
+
       // Seiteninhalte
       pages: {
         ueberUns: pageUeberUns,
@@ -357,6 +427,7 @@ async function build() {
     // Seiten finden & rendern
     const files = (await fs.readdir(PAGES_DIR)).filter(f => f.endsWith('.html'));
     await Promise.all(files.map(f => renderPage(f, locals)));
+    await writeSitemap();
 
     console.log(`\n✅ Build complete! ${files.length} pages generated.\n`);
   } catch (err) {

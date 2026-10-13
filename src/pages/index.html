@@ -27,6 +27,16 @@
             --color-light: {{ design.theme.light_color || '#F9FAFB' }};
         }
     </style>
+    <link rel="canonical" href="https://newnessoflife.de/">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="de_DE">
+    <meta property="og:site_name" content="Newness of Life Mainz">
+    <meta property="og:title" content="{{ homepage.seo.meta_title || settings.site_title }}">
+    <meta property="og:description" content="{{ homepage.seo.meta_description || settings.site_description }}">
+    <meta property="og:url" content="https://newnessoflife.de/">
+    <meta property="og:image" content="https://newnessoflife.de/images/church-service.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+{{{ churchJsonLd }}}
 </head>
 
 <body class="home">

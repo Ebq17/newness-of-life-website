@@ -1,0 +1,132 @@
+{
+  "church": {
+    "@context": "https://schema.org",
+    "@type": "Church",
+    "@id": "https://newnessoflife.de/#church",
+    "name": "Newness of Life – Die Kirche des lebendigen Gottes International e.V.",
+    "alternateName": [
+      "Newness of Life Mainz",
+      "Church of the Living God International Mainz"
+    ],
+    "description": "Internationale Freikirche und Gospel-Gemeinde in Mainz mit Gottesdienst jeden Sonntag um 14 Uhr.",
+    "url": "https://newnessoflife.de/",
+    "logo": "https://newnessoflife.de/images/Logo_Schwarz_Transparent_KS.png",
+    "image": "https://newnessoflife.de/images/church-service.jpg",
+    "email": "newnessoflife@clgi.org",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Hebbelstr. 56-60",
+      "postalCode": "55127",
+      "addressLocality": "Mainz",
+      "addressRegion": "Rheinland-Pfalz",
+      "addressCountry": "DE"
+    },
+    "areaServed": "Mainz",
+    "sameAs": [
+      "https://www.instagram.com/newnessoflife.clgi/"
+    ],
+    "memberOf": {
+      "@type": "Organization",
+      "name": "Church of the Living God International",
+      "url": "https://clgi.org/"
+    }
+  },
+  "services": {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Event",
+        "name": "Gospel-Gottesdienst – Newness of Life Mainz",
+        "description": "Wöchentlicher Gottesdienst mit Gospel-Lobpreis, Predigt, Kinderprogramm und Gemeinschaft.",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "eventSchedule": {
+          "@type": "Schedule",
+          "repeatFrequency": "P1W",
+          "byDay": "https://schema.org/Sunday",
+          "startTime": "14:00",
+          "scheduleTimezone": "Europe/Berlin"
+        },
+        "location": {
+          "@type": "Place",
+          "name": "Newness of Life Mainz",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Hebbelstr. 56-60",
+            "postalCode": "55127",
+            "addressLocality": "Mainz",
+            "addressRegion": "Rheinland-Pfalz",
+            "addressCountry": "DE"
+          }
+        },
+        "organizer": {
+          "@id": "https://newnessoflife.de/#church"
+        },
+        "isAccessibleForFree": true,
+        "image": "https://newnessoflife.de/images/church-service.jpg"
+      },
+      {
+        "@type": "Event",
+        "name": "Gebetsabend – Newness of Life Mainz",
+        "description": "Gemeinsames Gebet und Fürbitte.",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "eventSchedule": {
+          "@type": "Schedule",
+          "repeatFrequency": "P1W",
+          "byDay": "https://schema.org/Friday",
+          "startTime": "19:00",
+          "scheduleTimezone": "Europe/Berlin"
+        },
+        "location": {
+          "@type": "Place",
+          "name": "Newness of Life Mainz",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Hebbelstr. 56-60",
+            "postalCode": "55127",
+            "addressLocality": "Mainz",
+            "addressRegion": "Rheinland-Pfalz",
+            "addressCountry": "DE"
+          }
+        },
+        "organizer": {
+          "@id": "https://newnessoflife.de/#church"
+        },
+        "isAccessibleForFree": true,
+        "image": "https://newnessoflife.de/images/Gebete.jpg"
+      },
+      {
+        "@type": "Event",
+        "name": "Bibelstudium – Newness of Life Mainz",
+        "description": "Vertiefendes Bibelstudium.",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "eventSchedule": {
+          "@type": "Schedule",
+          "repeatFrequency": "P1W",
+          "byDay": [
+            "https://schema.org/Monday",
+            "https://schema.org/Wednesday"
+          ],
+          "startTime": "19:00",
+          "scheduleTimezone": "Europe/Berlin"
+        },
+        "location": {
+          "@type": "Place",
+          "name": "Newness of Life Mainz",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Hebbelstr. 56-60",
+            "postalCode": "55127",
+            "addressLocality": "Mainz",
+            "addressRegion": "Rheinland-Pfalz",
+            "addressCountry": "DE"
+          }
+        },
+        "organizer": {
+          "@id": "https://newnessoflife.de/#church"
+        },
+        "isAccessibleForFree": true,
+        "image": "https://newnessoflife.de/images/biblestunde_jugend.jpg"
+      }
+    ]
+  }
+}

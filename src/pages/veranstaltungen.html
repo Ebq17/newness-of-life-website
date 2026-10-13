@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Termine & Veranstaltungen - Newness of Life Mainz</title>
-    <meta name="description" content="Alle Termine und Veranstaltungen der Newness of Life Gemeinde in Mainz auf einen Blick.">
+    <title>Events & Gospel-Konzerte in Mainz | Newness of Life</title>
+    <meta name="description" content="Worship Nights, Gospel-Konzert, Jugendtreffen und mehr: alle Termine der Freikirche Newness of Life in Mainz. Eintritt frei – komm vorbei!">
 
     <link rel="stylesheet" href="css/style.css?v=20260220r3">
 
@@ -656,6 +656,16 @@
             }
         }
     </style>
+    <link rel="canonical" href="https://newnessoflife.de/veranstaltungen">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="de_DE">
+    <meta property="og:site_name" content="Newness of Life Mainz">
+    <meta property="og:title" content="Events & Gospel-Konzerte in Mainz | Newness of Life">
+    <meta property="og:description" content="Worship Nights, Gospel-Konzert, Jugendtreffen und mehr: alle Termine der Freikirche Newness of Life in Mainz. Eintritt frei – komm vorbei!">
+    <meta property="og:url" content="https://newnessoflife.de/veranstaltungen">
+    <meta property="og:image" content="https://newnessoflife.de/images/Yellow_and_Black_Minimalist_Night_Worship_Instagram_Post.png">
+    <meta name="twitter:card" content="summary_large_image">
+{{{ eventsJsonLd }}}
 </head>
 
 <body>
@@ -672,7 +682,7 @@
             </div>
             <div class="hero-overlay"></div>
             <div class="hero-content">
-                <h1 data-i18n="events_page.title">Termine & Veranstaltungen</h1>
+                <h1 data-i18n="events_page.title">Termine & Veranstaltungen in Mainz</h1>
                 <p class="lead" data-i18n="events_page.subtitle">Alle kommenden Termine unserer Gemeinde auf einen Blick.</p>
             </div>
         </section>
@@ -763,7 +773,7 @@
                             <div class="event-card">
                                 <div class="card-header" style="background: linear-gradient(135deg, {{ event.category_color }}cc 0%, {{ event.category_color }} 100%);">
                                     <if condition="event.image">
-                                        <img src="{{ event.image }}" alt="{{ event.title }}" style="{{ event.image_inline_style || '' }}">
+                                        <img src="{{ event.image }}" alt="{{ event.title }} – Newness of Life Mainz" style="{{ event.image_inline_style || '' }}">
                                     </if>
                                     <if condition="!event.image">
                                         <i class="fa-solid {{ event.category_icon }} event-icon"></i>

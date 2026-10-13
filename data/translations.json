@@ -14,14 +14,14 @@
       "logo_subtext": "die Kirche des lebendigen Gottes International e.V."
     },
     "hero": {
-      "title": "Willkommen in unserer Gemeinde",
+      "title": "Willkommen bei Newness of Life – deiner Freikirche in Mainz",
       "subtitle": "Ein Ort des Glaubens, der Gemeinschaft und der Hoffnung. Entdecke, wer wir sind und was uns bewegt.",
       "cta": "Mehr erfahren"
     },
     "services_section": {
       "title": "Unsere regelmäßigen Treffen",
       "subtitle": "Gemeinsam wachsen wir im Glauben",
-      "main_title": "Gottesdienste",
+      "main_title": "Gospel-Gottesdienst in Mainz",
       "description": "Erlebe lebendigen Lobpreis, inspirierende Predigten und herzliche Gemeinschaft. Unsere Gottesdienste sind ein Ort, an dem du Gott begegnen und im Glauben wachsen kannst.",
       "all_services": "Alle Gottesdienste",
       "our_service": "Unser Gottesdienst",
@@ -57,7 +57,7 @@
       "send": "Senden"
     },
     "events_page": {
-      "title": "Termine & Veranstaltungen",
+      "title": "Termine & Veranstaltungen in Mainz",
       "subtitle": "Alle kommenden Termine unserer Gemeinde auf einen Blick.",
       "upcoming": "Kommende Veranstaltungen",
       "upcoming_subtitle": "Besondere Events und Termine",
@@ -99,7 +99,7 @@
       "impact_help_desc": "Durch deine Unterstützung können wir Menschen in Notlagen schnell und unbürokratisch zur Seite stehen."
     },
     "about_page": {
-      "title": "Über uns",
+      "title": "Über uns – internationale Freikirche in Mainz",
       "subtitle": "Lerne unsere Gemeinde kennen",
       "welcome_title": "Willkommen bei Newness of Life",
       "welcome_subtitle": "Ein Ort des Glaubens, der Hoffnung und der Erneuerung",
@@ -142,10 +142,11 @@
       "open_website": "Website öffnen",
       "roots_europe_desc": "Die europäische Jurisdiktion der Church of the Living God International. Entdecke Mission, Leitbild und Gemeinden in Europa.",
       "roots_global_desc": "Die internationale Bewegung: Geschichte, Glaubensgrundsätze und weltweite Arbeit der Church of the Living God International.",
-      "beliefs_title": "Was wir glauben"
+      "beliefs_title": "Was wir glauben",
+      "intro_seo": "Newness of Life ist eine Freikirche in Mainz und Teil der weltweiten Church of the Living God International (CLGI). Bei uns kommen Menschen aus vielen Ländern zusammen. Unsere Gottesdienste sind geprägt von Gospel-Musik, lebendigem Lobpreis und klarer biblischer Lehre. Ob du neu in Mainz bist, eine internationale Gemeinde suchst oder einfach neugierig auf den Glauben bist: Du bist herzlich eingeladen."
     },
     "services_page": {
-      "title": "Gottesdienste",
+      "title": "Gottesdienste in Mainz – jeden Sonntag um 14 Uhr",
       "subtitle": "Erlebe Gottes Gegenwart in unserer Mitte",
       "what_to_expect": "Was dich erwartet",
       "intro_text": "Unsere Gottesdienste sind ein Ort der Begegnung mit Gott und untereinander. Erlebe lebendigen Lobpreis, inspirierende Predigten und herzliche Gemeinschaft.",
@@ -187,7 +188,9 @@
       "cta_title": "Komm, wie du bist",
       "address_prefix": "Adresse:",
       "cta_text": "Ganz egal, wo du im Leben stehst, du bist bei uns herzlich willkommen. Wir freuen uns darauf, dich kennenzulernen.",
-      "cta_button": "Zur Anfahrt"
+      "cta_button": "Zur Anfahrt",
+      "first_visit_title": "Dein erster Besuch",
+      "first_visit_text": "Du warst noch nie bei uns? Kein Problem. Unser Gottesdienst beginnt jeden Sonntag um 14 Uhr in der Hebbelstraße 56-60 in Mainz und dauert etwa zwei Stunden. Freu dich auf mitreißenden Gospel-Lobpreis, eine bibeltreue, alltagsnahe Predigt und Menschen aus vielen Nationen. Für Kinder gibt es während der Predigt ein eigenes Programm. Komm einfach so, wie du bist – nach dem Gottesdienst ist Zeit für Gespräche und Gemeinschaft."
     },
     "footer": {
       "about": "Über uns",
@@ -225,14 +228,14 @@
       "logo_subtext": "The Church of the Living God International e.V."
     },
     "hero": {
-      "title": "Welcome to Our Church",
+      "title": "Welcome to Newness of Life – your international church in Mainz",
       "subtitle": "A place of faith, community, and hope. Discover who we are and what moves us.",
       "cta": "Learn More"
     },
     "services_section": {
       "title": "Our Regular Meetings",
       "subtitle": "Together we grow in faith",
-      "main_title": "Church Services",
+      "main_title": "Gospel Church Service in Mainz",
       "description": "Experience vibrant worship, inspiring sermons, and warm fellowship. Our services are a place where you can encounter God and grow in faith.",
       "all_services": "All Services",
       "our_service": "Our Service",
@@ -268,7 +271,7 @@
       "send": "Send"
     },
     "events_page": {
-      "title": "Events & Dates",
+      "title": "Events & Dates in Mainz",
       "subtitle": "All upcoming events at a glance.",
       "upcoming": "Upcoming Events",
       "upcoming_subtitle": "Special events and dates",
@@ -310,7 +313,7 @@
       "impact_help_desc": "With your support, we can quickly and unbureaucratically assist people in difficult situations."
     },
     "about_page": {
-      "title": "About Us",
+      "title": "About Us – an international church in Mainz",
       "subtitle": "Get to know our church",
       "welcome_title": "Welcome to Newness of Life",
       "welcome_subtitle": "A place of faith, hope, and renewal",
@@ -353,10 +356,11 @@
       "open_website": "Open Website",
       "roots_europe_desc": "The European jurisdiction of the Church of the Living God International. Discover mission, vision, and churches in Europe.",
       "roots_global_desc": "The international movement: history, beliefs, and worldwide work of the Church of the Living God International.",
-      "beliefs_title": "What We Believe"
+      "beliefs_title": "What We Believe",
+      "intro_seo": "Newness of Life is a free church in Mainz and part of the worldwide Church of the Living God International (CLGI). People from many countries come together with us. Our services are shaped by gospel music, vibrant worship and clear biblical teaching. Whether you are new to Mainz, looking for an international church or simply curious about faith: you are warmly invited."
     },
     "services_page": {
-      "title": "Church Services",
+      "title": "Church Services in Mainz – every Sunday at 2 pm",
       "subtitle": "Experience God's presence among us",
       "what_to_expect": "What to Expect",
       "intro_text": "Our services are a place to encounter God and one another. Experience vibrant worship, inspiring sermons, and warm fellowship.",
@@ -398,7 +402,9 @@
       "cta_title": "Come as You Are",
       "address_prefix": "Address:",
       "cta_text": "No matter where you are in life, you are warmly welcome. We look forward to meeting you.",
-      "cta_button": "Get Directions"
+      "cta_button": "Get Directions",
+      "first_visit_title": "Your first visit",
+      "first_visit_text": "Never been to church with us? No problem. Our service starts every Sunday at 2 pm at Hebbelstraße 56-60 in Mainz and lasts about two hours. Expect uplifting gospel worship, a Bible-based, practical sermon and people from many nations. During the sermon there is a dedicated programme for children. Come as you are – after the service there is time to talk and connect."
     },
     "footer": {
       "about": "About Us",

@@ -4,12 +4,10 @@
     "subtitle": "Mit deiner Unterstützung können wir in Mainz einen Ort der Hoffnung, der Gemeinschaft und des Glaubens gestalten. Jeder Beitrag, ob groß oder klein, macht einen Unterschied.",
     "background_image": ""
   },
-
   "intro": {
     "title": "Warum Spenden?",
     "text": "Deine Spende ermöglicht es uns, Menschen mit der Liebe Gottes zu erreichen, unsere Gemeinde zu betreiben und soziale Projekte zu unterstützen. Jeder Beitrag macht einen Unterschied!"
   },
-
   "impact": {
     "title": "Dein Beitrag bewirkt",
     "items": [
@@ -35,7 +33,6 @@
       }
     ]
   },
-
   "bank_details": {
     "title": "Bankverbindung",
     "account_holder": "Die Kirche des lebendigen Gottes International e.V.",
@@ -44,13 +41,11 @@
     "bank_name": "Volksbank Alzey-Worms eG",
     "reference": "Spende"
   },
-
   "online_donation": {
     "enabled": true,
     "paypal_link": "https://www.paypal.com/donate/?hosted_button_id=JFM46GE836RP8",
     "other_link": ""
   },
-
   "faq": {
     "title": "Häufige Fragen",
     "items": [
@@ -68,9 +63,8 @@
       }
     ]
   },
-
   "seo": {
-    "meta_title": "Spenden - Newness of Life Mainz",
-    "meta_description": "Unterstütze unsere Gemeinde mit deiner Spende. Jeder Beitrag hilft uns, Menschen zu erreichen."
+    "meta_title": "Spenden – Freikirche Newness of Life Mainz",
+    "meta_description": "Unterstütze die Arbeit der Freikirche Newness of Life in Mainz per Überweisung oder PayPal. Spendenquittung auf Anfrage per E-Mail."
   }
 }
