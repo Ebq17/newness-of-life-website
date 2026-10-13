@@ -3,6 +3,17 @@
   publish = "."
   functions = "netlify/functions"
 
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-cache"
+
+[[redirects]]
+  from = "/event.html"
+  to = "/veranstaltungen"
+  status = 301
+
 # Interne Dateien nie ausliefern (private Daten, Quellcode, Entwicklung)
 [[redirects]]
   from = "/data/contacts.json"

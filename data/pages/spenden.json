@@ -1,67 +1,81 @@
 {
   "hero": {
     "title": "Deine Spende bewegt Herzen",
-    "subtitle": "Mit deiner Unterstützung können wir in Mainz einen Ort der Hoffnung, der Gemeinschaft und des Glaubens gestalten. Jeder Beitrag, ob groß oder klein, macht einen Unterschied.",
+    "title_en": "Your Donation Moves Hearts",
+    "subtitle": "Mit deiner Unterstützung können wir in Mainz einen Ort der Hoffnung, der Gemeinschaft und des Glaubens gestalten.",
+    "subtitle_en": "With your support, we can create a place of hope, community, and faith in Mainz.",
+    "button_text": "Jetzt spenden",
+    "button_text_en": "Donate Now",
     "background_image": ""
   },
-  "intro": {
-    "title": "Warum Spenden?",
-    "text": "Deine Spende ermöglicht es uns, Menschen mit der Liebe Gottes zu erreichen, unsere Gemeinde zu betreiben und soziale Projekte zu unterstützen. Jeder Beitrag macht einen Unterschied!"
-  },
   "impact": {
-    "title": "Dein Beitrag bewirkt",
+    "title": "Was deine Spende bewirkt",
+    "title_en": "What your donation achieves",
     "items": [
       {
-        "title": "Gemeindeleben",
-        "description": "Finanzierung von Gottesdiensten, Veranstaltungen und Gemeindeaktivitäten",
-        "icon": "fa-church"
+        "title": "Menschen begegnen",
+        "title_en": "Connect with people",
+        "description": "Deine Spende hilft uns, offene Türen für jeden zu haben, der Gemeinschaft und ein offenes Ohr sucht.",
+        "description_en": "Your donation helps us keep our doors open for everyone seeking community and a listening ear.",
+        "icon": "fa-people-group"
       },
       {
-        "title": "Soziale Projekte",
-        "description": "Unterstützung von Bedürftigen in unserer Umgebung",
+        "title": "Nächste Generation fördern",
+        "title_en": "Support the next generation",
+        "description": "Wir investieren in eine liebevolle und sichere Umgebung, in der Kinder und Jugendliche im Glauben wachsen können.",
+        "description_en": "We invest in a loving and safe environment where children and young people can grow in faith.",
+        "icon": "fa-seedling"
+      },
+      {
+        "title": "Praktische Hilfe leisten",
+        "title_en": "Provide practical help",
+        "description": "Durch deine Unterstützung können wir Menschen in Notlagen schnell und unbürokratisch zur Seite stehen.",
+        "description_en": "With your support, we can quickly and unbureaucratically assist people in difficult situations.",
         "icon": "fa-hand-holding-heart"
-      },
-      {
-        "title": "Jugendarbeit",
-        "description": "Programme und Events für junge Menschen",
-        "icon": "fa-users"
-      },
-      {
-        "title": "Mission",
-        "description": "Verbreitung des Evangeliums weltweit",
-        "icon": "fa-globe"
       }
     ]
   },
+  "options": {
+    "title": "So kannst du uns unterstützen",
+    "title_en": "Ways to support us"
+  },
   "bank_details": {
-    "title": "Bankverbindung",
+    "title": "Banküberweisung",
+    "title_en": "Bank Transfer",
+    "text": "Spende direkt auf unser Konto. Wenn du eine Spendenquittung brauchst, kannst du sie danach per E-Mail anfragen.",
+    "text_en": "Donate directly to our account. If you need a donation receipt, you can request it by email afterwards.",
     "account_holder": "Die Kirche des lebendigen Gottes International e.V.",
     "iban": "DE26 5509 1200 0040 3569 08",
     "bic": "GENODE61AZY",
     "bank_name": "Volksbank Alzey-Worms eG",
-    "reference": "Spende"
+    "reference": "Spende",
+    "reference_en": "Donation",
+    "recipient_label": "Empfänger",
+    "recipient_label_en": "Recipient",
+    "reference_label": "Verwendungszweck",
+    "reference_label_en": "Reference",
+    "bank_label": "Bank",
+    "bank_label_en": "Bank"
   },
   "online_donation": {
-    "enabled": true,
+    "show": true,
+    "title": "PayPal",
+    "title_en": "PayPal",
+    "text": "Sicher und schnell online spenden – auch ohne PayPal-Konto möglich.",
+    "text_en": "Donate securely and quickly online – even without a PayPal account.",
     "paypal_link": "https://www.paypal.com/donate/?hosted_button_id=JFM46GE836RP8",
-    "other_link": ""
+    "button_text": "Mit PayPal spenden",
+    "button_text_en": "Donate with PayPal",
+    "note": "Betrag und Zahlungsart wählst du direkt bei PayPal.",
+    "note_en": "You choose the amount and payment method directly on PayPal."
   },
-  "faq": {
-    "title": "Häufige Fragen",
-    "items": [
-      {
-        "question": "Ist meine Spende steuerlich absetzbar?",
-        "answer": "Ja, als eingetragener Verein können wir Spendenbescheinigungen ausstellen."
-      },
-      {
-        "question": "Wie wird meine Spende verwendet?",
-        "answer": "Deine Spende fließt in Gemeindeleben, soziale Projekte und Mission."
-      },
-      {
-        "question": "Kann ich auch regelmäßig spenden?",
-        "answer": "Ja, du kannst einen Dauerauftrag bei deiner Bank einrichten."
-      }
-    ]
+  "receipt": {
+    "title": "Spendenquittung nur bei Bedarf",
+    "title_en": "Donation receipt on request",
+    "text": "Du musst kein Formular ausfüllen. Spende einfach per Überweisung oder PayPal. Wenn du eine Spendenquittung brauchst, schick uns danach eine kurze E-Mail mit Betrag, Datum und Zahlungsweg. Für die Quittung brauchen wir deinen vollständigen Namen und deine Adresse.",
+    "text_en": "No form needed. Simply donate by bank transfer or PayPal. If you need a donation receipt, send us a short email afterwards with the amount, date and payment method. For the receipt we need your full name and address.",
+    "button_text": "Spendenquittung per E-Mail anfragen",
+    "button_text_en": "Request a receipt by email"
   },
   "seo": {
     "meta_title": "Spenden – Freikirche Newness of Life Mainz",

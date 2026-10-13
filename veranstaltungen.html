@@ -1,674 +1,32 @@
 <!DOCTYPE html>
 <html lang="de">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Events & Gospel-Konzerte in Mainz | Newness of Life</title>
-    <meta name="description" content="Worship Nights, Gospel-Konzert, Jugendtreffen und mehr: alle Termine der Freikirche Newness of Life in Mainz. Eintritt frei – komm vorbei!">
-
-    <link rel="stylesheet" href="css/style.css?v=20260220r3">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
-
-    <style>
-        /* ========================================
-           VERANSTALTUNGEN PAGE - OPTIMIERT
-           ======================================== */
-
-        /* Hero Section - wie Gottesdienste */
-        .events-hero {
-            position: relative;
-            min-height: 55vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #1e3a5f 0%, #2563EB 100%);
-            overflow: hidden;
-        }
-
-        .events-hero .video-background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
-
-        .events-hero .video-background video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .events-hero .hero-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(17, 24, 39, 0.65);
-            z-index: 1;
-        }
-
-        .events-hero .hero-content {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            color: white;
-            padding: 80px 20px;
-            max-width: 800px;
-        }
-
-        .events-hero h1 {
-            font-size: clamp(2.25rem, 5vw, 3.5rem);
-            font-weight: 800;
-            margin-bottom: 16px;
-            color: white;
-            line-height: 1.2;
-        }
-
-        .events-hero .lead {
-            font-size: clamp(1rem, 2vw, 1.2rem);
-            opacity: 0.95;
-            max-width: 550px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-
-        /* ========================================
-           REGELMÄSSIGE TERMINE - Clean Cards
-           ======================================== */
-        .regular-section {
-            background: #F8FAFC;
-            padding: 80px 0;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-
-        .section-header h2 {
-            font-size: clamp(1.75rem, 3vw, 2.25rem);
-            font-weight: 700;
-            color: #111827;
-            margin-bottom: 12px;
-        }
-
-        .section-header p {
-            color: #6B7280;
-            font-size: 1.1rem;
-        }
-
-        .regular-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .regular-card {
-            background: white;
-            border-radius: 16px;
-            padding: 32px 24px;
-            text-align: center;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid rgba(0, 0, 0, 0.04);
-        }
-
-        .regular-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .regular-card .icon-wrap {
-            width: 64px;
-            height: 64px;
-            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-        }
-
-        .regular-card .icon-wrap i {
-            font-size: 1.5rem;
-            color: white;
-        }
-
-        .regular-card h3 {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #111827;
-            margin-bottom: 8px;
-        }
-
-        .regular-card .time {
-            color: #2563EB;
-            font-weight: 600;
-            font-size: 0.95rem;
-            margin-bottom: 6px;
-        }
-
-        .regular-card .desc {
-            color: #6B7280;
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-
-        /* ========================================
-           KOMMENDE EVENTS - Standard + Flyer Cards
-           ======================================== */
-        .events-section {
-            padding: 80px 0;
-            background: white;
-        }
-
-        .events-grid {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 24px;
-            margin: 0;
-        }
-
-        .month-block {
-            margin-bottom: 56px;
-        }
-
-        .month-block:last-child {
-            margin-bottom: 0;
-        }
-
-        .month-heading {
-            font-size: 1.7rem;
-            font-weight: 800;
-            color: #0F172A;
-            margin-bottom: 18px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #E5E7EB;
-            text-transform: capitalize;
-        }
-
-        .mobile-month-nav {
-            display: none;
-            margin: 0 0 18px;
-        }
-
-        .mobile-month-nav-track {
-            display: flex;
-            gap: 10px;
-        }
-
-        .month-chip {
-            border: 1px solid #D1D5DB;
-            background: #FFFFFF;
-            color: #374151;
-            border-radius: 999px;
-            padding: 8px 14px;
-            font-size: 0.82rem;
-            font-weight: 600;
-            white-space: nowrap;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .month-chip:hover {
-            border-color: #2563EB;
-            color: #1D4ED8;
-        }
-
-        .month-chip.active {
-            border-color: #1D4ED8;
-            background: #2563EB;
-            color: #FFFFFF;
-        }
-
-        /* Standard Event Card */
-        .event-card {
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid rgba(0, 0, 0, 0.04);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .event-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .event-card .card-header {
-            height: 160px;
-            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        .event-card .card-header .event-icon {
-            font-size: 3rem;
-            color: white;
-            opacity: 0.9;
-        }
-
-        .event-card .card-header img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .event-card .date-badge {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            background: white;
-            border-radius: 12px;
-            padding: 10px 14px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            z-index: 2;
-        }
-
-        .event-card .date-badge .day {
-            display: block;
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: #2563EB;
-            line-height: 1;
-        }
-
-        .event-card .date-badge .month {
-            display: block;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            color: #6B7280;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-
-        .event-card .card-body {
-            padding: 24px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .event-card .tag {
-            display: inline-block;
-            background: #EEF2FF;
-            color: #4F46E5;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            margin-bottom: 12px;
-            width: fit-content;
-        }
-
-        .event-card h3 {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #111827;
-            margin-bottom: 16px;
-            line-height: 1.4;
-        }
-
-        .event-card .meta {
-            color: #6B7280;
-            font-size: 0.9rem;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .event-card .meta i {
-            color: #2563EB;
-            width: 18px;
-            text-align: center;
-        }
-
-        .event-schedule {
-            list-style: none;
-            margin: 6px 0 8px;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .event-schedule li {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            font-size: 0.86rem;
-            color: #374151;
-            border: 1px solid #E5E7EB;
-            border-radius: 8px;
-            padding: 6px 10px;
-            background: #F9FAFB;
-        }
-
-        .event-schedule .schedule-day {
-            font-weight: 600;
-        }
-
-        .event-schedule .schedule-time {
-            white-space: nowrap;
-            font-weight: 600;
-            color: #1D4ED8;
-        }
-
-        .btn-calendar {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 16px;
-            padding: 10px 18px;
-            background: #2563EB;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-calendar:hover {
-            background: #1D4ED8;
-            transform: translateY(-2px);
-        }
-
-        .btn-calendar i {
-            font-size: 1rem;
-        }
-
-        .event-card.flyer-card .btn-calendar {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(4px);
-        }
-
-        .event-card.flyer-card .btn-calendar:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        /* ========================================
-           FLYER CARD - Event mit Hintergrundbild
-           ======================================== */
-        .event-card.flyer-card {
-            min-height: 380px;
-            position: relative;
-            background-size: cover;
-            background-position: center;
-            border: none;
-        }
-
-        .event-card.flyer-card .flyer-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(
-                to bottom,
-                rgba(0, 0, 0, 0.1) 0%,
-                rgba(0, 0, 0, 0.4) 50%,
-                rgba(0, 0, 0, 0.85) 100%
-            );
-            z-index: 1;
-        }
-
-        .event-card.flyer-card .card-body {
-            position: relative;
-            z-index: 2;
-            margin-top: auto;
-            padding: 32px 24px;
-            color: white;
-        }
-
-        .event-card.flyer-card .tag {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            backdrop-filter: blur(4px);
-        }
-
-        .event-card.flyer-card h3 {
-            color: white;
-            font-size: 1.4rem;
-        }
-
-        .event-card.flyer-card .meta {
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .event-card.flyer-card .meta i {
-            color: white;
-        }
-
-        .event-card.flyer-card .event-schedule li {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(255, 255, 255, 0.35);
-            color: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(3px);
-        }
-
-        .event-card.flyer-card .event-schedule .schedule-time {
-            color: #ffffff;
-        }
-
-        .event-card.flyer-card .date-badge {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 2;
-        }
-
-        /* ========================================
-           CTA SECTION
-           ======================================== */
-        .events-cta {
-            background: linear-gradient(135deg, #1e3a5f 0%, #2563EB 100%);
-            padding: 80px 0;
-            text-align: center;
-            color: white;
-        }
-
-        .events-cta h2 {
-            color: white;
-            font-size: clamp(1.75rem, 3vw, 2.25rem);
-            margin-bottom: 16px;
-        }
-
-        .events-cta p {
-            opacity: 0.9;
-            max-width: 500px;
-            margin: 0 auto 28px;
-            font-size: 1.1rem;
-        }
-
-        .events-cta .btn {
-            background: white;
-            color: #2563EB;
-            padding: 14px 32px;
-            border-radius: 8px;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-block;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .events-cta .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        /* ========================================
-           RESPONSIVE
-           ======================================== */
-        @media (max-width: 900px) {
-            .regular-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .events-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-                gap: 18px;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .events-hero {
-                min-height: 45vh;
-            }
-
-            .events-hero .hero-content {
-                padding: 60px 20px;
-            }
-
-            .regular-section,
-            .events-section {
-                padding: 60px 0;
-            }
-
-            .regular-grid {
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
-
-            .events-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .mobile-month-nav {
-                display: block;
-            }
-
-            .mobile-month-nav-track {
-                overflow-x: auto;
-                padding-bottom: 6px;
-                scroll-snap-type: x proximity;
-                -webkit-overflow-scrolling: touch;
-            }
-
-            .mobile-month-nav-track::-webkit-scrollbar {
-                height: 4px;
-            }
-
-            .mobile-month-nav-track::-webkit-scrollbar-thumb {
-                background: #BFDBFE;
-                border-radius: 999px;
-            }
-
-            .month-chip {
-                scroll-snap-align: center;
-            }
-
-            .month-block {
-                margin-bottom: 28px;
-            }
-
-            .month-block.is-hidden-mobile {
-                display: none;
-            }
-
-            .month-heading {
-                font-size: 1.35rem;
-                margin-bottom: 12px;
-                padding-bottom: 6px;
-            }
-
-            .regular-card {
-                padding: 24px 20px;
-            }
-
-            .event-card .card-header {
-                height: 128px;
-            }
-
-            .event-card .card-body {
-                padding: 18px;
-            }
-
-            .event-card h3 {
-                font-size: 1.05rem;
-                margin-bottom: 12px;
-            }
-
-            .event-card .meta {
-                gap: 8px;
-                font-size: 0.85rem;
-            }
-
-            .event-schedule {
-                gap: 5px;
-            }
-
-            .event-schedule li {
-                font-size: 0.8rem;
-                padding: 5px 8px;
-            }
-
-            .event-card .date-badge {
-                top: 12px;
-                right: 12px;
-                padding: 8px 10px;
-            }
-
-            .event-card .date-badge .day {
-                font-size: 1.2rem;
-            }
-
-            .btn-calendar {
-                width: 100%;
-                justify-content: center;
-                margin-top: 12px;
-            }
-
-            .event-card.flyer-card {
-                min-height: 300px;
-            }
-
-            .event-card.flyer-card .card-body {
-                padding: 20px 18px;
-            }
-
-            .events-cta {
-                padding: 60px 20px;
-            }
-        }
-    </style>
-    <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="canonical" href="https://newnessoflife.de/veranstaltungen">
-    <meta property="og:type" content="website">
-    <meta property="og:locale" content="de_DE">
-    <meta property="og:site_name" content="Newness of Life Mainz">
-    <meta property="og:title" content="Events & Gospel-Konzerte in Mainz | Newness of Life">
-    <meta property="og:description" content="Worship Nights, Gospel-Konzert, Jugendtreffen und mehr: alle Termine der Freikirche Newness of Life in Mainz. Eintritt frei – komm vorbei!">
-    <meta property="og:url" content="https://newnessoflife.de/veranstaltungen">
-    <meta property="og:image" content="https://newnessoflife.de/images/Yellow_and_Black_Minimalist_Night_Worship_Instagram_Post.png">
-    <meta name="twitter:card" content="summary_large_image">
-    <script type="application/ld+json">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#15233B">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="de_DE">
+<meta property="og:site_name" content="Newness of Life Mainz">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+<link rel="stylesheet" href="/css/site.css?v=20261013">
+
+  <title>Events &amp; Gospel-Konzerte in Mainz | Newness of Life</title>
+  <meta name="description" content="Worship Nights, Gospel-Konzert, Jugendtreffen und mehr: alle Termine der Freikirche Newness of Life in Mainz. Eintritt frei – komm vorbei!">
+  <link rel="canonical" href="https://newnessoflife.de/veranstaltungen">
+  <meta property="og:title" content="Events &amp; Gospel-Konzerte in Mainz | Newness of Life">
+  <meta property="og:description" content="Worship Nights, Gospel-Konzert, Jugendtreffen und mehr: alle Termine der Freikirche Newness of Life in Mainz. Eintritt frei – komm vorbei!">
+  <meta property="og:url" content="https://newnessoflife.de/veranstaltungen">
+  <meta property="og:image" content="https://newnessoflife.de/images/Yellow_and_Black_Minimalist_Night_Worship_Instagram_Post.png">
+  <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
@@ -750,438 +108,239 @@
     }
   ]
 }
-    </script>
+</script>
 </head>
-
-<body>
-    <!-- Banner (wenn aktiviert) -->
-<!-- Header (Partial) -->
-<link rel="stylesheet" href="css/header.css?v=20260220r3">
-<header class="site-header-pro" data-cms-section="header">
-  <div class="container">
-    <nav class="main-nav-pro" aria-label="Hauptnavigation">
-      <a href="index.html#start" class="logo-pro" data-cms-field="header.logo" data-cms-label="Logo">
-        <img src="/images/Logo_Schwarz_Transparent_KS.png" alt="Newness of Life Logo" class="logo-img-pro" data-cms-field="header.logo.image" data-cms-label="Logo Bild">
-        <div class="logo-text-container">
-          <span class="logo-text-pro" data-cms-field="header.logo.text" data-cms-label="Logo Text">Newness of Life</span>
-          <span class="logo-subtext-pro" data-cms-field="header.logo.subtext" data-cms-label="Logo Untertext" data-i18n="header.logo_subtext">die Kirche des lebendigen Gottes International e.V.</span>
+<body class="page-events">
+  <a class="skip-link" href="#inhalt">Zum Inhalt springen</a>
+<header class="site-header" id="top">
+  <div class="container header-inner">
+    <a class="brand" href="/" aria-label="Newness of Life – Startseite">
+      <img class="brand-logo" src="/images/Logo_Schwarz_Transparent_KS.png" alt="Logo Newness of Life" width="52" height="52">
+      <span class="brand-text">
+        <span class="brand-name" data-t="global.header.logo.text">Newness of Life</span>
+        <span class="brand-sub" data-t="global.header.logo.subtext" data-en="The Church of the Living God International e.V.">Die Kirche des lebendigen Gottes International e.V.</span>
+      </span>
+    </a>
+    <nav class="main-nav" id="main-nav" aria-label="Hauptnavigation">
+      <ul>
+        
+          
+            <li><a href="/" class="" data-t="global.header.navigation.0.label" data-en="Home">Startseite</a></li>
+          
+          
+            <li><a href="/gottesdienste" class="" data-t="global.header.navigation.1.label" data-en="Services">Gottesdienste</a></li>
+          
+          
+            <li><a href="/ueber-uns" class="" data-t="global.header.navigation.2.label" data-en="About Us">Über uns</a></li>
+          
+          
+            <li><a href="/veranstaltungen" class="is-active" data-t="global.header.navigation.3.label" data-en="Events">Veranstaltungen</a></li>
+          
+          
+            <li><a href="/#kontakt" class="" data-t="global.header.navigation.4.label" data-en="Contact">Kontakt</a></li>
+          
+      </ul>
+      <div class="nav-actions">
+        <button type="button" class="lang-toggle" id="langToggle" aria-label="Switch to English">EN</button>
+        
+          <a class="btn btn-gold btn-sm" href="/spenden" data-t="global.header.cta_button.text" data-en="Donate">Spenden</a>
         </div>
-      </a>
-
-      <ul id="mainnav-pro" class="nav-links-pro">
-        
-          
-            <li><a href="index.html" class="" data-i18n="nav.home">Startseite</a></li>
-          
-          
-            <li><a href="gottesdienste.html" class="" data-i18n="nav.services">Gottesdienste</a></li>
-          
-          
-            <li><a href="ueber-uns.html" class="" data-i18n="nav.about">Über uns</a></li>
-          
-          
-            <li><a href="veranstaltungen.html" class="active" data-i18n="nav.events">Veranstaltungen</a></li>
-          
-          
-            <li><a href="index.html#kontakt" class="" data-i18n="nav.contact">Kontakt</a></li>
-          
-        
-          <li class="show-on-mobile"><a href="spenden.html" data-i18n="nav.donate">Spenden</a></li>
-        </ul>
-
-      <div class="header-actions">
-        <button id="langToggle" class="lang-toggle" onclick="I18n.toggleLanguage()" title="Switch to English">EN</button>
-        
-          <a href="spenden.html" class="btn-primary btn-spenden-pro" data-cms-field="header.cta_button.text" data-cms-label="CTA Button" data-i18n="nav.donate">Spenden</a>
-        <button class="menu-toggle-pro" aria-label="Menü öffnen" aria-controls="mainnav-pro" aria-expanded="false">
-          <i class="fa-solid fa-bars"></i>
-        </button>
-      </div>
     </nav>
+    <button type="button" class="menu-toggle" aria-controls="main-nav" aria-expanded="false">
+      <span class="sr-only">Menü öffnen</span>
+      <span class="menu-bars" aria-hidden="true"></span>
+    </button>
   </div>
 </header>
 
 
-    <main>
-
-        <!-- Hero -->
-        <section class="events-hero">
-            <div class="video-background">
-                <video playsinline="" autoplay="" muted="" loop="">
-                    <source src="images/Black and Red Typographic Funny YouTube Video Intro.mp4" type="video/mp4">
-                </video>
-            </div>
-            <div class="hero-overlay"></div>
-            <div class="hero-content">
-                <h1 data-i18n="events_page.title">Termine & Veranstaltungen in Mainz</h1>
-                <p class="lead" data-i18n="events_page.subtitle">Alle kommenden Termine unserer Gemeinde auf einen Blick.</p>
-            </div>
-        </section>
-
-        <!-- Regelmäßige Termine -->
-        <section class="regular-section">
-            <div class="container">
-                <div class="section-header">
-                    <h2 data-i18n="events_page.regular">Regelmäßige Termine</h2>
-                    <p data-i18n="events_page.regular_subtitle">Unsere wöchentlichen Treffen</p>
-                </div>
-                <div class="regular-grid">
-                    <div class="regular-card">
-                        <div class="icon-wrap">
-                            <i class="fa-solid fa-church"></i>
-                        </div>
-                        <h3 data-i18n="service_cards.service">Gottesdienst</h3>
-                        <p class="time" data-i18n="service_cards.every_sunday_at">Sonntag, 14:00 Uhr</p>
-                        <p class="desc" data-i18n="events_page.worship_praise">Lobpreis, Predigt & Gemeinschaft</p>
-                    </div>
-                    <div class="regular-card">
-                        <div class="icon-wrap">
-                            <i class="fa-solid fa-hands-praying"></i>
-                        </div>
-                        <h3 data-i18n="service_cards.prayer_evening">Gebetsabend</h3>
-                        <p class="time" data-i18n="service_cards.every_friday_at">Freitag, 19:00 Uhr</p>
-                        <p class="desc" data-i18n="events_page.prayer_desc">Gemeinsames Gebet & Fürbitte</p>
-                    </div>
-                    <div class="regular-card">
-                        <div class="icon-wrap">
-                            <i class="fa-solid fa-book-bible"></i>
-                        </div>
-                        <h3 data-i18n="service_cards.bible_study">Bibelstudium</h3>
-                        <p class="time" data-i18n="service_cards.every_monday_wednesday_at">Mo & Mi, 19:00 Uhr</p>
-                        <p class="desc" data-i18n="events_page.bible_study_desc">Vertiefendes Bibelstudium</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Kommende Veranstaltungen -->
-        <section class="events-section">
-            <div class="container">
-                <div class="section-header">
-                    <h2 data-i18n="events_page.upcoming">Kommende Veranstaltungen</h2>
-                    <p data-i18n="events_page.upcoming_subtitle">Besondere Events und Termine</p>
-                </div>
-                <div class="mobile-month-nav" aria-label="Monat auswählen">
-                    <div class="mobile-month-nav-track">
-                        
-                            <button type="button" class="month-chip" data-month-target="2026-10">Oktober 2026</button>
-                        
-                            <button type="button" class="month-chip" data-month-target="2026-11">November 2026</button>
-                        
-                            <button type="button" class="month-chip" data-month-target="2026-12">Dezember 2026</button>
-                        
-                    </div>
-                </div>
-                
-                    <div class="month-block" data-month-key="2026-10">
-                        <h3 class="month-heading">Oktober 2026</h3>
-                        <div class="events-grid">
-                        
-                        
-                            <!-- Standard Card -->
-                            <div class="event-card">
-                                <div class="card-header" style="background: linear-gradient(135deg, #F97316cc 0%, #F97316 100%);">
-                                    
-                                        <i class="fa-solid fa-heart event-icon"></i>
-                                    <div class="date-badge">
-                                        <span class="day">10</span>
-                                        <span class="month">Okt</span>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <span class="tag" style="background: #F9731622; color: #F97316;">Gemeinschaft</span>
-                                    <h3>Charity Dinner</h3>
-                                    <p class="meta"><i class="fa-solid fa-clock"></i> Samstag, 10. Oktober 2026 um 18:00 Uhr</p>
-                                    <p class="meta"><i class="fa-solid fa-location-dot"></i> In der Gemeinde</p>
-                                    <button class="btn-calendar" onclick="addToCalendar('Charity Dinner', '2026-10-10T18:00:00', 'In der Gemeinde', 'Tickets 15-20 Euro pro Person (Kinderpreise bis Alter 12), Sponsoren suchen, Zeugnisse teilen.', '')">
-                                        <i class="fa-solid fa-calendar-plus"></i> <span data-i18n="events_page.add_to_calendar">Zum Kalender</span>
-                                    </button>
-                                </div>
-                            </div>
-                        
-                        </div>
-                    </div>
-                
-                    <div class="month-block" data-month-key="2026-11">
-                        <h3 class="month-heading">November 2026</h3>
-                        <div class="events-grid">
-                        
-                        
-                            <!-- Standard Card -->
-                            <div class="event-card">
-                                <div class="card-header" style="background: linear-gradient(135deg, #f59e0bcc 0%, #f59e0b 100%);">
-                                    
-                                        <i class="fa-solid fa-music event-icon"></i>
-                                    <div class="date-badge">
-                                        <span class="day">28</span>
-                                        <span class="month">Nov</span>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <span class="tag" style="background: #f59e0b22; color: #f59e0b;">Special Event</span>
-                                    <h3>Gospel Concert NoL</h3>
-                                    <p class="meta"><i class="fa-solid fa-clock"></i> Samstag, 28. November 2026 um 19:00 Uhr</p>
-                                    <p class="meta"><i class="fa-solid fa-location-dot"></i> In der Gemeinde</p>
-                                    <button class="btn-calendar" onclick="addToCalendar('Gospel Concert NoL', '2026-11-28T19:00:00', 'In der Gemeinde', 'Worship Night und Gospel Concert NoL.', '')">
-                                        <i class="fa-solid fa-calendar-plus"></i> <span data-i18n="events_page.add_to_calendar">Zum Kalender</span>
-                                    </button>
-                                </div>
-                            </div>
-                        
-                        </div>
-                    </div>
-                
-                    <div class="month-block" data-month-key="2026-12">
-                        <h3 class="month-heading">Dezember 2026</h3>
-                        <div class="events-grid">
-                        
-                        
-                            <!-- Standard Card -->
-                            <div class="event-card">
-                                <div class="card-header" style="background: linear-gradient(135deg, #8B5CF6cc 0%, #8B5CF6 100%);">
-                                    
-                                        <i class="fa-solid fa-users event-icon"></i>
-                                    <div class="date-badge">
-                                        <span class="day">12</span>
-                                        <span class="month">Dez</span>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <span class="tag" style="background: #8B5CF622; color: #8B5CF6;">Jugend</span>
-                                    <h3>Youth Hangout</h3>
-                                    <p class="meta"><i class="fa-solid fa-clock"></i> Samstag, 12. Dezember 2026 um 17:00 Uhr</p>
-                                    <p class="meta"><i class="fa-solid fa-location-dot"></i> In der Gemeinde</p>
-                                    <button class="btn-calendar" onclick="addToCalendar('Youth Hangout', '2026-12-12T17:00:00', 'In der Gemeinde', 'Worship, Spiele, Pizza und Realtalk.', '')">
-                                        <i class="fa-solid fa-calendar-plus"></i> <span data-i18n="events_page.add_to_calendar">Zum Kalender</span>
-                                    </button>
-                                </div>
-                            </div>
-                        
-                        
-                            <!-- Standard Card -->
-                            <div class="event-card">
-                                <div class="card-header" style="background: linear-gradient(135deg, #f59e0bcc 0%, #f59e0b 100%);">
-                                    
-                                        <img src="/images/Yellow_and_Black_Minimalist_Night_Worship_Instagram_Post.png" alt="Worship Night – Newness of Life Mainz" style="object-position: center 30%; transform: scale(1.00); transform-origin: center 30%">
-                                    <div class="date-badge">
-                                        <span class="day">19</span>
-                                        <span class="month">Dez</span>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <span class="tag" style="background: #f59e0b22; color: #f59e0b;">Special Event</span>
-                                    <h3>Worship Night</h3>
-                                    <p class="meta"><i class="fa-solid fa-clock"></i> Samstag, 19. Dezember 2026 um 19:00 Uhr</p>
-                                    <p class="meta"><i class="fa-solid fa-location-dot"></i> In der Gemeinde</p>
-                                    <button class="btn-calendar" onclick="addToCalendar('Worship Night', '2026-12-19T19:00:00', 'In der Gemeinde', 'Jahresabschluss Worship Night.', '')">
-                                        <i class="fa-solid fa-calendar-plus"></i> <span data-i18n="events_page.add_to_calendar">Zum Kalender</span>
-                                    </button>
-                                </div>
-                            </div>
-                        
-                        </div>
-                    </div>
-                
-            </div>
-        </section>
-
-        <!-- CTA -->
-        <section class="events-cta">
-            <div class="container">
-                <h2 data-i18n="events_page.cta_title">Du bist herzlich willkommen</h2>
-                <p data-i18n="events_page.cta_text">Egal ob zum ersten Mal oder als regelmäßiger Besucher – wir freuen uns auf dich!</p>
-                <a href="index.html#kontakt" class="btn" data-i18n="events_page.contact">Kontakt aufnehmen</a>
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="site-footer" data-cms-section="footer">
-  <div class="container">
-    <div class="footer-grid">
-      <!-- Column 1: About -->
-      <div class="footer-column">
-        <h3 class="footer-heading" data-cms-field="settings.site_title" data-cms-label="Seiten-Titel">Newness of Life</h3>
-        <p class="footer-about-text" data-cms-field="footer.about_text" data-cms-label="Footer Beschreibung" data-i18n="footer.about_text">Ein Ort des Glaubens, der Gemeinschaft und der Hoffnung. Wir wollen Menschen mit der Liebe Gottes erreichen und unsere Umgebung positiv prägen.</p>
+  <main id="inhalt">
+    <section class="hero hero-page" style="background-image: url('/images/Yellow_and_Black_Minimalist_Night_Worship_Instagram_Post.png')">
+      <div class="container hero-inner">
+        <h1 data-t="pages.veranstaltungen.hero.title" data-en="Events &amp; Dates in Mainz">Termine &amp; Veranstaltungen in Mainz</h1>
+        <p class="hero-lead" data-t="pages.veranstaltungen.hero.subtitle" data-en="All upcoming events at a glance.">Alle kommenden Termine unserer Gemeinde auf einen Blick.</p>
       </div>
+    </section>
 
-      <!-- Column 2: Quick Links -->
-      
-        <div class="footer-column hide-on-mobile">
-          <h3 class="footer-heading" data-i18n="footer.quick_links">Navigation</h3>
-          <ul class="footer-links">
-            
-              
-                <li><a href="index.html" data-i18n="nav.home">Startseite</a></li>
-              
-              
-                <li><a href="gottesdienste.html" data-i18n="nav.services">Gottesdienste</a></li>
-              
-              
-                <li><a href="ueber-uns.html" data-i18n="nav.about">Über uns</a></li>
-              
-              
-                <li><a href="veranstaltungen.html" data-i18n="nav.events">Veranstaltungen</a></li>
-              
-              
-                <li><a href="index.html#kontakt" data-i18n="nav.contact">Kontakt</a></li>
-              
-            
-              <li><a href="spenden.html" data-i18n="nav.donate">Spenden</a></li>
-            </ul>
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2 data-t="pages.veranstaltungen.upcoming.title" data-en="Upcoming Events">Kommende Veranstaltungen</h2>
+          <p data-t="pages.veranstaltungen.upcoming.subtitle" data-en="Special events and dates">Besondere Events und Termine</p>
         </div>
-      <!-- Column 3: Contact -->
-      <div class="footer-column footer-contact-centered">
-        <h3 class="footer-heading" data-i18n="footer.contact">Kontakt</h3>
-        <address class="footer-contact">
-          <p><i class="fas fa-map-marker-alt"></i> Hebbelstr. 56-60<br>55127 Mainz</p>
-          
-            <p><i class="fas fa-envelope"></i> <a href="mailto:newnessoflife@clgi.org">newnessoflife@clgi.org</a></p>
-          </address>
-        <a href="index.html#kontakt" class="btn-footer-donate" data-i18n="contact_section.form_title">Kontaktformular</a>
-      </div>
 
-      <!-- Column 4: Social Media & Donations -->
-      <div class="footer-column">
         
-          <h3 class="footer-heading" data-i18n="footer.follow_us">Folge uns</h3>
-          <div class="footer-social">
-            <a href="https://www.instagram.com/newnessoflife.clgi/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <div class="month-filter" role="group" aria-label="Monat auswählen">
+            <button type="button" class="month-chip" data-month="all" aria-pressed="true" data-t="pages.veranstaltungen.upcoming.all_label" data-en="All months">Alle Monate</button>
+            
+              <button type="button" class="month-chip" data-month="2026-11" aria-pressed="false" data-t="eventsByMonth.0.label" data-en="November 2026">November 2026</button>
+            
+              <button type="button" class="month-chip" data-month="2026-12" aria-pressed="false" data-t="eventsByMonth.1.label" data-en="December 2026">Dezember 2026</button>
+            
+          </div>
+        
+          
+            <div class="month-block" data-month="2026-11">
+              <h3 class="month-heading" data-t="eventsByMonth.0.label" data-en="November 2026">November 2026</h3>
+              
+                <article class="event-card" style="--cat: #F59E0B">
+                  <div class="event-card-media no-image">
+                    
+                      <span class="event-day">28</span>
+                      <span class="event-month" data-t="eventsByMonth.0.items.0.month_short" data-en="Nov">Nov</span>
+                    </div>
+                  <div class="event-card-body">
+                    <span class="event-tag" data-t="eventsByMonth.0.items.0.category_name" data-en="Special event">Special Event</span><h3 data-t="eventsByMonth.0.items.0.title">Gospel Concert NoL</h3>
+                    <p class="event-meta"><i class="fa-regular fa-clock" aria-hidden="true"></i> <span data-t="eventsByMonth.0.items.0.date_label" data-en="Saturday, 28 November 2026, 7:00 pm">Samstag, 28. November 2026, 19:00 Uhr</span></p>
+                    <p class="event-meta"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> <span data-t="eventsByMonth.0.items.0.location" data-en="At our church">In der Gemeinde</span></p><p class="event-desc" data-t="eventsByMonth.0.items.0.description">Worship Night und Gospel Concert NoL.</p><a class="link-arrow" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Gospel%20Concert%20NoL&amp;dates=20261128T190000/20261128T210000&amp;ctz=Europe/Berlin&amp;details=Worship%20Night%20und%20Gospel%20Concert%20NoL.&amp;location=In%20der%20Gemeinde%20%E2%80%93%20Hebbelstr.%2056-60%2C%2055127%20Mainz" target="_blank" rel="noopener" data-t="pages.veranstaltungen.upcoming.calendar_button" data-en="Add to Calendar">Zum Kalender</a>
+                  </div>
+                </article>
+              
             </div>
-        <div class="footer-donation">
-          <h3 class="footer-heading" data-i18n="footer.donate">Unterstütze uns</h3>
-          <p data-cms-field="footer.donation_text" data-cms-label="Spenden Text" data-i18n="footer.donate_text">Deine Spende hilft uns, einen Unterschied in unserer Stadt zu machen.</p>
-          <a href="spenden.html" class="btn-footer-donate" data-i18n="footer.donate_button">Jetzt spenden</a>
+          
+            <div class="month-block" data-month="2026-12">
+              <h3 class="month-heading" data-t="eventsByMonth.1.label" data-en="December 2026">Dezember 2026</h3>
+              
+                <article class="event-card" style="--cat: #8B5CF6">
+                  <div class="event-card-media no-image">
+                    
+                      <span class="event-day">12</span>
+                      <span class="event-month" data-t="eventsByMonth.1.items.0.month_short" data-en="Dec">Dez</span>
+                    </div>
+                  <div class="event-card-body">
+                    <span class="event-tag" data-t="eventsByMonth.1.items.0.category_name" data-en="Youth">Jugend</span><h3 data-t="eventsByMonth.1.items.0.title">Youth Hangout</h3>
+                    <p class="event-meta"><i class="fa-regular fa-clock" aria-hidden="true"></i> <span data-t="eventsByMonth.1.items.0.date_label" data-en="Saturday, 12 December 2026, 5:00 pm">Samstag, 12. Dezember 2026, 17:00 Uhr</span></p>
+                    <p class="event-meta"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> <span data-t="eventsByMonth.1.items.0.location" data-en="At our church">In der Gemeinde</span></p><p class="event-desc" data-t="eventsByMonth.1.items.0.description">Worship, Spiele, Pizza und Realtalk.</p><a class="link-arrow" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Youth%20Hangout&amp;dates=20261212T170000/20261212T190000&amp;ctz=Europe/Berlin&amp;details=Worship%2C%20Spiele%2C%20Pizza%20und%20Realtalk.&amp;location=In%20der%20Gemeinde%20%E2%80%93%20Hebbelstr.%2056-60%2C%2055127%20Mainz" target="_blank" rel="noopener" data-t="pages.veranstaltungen.upcoming.calendar_button" data-en="Add to Calendar">Zum Kalender</a>
+                  </div>
+                </article>
+              
+                <article class="event-card" style="--cat: #F59E0B">
+                  <div class="event-card-media" style="background-image: url('/images/Yellow_and_Black_Minimalist_Night_Worship_Instagram_Post.png')">
+                    </div>
+                  <div class="event-card-body">
+                    <span class="event-tag" data-t="eventsByMonth.1.items.1.category_name" data-en="Special event">Special Event</span><h3 data-t="eventsByMonth.1.items.1.title">Worship Night</h3>
+                    <p class="event-meta"><i class="fa-regular fa-clock" aria-hidden="true"></i> <span data-t="eventsByMonth.1.items.1.date_label" data-en="Saturday, 19 December 2026, 7:00 pm">Samstag, 19. Dezember 2026, 19:00 Uhr</span></p>
+                    <p class="event-meta"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> <span data-t="eventsByMonth.1.items.1.location" data-en="At our church">In der Gemeinde</span></p><p class="event-desc" data-t="eventsByMonth.1.items.1.description">Jahresabschluss Worship Night.</p><a class="link-arrow" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Worship%20Night&amp;dates=20261219T190000/20261219T210000&amp;ctz=Europe/Berlin&amp;details=Jahresabschluss%20Worship%20Night.&amp;location=In%20der%20Gemeinde%20%E2%80%93%20Hebbelstr.%2056-60%2C%2055127%20Mainz" target="_blank" rel="noopener" data-t="pages.veranstaltungen.upcoming.calendar_button" data-en="Add to Calendar">Zum Kalender</a>
+                  </div>
+                </article>
+              
+            </div>
+          
+        </div>
+    </section>
+
+    <section class="section section-tint">
+      <div class="container">
+        <div class="section-head">
+          <h2 data-t="pages.veranstaltungen.regular.title" data-en="Regular Meetings">Regelmäßige Termine</h2>
+          <p data-t="pages.veranstaltungen.regular.subtitle" data-en="Our weekly gatherings">Unsere wöchentlichen Treffen</p>
+        </div>
+        <div class="meeting-grid">
+          
+            
+              <article class="meeting">
+                <div class="meeting-media" style="background-image: url('/images/bible.und.hand.hoch.jpg')"></div>
+                <div class="meeting-body">
+                  <p class="meeting-label" data-t="homepage.meetings.items.0.label" data-en="Fellowship">Gemeinschaft</p>
+                  <h3 data-t="homepage.meetings.items.0.title" data-en="Church Service">Gottesdienst</h3>
+                  <p class="meeting-time"><i class="fa-regular fa-clock" aria-hidden="true"></i> <span data-t="homepage.meetings.items.0.time" data-en="Every Sunday at 14:00">Jeden Sonntag um 14:00 Uhr</span></p>
+                </div>
+              </article>
+            
+            
+              <article class="meeting">
+                <div class="meeting-media" style="background-image: url('/images/Gebete.jpg')"></div>
+                <div class="meeting-body">
+                  <p class="meeting-label" data-t="homepage.meetings.items.1.label" data-en="Prayer">Gebet</p>
+                  <h3 data-t="homepage.meetings.items.1.title" data-en="Prayer Evening">Gebetsabend</h3>
+                  <p class="meeting-time"><i class="fa-regular fa-clock" aria-hidden="true"></i> <span data-t="homepage.meetings.items.1.time" data-en="Every Friday at 19:00">Jeden Freitag um 19:00 Uhr</span></p>
+                </div>
+              </article>
+            
+            
+              <article class="meeting">
+                <div class="meeting-media" style="background-image: url('/images/biblestunde_jugend.jpg')"></div>
+                <div class="meeting-body">
+                  <p class="meeting-label" data-t="homepage.meetings.items.2.label" data-en="Education">Bildung</p>
+                  <h3 data-t="homepage.meetings.items.2.title" data-en="Bible Study">Bibelstudium</h3>
+                  <p class="meeting-time"><i class="fa-regular fa-clock" aria-hidden="true"></i> <span data-t="homepage.meetings.items.2.time" data-en="Every Monday &amp; Wednesday at 19:00">Jeden Montag &amp; Mittwoch um 19:00 Uhr</span></p>
+                </div>
+              </article>
+            
         </div>
       </div>
-    </div>
+    </section>
 
-    <div class="footer-bottom">
-      <p>&copy; 2026 Newness of Life - Die Kirche des lebendigen Gottes International e.V. <span data-i18n="footer.copyright">Alle Rechte vorbehalten</span>.</p>
-      <nav class="footer-legal-links">
-        <a href="datenschutz.html" data-i18n="footer.privacy">Datenschutz</a>
-        <a href="impressum.html" data-i18n="footer.imprint">Impressum</a>
-      </nav>
+    <section class="section cta-band">
+      <div class="container narrow">
+        <h2 data-t="pages.veranstaltungen.cta.title" data-en="You are warmly welcome">Du bist herzlich willkommen</h2>
+        <p data-t="pages.veranstaltungen.cta.text" data-en="Whether it's your first time or you're a regular visitor – we look forward to seeing you!">Egal ob zum ersten Mal oder als regelmäßiger Besucher – wir freuen uns auf dich!</p>
+        <a class="btn btn-gold" href="/#kontakt" data-t="pages.veranstaltungen.cta.button_text" data-en="Get in touch">Kontakt aufnehmen</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-col footer-about">
+      <a class="brand brand-footer" href="/">
+        <img class="brand-logo" src="/images/Logo_Schwarz_Transparent_KS.png" alt="" width="44" height="44">
+        <span class="brand-name" data-t="global.header.logo.text">Newness of Life</span>
+      </a>
+      <p data-t="global.footer.about_text" data-en="A place of faith, community, and hope. We want to reach people with God's love and positively impact our surroundings.">Ein Ort des Glaubens, der Gemeinschaft und der Hoffnung. Wir wollen Menschen mit der Liebe Gottes erreichen und unsere Umgebung positiv prägen.</p>
+    </div>
+    <div class="footer-col">
+      <h2 class="footer-heading" data-t="global.footer.nav_heading" data-en="Navigation">Navigation</h2>
+      <ul class="footer-links">
+        
+          
+            <li><a href="/" data-t="global.header.navigation.0.label" data-en="Home">Startseite</a></li>
+          
+          
+            <li><a href="/gottesdienste" data-t="global.header.navigation.1.label" data-en="Services">Gottesdienste</a></li>
+          
+          
+            <li><a href="/ueber-uns" data-t="global.header.navigation.2.label" data-en="About Us">Über uns</a></li>
+          
+          
+            <li><a href="/veranstaltungen" data-t="global.header.navigation.3.label" data-en="Events">Veranstaltungen</a></li>
+          
+          
+            <li><a href="/#kontakt" data-t="global.header.navigation.4.label" data-en="Contact">Kontakt</a></li>
+          
+        <li><a href="/spenden" data-t="global.header.cta_button.text" data-en="Donate">Spenden</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h2 class="footer-heading" data-t="global.footer.contact_heading" data-en="Contact">Kontakt</h2>
+      <address>
+        <span data-t="settings.contact.address">Hebbelstr. 56-60</span><br>
+        <span data-t="settings.contact.city">55127 Mainz</span>
+      </address>
+      <ul class="footer-links">
+        
+          <li><a href="mailto:newnessoflife@clgi.org"><i class="fa-regular fa-envelope" aria-hidden="true"></i> newnessoflife@clgi.org</a></li>
+        <li><a href="/#kontakt" data-t="global.footer.contact_button" data-en="Contact form">Kontaktformular</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h2 class="footer-heading" data-t="global.footer.follow_heading" data-en="Follow Us">Folge uns</h2>
+      <div class="social">
+        <a href="https://www.instagram.com/newnessoflife.clgi/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a></div>
+      <h2 class="footer-heading" data-t="global.footer.donate_heading" data-en="Support Us">Unterstütze uns</h2>
+      <p data-t="global.footer.donation_text" data-en="Your donation helps us make a difference in our city.">Deine Spende hilft uns, einen Unterschied in unserer Stadt zu machen.</p>
+      <a class="link-arrow" href="/spenden" data-t="global.footer.donate_button" data-en="Donate Now">Jetzt spenden</a>
     </div>
   </div>
+  <div class="container footer-bottom">
+    <p>&copy; 2026 <span data-t="global.footer.copyright">Newness of Life – Die Kirche des lebendigen Gottes International e.V.</span> <span data-t="global.footer.rights_text" data-en="All rights reserved">Alle Rechte vorbehalten</span>.</p>
+    <nav aria-label="Rechtliches">
+      <a href="/datenschutz" data-t="global.footer.privacy_label" data-en="Privacy Policy">Datenschutz</a>
+      <a href="/impressum" data-t="global.footer.imprint_label" data-en="Imprint">Impressum</a>
+    </nav>
+  </div>
 </footer>
-<!-- CMS Preview Script (nur aktiv wenn ?cms-preview=1) -->
-<script src="js/cms-preview.js?v=20260220r3"></script>
-<!-- Internationalization -->
-<script src="js/i18n.js?v=20260220r3"></script>
+<script src="/js/site.js?v=20261013" defer=""></script>
 
-    <script src="js/script.js?v=20260312r1"></script>
-    <script>
-        // Add to Calendar function - generates .ics file
-        function addToCalendar(title, dateStr, location, description, endDateStr) {
-            const date = new Date(dateStr);
-            let endDate = endDateStr ? new Date(endDateStr) : new Date(date.getTime() + 2 * 60 * 60 * 1000); // +2 hours
-            if (Number.isNaN(endDate.getTime()) || endDate <= date) {
-                endDate = new Date(date.getTime() + 2 * 60 * 60 * 1000);
-            }
-
-            // Format dates for iCal (YYYYMMDDTHHmmss)
-            const formatDate = (d) => {
-                return d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-            };
-
-            const icsContent = [
-                'BEGIN:VCALENDAR',
-                'VERSION:2.0',
-                'PRODID:-//Newness of Life//Event//DE',
-                'CALSCALE:GREGORIAN',
-                'METHOD:PUBLISH',
-                'BEGIN:VEVENT',
-                `DTSTART:${formatDate(date)}`,
-                `DTEND:${formatDate(endDate)}`,
-                `SUMMARY:${title}`,
-                `LOCATION:${location || 'Hebbelstr. 56-60, 55127 Mainz'}`,
-                `DESCRIPTION:${(description || '').replace(/\n/g, '\\n')}`,
-                'STATUS:CONFIRMED',
-                `UID:${Date.now()}@newnessoflife.de`,
-                'END:VEVENT',
-                'END:VCALENDAR'
-            ].join('\r\n');
-
-            // Create download
-            const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `${title.replace(/[^a-zA-Z0-9]/g, '_')}.ics`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        function initMobileMonthFilter() {
-            const monthNav = document.querySelector('.mobile-month-nav');
-            const monthBlocks = Array.from(document.querySelectorAll('.month-block[data-month-key]'));
-            if (!monthNav || !monthBlocks.length) return;
-
-            const monthChips = Array.from(monthNav.querySelectorAll('.month-chip[data-month-target]'));
-            if (!monthChips.length) return;
-
-            const blockByKey = new Map(monthBlocks.map((block) => [block.dataset.monthKey, block]));
-            const availableKeys = monthChips
-                .map((chip) => chip.dataset.monthTarget)
-                .filter((key) => blockByKey.has(key));
-            if (!availableKeys.length) return;
-
-            const mobileQuery = window.matchMedia('(max-width: 640px)');
-            const currentMonthKey = (() => {
-                const now = new Date();
-                return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-            })();
-
-            const setActiveMonth = (activeKey) => {
-                monthChips.forEach((chip) => {
-                    chip.classList.toggle('active', chip.dataset.monthTarget === activeKey);
-                });
-                monthBlocks.forEach((block) => {
-                    block.classList.toggle('is-hidden-mobile', block.dataset.monthKey !== activeKey);
-                });
-            };
-
-            const showDesktopLayout = () => {
-                monthChips.forEach((chip) => chip.classList.remove('active'));
-                monthBlocks.forEach((block) => block.classList.remove('is-hidden-mobile'));
-            };
-
-            monthChips.forEach((chip) => {
-                chip.addEventListener('click', () => {
-                    if (!mobileQuery.matches) return;
-                    setActiveMonth(chip.dataset.monthTarget);
-                    chip.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
-                });
-            });
-
-            const applyByViewport = () => {
-                if (!mobileQuery.matches) {
-                    showDesktopLayout();
-                    return;
-                }
-
-                const defaultKey = availableKeys.includes(currentMonthKey) ? currentMonthKey : availableKeys[0];
-                setActiveMonth(defaultKey);
-
-                const activeChip = monthChips.find((chip) => chip.dataset.monthTarget === defaultKey);
-                if (activeChip) {
-                    activeChip.scrollIntoView({ inline: 'center', block: 'nearest' });
-                }
-            };
-
-            if (typeof mobileQuery.addEventListener === 'function') {
-                mobileQuery.addEventListener('change', applyByViewport);
-            } else if (typeof mobileQuery.addListener === 'function') {
-                mobileQuery.addListener(applyByViewport);
-            }
-
-            applyByViewport();
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            initMobileMonthFilter();
-        });
-    </script>
 </body>
 </html>

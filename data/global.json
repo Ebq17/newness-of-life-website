@@ -2,58 +2,79 @@
   "header": {
     "logo": {
       "image": "/images/Logo_Schwarz_Transparent_KS.png",
-      "alt": "Newness of Life Logo",
+      "alt": "Logo Newness of Life",
       "text": "Newness of Life",
-      "subtext": "die Kirche des lebendigen Gottes International e.V."
+      "subtext": "Die Kirche des lebendigen Gottes International e.V.",
+      "subtext_en": "The Church of the Living God International e.V."
     },
     "navigation": [
-      { "label": "Startseite", "url": "index.html", "show": true, "i18n_key": "nav.home" },
-      { "label": "Gottesdienste", "url": "gottesdienste.html", "show": true, "i18n_key": "nav.services" },
-      { "label": "Über uns", "url": "ueber-uns.html", "show": true, "i18n_key": "nav.about" },
-      { "label": "Veranstaltungen", "url": "veranstaltungen.html", "show": true, "i18n_key": "nav.events" },
-      { "label": "Kontakt", "url": "index.html#kontakt", "show": true, "i18n_key": "nav.contact" }
+      {
+        "label": "Startseite",
+        "label_en": "Home",
+        "url": "/",
+        "show": true
+      },
+      {
+        "label": "Gottesdienste",
+        "label_en": "Services",
+        "url": "/gottesdienste",
+        "show": true
+      },
+      {
+        "label": "Über uns",
+        "label_en": "About Us",
+        "url": "/ueber-uns",
+        "show": true
+      },
+      {
+        "label": "Veranstaltungen",
+        "label_en": "Events",
+        "url": "/veranstaltungen",
+        "show": true
+      },
+      {
+        "label": "Kontakt",
+        "label_en": "Contact",
+        "url": "/#kontakt",
+        "show": true
+      }
     ],
     "cta_button": {
       "text": "Spenden",
-      "url": "spenden.html",
-      "show": true,
-      "i18n_key": "nav.donate"
-    },
-    "sticky": true
-  },
-
-  "footer": {
-    "about_text": "Ein Ort des Glaubens, der Gemeinschaft und der Hoffnung. Wir wollen Menschen mit der Liebe Gottes erreichen und unsere Umgebung positiv prägen.",
-    "copyright": "Newness of Life - Die Kirche des lebendigen Gottes International e.V.",
-    "show_social": true,
-    "show_navigation": true,
-    "donation_text": "Deine Spende hilft uns, einen Unterschied in unserer Stadt zu machen."
-  },
-
-  "service_cards": [
-    {
-      "label": "Gemeinschaft",
-      "title": "Gottesdienst",
-      "time": "Jeden Sonntag um 14:00 Uhr",
-      "image": "/images/church-service.jpg",
-      "link": "gottesdienste.html",
-      "show": true
-    },
-    {
-      "label": "Gebet",
-      "title": "Gebetsabend",
-      "time": "Jeden Freitag um 19:00 Uhr",
-      "image": "/images/Gebete.jpg",
-      "link": "",
-      "show": true
-    },
-    {
-      "label": "Bildung",
-      "title": "Bibelstudium",
-      "time": "Jeden Montag & Mittwoch um 19:00 Uhr",
-      "image": "/images/biblestunde_jugend.jpg",
-      "link": "",
+      "text_en": "Donate",
+      "url": "/spenden",
       "show": true
     }
-  ]
+  },
+  "footer": {
+    "about_text": "Ein Ort des Glaubens, der Gemeinschaft und der Hoffnung. Wir wollen Menschen mit der Liebe Gottes erreichen und unsere Umgebung positiv prägen.",
+    "about_text_en": "A place of faith, community, and hope. We want to reach people with God's love and positively impact our surroundings.",
+    "nav_heading": "Navigation",
+    "nav_heading_en": "Navigation",
+    "contact_heading": "Kontakt",
+    "contact_heading_en": "Contact",
+    "contact_button": "Kontaktformular",
+    "contact_button_en": "Contact form",
+    "follow_heading": "Folge uns",
+    "follow_heading_en": "Follow Us",
+    "donate_heading": "Unterstütze uns",
+    "donate_heading_en": "Support Us",
+    "donation_text": "Deine Spende hilft uns, einen Unterschied in unserer Stadt zu machen.",
+    "donation_text_en": "Your donation helps us make a difference in our city.",
+    "donate_button": "Jetzt spenden",
+    "donate_button_en": "Donate Now",
+    "copyright": "Newness of Life – Die Kirche des lebendigen Gottes International e.V.",
+    "rights_text": "Alle Rechte vorbehalten",
+    "rights_text_en": "All rights reserved",
+    "privacy_label": "Datenschutz",
+    "privacy_label_en": "Privacy Policy",
+    "imprint_label": "Impressum",
+    "imprint_label_en": "Imprint"
+  },
+  "announcement": {
+    "show": false,
+    "text": "",
+    "text_en": "",
+    "link": ""
+  }
 }

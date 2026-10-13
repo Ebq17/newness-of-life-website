@@ -1,39 +1,12 @@
 {
   "hero": {
     "title": "Datenschutzerklärung",
+    "title_en": "Privacy policy",
     "subtitle": "",
-    "background_image": "images/kirche.jpg"
+    "subtitle_en": ""
   },
-
-  "content": {
-    "intro": "Der Schutz Ihrer persönlichen Daten ist uns wichtig. Diese Datenschutzerklärung informiert Sie über Art, Umfang und Zweck der Verarbeitung personenbezogener Daten auf unserer Website.",
-
-    "sections": [
-      {
-        "title": "1. Verantwortlicher",
-        "content": "Verantwortlich für die Datenverarbeitung auf dieser Website ist:\n\nDie Kirche des lebendigen Gottes International e.V.\nHebbelstr. 56-60\n55127 Mainz\n\nE-Mail: newnessoflife@clgi.org"
-      },
-      {
-        "title": "2. Erhebung und Speicherung personenbezogener Daten",
-        "content": "Beim Besuch unserer Website werden automatisch Informationen durch den Browser übermittelt und in Server-Logfiles gespeichert (z.B. IP-Adresse, Datum und Uhrzeit des Zugriffs, besuchte Seiten)."
-      },
-      {
-        "title": "3. Kontaktformular",
-        "content": "Wenn Sie uns über das Kontaktformular kontaktieren, werden die von Ihnen angegebenen Daten (Name, E-Mail, Nachricht) zur Bearbeitung Ihrer Anfrage gespeichert."
-      },
-      {
-        "title": "4. Ihre Rechte",
-        "content": "Sie haben das Recht auf Auskunft, Berichtigung, Löschung und Einschränkung der Verarbeitung Ihrer Daten. Kontaktieren Sie uns dafür bitte per E-Mail."
-      },
-      {
-        "title": "5. Cookies",
-        "content": "Unsere Website verwendet keine Cookies zu Tracking-Zwecken."
-      }
-    ]
-  },
-
-  "last_updated": "2025-01-01",
-
+  "content_html": "<h2>1. Datenschutz auf einen Blick</h2>\n<h3>Allgemeine Hinweise</h3>\n<p>Die folgenden Hinweise geben einen Überblick, was mit Ihren personenbezogenen Daten passiert, wenn Sie unsere Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können. Ausführliche Informationen entnehmen Sie der nachfolgenden Datenschutzerklärung.</p>\n<h3>Datenerfassung auf dieser Website</h3>\n<h4>Verantwortlicher für die Datenerfassung:</h4>\n<p>Newness of Life; Church of the Living God Europe e.V.<br>Hebbelstr. 56–60, 55127 Mainz, Deutschland<br>E-Mail: newnessoflife@clgi.org</p>\n<p>(Hinweis: Die Website wurde technisch von Emmanuel Quainoo individuell entwickelt; Verantwortlicher bleibt der Verein.)</p>\n<h4>Wie erfassen wir Ihre Daten?</h4>\n<ul>\n<li>Daten, die Sie selbst übermitteln (z. B. Kontaktformular).</li>\n<li>Technische Daten, die automatisch beim Besuch der Website erfasst werden (z. B. IP-Adresse, Browsertyp, Uhrzeit).</li>\n</ul>\n<h4>Wofür nutzen wir Ihre Daten?</h4>\n<ul>\n<li>Zur technischen Bereitstellung und Sicherheit der Website</li>\n<li>Zur Bearbeitung von Kontaktanfragen</li>\n<li>Nach Ihrer Einwilligung: für Google Ads/Conversion-Tracking und eingebettete Dienste (z. B. YouTube, Google Maps)</li>\n</ul>\n<h4>Ihre Rechte:</h4>\n<p>Sie haben jederzeit das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit und Widerspruch. Erteilte Einwilligungen können Sie jederzeit widerrufen.</p>\n<h2>2. Allgemeine Hinweise</h2>\n<h3>Speicherdauer</h3>\n<p>Personenbezogene Daten werden gelöscht, sobald der Zweck entfällt, Sie Ihre Einwilligung widerrufen oder Sie Löschung verlangen, sofern keine gesetzlichen Aufbewahrungsfristen bestehen.</p>\n<h3>Rechtsgrundlagen:</h3>\n<ul>\n<li>Art. 6 Abs. 1 lit. a DSGVO (Einwilligung)</li>\n<li>Art. 6 Abs. 1 lit. b DSGVO (Vertrag/Anfrage)</li>\n<li>Art. 6 Abs. 1 lit. c DSGVO (rechtliche Pflicht)</li>\n<li>Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse)</li>\n</ul>\n<h3>Datenschutzbeauftragter</h3>\n<p>Es wurde kein Datenschutzbeauftragter benannt, da die gesetzlichen Voraussetzungen nach Art. 37 DSGVO / § 38 BDSG derzeit nicht erfüllt sind.</p>\n<h3>Beschwerderecht</h3>\n<p>Sie haben das Recht, sich bei einer Aufsichtsbehörde zu beschweren, z. B.:<br>Landesbeauftragter für Datenschutz Rheinland-Pfalz</p>\n<h2>3. Datenerfassung</h2>\n<h3>Consent-Management</h3>\n<p>Beim ersten Besuch wird ein Cookie-Banner angezeigt. Dort können Sie auswählen, welche Cookies Sie zulassen. Ihre Auswahl wird gespeichert, bis Sie sie widerrufen.</p>\n<h3>Server-Log-Dateien</h3>\n<p>Folgende Daten werden automatisch erfasst: Browsertyp/-version, Betriebssystem, Referrer-URL, Hostname, Uhrzeit, IP-Adresse.</p>\n<p>Zweck: technische Bereitstellung & Sicherheit<br>Speicherdauer: max. 7 Tage<br>Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO</p>\n<h3>Kontaktformular & E-Mail</h3>\n<p>Die von Ihnen eingegebenen Daten (Name, E-Mail, Nachricht) werden nur zur Bearbeitung Ihrer Anfrage genutzt.</p>\n<p>Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO<br>Speicherdauer: bis Ihre Anfrage erledigt ist (gesetzliche Pflichten bleiben unberührt)</p>\n<h2>4. Analyse-Tools und Werbung</h2>\n<h3>Google Tag Manager</h3>\n<p>Ermöglicht die Verwaltung von Google-Diensten. Speichert selbst keine personenbezogenen Daten.</p>\n<p>Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (effiziente Verwaltung)</p>\n<h3>Google Ads & Conversion-Tracking</h3>\n<p>Wir nutzen Google Ads, um Werbung zu schalten. Conversion-Tracking zeigt uns, ob ein Nutzer nach dem Klick auf eine Anzeige eine Aktion ausführt.</p>\n<p>Rechtsgrundlage: Art. 6 Abs. 1 lit. a DSGVO (Einwilligung)<br>Sie können Ihre Einwilligung jederzeit widerrufen.</p>\n<h2>5. Eingebettete Dienste</h2>\n<h3>YouTube (Erweiterter Datenschutzmodus)</h3>\n<p>Videos werden erst nach Klick geladen. Dabei werden Daten (IP, ggf. Browserdaten) an Google/YouTube übertragen.</p>\n<p>Rechtsgrundlage: Art. 6 Abs. 1 lit. a DSGVO (Einwilligung)</p>\n<h3>Google Maps</h3>\n<p>Zeigt unseren Standort. Beim Laden werden Daten (inkl. IP-Adresse) an Google übertragen.</p>\n<p>Rechtsgrundlage: Art. 6 Abs. 1 lit. a DSGVO (Einwilligung)</p>\n<h2>6. Zahlungsanbieter</h2>\n<h3>PayPal</h3>\n<p>Bei einer Spende über PayPal werden Zahlungsdaten direkt von PayPal verarbeitet.</p>\n<p>Verantwortlich: PayPal (Europe) S.à r.l. et Cie, S.C.A., Luxemburg</p>\n<p>Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO</p>\n<p>Mehr Infos: <a href=\"https://www.paypal.com/de/webapps/mpp/ua/privacy-full\" target=\"_blank\" rel=\"noopener\">PayPal-Datenschutz</a></p>\n<h2>7. Drittlandübermittlungen</h2>\n<p>Bei Nutzung von Google- oder PayPal-Diensten kann eine Datenübermittlung in die USA stattfinden.</p>\n<p>Google und PayPal sind nach dem EU-US Data Privacy Framework zertifiziert.</p>",
+  "content_html_en": "",
   "seo": {
     "meta_title": "Datenschutz - Newness of Life Mainz",
     "meta_description": "Datenschutzerklärung der Newness of Life Gemeinde in Mainz."

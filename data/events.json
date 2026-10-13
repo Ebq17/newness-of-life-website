@@ -1,40 +1,39 @@
 {
   "categories": [
     {
-      "id": "alle",
-      "name": "Alle Termine",
-      "color": "#2563EB",
-      "icon": "fa-calendar"
-    },
-    {
       "id": "gottesdienst",
       "name": "Gottesdienst",
       "color": "#10B981",
-      "icon": "fa-church"
+      "icon": "fa-church",
+      "name_en": "Church service"
     },
     {
       "id": "jugend",
       "name": "Jugend",
       "color": "#8B5CF6",
-      "icon": "fa-users"
+      "icon": "fa-users",
+      "name_en": "Youth"
     },
     {
       "id": "special",
       "name": "Special Event",
       "color": "#F59E0B",
-      "icon": "fa-star"
+      "icon": "fa-star",
+      "name_en": "Special event"
     },
     {
       "id": "gebet",
       "name": "Gebet",
       "color": "#10B981",
-      "icon": "fa-pray"
+      "icon": "fa-pray",
+      "name_en": "Prayer"
     },
     {
       "id": "gemeinschaft",
       "name": "Gemeinschaft",
       "color": "#F97316",
-      "icon": "fa-heart"
+      "icon": "fa-heart",
+      "name_en": "Fellowship"
     }
   ],
   "items": [
@@ -45,17 +44,12 @@
       "location": "In der Gemeinde",
       "category": "special",
       "image": "/images/Yellow_and_Black_Minimalist_Night_Worship_Instagram_Post.png",
-      "icon": "fa-music",
-      "color": "#f59e0b",
       "description": "Worship Night mit Lobpreis, Gebet und Gemeinschaft.",
-      "featured": false,
       "published": true,
-      "flyerLayout": false,
-      "flyer_style": {
-        "position": "center 30%",
-        "zoom": 100,
-        "overlay": 85
-      }
+      "title_en": "",
+      "description_en": "",
+      "end_date": "",
+      "location_en": "At our church"
     },
     {
       "id": "2",
@@ -64,12 +58,12 @@
       "location": "In der Gemeinde",
       "category": "gottesdienst",
       "image": "",
-      "icon": "fa-church",
-      "color": "#10B981",
       "description": "Gemeinsamer Gottesdienst mit Danksagung und Abendmahl.",
-      "featured": false,
       "published": true,
-      "flyerLayout": false
+      "title_en": "",
+      "description_en": "",
+      "end_date": "",
+      "location_en": "At our church"
     },
     {
       "id": "3",
@@ -78,12 +72,12 @@
       "location": "In der Gemeinde",
       "category": "jugend",
       "image": "",
-      "icon": "fa-users",
-      "color": "#8B5CF6",
       "description": "Worship, Spiele, Pizza und Realtalk.",
-      "featured": false,
       "published": true,
-      "flyerLayout": false
+      "title_en": "",
+      "description_en": "",
+      "end_date": "",
+      "location_en": "At our church"
     },
     {
       "id": "4",
@@ -92,12 +86,12 @@
       "location": "In der Gemeinde",
       "category": "gemeinschaft",
       "image": "",
-      "icon": "fa-heart",
-      "color": "#F97316",
       "description": "Sommer-Grillen mit Gospel-Musik und Gemeinschaft.",
-      "featured": false,
       "published": true,
-      "flyerLayout": false
+      "title_en": "",
+      "description_en": "",
+      "end_date": "",
+      "location_en": "At our church"
     },
     {
       "id": "5",
@@ -106,12 +100,12 @@
       "location": "In der Gemeinde",
       "category": "jugend",
       "image": "",
-      "icon": "fa-users",
-      "color": "#8B5CF6",
       "description": "Für die Jugend: Spiele im Freien und Musik.",
-      "featured": false,
       "published": true,
-      "flyerLayout": false
+      "title_en": "",
+      "description_en": "",
+      "end_date": "",
+      "location_en": "At our church"
     },
     {
       "id": "6",
@@ -121,12 +115,8 @@
       "location": "Mainz",
       "category": "special",
       "image": "/images/Blue_Modern_Worship_Poster.png",
-      "icon": "fa-star",
-      "color": "#f59e0b",
       "description": "Konferenz in Mainz vom 07.08 bis 09.08.2026.",
-      "featured": false,
       "published": true,
-      "flyerLayout": true,
       "schedule": [
         {
           "date": "2026-08-07",
@@ -144,11 +134,9 @@
           "end_time": "14:30"
         }
       ],
-      "flyer_style": {
-        "position": "center top",
-        "zoom": 110,
-        "overlay": 85
-      }
+      "title_en": "",
+      "description_en": "",
+      "location_en": ""
     },
     {
       "id": "7",
@@ -158,12 +146,11 @@
       "location": "In der Gemeinde",
       "category": "special",
       "image": "",
-      "icon": "fa-star",
-      "color": "#F59E0B",
       "description": "Pastoral Anniversary vom 22.08 bis 23.08.2026.",
-      "featured": false,
       "published": true,
-      "flyerLayout": false
+      "title_en": "",
+      "description_en": "",
+      "location_en": "At our church"
     },
     {
       "id": "8",
@@ -172,12 +159,12 @@
       "location": "In der Gemeinde",
       "category": "special",
       "image": "",
-      "icon": "fa-music",
-      "color": "#F59E0B",
       "description": "Worship Night mit Lobpreis, Gebet und Gemeinschaft.",
-      "featured": false,
       "published": true,
-      "flyerLayout": false
+      "title_en": "",
+      "description_en": "",
+      "end_date": "",
+      "location_en": "At our church"
     },
     {
       "id": "9",
@@ -186,12 +173,12 @@
       "location": "In der Gemeinde",
       "category": "gemeinschaft",
       "image": "",
-      "icon": "fa-heart",
-      "color": "#F97316",
       "description": "Tickets 15-20 Euro pro Person (Kinderpreise bis Alter 12), Sponsoren suchen, Zeugnisse teilen.",
-      "featured": false,
       "published": true,
-      "flyerLayout": false
+      "title_en": "",
+      "description_en": "",
+      "end_date": "",
+      "location_en": "At our church"
     },
     {
       "id": "11",
@@ -200,12 +187,12 @@
       "location": "In der Gemeinde",
       "category": "special",
       "image": "",
-      "icon": "fa-music",
-      "color": "#f59e0b",
       "description": "Worship Night und Gospel Concert NoL.",
-      "featured": false,
       "published": true,
-      "flyerLayout": false
+      "title_en": "",
+      "description_en": "",
+      "end_date": "",
+      "location_en": "At our church"
     },
     {
       "id": "12",
@@ -214,12 +201,12 @@
       "location": "In der Gemeinde",
       "category": "jugend",
       "image": "",
-      "icon": "fa-users",
-      "color": "#8B5CF6",
       "description": "Worship, Spiele, Pizza und Realtalk.",
-      "featured": false,
       "published": true,
-      "flyerLayout": false
+      "title_en": "",
+      "description_en": "",
+      "end_date": "",
+      "location_en": "At our church"
     },
     {
       "id": "13",
@@ -228,17 +215,12 @@
       "location": "In der Gemeinde",
       "category": "special",
       "image": "/images/Yellow_and_Black_Minimalist_Night_Worship_Instagram_Post.png",
-      "icon": "fa-music",
-      "color": "#f59e0b",
       "description": "Jahresabschluss Worship Night.",
-      "featured": false,
       "published": true,
-      "flyerLayout": false,
-      "flyer_style": {
-        "position": "center 30%",
-        "zoom": 100,
-        "overlay": 85
-      }
+      "title_en": "",
+      "description_en": "",
+      "end_date": "",
+      "location_en": "At our church"
     }
   ]
 }

@@ -1,45 +1,12 @@
 {
   "hero": {
     "title": "Impressum",
+    "title_en": "Legal notice",
     "subtitle": "",
-    "background_image": "images/kirche.jpg"
+    "subtitle_en": ""
   },
-
-  "content": {
-    "organization": {
-      "name": "Die Kirche des lebendigen Gottes International e.V.",
-      "short_name": "Newness of Life",
-      "legal_form": "Eingetragener Verein (e.V.)"
-    },
-
-    "address": {
-      "street": "Hebbelstr. 56-60",
-      "zip": "55127",
-      "city": "Mainz",
-      "country": "Deutschland"
-    },
-
-    "contact": {
-      "email": "newnessoflife@clgi.org",
-      "phone": ""
-    },
-
-    "registration": {
-      "court": "",
-      "registration_number": ""
-    },
-
-    "representatives": {
-      "title": "Vertretungsberechtigte Vorstände",
-      "names": []
-    },
-
-    "disclaimer": {
-      "title": "Haftungsausschluss",
-      "content": "Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt der verlinkten Seiten sind ausschließlich deren Betreiber verantwortlich."
-    }
-  },
-
+  "content_html": "<h3>Angaben gemäß § 5 TMG</h3>\n<p>Newness of Life; Church of the Living God Europe e.V.</p>\n<p><strong>Vertreten durch:</strong><br>Isaac Addae (Vorstand)<br>Anthony Quainoo (Vorstand)</p>\n<h3>Anschrift</h3>\n<p>Hebbelstr. 56–60<br>55127 Mainz</p>\n<h3>Kontakt</h3>\n<p>📧 <a href=\"mailto:newnessoflife@clgi.org\">newnessoflife@clgi.org</a></p>\n<p>📩 Kontaktformular (siehe Menüpunkt „Kontakt“)</p>\n<h3>Registereintrag</h3>\n<p>Eingetragen im Vereinsregister beim Amtsgericht Mainz<br>VR 42576</p>\n<h3>Inhaltlich verantwortlich gemäß § 18 Abs. 2 MStV</h3>\n<p>Anthony Quainoo<br>Hebbelstr. 56–60<br>55127 Mainz</p>",
+  "content_html_en": "",
   "seo": {
     "meta_title": "Impressum - Newness of Life Mainz",
     "meta_description": "Impressum der Newness of Life Gemeinde in Mainz."

@@ -1,75 +1,109 @@
 {
   "hero": {
     "title": "Gottesdienste in Mainz – jeden Sonntag um 14 Uhr",
+    "title_en": "Church Services in Mainz – every Sunday at 2 pm",
     "subtitle": "Erlebe Gottes Gegenwart in unserer Mitte",
-    "background_image": ""
+    "subtitle_en": "Experience God's presence among us",
+    "background_image": "/images/Gebete.jpg",
+    "video": ""
   },
   "intro": {
     "title": "Was dich erwartet",
-    "text": "Unsere Gottesdienste sind ein Ort der Begegnung mit Gott und untereinander. Erlebe lebendigen Lobpreis, inspirierende Predigten und herzliche Gemeinschaft."
+    "title_en": "What to Expect",
+    "text": "Unsere Gottesdienste sind ein Ort der Begegnung mit Gott und untereinander. Erlebe lebendigen Lobpreis, inspirierende Predigten und herzliche Gemeinschaft.",
+    "text_en": "Our services are a place to encounter God and one another. Experience vibrant worship, inspiring sermons, and warm fellowship."
+  },
+  "first_visit": {
+    "title": "Dein erster Besuch",
+    "title_en": "Your first visit",
+    "text": "Du warst noch nie bei uns? Kein Problem. Unser Gottesdienst beginnt jeden Sonntag um 14 Uhr in der Hebbelstraße 56-60 in Mainz und dauert etwa zwei Stunden. Freu dich auf mitreißenden Gospel-Lobpreis, eine bibeltreue, alltagsnahe Predigt und Menschen aus vielen Nationen. Gepredigt wird auf Deutsch und Englisch, sodass du alles verstehst. Für Kinder gibt es während der Predigt ein eigenes Programm. Komm einfach so, wie du bist – nach dem Gottesdienst ist Zeit für Gespräche und Gemeinschaft.",
+    "text_en": "Never been to church with us? No problem. Our service starts every Sunday at 2 pm at Hebbelstraße 56-60 in Mainz and lasts about two hours. Expect uplifting gospel worship, a Bible-based, practical sermon and people from many nations. We preach in both English and German, so you can follow everything. During the sermon there is a dedicated programme for children. Come as you are – after the service there is time to talk and connect.",
+    "image": "/images/bible.und.hand.hoch.jpg"
   },
   "main_service": {
     "title": "Hauptgottesdienst",
+    "title_en": "Main Service",
     "day": "Sonntag",
+    "day_en": "Sunday",
     "time": "14:00 Uhr",
+    "time_en": "2:00 pm",
     "duration": "ca. 2 Stunden",
+    "duration_en": "approx. 2 hours",
     "description": "Unser wöchentlicher Gottesdienst mit Lobpreis, Predigt und Gemeinschaft.",
+    "description_en": "Our weekly service with worship, preaching, and fellowship.",
     "features": [
       {
         "title": "Lobpreis & Anbetung",
+        "title_en": "Worship & Praise",
         "description": "Beginne die Woche mit kraftvoller Anbetung",
+        "description_en": "Start the week with powerful worship",
         "icon": "fa-music"
       },
       {
         "title": "Predigt",
+        "title_en": "Sermon",
         "description": "Bibeltreue und lebensnahe Botschaften",
+        "description_en": "Bible-based and practical messages",
         "icon": "fa-book-open"
       },
       {
         "title": "Kinderprogramm",
+        "title_en": "Kids Program",
         "description": "Altersgerechtes Programm während der Predigt",
+        "description_en": "Age-appropriate program during the sermon",
         "icon": "fa-child"
       },
       {
         "title": "Gemeinschaft",
+        "title_en": "Fellowship",
         "description": "Zeit zum Austausch nach dem Gottesdienst",
+        "description_en": "Time to connect after the service",
         "icon": "fa-users"
       }
     ]
   },
   "other_meetings": {
     "title": "Weitere Treffen",
+    "title_en": "Other Meetings",
     "items": [
       {
         "title": "Gebetsabend",
+        "title_en": "Prayer Evening",
         "day": "Freitag",
+        "day_en": "Friday",
         "time": "19:00 Uhr",
+        "time_en": "7:00 pm",
         "description": "Gemeinsames Gebet und Fürbitte",
+        "description_en": "Joint prayer and intercession",
         "icon": "fa-pray"
       },
       {
         "title": "Bibelstudium",
+        "title_en": "Bible Study",
         "day": "Montag & Mittwoch",
+        "day_en": "Monday & Wednesday",
         "time": "19:00 Uhr",
+        "time_en": "7:00 pm",
         "description": "Vertiefendes Bibelstudium",
+        "description_en": "In-depth Bible study",
         "icon": "fa-book-bible"
       }
     ]
   },
   "cta": {
     "title": "Komm, wie du bist",
+    "title_en": "Come as You Are",
     "text": "Ganz egal, wo du im Leben stehst, du bist bei uns herzlich willkommen. Wir freuen uns darauf, dich kennenzulernen.",
+    "text_en": "No matter where you are in life, you are warmly welcome. We look forward to meeting you.",
     "button_text": "Zur Anfahrt",
+    "button_text_en": "Get Directions",
     "button_link": "#anfahrt"
   },
   "anfahrt": {
     "title": "Anfahrt",
-    "text": ""
-  },
-  "location": {
-    "show_map": true,
-    "parking_info": "Parkplätze sind vor dem Gebäude verfügbar.",
-    "accessibility_info": "Barrierefreier Zugang vorhanden."
+    "title_en": "Directions",
+    "text": "",
+    "text_en": ""
   },
   "seo": {
     "meta_title": "Gottesdienst sonntags 14 Uhr in Mainz | Newness of Life",

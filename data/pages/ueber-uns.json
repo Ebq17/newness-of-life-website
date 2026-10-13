@@ -1,44 +1,115 @@
 {
   "hero": {
     "title": "Über uns – internationale Freikirche in Mainz",
+    "title_en": "About Us – an international church in Mainz",
     "subtitle": "Lerne unsere Gemeinde kennen",
-    "background_image": ""
+    "subtitle_en": "Get to know our church",
+    "background_image": "/images/Gebete.jpg"
   },
   "intro": {
     "title": "Willkommen bei Newness of Life",
-    "text": "Wir sind die Newness of Life – Die Kirche des lebendigen Gottes International e.V. aus Mainz. Unser Herz schlägt dafür, Menschen mit der Liebe Gottes zu erreichen, Glauben zu stärken und Gemeinschaft zu leben."
+    "title_en": "Welcome to Newness of Life",
+    "subtitle": "Ein Ort des Glaubens, der Hoffnung und der Erneuerung",
+    "subtitle_en": "A place of faith, hope, and renewal",
+    "text": "Wir sind die Newness of Life – Die Kirche des lebendigen Gottes International e.V. aus Mainz. Unser Herz schlägt dafür, Menschen mit der Liebe Gottes zu erreichen, Glauben zu stärken und Gemeinschaft zu leben.\n\nNewness of Life ist eine Freikirche in Mainz und Teil der weltweiten Church of the Living God International (CLGI). Bei uns kommen Menschen aus vielen Ländern zusammen. Unsere Gottesdienste sind geprägt von Gospel-Musik, lebendigem Lobpreis und klarer biblischer Lehre – gepredigt auf Deutsch und Englisch. Ob du neu in Mainz bist, eine internationale oder englischsprachige Gemeinde suchst oder einfach neugierig auf den Glauben bist: Du bist herzlich eingeladen.\n\nBei uns findest du inspirierenden Lobpreis, biblisch fundierte Lehre und Räume, in denen du deine Berufung entdecken kannst – in Kleingruppen, in der Jugendarbeit, im Gebet und im sozialen Engagement. Wir glauben: Jeder Mensch ist von Gott geliebt und berufen.",
+    "text_en": "We are Newness of Life – The Church of the Living God International e.V. in Mainz. Our heart is to reach people with God's love, strengthen faith, and live out community.\n\nNewness of Life is a free church in Mainz and part of the worldwide Church of the Living God International (CLGI). People from many countries come together with us. Our services are shaped by gospel music, vibrant worship and clear biblical teaching – preached in English and German. Whether you are new to Mainz, looking for an international or English-speaking church or simply curious about faith: you are warmly invited.\n\nWith us you will find inspiring worship, Bible-based teaching, and spaces where you can discover your calling – in small groups, youth ministry, prayer, and social engagement. We believe: Every person is loved and called by God.",
+    "mission": "Unser Auftrag ist klar: Menschen zu Jüngern machen, Hoffnung weitergeben und Gottes Licht sichtbar machen. Wenn du nach einer geistlichen Heimat suchst: Du bist willkommen.",
+    "mission_en": "Our mission is clear: make disciples, pass on hope, and make God's light visible. If you are looking for a spiritual home: you are welcome.",
+    "image": "/images/Logo_Schwarz_Transparent_KS.png"
   },
   "story": {
     "title": "Unsere Geschichte",
-    "text": "Bei uns erlebst du lebendige Gottesdienste, inspirierende Musik, praktische Bibellehre und eine herzliche Familie, in der jeder willkommen ist – egal, woher du kommst oder welche Geschichte du mitbringst.",
-    "image": "images/Logo_Schwarz_Transparent_KS.png"
+    "title_en": "Our History",
+    "subtitle": "Die Anfänge",
+    "subtitle_en": "The Beginnings",
+    "text": "Unsere Gemeinde entstand Anfang der 1990er-Jahre aus kleinen Bibelstunden in Mainz. Aus dieser einfachen, aber leidenschaftlichen Anfangszeit entwickelte sich Schritt für Schritt eine wachsende Gemeinschaft. 1993 begannen regelmäßige Treffen, die schon bald zu einem festen geistlichen Zuhause für viele wurden. 1994 kam weitere Unterstützung hinzu, und durch die Zusammenarbeit mit Geschwistern aus umliegenden Städten konnte die Gemeinde gefestigt und aufgebaut werden. Am 23. August 2003 wurde die Geschichte unserer Gemeinde schriftlich festgehalten – als Zeugnis von Gottes Treue.\n\nHeute ist Newness of Life mehr als ein Gottesdienst am Sonntag – wir sind eine Familie, die im Alltag füreinander da ist. Unser Herzschlag: Jesus Christus klar verkünden, Menschen stärken und unsere Stadt mit praktischer Liebe prägen.",
+    "text_en": "Our church began in the early 1990s with small Bible studies in Mainz. From these simple but passionate beginnings, a growing community developed step by step. In 1993, regular meetings began and soon became a spiritual home for many. In 1994, further support was added, and through cooperation with brothers and sisters from nearby cities, the church was strengthened and built up. On August 23, 2003, the history of our church was documented in writing – as a testimony to God's faithfulness.\n\nToday, Newness of Life is more than a Sunday service – we are a family that supports one another in everyday life. Our heartbeat: proclaim Jesus Christ clearly, strengthen people, and shape our city with practical love."
   },
   "vision": {
     "title": "Unsere Vision & Mission",
-    "text": "Wir glauben, dass jeder Mensch von Gott einzigartig geschaffen ist und einen Platz in seinem Plan hat. Gemeinsam wollen wir wachsen, einander ermutigen und unsere Umgebung mit Hoffnung und Licht prägen."
+    "title_en": "Our Vision & Mission",
+    "text": "Wir glauben, dass jeder Mensch von Gott einzigartig geschaffen ist und einen Platz in seinem Plan hat. Gemeinsam wollen wir wachsen, einander ermutigen und unsere Umgebung mit Hoffnung und Licht prägen.",
+    "text_en": "We believe every person is uniquely created by God and has a place in His plan. Together we want to grow, encourage one another, and shape our surroundings with hope and light."
   },
-  "beliefs": {
-    "title": "Was wir glauben",
+  "values": {
+    "title": "Wofür wir stehen",
+    "title_en": "What we stand for",
     "items": [
       {
-        "title": "Die Bibel",
-        "text": "Die Bibel ist Gottes inspiriertes Wort und unsere höchste Autorität.",
-        "icon": "fa-book-bible"
+        "title": "Gemeinschaft & Familie",
+        "title_en": "Community & Family",
+        "text": "Kirche ist nicht nur ein Ort – sie ist Familie. Wir leben Annahme und Liebe, damit jeder Mensch Zugehörigkeit und Freundschaft findet.\n\nGott hat uns nicht als Einzelkämpfer geschaffen. Darum schaffen wir Räume, in denen Menschen füreinander da sind – durch Ermutigung, praktische Hilfe und Freundschaften, die tragen.",
+        "text_en": "Church is not just a place – it is family. We live acceptance and love so that everyone can find belonging and friendship.\n\nGod did not create us as lone fighters. That is why we create spaces where people are there for one another – through encouragement, practical help, and friendships that carry.",
+        "verse": "1. Johannes 4,7",
+        "verse_en": "1 John 4:7"
       },
       {
-        "title": "Jesus Christus",
-        "text": "Jesus ist der Sohn Gottes, unser Retter und Herr.",
-        "icon": "fa-cross"
+        "title": "Transparenz & Vertrauen",
+        "title_en": "Transparency & Trust",
+        "text": "Wir handeln ehrlich und kommunizieren klar. So wächst Vertrauen, Beziehungen werden gestärkt und Gottes Wahrheit wird sichtbar.\n\nBei uns gibt es nichts Hintergründiges oder Verstecktes. Offenheit schafft Glaubwürdigkeit und lässt Kirche als sicheren Ort erlebt werden.",
+        "text_en": "We act honestly and communicate clearly. In this way, trust grows, relationships are strengthened, and God's truth becomes visible.\n\nThere is nothing hidden or deceptive with us. Openness builds credibility and allows church to be experienced as a safe place.",
+        "verse": "Epheser 4,25",
+        "verse_en": "Ephesians 4:25"
       },
       {
-        "title": "Der Heilige Geist",
-        "text": "Der Heilige Geist lebt in jedem Gläubigen und befähigt uns.",
-        "icon": "fa-dove"
+        "title": "Ermächtigung & Berufung",
+        "title_en": "Empowerment & Calling",
+        "text": "Jeder ist von Gott begabt. Wir ermutigen, Talente zu entdecken und einzusetzen – in Kirche, im Alltag und beim Aufbau neuer Gemeinden in Europa.\n\nOb Musik, Organisation, Seelsorge oder Technik – Gott kann jede Gabe gebrauchen. Wir setzen frei, damit Menschen ihr Potenzial leben und einen Unterschied machen.",
+        "text_en": "Everyone is gifted by God. We encourage people to discover and use their talents – in church, in everyday life, and in building new churches in Europe.\n\nWhether music, organization, pastoral care, or tech – God can use every gift. We release people to live their potential and make a difference.",
+        "verse": "1. Petrus 4,10",
+        "verse_en": "1 Peter 4:10"
       },
       {
-        "title": "Gemeinschaft",
-        "text": "Wir sind eine Familie, die füreinander da ist.",
-        "icon": "fa-users"
+        "title": "Wachstum & Entwicklung",
+        "title_en": "Growth & Development",
+        "text": "Durch Gebet, Lobpreis und Bibelstudium wachsen wir im Glauben; zugleich fördern wir Bildung, Arbeit und persönliche Reife für ein Leben mit Sinn.\n\nWir begleiten Menschen, in allen Lebensbereichen gesund zu reifen – geistlich, seelisch und praktisch – damit Verantwortung im Alltag gelingen kann.",
+        "text_en": "Through prayer, worship, and Bible study we grow in faith; at the same time we encourage education, work, and personal maturity for a life with purpose.\n\nWe accompany people to grow healthy in all areas of life – spiritually, emotionally, and practically – so that responsibility can succeed in everyday life.",
+        "verse": "2. Petrus 3,18",
+        "verse_en": "2 Peter 3:18"
+      },
+      {
+        "title": "Verantwortung & Einheit",
+        "title_en": "Responsibility & Unity",
+        "text": "Respekt, Integrität und Authentizität – vor Ort und online. Wir bauen Brücken und verbinden Menschen.\n\nEinheit heißt für uns: Unterschiede nicht übersehen, sondern als Bereicherung feiern und im Geist Christi zusammenführen.",
+        "text_en": "Respect, integrity, and authenticity – on site and online. We build bridges and connect people.\n\nFor us, unity means not ignoring differences but celebrating them as enrichment and bringing people together in the spirit of Christ.",
+        "verse": "Epheser 4,3",
+        "verse_en": "Ephesians 4:3"
+      },
+      {
+        "title": "Dienst & Hingabe",
+        "title_en": "Service & Devotion",
+        "text": "Nachfolge zeigt sich im Tun: Wir setzen Zeit, Gaben und Ressourcen ein, um anderen zu dienen.\n\nOb im Gottesdienst, in der Nachbarschaft oder in globalen Projekten – wir wollen durch praktische Taten zeigen, dass Gottes Liebe real ist.",
+        "text_en": "Discipleship shows itself in action: we invest time, gifts, and resources to serve others.\n\nWhether in services, in the neighborhood, or in global projects – we want to show through practical actions that God's love is real.",
+        "verse": "Markus 10,45",
+        "verse_en": "Mark 10:45"
+      }
+    ]
+  },
+  "roots": {
+    "title": "Mehr über unsere Wurzeln",
+    "title_en": "More About Our Roots",
+    "text": "Du möchtest mehr über die Gründung, Geschichte und weltweite Bewegung hinter The Church of the Living God International, Inc. erfahren? Hier findest du weiterführende Informationen unserer Kirchenfamilie.",
+    "text_en": "Would you like to learn more about the founding, history, and worldwide movement behind The Church of the Living God International, Inc.? Here you will find further information from our church family.",
+    "items": [
+      {
+        "title": "Europe CLGI",
+        "title_en": "Europe CLGI",
+        "text": "Die europäische Jurisdiktion der Church of the Living God International. Entdecke Mission, Leitbild und Gemeinden in Europa.",
+        "text_en": "The European jurisdiction of the Church of the Living God International. Discover mission, vision, and churches in Europe.",
+        "image": "/images/CLGI EUROPE.png",
+        "link": "https://europeclgi.org/de",
+        "button_text": "Website öffnen",
+        "button_text_en": "Open Website"
+      },
+      {
+        "title": "CLGI – Global",
+        "title_en": "CLGI – Global",
+        "text": "Die internationale Bewegung: Geschichte, Glaubensgrundsätze und weltweite Arbeit der Church of the Living God International.",
+        "text_en": "The international movement: history, beliefs, and worldwide work of the Church of the Living God International.",
+        "image": "/images/CLGILOGO.png",
+        "link": "https://clgi.org/",
+        "button_text": "Website öffnen",
+        "button_text_en": "Open Website"
       }
     ]
   },

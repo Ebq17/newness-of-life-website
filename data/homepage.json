@@ -1,28 +1,118 @@
 {
   "hero": {
     "title": "Willkommen bei Newness of Life – deiner Freikirche in Mainz",
+    "title_en": "Welcome to Newness of Life – your international church in Mainz",
     "subtitle": "Ein Ort des Glaubens, der Gemeinschaft und der Hoffnung. Entdecke, wer wir sind und was uns bewegt.",
-    "background_image": "",
-    "cta_text": "Mehr erfahren",
-    "cta_link": "ueber-uns.html"
+    "subtitle_en": "A place of faith, community, and hope. Discover who we are and what moves us.",
+    "background_image": "/images/bible.und.hand.hoch.jpg",
+    "cta_text": "Gottesdienst besuchen",
+    "cta_text_en": "Visit a service",
+    "cta_link": "/gottesdienste",
+    "cta2_text": "Mehr erfahren",
+    "cta2_text_en": "Learn More",
+    "cta2_link": "/ueber-uns"
+  },
+  "service_info": {
+    "title": "Unser Gottesdienst",
+    "title_en": "Our Service",
+    "when": "Jeden Sonntag, 14:00 Uhr",
+    "when_en": "Every Sunday, 2:00 pm",
+    "kids": "Kinderprogramm während der Predigt",
+    "kids_en": "Kids program during the sermon",
+    "language": "Predigt auf Deutsch und Englisch",
+    "language_en": "Preaching in German and English",
+    "directions_text": "Route planen",
+    "directions_text_en": "Get directions"
   },
   "services_section": {
     "title": "Gospel-Gottesdienst in Mainz",
+    "title_en": "Gospel Church Service in Mainz",
     "description": "Erlebe lebendigen Lobpreis, inspirierende Predigten und herzliche Gemeinschaft. Unsere Gottesdienste sind ein Ort, an dem du Gott begegnen und im Glauben wachsen kannst.",
-    "service_day": "Jeden Sonntag",
-    "service_time": "14:00 Uhr",
-    "location": "Hebbelstr. 56-60, 55127 Mainz",
-    "kids_info": "Kinderprogramm während der Predigt"
+    "description_en": "Experience vibrant worship, inspiring sermons, and warm fellowship. Our services are a place where you can encounter God and grow in faith.",
+    "button_text": "Alle Gottesdienste",
+    "button_text_en": "All Services",
+    "image": "/images/Gebete.jpg"
+  },
+  "meetings": {
+    "title": "Unsere regelmäßigen Treffen",
+    "title_en": "Our Regular Meetings",
+    "subtitle": "Gemeinsam wachsen wir im Glauben",
+    "subtitle_en": "Together we grow in faith",
+    "items": [
+      {
+        "label": "Gemeinschaft",
+        "label_en": "Fellowship",
+        "title": "Gottesdienst",
+        "title_en": "Church Service",
+        "time": "Jeden Sonntag um 14:00 Uhr",
+        "time_en": "Every Sunday at 14:00",
+        "image": "/images/bible.und.hand.hoch.jpg",
+        "link": "/gottesdienste",
+        "show": true
+      },
+      {
+        "label": "Gebet",
+        "label_en": "Prayer",
+        "title": "Gebetsabend",
+        "title_en": "Prayer Evening",
+        "time": "Jeden Freitag um 19:00 Uhr",
+        "time_en": "Every Friday at 19:00",
+        "image": "/images/Gebete.jpg",
+        "link": "",
+        "show": true
+      },
+      {
+        "label": "Bildung",
+        "label_en": "Education",
+        "title": "Bibelstudium",
+        "title_en": "Bible Study",
+        "time": "Jeden Montag & Mittwoch um 19:00 Uhr",
+        "time_en": "Every Monday & Wednesday at 19:00",
+        "image": "/images/biblestunde_jugend.jpg",
+        "link": "",
+        "show": true
+      }
+    ]
   },
   "about_section": {
     "title": "Über uns",
+    "title_en": "About Us",
     "subtitle": "Unsere Vision & Mission",
-    "text": "Wir sind die Newness of Life – Die Kirche des lebendigen Gottes International e.V. aus Mainz. Unser Herz schlägt dafür, Menschen mit der Liebe Gottes zu erreichen, Glauben zu stärken und Gemeinschaft zu leben. Bei uns erlebst du lebendige Gottesdienste, inspirierende Musik, praktische Bibellehre und eine herzliche Familie, in der jeder willkommen ist – egal, woher du kommst oder welche Geschichte du mitbringst. Wir glauben, dass jeder Mensch von Gott einzigartig geschaffen ist und einen Platz in seinem Plan hat. Gemeinsam wollen wir wachsen, einander ermutigen und unsere Umgebung mit Hoffnung und Licht prägen."
+    "subtitle_en": "Our Vision & Mission",
+    "text": "Wir sind die Newness of Life – Die Kirche des lebendigen Gottes International e.V. aus Mainz. Unser Herz schlägt dafür, Menschen mit der Liebe Gottes zu erreichen, Glauben zu stärken und Gemeinschaft zu leben. Bei uns erlebst du lebendige Gottesdienste, inspirierende Musik, praktische Bibellehre und eine herzliche Familie, in der jeder willkommen ist – egal, woher du kommst oder welche Geschichte du mitbringst. Wir glauben, dass jeder Mensch von Gott einzigartig geschaffen ist und einen Platz in seinem Plan hat. Gemeinsam wollen wir wachsen, einander ermutigen und unsere Umgebung mit Hoffnung und Licht prägen.",
+    "text_en": "We are Newness of Life – The Church of the Living God International e.V. in Mainz. Our heart is to reach people with God's love, strengthen faith, and live out community. With us you will experience vibrant services, inspiring music, practical Bible teaching, and a warm family where everyone is welcome—no matter where you come from or what story you bring. We believe every person is uniquely created by God and has a place in His plan. Together we want to grow, encourage one another, and shape our surroundings with hope and light.",
+    "button_text": "Mehr erfahren",
+    "button_text_en": "Learn More"
+  },
+  "events_section": {
+    "show": true,
+    "count": 3,
+    "title": "Kommende Veranstaltungen",
+    "title_en": "Upcoming Events",
+    "text": "Besondere Abende, Konzerte und Treffen – komm vorbei und bring Freunde mit.",
+    "text_en": "Special nights, concerts and gatherings – come along and bring your friends.",
+    "button_text": "Alle Termine ansehen",
+    "button_text_en": "See all events"
   },
   "contact_section": {
     "title": "Kontakt",
+    "title_en": "Contact",
     "form_title": "Schreiben Sie uns",
-    "address_title": "Adresse & Anfahrt"
+    "form_title_en": "Write to Us",
+    "name_placeholder": "Ihr Name",
+    "name_placeholder_en": "Your Name",
+    "email_placeholder": "Ihre E-Mail",
+    "email_placeholder_en": "Your Email",
+    "message_placeholder": "Ihre Nachricht",
+    "message_placeholder_en": "Your Message",
+    "send_button": "Senden",
+    "send_button_en": "Send",
+    "address_title": "Adresse & Anfahrt",
+    "address_title_en": "Address & Directions",
+    "success_message": "Danke! Deine Nachricht ist angekommen. Wir melden uns bald.",
+    "success_message_en": "Thank you! Your message has arrived. We will get back to you soon.",
+    "error_message": "Die Nachricht konnte nicht gesendet werden. Bitte schreib uns direkt per E-Mail.",
+    "error_message_en": "The message could not be sent. Please email us directly."
   },
   "seo": {
     "meta_title": "Freikirche & Gospel-Gottesdienst in Mainz | Newness of Life",

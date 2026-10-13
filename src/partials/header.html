@@ -1,55 +1,38 @@
-<!-- Banner (wenn aktiviert) -->
-<if condition="design.banner && design.banner.enabled">
-  <div class="site-banner" style="background-color: {{ design.banner.background_color }}; color: {{ design.banner.text_color }};" data-cms-field="design.banner" data-cms-label="Banner">
+<a class="skip-link" href="#inhalt">Zum Inhalt springen</a>
+<if condition="global.announcement && global.announcement.show && global.announcement.text">
+  <div class="announcement">
     <div class="container">
-      <p class="banner-text" data-cms-field="design.banner.text" data-cms-label="Banner Text">
-        <if condition="design.banner.link">
-          <a href="{{ design.banner.link }}" style="color: {{ design.banner.text_color }};">{{ design.banner.text }}</a>
-        </if>
-        <if condition="!design.banner.link">
-          {{ design.banner.text }}
-        </if>
-      </p>
-      <if condition="design.banner.dismissible">
-        <button class="banner-close" aria-label="Banner schließen">&times;</button>
-      </if>
+      <a href="{{ global.announcement.link || '#' }}" data-t="global.announcement.text">{{ global.announcement.text }}</a>
     </div>
   </div>
 </if>
-
-<!-- Header (Partial) -->
-<link rel="stylesheet" href="css/header.css?v=20260220r3" />
-<header class="site-header-pro" data-cms-section="header">
-  <div class="container">
-    <nav class="main-nav-pro" aria-label="Hauptnavigation">
-      <a href="index.html#start" class="logo-pro" data-cms-field="header.logo" data-cms-label="Logo">
-        <img src="{{ header.logo.image || design.logo.main || 'images/Logo_Schwarz_Transparent_KS.png' }}" alt="{{ header.logo.alt || design.logo.alt_text || 'Newness of life Logo' }}" class="logo-img-pro" data-cms-field="header.logo.image" data-cms-label="Logo Bild">
-        <div class="logo-text-container">
-          <span class="logo-text-pro" data-cms-field="header.logo.text" data-cms-label="Logo Text">{{ header.logo.text || settings.site_title || 'Newness of Life' }}</span>
-          <span class="logo-subtext-pro" data-cms-field="header.logo.subtext" data-cms-label="Logo Untertext" data-i18n="header.logo_subtext">{{ header.logo.subtext || 'die Kirche des lebendigen Gottes International e.V.' }}</span>
-        </div>
-      </a>
-
-      <ul id="mainnav-pro" class="nav-links-pro">
-        <each loop="item in header.navigation">
+<header class="site-header" id="top">
+  <div class="container header-inner">
+    <a class="brand" href="/" aria-label="Newness of Life – Startseite">
+      <img class="brand-logo" src="/images/Logo_Schwarz_Transparent_KS.png" data-src="global.header.logo.image" alt="{{ global.header.logo.alt }}" width="52" height="52">
+      <span class="brand-text">
+        <span class="brand-name" data-t="global.header.logo.text">Newness of Life</span>
+        <span class="brand-sub" data-t="global.header.logo.subtext">Die Kirche des lebendigen Gottes International e.V.</span>
+      </span>
+    </a>
+    <nav class="main-nav" id="main-nav" aria-label="Hauptnavigation">
+      <ul>
+        <each loop="item, i in global.header.navigation">
           <if condition="item.show !== false">
-            <li><a href="{{ item.url }}" class="{{ currentPage === item.url ? 'active' : '' }}" data-i18n="{{ item.i18n_key }}">{{ item.label }}</a></li>
+            <li><a href="{{ item.url }}" class="{{ (item.url === '/' + currentPage) || (currentPage === 'index' && item.url === '/') ? 'is-active' : '' }}" data-t="global.header.navigation.{{ i }}.label">{{ item.label }}</a></li>
           </if>
         </each>
-        <if condition="header.cta_button && header.cta_button.show">
-          <li class="show-on-mobile"><a href="{{ header.cta_button.url }}" data-i18n="{{ header.cta_button.i18n_key }}">{{ header.cta_button.text }}</a></li>
-        </if>
       </ul>
-
-      <div class="header-actions">
-        <button id="langToggle" class="lang-toggle" onclick="I18n.toggleLanguage()" title="Switch to English">EN</button>
-        <if condition="header.cta_button && header.cta_button.show">
-          <a href="{{ header.cta_button.url }}" class="btn-primary btn-spenden-pro" data-cms-field="header.cta_button.text" data-cms-label="CTA Button" data-i18n="{{ header.cta_button.i18n_key }}">{{ header.cta_button.text }}</a>
+      <div class="nav-actions">
+        <button type="button" class="lang-toggle" id="langToggle" aria-label="Switch to English">EN</button>
+        <if condition="global.header.cta_button && global.header.cta_button.show !== false">
+          <a class="btn btn-gold btn-sm" href="{{ global.header.cta_button.url }}" data-t="global.header.cta_button.text">Spenden</a>
         </if>
-        <button class="menu-toggle-pro" aria-label="Menü öffnen" aria-controls="mainnav-pro" aria-expanded="false">
-          <i class="fa-solid fa-bars"></i>
-        </button>
       </div>
     </nav>
+    <button type="button" class="menu-toggle" aria-controls="main-nav" aria-expanded="false">
+      <span class="sr-only">Menü öffnen</span>
+      <span class="menu-bars" aria-hidden="true"></span>
+    </button>
   </div>
 </header>

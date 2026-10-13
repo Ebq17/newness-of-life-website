@@ -1,4 +1,13 @@
-// build.js
+// build.js – erzeugt die HTML-Seiten aus src/ (Vorlagen) und data/ (Inhalte).
+//
+// Inhalte kommen ausschließlich aus data/*.json (bearbeitbar über /admin).
+// In den Vorlagen werden Elemente mit Pfaden markiert:
+//   data-t="homepage.hero.title"        -> Text (Zeilenumbrüche werden zu <br>)
+//   data-t-html="pages.impressum.content_html" -> HTML-Inhalt
+//   data-src / data-href / data-bg / data-placeholder="pfad" -> Attribute
+// Gibt es neben einem Feld ein Feld mit Endung "_en", wird es als data-en
+// (bzw. data-en-html / data-en-placeholder) ausgegeben; js/i18n.js zeigt es
+// an, wenn Besucher auf "EN" umschalten.
 'use strict';
 
 const fs = require('fs').promises;
@@ -11,429 +20,320 @@ const ROOT_DIR = __dirname;
 const SRC_DIR = path.join(ROOT_DIR, 'src');
 const PAGES_DIR = path.join(SRC_DIR, 'pages');
 const DATA_DIR = path.join(ROOT_DIR, 'data');
-const PAGES_DATA_DIR = path.join(DATA_DIR, 'pages');
+const SITE_URL = 'https://newnessoflife.de';
 
-/**
- * JSON-Datei laden und parsen.
- * @param {string} filePath
- * @returns {Promise<object>}
- */
-async function loadJson(filePath) {
+async function loadJson(file) {
   try {
-    const data = await fs.readFile(filePath, 'utf8');
-    return JSON.parse(data);
+    return JSON.parse(await fs.readFile(path.join(DATA_DIR, file), 'utf8'));
   } catch (err) {
-    console.warn(`Warning: Could not load ${filePath}`, err.message);
+    console.warn(`Warnung: ${file} konnte nicht gelesen werden:`, err.message);
     return {};
   }
 }
 
-/**
- * Events filtern, sortieren und Datum formatieren.
- * @param {object} eventsRaw
- * @returns {object}
- */
-function prepareEvents(eventsRaw) {
-  const items = eventsRaw.items || [];
-  const categories = eventsRaw.categories || [];
+// ---------------------------------------------------------------------------
+// Hilfsfunktionen
+// ---------------------------------------------------------------------------
 
-  // Cutoff: 2 weeks ago
-  const twoWeeksAgo = new Date();
-  twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
+function getPath(obj, p) {
+  return String(p).split('.').reduce((o, k) => (o == null ? undefined : o[k]), obj);
+}
 
-  const processedItems = items
-    // Only published events
-    .filter(e => e.published === true)
-    // Hide events older than 2 weeks
-    .filter(e => new Date(e.date) >= twoWeeksAgo)
-    // Sort by date (upcoming first)
-    .sort((a, b) => new Date(a.date) - new Date(b.date))
-    .map(e => {
-      // Kategorie-Infos hinzufügen
-      const category = categories.find(c => c.id === e.category) || {};
-      const flyerStyle = normalizeFlyerStyle(e.flyer_style);
+function getEnPath(obj, p) {
+  const parts = String(p).split('.');
+  const last = parts.pop();
+  const parent = parts.length ? getPath(obj, parts.join('.')) : obj;
+  return parent && typeof parent === 'object' ? parent[last + '_en'] : undefined;
+}
 
-      const dateObj = new Date(e.date);
-      const monthNames = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
+function escapeHtml(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
 
+function textToHtml(value) {
+  return escapeHtml(value).replace(/\r?\n/g, '<br>');
+}
+
+function isFilled(v) {
+  return v !== undefined && v !== null && String(v).trim() !== '';
+}
+
+function cssUrl(value) {
+  return `url('${String(value).replace(/'/g, '%27').replace(/ /g, '%20')}')`;
+}
+
+// ---------------------------------------------------------------------------
+// posthtml-Plugin: füllt markierte Elemente mit Inhalten
+// ---------------------------------------------------------------------------
+
+function fillPlugin(locals) {
+  return function (tree) {
+    tree.walk((node) => {
+      if (!node || !node.attrs) return node;
+      const a = node.attrs;
+
+      if (a['data-t']) {
+        const v = getPath(locals, a['data-t']);
+        if (isFilled(v)) node.content = [textToHtml(v)];
+        const en = getEnPath(locals, a['data-t']);
+        if (isFilled(en)) a['data-en'] = escapeHtml(en).replace(/\r?\n/g, '&#10;');
+      }
+      if (a['data-t-html']) {
+        const v = getPath(locals, a['data-t-html']);
+        if (isFilled(v)) node.content = [String(v)];
+        const en = getEnPath(locals, a['data-t-html']);
+        if (isFilled(en)) a['data-en-html'] = escapeHtml(en);
+      }
+      if (a['data-placeholder']) {
+        const v = getPath(locals, a['data-placeholder']);
+        if (isFilled(v)) a.placeholder = escapeHtml(v);
+        const en = getEnPath(locals, a['data-placeholder']);
+        if (isFilled(en)) a['data-en-placeholder'] = escapeHtml(en);
+        delete a['data-placeholder'];
+      }
+      if (a['data-src']) {
+        const v = getPath(locals, a['data-src']);
+        if (isFilled(v)) a.src = escapeHtml(v);
+        delete a['data-src'];
+      }
+      if (a['data-href']) {
+        const v = getPath(locals, a['data-href']);
+        if (isFilled(v)) a.href = escapeHtml(v);
+        delete a['data-href'];
+      }
+      if (a['data-bg']) {
+        const v = getPath(locals, a['data-bg']);
+        if (isFilled(v)) {
+          a.style = `${a.style ? a.style + '; ' : ''}background-image: ${cssUrl(v)}`;
+        } else {
+          a.class = `${a.class || ''} no-image`.trim();
+        }
+        delete a['data-bg'];
+      }
+      return node;
+    });
+    return tree;
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Veranstaltungen
+// ---------------------------------------------------------------------------
+
+const MONTHS_DE = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
+const MONTHS_EN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+// Datum ohne Zeitzonen-Verschiebung lesen ("2026-11-28T19:00" = Ortszeit Mainz)
+function parseLocal(str) {
+  const m = String(str || '').match(/^(\d{4})-(\d{2})-(\d{2})(?:[T ](\d{2}):(\d{2}))?/);
+  if (!m) return null;
+  return { y: +m[1], mo: +m[2], d: +m[3], h: m[4] ? +m[4] : null, mi: m[5] ? +m[5] : 0 };
+}
+
+function weekday(p, lang) {
+  const names = lang === 'en'
+    ? ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    : ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
+  return names[new Date(Date.UTC(p.y, p.mo - 1, p.d)).getUTCDay()];
+}
+
+function formatDate(p, lang) {
+  if (!p) return '';
+  const monthsLong = lang === 'en'
+    ? ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    : ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+  const date = lang === 'en'
+    ? `${weekday(p, lang)}, ${p.d} ${monthsLong[p.mo - 1]} ${p.y}`
+    : `${weekday(p, lang)}, ${p.d}. ${monthsLong[p.mo - 1]} ${p.y}`;
+  if (p.h === null) return date;
+  const hh = String(p.h).padStart(2, '0');
+  const mm = String(p.mi).padStart(2, '0');
+  if (lang === 'en') {
+    const h12 = ((p.h + 11) % 12) + 1;
+    return `${date}, ${h12}:${mm} ${p.h < 12 ? 'am' : 'pm'}`;
+  }
+  return `${date}, ${hh}:${mm} Uhr`;
+}
+
+function icsStamp(p, addHours) {
+  if (!p) return '';
+  const d = new Date(Date.UTC(p.y, p.mo - 1, p.d, p.h || 0, p.mi || 0) + (addHours || 0) * 3600e3);
+  return d.toISOString().replace(/[-:]/g, '').slice(0, 15);
+}
+
+function prepareEvents(raw) {
+  const categories = raw.categories || [];
+  const today = new Date();
+  const todayKey = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+
+  const items = (raw.items || [])
+    .filter((e) => e && e.published !== false && parseLocal(e.date))
+    .map((e) => {
+      const p = parseLocal(e.date);
+      const pe = parseLocal(e.end_date);
+      const cat = categories.find((c) => c.id === e.category) || {};
+      const last = pe || p;
+      const startStamp = icsStamp(p);
+      const endStamp = pe ? icsStamp(pe) : icsStamp(p, p.h === null ? 24 : 2);
+      const calText = encodeURIComponent(e.title || '');
+      const calDetails = encodeURIComponent(e.description || '');
+      const calLoc = encodeURIComponent(`${e.location || ''} – Hebbelstr. 56-60, 55127 Mainz`);
       return {
         ...e,
-        date_de: formatDateDE(e.date),
-        date_display_de: formatDateDisplayDE(e.date, e.end_date),
-        end_date_de: e.end_date ? formatDateDE(e.end_date) : '',
-        schedule_de: formatScheduleDE(e.schedule),
-        day: dateObj.getDate(),
-        monthShort: monthNames[dateObj.getMonth()],
-        flyer_style: flyerStyle,
-        flyer_card_style: buildFlyerCardStyle(e.image, flyerStyle),
-        flyer_overlay_style: buildFlyerOverlayStyle(flyerStyle),
-        image_inline_style: buildImageInlineStyle(flyerStyle),
-        category_name: category.name || '',
-        // Use custom color/icon if set, otherwise fall back to category defaults
-        category_color: e.color || category.color || '#2563EB',
-        category_icon: e.icon || category.icon || 'fa-calendar'
-      };
-    });
-
-  // Featured Events separieren
-  const featuredEvents = processedItems.filter(e => e.featured);
-  const regularEvents = processedItems.filter(e => !e.featured);
-  const monthFormatter = new Intl.DateTimeFormat('de-DE', { month: 'long', year: 'numeric' });
-  const eventsByMonth = [];
-  const monthIndex = new Map();
-
-  for (const event of processedItems) {
-    const dateObj = new Date(event.date);
-    const key = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}`;
-    let bucket = monthIndex.get(key);
-    if (!bucket) {
-      bucket = {
-        key,
-        monthLabel: monthFormatter.format(dateObj),
-        items: []
-      };
-      monthIndex.set(key, bucket);
-      eventsByMonth.push(bucket);
-    }
-    bucket.items.push(event);
-  }
-
-  return {
-    all: processedItems,
-    featured: featuredEvents,
-    regular: regularEvents,
-    categories: categories,
-    byMonth: eventsByMonth
-  };
-}
-
-/**
- * Datum ins deutsche Format konvertieren.
- * @param {string} dateStr
- * @returns {string}
- */
-function formatDateDE(dateStr) {
-  if (!dateStr) return '';
-  return new Date(dateStr).toLocaleString('de-DE', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false
-  }) + ' Uhr';
-}
-
-function formatDateDisplayDE(startStr, endStr) {
-  if (!startStr) return '';
-  const start = new Date(startStr);
-  if (!endStr) return formatDateDE(startStr);
-
-  const end = new Date(endStr);
-  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end <= start) {
-    return formatDateDE(startStr);
-  }
-
-  const startLabel = start.toLocaleDateString('de-DE', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
-  const endLabel = end.toLocaleDateString('de-DE', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
-  return `${startLabel} bis ${endLabel}`;
-}
-
-function formatScheduleDE(schedule) {
-  if (!Array.isArray(schedule)) return [];
-
-  return schedule
-    .map((slot) => {
-      if (!slot || typeof slot !== 'object') return null;
-
-      let label = (slot.label || '').trim();
-      if (!label && slot.date) {
-        const d = new Date(slot.date);
-        if (!Number.isNaN(d.getTime())) {
-          label = d.toLocaleDateString('de-DE', {
-            weekday: 'long',
-            day: '2-digit',
-            month: '2-digit'
-          });
-        }
-      }
-      if (!label) return null;
-
-      const startTime = (slot.start_time || '').trim();
-      const endTime = (slot.end_time || '').trim();
-      let time = (slot.time || '').trim();
-      if (!time && startTime && endTime) time = `${startTime} - ${endTime} Uhr`;
-      if (!time && startTime) time = `${startTime} Uhr`;
-      if (!time) return null;
-
-      return {
-        label,
-        time
+        key: last.y * 10000 + last.mo * 100 + last.d,
+        sort: e.date,
+        day: p.d,
+        month_short: MONTHS_DE[p.mo - 1],
+        month_short_en: MONTHS_EN[p.mo - 1],
+        month_key: `${p.y}-${String(p.mo).padStart(2, '0')}`,
+        date_label: pe ? `${formatDate(p, 'de')} bis ${formatDate(pe, 'de')}` : formatDate(p, 'de'),
+        date_label_en: pe ? `${formatDate(p, 'en')} to ${formatDate(pe, 'en')}` : formatDate(p, 'en'),
+        category_name: cat.name || '',
+        category_name_en: cat.name_en || cat.name || '',
+        category_color: cat.color || '#2350B8',
+        calendar_link: `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${calText}&dates=${startStamp}/${endStamp}&ctz=Europe/Berlin&details=${calDetails}&location=${calLoc}`
       };
     })
-    .filter(Boolean);
-}
+    .filter((e) => e.key >= todayKey)
+    .sort((a, b) => String(a.sort).localeCompare(String(b.sort)));
 
-function normalizeFlyerStyle(raw) {
-  const source = raw && typeof raw === 'object' ? raw : {};
-  const allowedPositions = new Set([
-    'center center',
-    'center top',
-    'center 30%',
-    'center 70%',
-    'center bottom',
-    'left center',
-    'right center'
-  ]);
-  const position = allowedPositions.has(source.position) ? source.position : 'center center';
-  const zoom = clampNumber(source.zoom, 80, 200, 100);
-  const overlay = clampNumber(source.overlay, 35, 95, 85);
-
-  return { position, zoom, overlay };
-}
-
-function clampNumber(value, min, max, fallback) {
-  const num = Number(value);
-  if (!Number.isFinite(num)) return fallback;
-  if (num < min) return min;
-  if (num > max) return max;
-  return num;
-}
-
-function buildFlyerCardStyle(image, flyerStyle) {
-  const styleParts = [];
-  if (image) styleParts.push(`background-image: url(${image})`);
-  styleParts.push(`background-position: ${flyerStyle.position}`);
-  styleParts.push(`background-size: ${flyerStyle.zoom}%`);
-  return styleParts.join('; ');
-}
-
-function buildFlyerOverlayStyle(flyerStyle) {
-  const end = flyerStyle.overlay / 100;
-  const mid = Math.max(0.2, end - 0.35);
-  const start = Math.max(0.06, end - 0.7);
-  return `background: linear-gradient(to bottom, rgba(0, 0, 0, ${start.toFixed(2)}) 0%, rgba(0, 0, 0, ${mid.toFixed(2)}) 50%, rgba(0, 0, 0, ${end.toFixed(2)}) 100%)`;
-}
-
-function buildImageInlineStyle(flyerStyle) {
-  const zoomFactor = (flyerStyle.zoom / 100).toFixed(2);
-  return `object-position: ${flyerStyle.position}; transform: scale(${zoomFactor}); transform-origin: ${flyerStyle.position}`;
-}
-
-/**
- * Team-Mitglieder filtern und sortieren.
- * @param {object} teamRaw
- * @returns {object}
- */
-function prepareTeam(teamRaw) {
-  const members = teamRaw.members || [];
-
-  const processedMembers = members
-    .filter(m => m.published !== false)
-    .sort((a, b) => (a.order || 999) - (b.order || 999));
-
-  return {
-    page: teamRaw.page || {},
-    members: processedMembers
+  const monthFmt = (e, lang) => {
+    const p = parseLocal(e.date);
+    const names = lang === 'en'
+      ? ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+      : ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+    return `${names[p.mo - 1]} ${p.y}`;
   };
+  const byMonth = [];
+  for (const e of items) {
+    let bucket = byMonth.find((b) => b.key === e.month_key);
+    if (!bucket) {
+      bucket = { key: e.month_key, label: monthFmt(e, 'de'), label_en: monthFmt(e, 'en'), items: [] };
+      byMonth.push(bucket);
+    }
+    bucket.items.push(e);
+  }
+  return { items, byMonth, categories };
 }
 
-/**
- * SEO: JSON-LD als <script>-Block (sicher gegen </script> im Text).
- */
+// ---------------------------------------------------------------------------
+// SEO: strukturierte Daten & Sitemap
+// ---------------------------------------------------------------------------
+
 function jsonLdScript(obj) {
   const json = JSON.stringify(obj, null, 2).replace(/</g, '\\u003c');
-  return `    <script type="application/ld+json">\n${json}\n    </script>`;
+  return `<script type="application/ld+json">\n${json}\n</script>`;
 }
 
-/**
- * SEO: kommende Veranstaltungen als schema.org Events.
- */
 function buildEventsJsonLd(events) {
-  const now = new Date();
   const address = {
-    '@type': 'PostalAddress',
-    streetAddress: 'Hebbelstr. 56-60',
-    postalCode: '55127',
-    addressLocality: 'Mainz',
-    addressRegion: 'Rheinland-Pfalz',
-    addressCountry: 'DE'
+    '@type': 'PostalAddress', streetAddress: 'Hebbelstr. 56-60', postalCode: '55127',
+    addressLocality: 'Mainz', addressRegion: 'Rheinland-Pfalz', addressCountry: 'DE'
   };
-  const graph = events
-    .filter(e => e.date && new Date(e.end_date || e.date) >= now)
-    .map(e => {
-      const item = {
-        '@type': 'Event',
-        name: `${e.title} – Newness of Life Mainz`,
-        startDate: e.date,
-        eventStatus: 'https://schema.org/EventScheduled',
-        eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-        location: { '@type': 'Place', name: 'Newness of Life Mainz', address },
-        organizer: { '@type': 'Organization', name: 'Newness of Life Mainz', url: 'https://newnessoflife.de/' }
-      };
-      if (e.end_date) item.endDate = e.end_date;
-      if (e.description) item.description = String(e.description).replace(/<[^>]*>/g, '').trim();
-      if (e.image) item.image = 'https://newnessoflife.de/' + String(e.image).replace(/^\//, '');
-      return item;
-    });
-  if (!graph.length) return '';
-  return jsonLdScript({ '@context': 'https://schema.org', '@graph': graph });
+  const graph = events.map((e) => {
+    const item = {
+      '@type': 'Event',
+      name: `${e.title} – Newness of Life Mainz`,
+      startDate: e.date,
+      eventStatus: 'https://schema.org/EventScheduled',
+      eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+      location: { '@type': 'Place', name: 'Newness of Life Mainz', address },
+      organizer: { '@type': 'Organization', name: 'Newness of Life Mainz', url: `${SITE_URL}/` }
+    };
+    if (e.end_date) item.endDate = e.end_date;
+    if (e.description) item.description = String(e.description).replace(/<[^>]*>/g, '').trim();
+    if (e.image) item.image = `${SITE_URL}/${String(e.image).replace(/^\//, '')}`;
+    return item;
+  });
+  return graph.length ? jsonLdScript({ '@context': 'https://schema.org', '@graph': graph }) : '';
 }
 
-/**
- * SEO: sitemap.xml neu schreiben (lastmod = Build-Datum).
- */
+// Kirchen-Daten für Google immer aus den aktuellen Kontaktdaten übernehmen
+function churchFromSettings(church, settings) {
+  const c = JSON.parse(JSON.stringify(church));
+  const contact = settings.contact || {};
+  if (contact.address) c.address.streetAddress = contact.address;
+  const m = String(contact.city || '').match(/^(\d{5})\s+(.+)$/);
+  if (m) { c.address.postalCode = m[1]; c.address.addressLocality = m[2]; }
+  if (contact.email) c.email = contact.email;
+  if (contact.phone) c.telephone = contact.phone;
+  const social = Object.values(settings.social_media || {}).filter(Boolean);
+  if (social.length) c.sameAs = social;
+  return c;
+}
+
 async function writeSitemap() {
   const today = new Date().toISOString().slice(0, 10);
   const urls = [
-    ['/', 'weekly', '1.0'],
-    ['/gottesdienste', 'monthly', '0.9'],
-    ['/veranstaltungen', 'weekly', '0.8'],
-    ['/ueber-uns', 'monthly', '0.8'],
-    ['/spenden', 'yearly', '0.5'],
-    ['/impressum', 'yearly', '0.2'],
+    ['/', 'weekly', '1.0'], ['/gottesdienste', 'monthly', '0.9'], ['/veranstaltungen', 'weekly', '0.8'],
+    ['/ueber-uns', 'monthly', '0.8'], ['/spenden', 'yearly', '0.5'], ['/impressum', 'yearly', '0.2'],
     ['/datenschutz', 'yearly', '0.2']
   ];
   const body = urls.map(([loc, freq, prio]) =>
-    `  <url>\n    <loc>https://newnessoflife.de${loc}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>${freq}</changefreq>\n    <priority>${prio}</priority>\n  </url>`
+    `  <url>\n    <loc>${SITE_URL}${loc}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>${freq}</changefreq>\n    <priority>${prio}</priority>\n  </url>`
   ).join('\n');
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>\n`;
-  await fs.writeFile(path.join(ROOT_DIR, 'sitemap.xml'), xml);
-  console.log('✓ Built sitemap.xml');
+  await fs.writeFile(path.join(ROOT_DIR, 'sitemap.xml'),
+    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>\n`);
+  console.log('✓ sitemap.xml');
 }
 
-/**
- * Einzelne Seite rendern.
- * @param {string} file
- * @param {object} locals
- */
+// ---------------------------------------------------------------------------
+// Seiten rendern
+// ---------------------------------------------------------------------------
+
 async function renderPage(file, locals) {
   const src = path.join(PAGES_DIR, file);
-  const dest = path.join(ROOT_DIR, file);
-
-  try {
-    const html = await fs.readFile(src, 'utf8');
-    const localsForPage = { ...locals, currentPage: file };
-    const result = await posthtml([
-      include({ root: SRC_DIR }),
-      expressions({ locals: localsForPage })
-    ]).process(html);
-
-    await fs.writeFile(dest, result.html);
-    console.log(`✓ Built ${file}`);
-  } catch (err) {
-    console.error(`✗ Error processing ${file}:`, err.message);
-  }
+  const html = await fs.readFile(src, 'utf8');
+  const pageLocals = { ...locals, currentPage: file.replace(/\.html$/, '') };
+  const result = await posthtml([
+    include({ root: SRC_DIR }),
+    expressions({ locals: pageLocals, strictMode: false }),
+    fillPlugin(pageLocals)
+  ]).process(html);
+  await fs.writeFile(path.join(ROOT_DIR, file), result.html);
+  console.log(`✓ ${file}`);
 }
 
-/**
- * Haupt-Build.
- */
 async function build() {
-  console.log('\n🔨 Building website...\n');
-
-  try {
-    // Alle Daten parallel laden
-    const [
-      homepage,
-      eventsRaw,
-      settings,
-      design,
-      teamRaw,
-      global,
-      pageUeberUns,
-      pageGottesdienste,
-      pageSpenden,
-      pageDatenschutz,
-      pageImpressum
-    ] = await Promise.all([
-      loadJson(path.join(DATA_DIR, 'homepage.json')),
-      loadJson(path.join(DATA_DIR, 'events.json')),
-      loadJson(path.join(DATA_DIR, 'settings.json')),
-      loadJson(path.join(DATA_DIR, 'design.json')),
-      loadJson(path.join(DATA_DIR, 'team.json')),
-      loadJson(path.join(DATA_DIR, 'global.json')),
-      loadJson(path.join(PAGES_DATA_DIR, 'ueber-uns.json')),
-      loadJson(path.join(PAGES_DATA_DIR, 'gottesdienste.json')),
-      loadJson(path.join(PAGES_DATA_DIR, 'spenden.json')),
-      loadJson(path.join(PAGES_DATA_DIR, 'datenschutz.json')),
-      loadJson(path.join(PAGES_DATA_DIR, 'impressum.json'))
+  console.log('\nWebsite wird gebaut ...\n');
+  const [settings, global, homepage, eventsRaw, seoJsonLd, gottesdienste, ueberUns, spenden, impressum, datenschutz, veranstaltungen] =
+    await Promise.all([
+      loadJson('settings.json'), loadJson('global.json'), loadJson('homepage.json'), loadJson('events.json'),
+      loadJson('seo-jsonld.json'), loadJson('pages/gottesdienste.json'), loadJson('pages/ueber-uns.json'),
+      loadJson('pages/spenden.json'), loadJson('pages/impressum.json'), loadJson('pages/datenschutz.json'),
+      loadJson('pages/veranstaltungen.json')
     ]);
-    const seoJsonLd = await loadJson(path.join(DATA_DIR, 'seo-jsonld.json'));
 
-    // Daten aufbereiten
-    const events = prepareEvents(eventsRaw);
-    const team = prepareTeam(teamRaw);
-    const homepageEventsSource = homepage.events_section && homepage.events_section.featured_only
-      ? events.featured
-      : events.all;
-    const homepageEventsCount = parseInt(homepage.events_section && homepage.events_section.show_count, 10);
-    const homepageEvents = Number.isFinite(homepageEventsCount)
-      ? homepageEventsSource.slice(0, homepageEventsCount)
-      : homepageEventsSource;
+  const events = prepareEvents(eventsRaw);
+  const homeCount = parseInt((homepage.events_section || {}).count, 10) || 3;
 
-    // Alle Daten für Templates zusammenfassen
-    const locals = {
-      // Globale Daten
-      settings,
-      design,
+  const locals = {
+    settings,
+    global,
+    homepage,
+    pages: { gottesdienste, ueberUns, spenden, impressum, datenschutz, veranstaltungen },
+    events: events.items,
+    eventsByMonth: events.byMonth,
+    upcomingEvents: events.items.slice(0, homeCount),
+    year: new Date().getFullYear(),
+    churchJsonLd: seoJsonLd.church ? jsonLdScript(churchFromSettings(seoJsonLd.church, settings)) : '',
+    servicesJsonLd: seoJsonLd.services ? jsonLdScript(seoJsonLd.services) : '',
+    eventsJsonLd: buildEventsJsonLd(events.items)
+  };
 
-      // Header, Footer, Service Cards (aus global.json)
-      header: global.header || {},
-      footer: global.footer || {},
-      service_cards: (global.service_cards || []),
-
-      // Startseite
-      homepage,
-
-      // Events (mehrere Varianten)
-      events: events.all,
-      featuredEvents: events.featured,
-      regularEvents: events.regular,
-      eventCategories: events.categories,
-      eventsByMonth: events.byMonth,
-      homepageEvents,
-
-      // Team
-      team: team.members,
-      teamPage: team.page,
-
-      // SEO: strukturierte Daten
-      churchJsonLd: seoJsonLd.church ? jsonLdScript(seoJsonLd.church) : '',
-      servicesJsonLd: seoJsonLd.services ? jsonLdScript(seoJsonLd.services) : '',
-      eventsJsonLd: buildEventsJsonLd(events.all),
-
-      // Seiteninhalte
-      pages: {
-        ueberUns: pageUeberUns,
-        gottesdienste: pageGottesdienste,
-        spenden: pageSpenden,
-        datenschutz: pageDatenschutz,
-        impressum: pageImpressum
-      }
-    };
-
-    // Seiten finden & rendern
-    const files = (await fs.readdir(PAGES_DIR)).filter(f => f.endsWith('.html'));
-    await Promise.all(files.map(f => renderPage(f, locals)));
-    await writeSitemap();
-
-    console.log(`\n✅ Build complete! ${files.length} pages generated.\n`);
-  } catch (err) {
-    console.error('\n❌ Build failed:', err);
-    process.exit(1);
+  const files = (await fs.readdir(PAGES_DIR)).filter((f) => f.endsWith('.html'));
+  for (const f of files) {
+    await renderPage(f, locals);
   }
+  await writeSitemap();
+  console.log(`\nFertig: ${files.length} Seiten.\n`);
 }
 
-build();
+build().catch((err) => {
+  console.error('\nBuild fehlgeschlagen:', err);
+  process.exit(1);
+});

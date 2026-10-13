@@ -1,0 +1,39 @@
+{
+  "hero": {
+    "title": "Termine & Veranstaltungen in Mainz",
+    "title_en": "Events & Dates in Mainz",
+    "subtitle": "Alle kommenden Termine unserer Gemeinde auf einen Blick.",
+    "subtitle_en": "All upcoming events at a glance.",
+    "background_image": "/images/Yellow_and_Black_Minimalist_Night_Worship_Instagram_Post.png"
+  },
+  "regular": {
+    "title": "Regelmäßige Termine",
+    "title_en": "Regular Meetings",
+    "subtitle": "Unsere wöchentlichen Treffen",
+    "subtitle_en": "Our weekly gatherings"
+  },
+  "upcoming": {
+    "title": "Kommende Veranstaltungen",
+    "title_en": "Upcoming Events",
+    "subtitle": "Besondere Events und Termine",
+    "subtitle_en": "Special events and dates",
+    "all_label": "Alle Monate",
+    "all_label_en": "All months",
+    "empty_text": "Keine aktuellen Veranstaltungen",
+    "empty_text_en": "No current events",
+    "calendar_button": "Zum Kalender",
+    "calendar_button_en": "Add to Calendar"
+  },
+  "cta": {
+    "title": "Du bist herzlich willkommen",
+    "title_en": "You are warmly welcome",
+    "text": "Egal ob zum ersten Mal oder als regelmäßiger Besucher – wir freuen uns auf dich!",
+    "text_en": "Whether it's your first time or you're a regular visitor – we look forward to seeing you!",
+    "button_text": "Kontakt aufnehmen",
+    "button_text_en": "Get in touch"
+  },
+  "seo": {
+    "meta_title": "Events & Gospel-Konzerte in Mainz | Newness of Life",
+    "meta_description": "Worship Nights, Gospel-Konzert, Jugendtreffen und mehr: alle Termine der Freikirche Newness of Life in Mainz. Eintritt frei – komm vorbei!"
+  }
+}

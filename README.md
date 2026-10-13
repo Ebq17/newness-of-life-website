@@ -1,70 +1,38 @@
-# Newness of Life – Website + Admin
+# Newness of Life – Website
 
-## Lokaler Start
+Website der Freikirche Newness of Life in Mainz: https://newnessoflife.de
 
-1. Admin/API-Server starten:
+## Inhalte bearbeiten (ohne Code)
+
+**https://newnessoflife.de/admin** – E-Mail eingeben, Anmelde-Link aus dem Postfach öffnen, fertig.
+Freigeschaltete Adressen: `newnessoflife@clgi.org`, `emma_quainoo@yahoo.de`
+(änderbar über die Netlify-Umgebungsvariable `ADMIN_EMAILS`, kommagetrennt).
+
+Nach „Speichern“ wird die Website von Netlify automatisch neu gebaut (ca. 1–2 Minuten).
+
+## Aufbau
+
+| Ordner / Datei | Inhalt |
+| --- | --- |
+| `data/*.json`, `data/pages/*.json` | Alle Texte, Bilder, Termine (werden vom Admin bearbeitet). Felder mit Endung `_en` sind die englische Version. |
+| `src/pages/`, `src/partials/` | HTML-Vorlagen. Elemente mit `data-t="pfad"` werden beim Bauen mit Inhalten gefüllt. |
+| `build.js` | Erzeugt die fertigen Seiten (`index.html` usw.) und `sitemap.xml`. |
+| `css/site.css`, `js/site.js` | Design und Website-Skript. |
+| `admin/` | Admin-Oberfläche. |
+| `netlify/functions/admin-api.js` | Admin-Backend: Anmelde-Link per E-Mail (Brevo), Speichern ins GitHub-Repo. |
+| `netlify/functions/contact-email.js` | Kontaktformular. |
+
+## Netlify-Umgebungsvariablen
+
+- `GITHUB_TOKEN` – Fine-grained Token für dieses Repository mit Berechtigung *Contents: Read and write* (für den Admin).
+- `BREVO_API_KEY` – E-Mail-Versand (Kontaktformular und Admin-Anmeldung).
+- optional: `ADMIN_EMAILS`, `ADMIN_SECRET`, `NOREPLY_EMAIL`, `FROM_EMAIL`, `CHURCH_EMAIL`.
+
+## Lokal entwickeln
 
 ```bash
-npm run admin
-```
-
-Dann Admin öffnen: `http://localhost:3001/admin/`
-
-2. Website bauen:
-
-```bash
-npm run build
-```
-
-## Admin ohne Localhost (Netlify)
-
-Für Online-Bearbeitung (inkl. Bilder) wird jetzt Decap CMS unter `https://newnessoflife.netlify.app/admin/cms.html` genutzt.
-
-In Netlify einmalig aktivieren:
-
-1. `Site settings -> Identity -> Enable Identity`
-2. `Identity -> Registration preferences -> Invite only` (empfohlen)
-3. `Identity -> Services -> Git Gateway -> Enable Git Gateway`
-4. Benutzer einladen und per E-Mail bestätigen
-
-Danach kannst du Inhalte direkt online bearbeiten und veröffentlichen, ohne lokalen Server.
-
-## Tests
-
-```bash
+npm install
+npm run build   # Seiten bauen
+npm run serve   # http://localhost:8080
 npm test
 ```
-
-## E-Mail (Kontaktformular)
-
-Der Endpoint `POST /api/contact` (lokaler Admin-Server) verschickt E-Mails über Brevo.
-Auf Netlify nutzt das Kontaktformular als Fallback `/.netlify/functions/contact-email` (Mail an Gemeinde + Bestätigung an Absender).
-Falls der Mail-Service nicht konfiguriert ist, wird das Formular trotzdem als Netlify Form gespeichert (kein Datenverlust).
-
-Der Endpoint `POST /api/donations` verschickt eine Spendenbestaetigung mit PDF-Anhang an den Spender und eine interne Kopie an die Gemeinde.
-Auf Netlify wird dafuer automatisch `/.netlify/functions/donations` verwendet (gleiche Nutzlast).
-
-- Konfiguration über `.env` (siehe `.env.example`)
-- Fuer lokale Tests brauchst du eine private `.env` mit demselben `BREVO_API_KEY`, der auch in Netlify gesetzt ist.
-- Netlify-Umgebungsvariablen sind lokal nicht automatisch verfuegbar.
-- `CONTACT_BREVO_API_KEY` leer lassen, solange du nicht bewusst einen separaten Key nur fuer das Kontaktformular verwenden willst.
-- Wichtige Variablen:
-  - `BREVO_API_KEY`
-  - `CONTACT_BREVO_API_KEY` (optional, überschreibt `BREVO_API_KEY` nur für Kontakt)
-  - `CHURCH_EMAIL` (primäre Zieladresse)
-  - `TO_EMAIL` (Legacy-Fallback)
-  - `FROM_EMAIL`
-  - `NOREPLY_EMAIL`
-  - Optional fuer Kontakt-Mails:
-    - `CONTACT_TO_EMAIL`
-    - `CONTACT_FROM_EMAIL`
-    - `CONTACT_NOREPLY_EMAIL`
-    - `CONTACT_ATTACH_PDF` (`1` aktiviert PDF-Anhang)
-  - Optional fuer Spenden-Mails:
-    - `DONATION_TO_EMAIL`
-    - `DONATION_FROM_EMAIL`
-    - `DONATION_NOREPLY_EMAIL`
-    - `ORG_NAME`
-    - `SITE_URL`
-
-Hinweis: Wenn ein API-Key jemals in GitHub gelandet ist, bitte im Brevo-Dashboard rotieren und den alten Key deaktivieren.

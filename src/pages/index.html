@@ -1,182 +1,183 @@
 <!DOCTYPE html>
 <html lang="de">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ homepage.seo.meta_title || settings.site_title || 'Newness of Life' }}</title>
-    <meta name="description" content="{{ homepage.seo.meta_description || settings.site_description || '' }}">
-
-    <link rel="stylesheet" href="css/style.css?v=20260220r3">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <!-- Dynamische Theme-Farben -->
-    <style>
-        :root {
-            --color-primary: {{ design.theme.primary_color || '#2563EB' }};
-            --color-secondary: {{ design.theme.secondary_color || '#10B981' }};
-            --color-accent: {{ design.theme.accent_color || '#F59E0B' }};
-            --color-dark: {{ design.theme.dark_color || '#111827' }};
-            --color-light: {{ design.theme.light_color || '#F9FAFB' }};
-        }
-    </style>
-    <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="canonical" href="https://newnessoflife.de/">
-    <meta property="og:type" content="website">
-    <meta property="og:locale" content="de_DE">
-    <meta property="og:site_name" content="Newness of Life Mainz">
-    <meta property="og:title" content="{{ homepage.seo.meta_title || settings.site_title }}">
-    <meta property="og:description" content="{{ homepage.seo.meta_description || settings.site_description }}">
-    <meta property="og:url" content="https://newnessoflife.de/">
-    <meta property="og:image" content="https://newnessoflife.de/images/church-service.jpg">
-    <meta name="twitter:card" content="summary_large_image">
-{{{ churchJsonLd }}}
+  <include src="partials/head-common.html"></include>
+  <title>{{ homepage.seo.meta_title || settings.site_title }}</title>
+  <meta name="description" content="{{ homepage.seo.meta_description || settings.site_description }}">
+  <link rel="canonical" href="https://newnessoflife.de/">
+  <meta property="og:title" content="{{ homepage.seo.meta_title || settings.site_title }}">
+  <meta property="og:description" content="{{ homepage.seo.meta_description || settings.site_description }}">
+  <meta property="og:url" content="https://newnessoflife.de/">
+  <meta property="og:image" content="https://newnessoflife.de{{ homepage.hero.background_image || '/images/bible.und.hand.hoch.jpg' }}">
+  {{{ churchJsonLd }}}
 </head>
+<body class="page-home">
+  <include src="partials/header.html"></include>
 
-<body class="home">
-    <include src="partials/header.html"></include>
-
-    <!-- Hero Section -->
-    <section
-        class="hero"
-        id="start"
-        data-cms-section="hero"
-        data-has-image="{{ homepage.hero.background_image ? 'true' : 'false' }}"
-        style="{{ homepage.hero.background_image ? 'background-image: linear-gradient(135deg, rgba(31, 71, 112, 0.6) 0%, rgba(238, 242, 243, 0.9) 100%), url(' + homepage.hero.background_image + '); background-size: cover; background-position: center;' : 'background: linear-gradient(135deg, rgba(95, 164, 221, 1) 0%, rgba(238, 242, 243, 1) 100%);' }}"
-    >
-        <div
-            class="cms-edit-layer"
-            data-cms-field="hero.background_image"
-            data-cms-label="Hintergrundbild"
-            data-cms-attr="background-image"
-            data-cms-bg-overlay="linear-gradient(135deg, rgba(31, 71, 112, 0.6) 0%, rgba(238, 242, 243, 0.9) 100%)"
-            data-has-image="{{ homepage.hero.background_image ? 'true' : 'false' }}"
-        ></div>
-        <div class="container hero-grid">
-            <div class="hero-left">
-                <h1 id="hero-title" data-cms-field="hero.title" data-cms-label="Haupttitel" data-i18n="hero.title">{{ homepage.hero.title || 'Willkommen in unserer Gemeinde' }}</h1>
-                <p id="hero-subtitle" data-cms-field="hero.subtitle" data-cms-label="Untertitel" data-cms-format="html" data-i18n="hero.subtitle">{{ homepage.hero.subtitle || 'Ein Ort des Glaubens, der Gemeinschaft und der Hoffnung.' }}</p>
-                <a href="{{ homepage.hero.cta_link || 'ueber-uns.html' }}" class="btn-ghost" data-cms-field="hero.cta_link" data-cms-label="Button Link" data-cms-attr="href">
-                    <span data-cms-field="hero.cta_text" data-cms-label="Button Text" data-i18n="hero.cta">{{ homepage.hero.cta_text || 'Mehr erfahren' }}</span>
-                    <i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>
-                </a>
-            </div>
-            <div class="hero-right hide-on-mobile" aria-hidden="true">
-                <i class="fa-solid fa-church church-icon"></i>
-            </div>
+  <main id="inhalt">
+    <section class="hero hero-home" data-bg="homepage.hero.background_image">
+      <div class="container hero-inner">
+        <h1 data-t="homepage.hero.title"></h1>
+        <p class="hero-lead" data-t="homepage.hero.subtitle"></p>
+        <div class="btn-row">
+          <a class="btn btn-gold" href="{{ homepage.hero.cta_link }}" data-t="homepage.hero.cta_text"></a>
+          <if condition="homepage.hero.cta2_text">
+            <a class="btn btn-ghost-light" href="{{ homepage.hero.cta2_link }}" data-t="homepage.hero.cta2_text"></a>
+          </if>
         </div>
+      </div>
     </section>
 
-    <main>
-        <!-- Gottesdienste Section -->
-        <section id="gottesdienste" class="content-section services-section-new" data-cms-section="services">
-            <div class="container">
-                <div class="gottesdienste-grid">
-                    <div class="gottesdienste-info">
-                        <h2 id="gottesdienste-title" data-cms-field="services_section.title" data-cms-label="Titel" data-i18n="services_section.main_title">{{ homepage.services_section.title || 'Gottesdienste' }}</h2>
-                        <p id="gottesdienste-description" data-cms-field="services_section.description" data-cms-label="Beschreibung" data-cms-format="html" data-i18n="services_section.description">{{ homepage.services_section.description || 'Erlebe lebendigen Lobpreis, inspirierende Predigten und herzliche Gemeinschaft.' }}</p>
-                        <a href="gottesdienste.html" class="btn-primary">
-                            <span data-i18n="services_section.all_services">Alle Gottesdienste</span> <i class="fa-solid fa-arrow-right-long" aria-hidden="true"></i>
-                        </a>
-                    </div>
-                    <div class="gottesdienste-card-professional">
-                        <div class="gottesdienste-card-header">
-                            <i class="fa-solid fa-church"></i>
-                            <h3 data-i18n="services_section.our_service">Unser Gottesdienst</h3>
-                        </div>
-                        <div class="gottesdienste-card-body">
-                            <div class="service-item">
-                                <i class="fa-solid fa-clock"></i>
-                                <p id="gottesdienste-zeiten-ort-details">
-                                    <strong>
-                                        <span data-cms-field="services_section.service_day" data-cms-label="Tag" data-i18n="services_section.every_sunday">{{ homepage.services_section.service_day || 'Jeden Sonntag' }}</span>
-                                        <span data-i18n="services_section.at">um</span>
-                                        <span data-cms-field="services_section.service_time" data-cms-label="Uhrzeit">{{ homepage.services_section.service_time || '14:00 Uhr' }}</span>
-                                    </strong>
-                                </p>
-                            </div>
-                            <div class="service-item">
-                                <i class="fa-solid fa-map-marker-alt"></i>
-                                <p id="gottesdienste-location">
-                                    <span data-cms-field="contact.address" data-cms-label="Strasse">{{ settings.contact.address || 'Hebbelstr. 56-60' }}</span><br>
-                                    <span data-cms-field="contact.city" data-cms-label="PLZ und Stadt">{{ settings.contact.city || '55127 Mainz' }}</span>
-                                </p>
-                            </div>
-                            <if condition="homepage.services_section.kids_info">
-                                <div class="service-item">
-                                    <i class="fa-solid fa-child"></i>
-                                    <p id="gottesdienste-kids" data-cms-field="services_section.kids_info" data-cms-label="Kinderinfo" data-i18n="services_section.kids_program">{{ homepage.services_section.kids_info }}</p>
-                                </div>
-                            </if>
-                        </div>
-                    </div>
+    <section class="service-panel-wrap" aria-labelledby="service-panel-title">
+      <div class="container">
+        <div class="service-panel">
+          <h2 id="service-panel-title" class="service-panel-title" data-t="homepage.service_info.title"></h2>
+          <ul class="service-facts">
+            <li>
+              <i class="fa-regular fa-clock" aria-hidden="true"></i>
+              <strong data-t="homepage.service_info.when"></strong>
+            </li>
+            <li>
+              <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+              <span>
+                <strong><span data-t="settings.contact.address"></span>, <span data-t="settings.contact.city"></span></strong>
+                <a class="link-arrow" href="https://www.google.com/maps/dir/?api=1&destination={{ encodeURIComponent((settings.contact.address || '') + ', ' + (settings.contact.city || '')) }}" target="_blank" rel="noopener" data-t="homepage.service_info.directions_text"></a>
+              </span>
+            </li>
+            <if condition="homepage.service_info.kids">
+              <li><i class="fa-solid fa-child-reaching" aria-hidden="true"></i><span data-t="homepage.service_info.kids"></span></li>
+            </if>
+            <if condition="homepage.service_info.language">
+              <li><i class="fa-solid fa-language" aria-hidden="true"></i><span data-t="homepage.service_info.language"></span></li>
+            </if>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section split-section">
+      <div class="container split">
+        <div class="split-text">
+          <h2 data-t="homepage.services_section.title"></h2>
+          <p class="text-large" data-t="homepage.services_section.description"></p>
+          <a class="btn btn-primary" href="/gottesdienste" data-t="homepage.services_section.button_text"></a>
+        </div>
+        <figure class="split-media">
+          <img src="/images/Gebete.jpg" data-src="homepage.services_section.image" alt="" loading="lazy">
+        </figure>
+      </div>
+    </section>
+
+    <section class="section section-tint" aria-labelledby="meetings-title">
+      <div class="container">
+        <div class="section-head">
+          <h2 id="meetings-title" data-t="homepage.meetings.title"></h2>
+          <p data-t="homepage.meetings.subtitle"></p>
+        </div>
+        <div class="meeting-grid">
+          <each loop="item, i in homepage.meetings.items">
+            <if condition="item.show !== false">
+              <article class="meeting">
+                <div class="meeting-media" data-bg="homepage.meetings.items.{{ i }}.image"></div>
+                <div class="meeting-body">
+                  <p class="meeting-label" data-t="homepage.meetings.items.{{ i }}.label"></p>
+                  <h3 data-t="homepage.meetings.items.{{ i }}.title"></h3>
+                  <p class="meeting-time"><i class="fa-regular fa-clock" aria-hidden="true"></i> <span data-t="homepage.meetings.items.{{ i }}.time"></span></p>
+                  <if condition="item.link">
+                    <a class="stretched-link" href="{{ item.link }}"><span class="sr-only">{{ item.title }}</span></a>
+                  </if>
                 </div>
+              </article>
+            </if>
+          </each>
+        </div>
+      </div>
+    </section>
+
+    <section class="section about-teaser" aria-labelledby="about-title">
+      <div class="container narrow">
+        <h2 id="about-title" data-t="homepage.about_section.title"></h2>
+        <p class="about-sub" data-t="homepage.about_section.subtitle"></p>
+        <p class="text-large" data-t="homepage.about_section.text"></p>
+        <a class="btn btn-outline" href="/ueber-uns" data-t="homepage.about_section.button_text"></a>
+      </div>
+    </section>
+
+    <if condition="homepage.events_section.show !== false && upcomingEvents.length">
+      <section class="section section-tint" aria-labelledby="events-title">
+        <div class="container">
+          <div class="section-head section-head-row">
+            <div>
+              <h2 id="events-title" data-t="homepage.events_section.title"></h2>
+              <p data-t="homepage.events_section.text"></p>
             </div>
-        </section>
-
-        <!-- Service Cards (Regelmäßige Treffen) -->
-        <include src="partials/service-cards.html"></include>
-
-        <!-- Über uns Section -->
-        <section id="ueber-uns" class="content-section" data-cms-section="about">
-            <div class="container">
-                <h2 id="ueber-uns-title" data-cms-field="about_section.title" data-cms-label="Titel" data-i18n="about_section.title">{{ homepage.about_section.title || 'Über uns' }}</h2>
-                <h3 id="ueber-uns-subtitle" data-cms-field="about_section.subtitle" data-cms-label="Untertitel" data-i18n="about_section.subtitle">{{ homepage.about_section.subtitle || 'Unsere Vision & Mission' }}</h3>
-                <p id="ueber-uns-text" data-cms-field="about_section.text" data-cms-label="Text" data-cms-format="html" data-i18n-html="about_section.text">{{ homepage.about_section.text || '' }}</p>
-                <div class="centered-actions">
-                    <a href="ueber-uns.html" class="btn btn-primary" aria-label="Mehr über uns erfahren">
-                        <span data-i18n="about_section.learn_more">Mehr erfahren</span>
-                    </a>
+            <a class="link-arrow" href="/veranstaltungen" data-t="homepage.events_section.button_text"></a>
+          </div>
+          <ul class="event-list">
+            <each loop="event, i in upcomingEvents">
+              <li class="event-row">
+                <div class="event-date" style="--cat: {{ event.category_color }}">
+                  <span class="event-day">{{ event.day }}</span>
+                  <span class="event-month" data-t="upcomingEvents.{{ i }}.month_short"></span>
                 </div>
-            </div>
-        </section>
-
-        <!-- Events Section entfernt: Veranstaltungen werden auf eigener Seite verwaltet -->
-
-        <!-- Kontakt Section -->
-        <section id="kontakt" class="content-section" data-cms-section="contact">
-            <div class="container">
-                <h2 id="kontakt-title" data-cms-field="contact_section.title" data-cms-label="Titel" data-i18n="contact_section.title">{{ homepage.contact_section.title || 'Kontakt' }}</h2>
-                <div class="contact-grid">
-                    <div class="contact-form">
-                        <h3 id="kontakt-form-title" data-cms-field="contact_section.form_title" data-cms-label="Formular-Titel" data-i18n="contact_section.form_title">{{ homepage.contact_section.form_title || 'Schreiben Sie uns' }}</h3>
-                        <form id="contact-form" name="contact" method="POST" action="/" data-netlify="true" netlify-honeypot="website" novalidate>
-                            <input type="hidden" name="form-name" value="contact">
-                            <input type="text" name="website" class="is-hidden" tabindex="-1" autocomplete="off">
-                            <input type="text" name="name" placeholder="Ihr Name" data-i18n="contact_section.name" required>
-                            <input type="email" name="email" placeholder="Ihre E-Mail" data-i18n="contact_section.email" required>
-                            <textarea name="message" placeholder="Ihre Nachricht" data-i18n="contact_section.message" rows="5" required></textarea>
-                            <button type="submit" data-i18n="contact_section.send">Senden</button>
-                            <p class="form-status" id="contact-status" aria-live="polite"></p>
-                        </form>
-                    </div>
-                    <div class="contact-details">
-                        <h3 id="kontakt-address-title" data-cms-field="contact_section.address_title" data-cms-label="Adress-Titel" data-i18n="contact_section.address_title">{{ homepage.contact_section.address_title || 'Adresse & Anfahrt' }}</h3>
-                        <p id="kontakt-address">
-                            <span data-cms-field="contact.address" data-cms-label="Strasse">{{ settings.contact.address || 'Hebbelstr. 56-60' }}</span><br>
-                            <span data-cms-field="contact.city" data-cms-label="PLZ und Stadt">{{ settings.contact.city || '55127 Mainz' }}</span>
-                        </p>
-                        <div class="map-container">
-                            <iframe class="map-embed" src="{{ settings.contact.maps_url || 'https://www.google.com/maps?q=Hebbelstr.+56-60,+55127+Mainz' }}&output=embed" width="100%" height="300" allowfullscreen="" loading="lazy"></iframe>
-                        </div>
-                    </div>
+                <div class="event-info">
+                  <h3 data-t="upcomingEvents.{{ i }}.title"></h3>
+                  <p class="event-meta" data-t="upcomingEvents.{{ i }}.date_label"></p>
                 </div>
-            </div>
-        </section>
-    </main>
+              </li>
+            </each>
+          </ul>
+        </div>
+      </section>
+    </if>
 
-    <include src="partials/footer.html"></include>
-    <script src="js/script.js?v=20260312r1"></script>
+    <section class="section" id="kontakt" aria-labelledby="contact-title">
+      <div class="container">
+        <div class="section-head">
+          <h2 id="contact-title" data-t="homepage.contact_section.title"></h2>
+        </div>
+        <div class="contact-grid">
+          <div class="contact-card">
+            <h3 data-t="homepage.contact_section.form_title"></h3>
+            <form id="contact-form" name="contact" method="POST" action="/" data-netlify="true" netlify-honeypot="website" novalidate
+                  data-msg-ok="{{ homepage.contact_section.success_message }}" data-msg-ok-en="{{ homepage.contact_section.success_message_en }}"
+                  data-msg-error="{{ homepage.contact_section.error_message }}" data-msg-error-en="{{ homepage.contact_section.error_message_en }}">
+              <input type="hidden" name="form-name" value="contact">
+              <p class="is-hidden"><label>Website <input name="website" tabindex="-1" autocomplete="off"></label></p>
+              <label class="field">
+                <span class="sr-only" data-t="homepage.contact_section.name_placeholder"></span>
+                <input type="text" name="name" autocomplete="name" required data-placeholder="homepage.contact_section.name_placeholder">
+              </label>
+              <label class="field">
+                <span class="sr-only" data-t="homepage.contact_section.email_placeholder"></span>
+                <input type="email" name="email" autocomplete="email" required data-placeholder="homepage.contact_section.email_placeholder">
+              </label>
+              <label class="field">
+                <span class="sr-only" data-t="homepage.contact_section.message_placeholder"></span>
+                <textarea name="message" rows="5" required data-placeholder="homepage.contact_section.message_placeholder"></textarea>
+              </label>
+              <button type="submit" class="btn btn-primary" data-t="homepage.contact_section.send_button"></button>
+              <p class="form-status" id="contact-status" role="status" aria-live="polite"></p>
+            </form>
+          </div>
+          <div class="contact-details">
+            <h3 data-t="homepage.contact_section.address_title"></h3>
+            <p class="contact-address">
+              <span data-t="settings.contact.address"></span><br>
+              <span data-t="settings.contact.city"></span>
+            </p>
+            <if condition="settings.contact.email">
+              <p><a href="mailto:{{ settings.contact.email }}">{{ settings.contact.email }}</a></p>
+            </if>
+            <div class="map">
+              <iframe title="Karte: {{ settings.contact.address }}, {{ settings.contact.city }}" src="https://www.google.com/maps?q={{ encodeURIComponent((settings.contact.address || '') + ', ' + (settings.contact.city || '')) }}&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <include src="partials/footer.html"></include>
 </body>
 </html>
